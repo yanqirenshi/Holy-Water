@@ -12,11 +12,13 @@
                 ((:file "package")
                  (:module "dao"
                   :components ((:file "rs_angel")
+                               (:file "rs_maledict-type")
                                (:file "rs_maledict")
                                (:file "rs_impure")
                                (:file "th_angel-maledict")
                                (:file "ev_collect-impure")
                                (:file "ev_purge")))
+                 (:file "creator")
                  (:file "angel-maledict")
                  (:file "angel")
                  (:file "maledict"))))
