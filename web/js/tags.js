@@ -62,7 +62,7 @@ riot.tag2('menu-bar', '<aside class="menu"> <p ref="brand" class="menu-label" on
      };
 });
 
-riot.tag2('page-tabs', '<div class="tabs is-boxed" style="padding-left:55px;"> <ul> <li each="{opts.core.tabs}" class="{opts.core.active_tab==code ? \'is-active\' : \'\'}"> <a code="{code}" onclick="{clickTab}">{label}</a> </li> </ul> </div>', 'page-tabs li:first-child { margin-left: 55px; }', '', function(opts) {
+riot.tag2('page-tabs', '<div class="tabs is-boxed"> <ul> <li each="{opts.core.tabs}" class="{opts.core.active_tab==code ? \'is-active\' : \'\'}"> <a code="{code}" onclick="{clickTab}">{label}</a> </li> </ul> </div>', 'page-tabs li:first-child { margin-left: 55px; }', '', function(opts) {
      this.clickTab = (e) => {
          let code = e.target.getAttribute('code');
          this.opts.callback(e, 'CLICK-TAB', { code: code });
@@ -141,7 +141,9 @@ riot.tag2('home', '', '', '', function(opts) {
      this.on('update', () => { this.draw(); });
 });
 
-riot.tag2('home_page_root-buckets', '<nav class="panel" style="width: 255px;"> <p class="panel-heading">Buckets</p> <a each="{opts.data.list}" class="panel-block {isActive(id)}" onclick="{clickItem}" maledict-id="{id}"> <span style="width: 177px;" maledict-id="{id}"> {name} </span> <span style="width: 53px;"> <span class="icon"> <i class="fas fa-door-closed"></i> </span> <span class="icon hide"> <i class="fas fa-door-open"></i> </span> <span class="icon"> <i class="far fa-plus-square"></i> </span> </span> </a> </nav>', '', '', function(opts) {
+riot.tag2('home_page_root-buckets', '<nav class="panel" style="width: 255px;"> <p class="panel-heading">Buckets</p> <a each="{opts.data.list}" class="panel-block {isActive(id)}" onclick="{clickItem}" maledict-id="{id}"> <span style="width: 177px;" maledict-id="{id}"> {name} </span> <span style="width: 53px;"> <span class="move-door {dragging ? \'open\' : \'close\'}" ref="move-door" dragover="{mouseOver}" dragenter="{dragEnter}" dragleave="{dragLeave}"> <span class="icon" title="ここに「やること」を追加する。"> <i class="far fa-plus-square"></i> </span> <span class="icon closed-door"> <i class="fas fa-door-closed"></i> </span> <span class="icon opened-door"> <i class="fas fa-door-open"></i> </span> </span> </span> </a> </nav>', 'home_page_root-buckets .move-door.close .opened-door{ display: none; } home_page_root-buckets .move-door.open .closed-door{ display: none; }', '', function(opts) {
+     this.dragging = false;
+
      this.active_maledict = null;
      this.isActive = (id) => {
          return id==opts.select ? 'is-active' : ''
@@ -149,6 +151,16 @@ riot.tag2('home_page_root-buckets', '<nav class="panel" style="width: 255px;"> <
      this.clickItem = (e) => {
          this.opts.callback('select-bucket', e.target.getAttribute('maledict-id') * 1)
      };
+     STORE.subscribe((action) => {
+         if (action.type=='START-DRAG-IMPURE-ICON') {
+             this.dragging = true;
+             this.update();
+         }
+         if (action.type=='END-DRAG-IMPURE-ICON') {
+             this.dragging = false;
+             this.update();
+         }
+     });
 });
 
 riot.tag2('home_page_root-impures', '<div class="flex-parent" style="height:100%;"> <div class="card-container"> <div style="overflow: hidden; padding-bottom: 222px;"> <impure-card each="{impure in impures()}" data="{impure}"></impure-card> </div> </div> </div>', 'home_page_root-impures .flex-parent { display: flex; flex-direction: column; } home_page_root-impures .card-container { padding-right: 22px; display: block; overflow: scroll; overflow-x: hidden; flex-grow: 1; }', '', function(opts) {
@@ -160,6 +172,25 @@ riot.tag2('home_page_root-impures', '<div class="flex-parent" style="height:100%
              this.update();
          if (action.type=='CREATED-MALEDICT-IMPURES')
              this.update();
+     });
+});
+
+riot.tag2('home_page_root-members', '<nav class="panel" style="width: 255px; margin-top: 22px;"> <p class="panel-heading">Members</p> <a each="{opts.data.list}" class="panel-block {isActive(id)}" maledict-id="{id}"> <span style="width: 177px;" maledict-id="{id}"> {name} </span> </a> </nav>', 'home_page_root-members home_page_root-buckets .move-door.close .opened-door,[data-is="home_page_root-members"] home_page_root-buckets .move-door.close .opened-door{ display: none; } home_page_root-members home_page_root-buckets .move-door.open .closed-door,[data-is="home_page_root-members"] home_page_root-buckets .move-door.open .closed-door{ display: none; }', '', function(opts) {
+     this.dragging = false;
+
+     this.active_maledict = null;
+     this.isActive = (id) => {
+         return id==opts.select ? 'is-active' : ''
+     }
+     STORE.subscribe((action) => {
+         if (action.type=='START-DRAG-IMPURE-ICON') {
+             this.dragging = true;
+             this.update();
+         }
+         if (action.type=='END-DRAG-IMPURE-ICON') {
+             this.dragging = false;
+             this.update();
+         }
      });
 });
 
@@ -178,8 +209,6 @@ riot.tag2('home_page_root-modal-create-impure', '<div class="modal {opts.open ? 
 
 riot.tag2('home_page_root-operators', '<div> <button class="button is-danger {isHide()}" action="open-modal-create-impure" onclick="{clickButton}"> 「やること」を追加 </button> </div>', 'home_page_root-operators { position: fixed; bottom: 22px; right: 33px; } home_page_root-operators .button { border-radius: 3px; margin-left: 11px; }', '', function(opts) {
      this.isHide = () => {
-         dump('isHide');
-         dump(this.opts);
          return this.opts.maledict ? '' : 'hide'
      };
      this.findUp = (element, nodeName) => {
@@ -200,7 +229,7 @@ riot.tag2('home_page_root-operators', '<div> <button class="button is-danger {is
 riot.tag2('home_page_root-tabs', '<div class="tabs is-boxed"> <ul> <li class="is-active" style="margin-left:22px;"> <a> <span class="icon is-small"><i class="fas fa-image" aria-hidden="true"></i></span> <span>Tasks</span> </a> </li> </ul> </div>', '', '', function(opts) {
 });
 
-riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-buckets data="{STORE.get(\'maledicts\')}" select="{maledict}" callback="{callback}"></home_page_root-buckets> </div> <div class="contetns-area"> <home_page_root-impures maledict="{maledict}"></home_page_root-impures> </div> <home_page_root-operators callback="{callback}" maledict="{maledict}"></home_page_root-operators> <home_page_root-modal-create-impure open="{modal_open}" callback="{callback}" maledict="{maledict}"></home_page_root-modal-create-impure>', 'home_page_root { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page_root > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; }', '', function(opts) {
+riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-buckets data="{STORE.get(\'maledicts\')}" select="{maledict}" callback="{callback}" dragging="{dragging}"></home_page_root-buckets> <home_page_root-members></home_page_root-members> </div> <div class="contetns-area"> <home_page_root-impures maledict="{maledict}" callback="{callback}"></home_page_root-impures> </div> <home_page_root-operators callback="{callback}" maledict="{maledict}"></home_page_root-operators> <home_page_root-modal-create-impure open="{modal_open}" callback="{callback}" maledict="{maledict}"></home_page_root-modal-create-impure>', 'home_page_root { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page_root > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; }', '', function(opts) {
      this.modal_open = false;
      this.maledict = null;
 
@@ -249,7 +278,44 @@ riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-buckets d
      };
 });
 
-riot.tag2('impure-card', '<div class="card" style=""> <header class="card-header"> <p class="card-header-title"> やること </p> <a href="#" class="card-header-icon" aria-label="more options"> <span class="icon"> <i class="fas fa-running"></i> </span> </a> </header> <div class="card-content"> <div class="content"> <p>{name()}</p> <p>{description()}</p> </div> </div> <footer class="card-footer"> <a href="#" class="card-footer-item">Start</a> <a href="#" class="card-footer-item">Stop</a> <a href="#" class="card-footer-item">Open</a> </footer> </div>', 'impure-card > .card { width: 222px; height: calc(1.618 * 222px); float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; } impure-card > .card .card-content{ height: calc(222px + 39px); padding: 11px 22px; overflow: auto; }', '', function(opts) {
+riot.tag2('impure-card-large', '<div class="card" style=""> <header class="card-header"> <p class="card-header-title"> やること </p> <a href="#" class="card-header-icon" aria-label="more options"> <span class="icon" draggable="true" dragstart="{dragStart}" dragend="{dragEnd}"> <i class="fas fa-running"></i> </span> </a> </header> <div class="card-content"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> <div style="margin-top: 11px;"> <impure-card-large_tab_actions class="hide" data="{opts.data}"></impure-card-large_tab_actions> <impure-card-large_tab_edit class="hide" data="{opts.data}"></impure-card-large_tab_edit> <impure-card-large_tab_hisotry class="hide" data="{opts.data}"></impure-card-large_tab_hisotry> <impure-card-large_tab_show class="hide" data="{opts.data}"></impure-card-large_tab_show> </div> </div> <footer class="card-footer"> <a class="card-footer-item">Start</a> <a class="card-footer-item">Stop</a> <a class="card-footer-item" onclick="{clickCloseButton}">Close</a> </footer> </div>', 'impure-card-large > .card { width: calc(222px + 222px + 22px); height: calc(222px + 222px + 222px + 22px); float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; } impure-card-large > .card .card-content{ height: calc(222px + 222px + 222px + 22px - 49px - 48px); padding: 11px 22px; overflow: auto; }', '', function(opts) {
+     this.clickCloseButton = (e) => {
+         this.opts.callback('switch-small');
+     };
+     this.dragStart = (e) => {
+         this.opts.callback('start-drag');
+     };
+     this.dragEnd = (e) => {
+         this.opts.callback('end-drag');
+     };
+
+     this.name = () => {
+         if (!this.opts.data) return '????????'
+         return this.opts.data.name;
+     };
+
+     this.page_tabs = new PageTabs([
+         {code: 'show',    label: '照会',     tag: 'impure-card-large_tab_show' },
+         {code: 'edit',    label: '編集',     tag: 'impure-card-large_tab_edit' },
+         {code: 'actions', label: '実績',     tag: 'impure-card-large_tab_actions' },
+         {code: 'history', label: '移動履歴', tag: 'impure-card-large_tab_hisotry' },
+     ]);
+
+     this.on('mount', () => {
+         this.page_tabs.switchTab(this.tags)
+         this.update();
+     });
+
+     this.clickTab = (e, action, data) => {
+         if (this.page_tabs.switchTab(this.tags, data.code))
+             this.update();
+     };
+});
+
+riot.tag2('impure-card-large_tab_actions', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"> <thead> <tr> <th>担当</th> <th>開始</th> <th>終了</th> <th>時間</th> </tr> </thead> <tbody> </tbody> </table>', '', '', function(opts) {
+});
+
+riot.tag2('impure-card-large_tab_edit', '<input class="input" type="text" placeholder="Text input" riot-value="{name()}"> <textarea class="textarea" placeholder="10 lines of textarea" rows="10" style="height: 411px;">{description()}</textarea> <button class="button">Save</button>', 'impure-card-large_tab_edit > *{ margin-bottom: 11px; } impure-card-large_tab_edit > *:last-child{ margin-bottom: 0px; }', '', function(opts) {
      this.name = () => {
          if (!this.opts.data) return '????????'
          return this.opts.data.name;
@@ -257,6 +323,58 @@ riot.tag2('impure-card', '<div class="card" style=""> <header class="card-header
      this.description = () => {
          if (!this.opts.data) return ''
          return this.opts.data.description;
+     };
+});
+
+riot.tag2('impure-card-large_tab_hisotry', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"> <thead> <tr> <th>担当</th> <th>Maledict</th> <th>開始</th> <th>終了</th> <th>時間</th> </tr> </thead> <tbody> </tbody> </table>', '', '', function(opts) {
+});
+
+riot.tag2('impure-card-large_tab_show', '<div style="height:422px; height:505px; overflow:auto;"> <p style="font-weight: bold;">{name()}</p> <p style="margin-top:11px;">{description()}</p> </div>', '', '', function(opts) {
+     this.name = () => {
+         if (!this.opts.data) return '????????'
+         return this.opts.data.name;
+     };
+     this.description = () => {
+         if (!this.opts.data) return ''
+         return this.opts.data.description;
+     };
+});
+
+riot.tag2('impure-card-small', '<div class="card" style=""> <header class="card-header"> <p class="card-header-title"> やること </p> <a href="#" class="card-header-icon" aria-label="more options"> <span class="icon" title="このアイコンを扉へドラッグ&ドロップすると、扉の場所へ移動できます。" draggable="true" dragstart="{dragStart}" dragend="{dragEnd}"> <i class="fas fa-running"></i> </span> </a> </header> <div class="card-content"> <div class="content"> <p>{name()}</p> </div> </div> <footer class="card-footer"> <a class="card-footer-item">Start</a> <a class="card-footer-item">Stop</a> <a class="card-footer-item" onclick="{clickOpenButton}">Open</a> </footer> </div>', 'impure-card-small > .card { width: 222px; height: 222px; float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; } impure-card-small > .card .card-content{ height: calc(222px - 49px - 48px); padding: 11px 22px; overflow: auto; }', '', function(opts) {
+     this.clickOpenButton = (e) => {
+         this.opts.callback('switch-large');
+     };
+     this.dragStart = (e) => {
+         this.opts.callback('start-drag');
+     };
+     this.dragEnd = (e) => {
+         this.opts.callback('end-drag');
+     };
+
+     this.name = () => {
+         if (!this.opts.data) return '????????'
+         return this.opts.data.name;
+     };
+     this.description = () => {
+         if (!this.opts.data) return ''
+         return this.opts.data.description;
+     };
+});
+
+riot.tag2('impure-card', '<impure-card-small data="{opts.data}" callback="{callback}"></impure-card-small> <impure-card-large data="{opts.data}" callback="{callback}"></impure-card-large>', 'impure-card.large > impure-card-small { display: none; } impure-card.small > impure-card-large { display: none; }', 'class="small"', function(opts) {
+     this.callback = (action) => {
+         if ('switch-large'==action)
+             this.root.setAttribute('class', 'large');
+
+         if ('switch-small'==action)
+             this.root.setAttribute('class', 'small');
+
+         if ('start-drag'==action)
+             ACTIONS.startDragImpureIcon();
+
+         if ('end-drag'==action)
+             ACTIONS.endDragImpureIcon();
+
      };
 });
 

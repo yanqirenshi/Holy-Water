@@ -2,11 +2,14 @@
     <div class="bucket-area">
         <home_page_root-buckets data={STORE.get('maledicts')}
                                 select={maledict}
-                                callback={callback}></home_page_root-buckets>
+                                callback={callback}
+                                dragging={dragging}></home_page_root-buckets>
+        <home_page_root-members></home_page_root-members>
     </div>
 
     <div class="contetns-area">
-        <home_page_root-impures maledict={maledict}></home_page_root-impures>
+        <home_page_root-impures maledict={maledict}
+                                callback={callback}></home_page_root-impures>
     </div>
 
     <home_page_root-operators callback={callback}

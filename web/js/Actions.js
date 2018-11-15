@@ -69,4 +69,20 @@ class Actions extends Vanilla_Redux_Actions {
             data: { impures: this.mergeData(response) },
         };
     }
+    /////
+    /////
+    /////
+    startDragImpureIcon () {
+        STORE.dispatch({
+            type: 'START-DRAG-IMPURE-ICON',
+            data: {},
+        });
+    }
+    endDragImpureIcon () {
+        STORE.dispatch({
+            type: 'END-DRAG-IMPURE-ICON',
+            data: {},
+        });
+    }
+
 }

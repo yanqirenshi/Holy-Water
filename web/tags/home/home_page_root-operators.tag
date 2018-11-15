@@ -9,8 +9,6 @@
 
     <script>
      this.isHide = () => {
-         dump('isHide');
-         dump(this.opts);
          return this.opts.maledict ? '' : 'hide'
      };
      this.findUp = (element, nodeName) => {
