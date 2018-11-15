@@ -2,10 +2,23 @@
     <div class="flex-parent" style="height:100%;">
         <div class="card-container">
             <div style="overflow: hidden; padding-bottom: 222px;">
-                <impure-card each={opts.data.list}></impure-card>
+                <impure-card each={impure in impures()}
+                             data={impure}></impure-card>
             </div>
         </div>
     </div>
+
+    <script>
+     this.impures = () => {
+         return STORE.get('impures').list;
+     };
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-MALEDICT-IMPURES')
+             this.update();
+         if (action.type=='CREATED-MALEDICT-IMPURES')
+             this.update();
+     });
+    </script>
 
     <style>
      home_page_root-impures .flex-parent {

@@ -22,3 +22,11 @@
 (defun find-impures (&key maledict)
   (mapcar #'dao2impure
           (hw:find-impures :maledict maledict)))
+
+
+(defun create-impure-2-maledict (maledict &key (name "????????") (description "") editor)
+  (hw:add-impure maledict
+                 (hw:create-impure :name name
+                                   :description description
+                                   :creator editor)
+                 :creator editor))

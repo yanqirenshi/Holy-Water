@@ -1,15 +1,27 @@
 <home_page_root-buckets>
-    <nav class="panel" style="width: 222px;">
+    <nav class="panel" style="width: 255px;">
         <p class="panel-heading">Buckets</p>
 
         <a each={opts.data.list}
            class="panel-block {isActive(id)}"
            onclick={clickItem}
            maledict-id={id}>
-            <span class="panel-icon">
-                <i class="fas fa-book" aria-hidden="true"></i>
+
+            <span style="width: 177px;" maledict-id={id}>
+                {name}
             </span>
-            {name}
+
+            <span style="width: 53px;">
+                <span class="icon">
+                    <i class="fas fa-door-closed"></i>
+                </span>
+                <span class="icon hide">
+                    <i class="fas fa-door-open"></i>
+                </span>
+                <span class="icon">
+                    <i class="far fa-plus-square"></i>
+                </span>
+            </span>
         </a>
     </nav>
 

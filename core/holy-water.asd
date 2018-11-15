@@ -20,6 +20,7 @@
                                (:file "ev_purge")))
                  (:file "creator")
                  (:file "angel-maledict")
+                 (:file "collect-impure")
                  (:file "angel")
                  (:file "maledict")
                  (:file "impure"))))

@@ -16,16 +16,21 @@
                                               :updated-by by-id)
                              :creator creator)))
 
-(defgeneric find-maledicts (angel)
+(defun get-angel (&key id)
+  (mito:find-dao 'rs_angel :id id))
+
+
+(defgeneric find-angel-maledicts (angel)
   (:method ((angel rs_angel))
     (mapcar #'(lambda (d)
                 (mito:find-dao 'rs_maledict :id (maledict-id d)))
             (mito:select-dao 'th_angel-maledict
               (sxql:where (:= :angel-id (mito:object-id angel)))))))
 
+
 (defgeneric get-inbox-maledict (angel)
   (:method ((angel rs_angel))
     (or (find-if #'(lambda (maledict)
                   (= *maledict-type-inbox* (maledict-type-id maledict)))
-              (find-maledicts angel))
+              (find-angel-maledicts angel))
         (error "Not found InBox"))))

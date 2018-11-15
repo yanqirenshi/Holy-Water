@@ -6,8 +6,7 @@
     </div>
 
     <div class="contetns-area">
-        <home_page_root-impures data={STORE.get('impures')}
-                                maledict={maledict}></home_page_root-impures>
+        <home_page_root-impures maledict={maledict}></home_page_root-impures>
     </div>
 
     <home_page_root-operators callback={callback}
@@ -27,7 +26,8 @@
          if (action=='select-bucket') {
              let id = data;
              this.maledict = id;
-             this.tags['home_page_root-buckets'].update();
+
+             this.update();
 
              ACTIONS.fetchMaledictImpures(id);
          }

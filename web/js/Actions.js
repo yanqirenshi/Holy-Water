@@ -1,7 +1,16 @@
 class Actions extends Vanilla_Redux_Actions {
     mergeData (source, target) {
-        let target_ht = Object.assign({}, target.ht);
-        let target_list = target.list.slice();
+        let target_ht;
+        let target_list;
+
+        if (target){
+            target_ht = Object.assign({}, target.ht);
+            target_list = target.list.slice();
+        } else {
+            target_ht = {};
+            target_list = [];
+        }
+
         for (var i in source) {
             let obj = source[i];
 
@@ -43,8 +52,8 @@ class Actions extends Vanilla_Redux_Actions {
     }
     fetchedMaledictImpures (response) {
         return {
-            type: 'FETCHED-MALEDICTS',
-            data: { maledicts: this.mergeData(response, STORE.get('maledicts')) },
+            type: 'FETCHED-MALEDICT-IMPURES',
+            data: { impures: this.mergeData(response) },
         };
     }
     createMaledictImpures (maledict_id, data) {
@@ -57,7 +66,7 @@ class Actions extends Vanilla_Redux_Actions {
     createdMaledictImpures (response) {
         return {
             type: 'CREATED-MALEDICT-IMPURES',
-            data: {},
+            data: { impures: this.mergeData(response) },
         };
     }
 }

@@ -7,6 +7,16 @@
   (:export #:*route*))
 (in-package :holy-water.api.route)
 
+
+;;;;;
+;;;;; utils
+;;;;;
+(defun get-angel ()
+  (hw:get-angel :id 1))
+
+(defun post-data (_parsed)
+  (jojo:parse (caar _parsed)))
+
 ;;;;;
 ;;;;; Router
 ;;;;;
@@ -17,16 +27,31 @@
 ;;;;;
 ;;;;; Routing rules
 ;;;;;
-(defroute "/" ()
-  "")
+(defroute "/" () "")
 
 (defroute "/maledicts" ()
   (render-json (hw.api.ctrl:find-maledicts)))
+
 
 (defroute "/maledicts/:id/impures" (&key id)
   (let ((maledict (hw:get-maledict :id id)))
     (unless maledict (throw-code 404))
     (render-json (hw.api.ctrl:find-impures :maledict maledict))))
+
+
+(defroute ("/maledicts/:id/impures" :method :POST) (&key id _parsed)
+  (let* ((angel (get-angel))
+         (maledict (hw:get-maledict :id id))
+         (post-data (post-data _parsed))
+         (name (getf post-data :|name|))
+         (description (getf post-data :|description|)))
+    (unless maledict (throw-code 404))
+    (hw.api.ctrl:create-impure-2-maledict maledict
+                                          :name name
+                                          :description description
+                                          :editor angel)
+    (render-json (hw.api.ctrl:find-impures :maledict maledict))))
+
 
 ;;;;;
 ;;;;; Error pages

@@ -7,5 +7,6 @@
                 #:write-key-value)
   (:export #:find-maledicts
            #:get-maledict)
-  (:export #:find-impures))
+  (:export #:find-impures
+           #:create-impure-2-maledict))
 (in-package :holy-water.api.controller)
