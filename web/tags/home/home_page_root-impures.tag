@@ -1,7 +1,7 @@
 <home_page_root-impures>
-    <div class="flex-parent" style="height:100%;">
+    <div class="flex-parent" style="height:100%; margin-top: -8px;">
         <div class="card-container">
-            <div style="overflow: hidden; padding-bottom: 222px;">
+            <div style="overflow: hidden; padding-bottom: 222px; padding-top: 8px;">
                 <impure-card each={impure in impures()}
                              data={impure}></impure-card>
             </div>

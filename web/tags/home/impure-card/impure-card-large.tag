@@ -1,5 +1,5 @@
 <impure-card-large>
-    <div class="card" style="">
+    <div class="card" style="box-shadow: 0px 0px 8px #eeeeee;">
         <header class="card-header">
             <p class="card-header-title">
                 やること
@@ -78,6 +78,10 @@
          margin-left: 22px;
          margin-top: 1px;
          margin-bottom: 22px;
+
+         box-shadow: 0px 0px 8px #ffffff;
+         border: 1px solid #dddddd;
+         border-radius: 5px;
      }
      impure-card-large > .card .card-content{
          height: calc(222px + 222px + 222px + 22px - 49px - 48px);

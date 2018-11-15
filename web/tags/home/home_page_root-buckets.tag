@@ -5,7 +5,8 @@
         <a each={opts.data.list}
            class="panel-block {isActive(id)}"
            onclick={clickItem}
-           maledict-id={id}>
+           maledict-id={id}
+           style="background:#fff;">
 
             <span style="width: 177px;" maledict-id={id}>
                 {name}
