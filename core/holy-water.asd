@@ -21,7 +21,8 @@
                  (:file "creator")
                  (:file "angel-maledict")
                  (:file "angel")
-                 (:file "maledict"))))
+                 (:file "maledict")
+                 (:file "impure"))))
   :description ""
   :long-description
   #.(read-file-string

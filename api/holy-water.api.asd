@@ -6,10 +6,16 @@
   :version "0.1.0"
   :author ""
   :license ""
-  :depends-on ()
+  :depends-on ("caveman2" "lack-middleware-validation")
   :components ((:module "src"
                 :components
-                ((:file "holy-water.api"))))
+                ((:module "controller"
+                  :components ((:file "package")
+                               (:file "maledict")
+                               (:file "impure")))
+                 (:file "package")
+                 (:file "render")
+                 (:file "route"))))
   :description ""
   :long-description
   #.(read-file-string

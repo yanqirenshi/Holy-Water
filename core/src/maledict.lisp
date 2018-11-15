@@ -1,5 +1,15 @@
 (in-package :holy-water)
 
+(defun get-maledict (&key id)
+  (when id
+    (mito:find-dao 'rs_maledict :id id)))
+
+(defun find-maledicts ()
+  (mito:select-dao 'rs_maledict))
+
+(defun get-maledict-type (&key maledict)
+  (gethash (maledict-type-id maledict) *maledict-types*))
+
 (defun create-maledict (&key creator
                           maledict-type-id
                           (name "????????")

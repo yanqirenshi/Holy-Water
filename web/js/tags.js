@@ -141,13 +141,100 @@ riot.tag2('home', '', '', '', function(opts) {
      this.on('update', () => { this.draw(); });
 });
 
-riot.tag2('home_page_root-buckets', '<nav class="panel" style="width: 222px;"> <p class="panel-heading">Buckets</p> <a class="panel-block is-active"> <span class="panel-icon"> <i class="fas fa-book" aria-hidden="true"></i> </span> bulma </a> <a class="panel-block"> <span class="panel-icon"> <i class="fas fa-book" aria-hidden="true"></i> </span> marksheet </a> <a class="panel-block"> <span class="panel-icon"> <i class="fas fa-book" aria-hidden="true"></i> </span> minireset.css </a> <a class="panel-block"> <span class="panel-icon"> <i class="fas fa-book" aria-hidden="true"></i> </span> jgthms.github.io </a> <a class="panel-block"> <span class="panel-icon"> <i class="fas fa-code-branch" aria-hidden="true"></i> </span> daniellowtw/infboard </a> <a class="panel-block"> <span class="panel-icon"> <i class="fas fa-code-branch" aria-hidden="true"></i> </span> mojs </a> </nav>', '', '', function(opts) {
+riot.tag2('home_page_root-buckets', '<nav class="panel" style="width: 222px;"> <p class="panel-heading">Buckets</p> <a each="{opts.data.list}" class="panel-block {isActive(id)}" onclick="{clickItem}" maledict-id="{id}"> <span class="panel-icon"> <i class="fas fa-book" aria-hidden="true"></i> </span> {name} </a> </nav>', '', '', function(opts) {
+     this.active_maledict = null;
+     this.isActive = (id) => {
+         return id==opts.select ? 'is-active' : ''
+     }
+     this.clickItem = (e) => {
+         this.opts.callback('select-bucket', e.target.getAttribute('maledict-id') * 1)
+     };
+});
+
+riot.tag2('home_page_root-impures', '<div class="flex-parent" style="height:100%;"> <div class="card-container"> <div style="overflow: hidden; padding-bottom: 222px;"> <impure-card each="{opts.data.list}"></impure-card> </div> </div> </div>', 'home_page_root-impures .flex-parent { display: flex; flex-direction: column; } home_page_root-impures .card-container { padding-right: 22px; display: block; overflow: scroll; overflow-x: hidden; flex-grow: 1; }', '', function(opts) {
+});
+
+riot.tag2('home_page_root-modal-create-impure', '<div class="modal {opts.open ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head"> <p class="modal-card-title">やる事を追加</p> <button class="delete" aria-label="close" onclick="{clickCloseButton}"></button> </header> <section class="modal-card-body"> <input class="input" type="text" placeholder="Title" ref="name"> <textarea class="textarea" placeholder="Description" rows="6" style="margin-top:11px;" ref="description"></textarea> </section> <footer class="modal-card-foot"> <button class="button is-success" onclick="{clickCreateButton}">Create!</button> <button class="button" onclick="{clickCloseButton}">Cancel</button> </footer> </div> </div>', '', '', function(opts) {
+     this.clickCreateButton = (e) => {
+         this.opts.callback('create-impure', {
+             name: this.refs['name'].value,
+             description: this.refs['description'].value,
+             maledict: this.opts.maledict
+         });
+     };
+     this.clickCloseButton = (e) => {
+         this.opts.callback('close-modal-create-impure');
+     };
+});
+
+riot.tag2('home_page_root-operators', '<div> <button class="button is-danger {isHide()}" action="open-modal-create-impure" onclick="{clickButton}"> 「やること」を追加 </button> </div>', 'home_page_root-operators { position: fixed; bottom: 22px; right: 33px; } home_page_root-operators .button { border-radius: 3px; margin-left: 11px; }', '', function(opts) {
+     this.isHide = () => {
+         return this.opts.maledict ? '' : 'hide'
+     };
+     this.findUp = (element, nodeName) => {
+         if (!element) return null;
+
+         if (element.nodeName == nodeName)
+             return element;
+
+         return this.findUp(element.parentElement, nodeName);
+     };
+     this.clickButton = (e) => {
+         let button = this.findUp(e.target, 'BUTTON');
+
+         opts.callback(button.getAttribute('action'));
+     };
 });
 
 riot.tag2('home_page_root-tabs', '<div class="tabs is-boxed"> <ul> <li class="is-active" style="margin-left:22px;"> <a> <span class="icon is-small"><i class="fas fa-image" aria-hidden="true"></i></span> <span>Tasks</span> </a> </li> </ul> </div>', '', '', function(opts) {
 });
 
-riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-buckets></home_page_root-buckets> </div> <div class="contetns-area"> <div style="height:100%;"> <div class="card-container"> <div style="overflow: hidden; padding-bottom: 222px;"> <impure-card></impure-card> <impure-card></impure-card> <impure-card></impure-card> <impure-card></impure-card> <impure-card></impure-card> <impure-card></impure-card> <impure-card></impure-card> <impure-card></impure-card> <impure-card></impure-card> <impure-card></impure-card> <impure-card></impure-card> <impure-card></impure-card> <impure-card></impure-card> <impure-card></impure-card> <impure-card></impure-card> <impure-card></impure-card> <impure-card></impure-card> <impure-card></impure-card> <impure-card></impure-card> <impure-card></impure-card> <impure-card></impure-card> </div> </div> </div> </div>', 'home_page_root { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page_root > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; } home_page_root > .contetns-area > div { display: flex; flex-direction: column; } home_page_root > .contetns-area > div > .card-container { padding-right: 22px; display: block; overflow: scroll; overflow-x: hidden; flex-grow: 1; }', '', function(opts) {
+riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-buckets data="{STORE.get(\'maledicts\')}" select="{maledict}" callback="{callback}"></home_page_root-buckets> </div> <div class="contetns-area"> <home_page_root-impures data="{STORE.get(\'impures\')}" maledict="{maledict}"></home_page_root-impures> </div> <home_page_root-operators callback="{callback}" maledict="{maledict}"></home_page_root-operators> <home_page_root-modal-create-impure open="{modal_open}" callback="{callback}" maledict="{maledict}"></home_page_root-modal-create-impure>', 'home_page_root { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page_root > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; }', '', function(opts) {
+     this.modal_open = false;
+     this.maledict = null;
+
+     this.callback = (action, data) => {
+         if (action=='select-bucket') {
+             let id = data;
+             this.maledict = id;
+             this.tags['home_page_root-buckets'].update();
+
+             ACTIONS.fetchMaledictImpures(id);
+         }
+
+         if (action=='open-modal-create-impure')
+             this.openModal();
+
+         if (action=='close-modal-create-impure')
+             this.closeModal();
+
+         if (action=='create-impure')
+             ACTIONS.createMaledictImpures(data.maledict, {
+                 name: data.name,
+                 description: data.description,
+             });
+
+     };
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-MALEDICTS') {
+             this.update();
+         }
+         if (action.type=='CREATED-MALEDICT-IMPURES') {
+             this.closeModal();
+         }
+     });
+     this.on('mount', () => {
+         ACTIONS.fetchMaledicts();
+     });
+
+     this.openModal = () => {
+         this.modal_open = true;
+         this.tags['home_page_root-modal-create-impure'].update();
+     };
+     this.closeModal = () => {
+         this.modal_open = false;
+         this.tags['home_page_root-modal-create-impure'].update();
+     };
 });
 
 riot.tag2('impure-card', '<div class="card" style=""> <header class="card-header"> <p class="card-header-title"> Component </p> <a href="#" class="card-header-icon" aria-label="more options"> <span class="icon"> <i class="fas fa-angle-down" aria-hidden="true"></i> </span> </a> </header> <div class="card-content"> <div class="content"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris. <a href="#">@bulmaio</a>. <a href="#">#css</a> <a href="#">#responsive</a> <br> <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time> </div> </div> <footer class="card-footer"> <a href="#" class="card-footer-item">Save</a> <a href="#" class="card-footer-item">Edit</a> <a href="#" class="card-footer-item">Delete</a> </footer> </div>', 'impure-card > .card { width: 222px; height: calc(1.618 * 222px); float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; } impure-card > .card .card-content{ height: calc(222px + 39px); }', '', function(opts) {

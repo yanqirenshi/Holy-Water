@@ -49,6 +49,8 @@ class Store extends Vanilla_Redux_Store {
     }
     init () {
         let data = {
+            maledicts: { ht: {}, list: [] },
+            impures: { ht: {}, list: [] },
             site: {
                 active_page: 'home',
                 home_page: 'home',
@@ -68,7 +70,6 @@ class Store extends Vanilla_Redux_Store {
                 section.hash = hash;
             }
         }
-
 
         this._contents = Immutable.Map(data);
         return this;

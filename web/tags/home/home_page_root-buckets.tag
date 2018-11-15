@@ -2,41 +2,24 @@
     <nav class="panel" style="width: 222px;">
         <p class="panel-heading">Buckets</p>
 
-        <a class="panel-block is-active">
+        <a each={opts.data.list}
+           class="panel-block {isActive(id)}"
+           onclick={clickItem}
+           maledict-id={id}>
             <span class="panel-icon">
                 <i class="fas fa-book" aria-hidden="true"></i>
             </span>
-            bulma
-        </a>
-        <a class="panel-block">
-            <span class="panel-icon">
-                <i class="fas fa-book" aria-hidden="true"></i>
-            </span>
-            marksheet
-        </a>
-        <a class="panel-block">
-            <span class="panel-icon">
-                <i class="fas fa-book" aria-hidden="true"></i>
-            </span>
-            minireset.css
-        </a>
-        <a class="panel-block">
-            <span class="panel-icon">
-                <i class="fas fa-book" aria-hidden="true"></i>
-            </span>
-            jgthms.github.io
-        </a>
-        <a class="panel-block">
-            <span class="panel-icon">
-                <i class="fas fa-code-branch" aria-hidden="true"></i>
-            </span>
-            daniellowtw/infboard
-        </a>
-        <a class="panel-block">
-            <span class="panel-icon">
-                <i class="fas fa-code-branch" aria-hidden="true"></i>
-            </span>
-            mojs
+            {name}
         </a>
     </nav>
+
+    <script>
+     this.active_maledict = null;
+     this.isActive = (id) => {
+         return id==opts.select ? 'is-active' : ''
+     }
+     this.clickItem = (e) => {
+         this.opts.callback('select-bucket', e.target.getAttribute('maledict-id') * 1)
+     };
+    </script>
 </home_page_root-buckets>

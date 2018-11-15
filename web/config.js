@@ -1,10 +1,10 @@
 const _CONFIG = {
     api : {
         scheme: 'http',
-        host: 'localhost',
+        host: 'satoshi-iwasaki.local',
         port: '8080',
         path: {
-            prefix: '/path/api/v1'
+            prefix: '/hw/api/v1'
         }
     }
 };
