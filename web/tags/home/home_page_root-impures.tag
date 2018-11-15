@@ -29,7 +29,7 @@
      home_page_root-impures .card-container {
          padding-right: 22px;
          display: block;
-         overflow: scroll;
+         overflow: auto;
          overflow-x: hidden;
          flex-grow: 1;
      }
