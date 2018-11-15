@@ -6,6 +6,6 @@
 *.x86f
 *~
 .#*
-
+.DS_Store
 
 hour-memos.org
