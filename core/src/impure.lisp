@@ -4,7 +4,7 @@
                           (name "????????")
                           (description ""))
   (let ((by-id (creator-id creator)))
-    (mito:create-dao 'rs_impure
+    (mito:create-dao 'rs_impure-active
                      :name name
                      :description description
                      :created-by by-id
@@ -12,9 +12,9 @@
 
 
 (defgeneric add-impure (target impure &key creator)
-  (:method ((maledict rs_maledict) (impure rs_impure) &key creator)
+  (:method ((maledict rs_maledict) (impure rs_impure-active) &key creator)
     (collect-impure-create maledict impure :creator creator))
-  (:method ((angel rs_angel) (impure rs_impure) &key creator)
+  (:method ((angel rs_angel) (impure rs_impure-active) &key creator)
     (let ((inbox (get-inbox-maledict angel)))
       (add-impure inbox impure :creator creator))))
 
@@ -22,7 +22,7 @@
   (when maledict
     (mapcar #'(lambda (d)
                 (print (hw::impure-id d))
-                (mito:find-dao 'hw::rs_impure :id (hw::impure-id d)))
+                (mito:find-dao 'hw::rs_impure-active :id (hw::impure-id d)))
             (mito:select-dao 'ev_collect-impure
               (sxql:where (:= :maledict-id (mito:object-id maledict)))))))
 
@@ -30,6 +30,9 @@
   (when maledict
     (mapcar #'(lambda (d)
                 ;; TODO: これはまずいよなぁ。
-                (mito:find-dao 'rs_impure :id (impure-id d)))
+                (mito:find-dao 'rs_impure-active :id (impure-id d)))
             (mito:select-dao 'ev_collect-impure
               (sxql:where (:= :maledict-id (mito:object-id maledict)))))))
+
+(defun get-impure (&key id)
+  (mito:find-dao 'rs_impure-active :id id))

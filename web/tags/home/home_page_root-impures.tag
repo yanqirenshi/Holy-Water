@@ -17,6 +17,10 @@
              this.update();
          if (action.type=='CREATED-MALEDICT-IMPURES')
              this.update();
+         if (action.type=='STARTED-ACTION')
+             this.update();
+         if (action.type=='STOPED-ACTION')
+             this.update();
      });
     </script>
 

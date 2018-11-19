@@ -70,6 +70,35 @@ class Actions extends Vanilla_Redux_Actions {
         };
     }
     /////
+    ///// Action
+    /////
+    startAction (impure) {
+        let path = '/impures/' + impure.id + '/purges/start';
+
+        API.post(path, null, function (response) {
+            STORE.dispatch(this.startedAction(response));
+        }.bind(this));
+    }
+    startedAction (impure) {
+        return {
+            type: 'STARTED-ACTION',
+            data: { impures: this.mergeData([impure], STORE.get('impures')) },
+        };
+    }
+    stopAction (impure) {
+        let path = '/impures/' + impure.id + '/purges/stop';
+
+        API.post(path, null, function (response) {
+            STORE.dispatch(this.startedAction(response));
+        }.bind(this));
+    }
+    stopedAction (impure) {
+        return {
+            type: 'STOPED-ACTION',
+            data: { impures: this.mergeData([impure], STORE.get('impures')) },
+        };
+    }
+    /////
     /////
     /////
     startDragImpureIcon () {

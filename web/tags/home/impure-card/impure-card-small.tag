@@ -1,4 +1,4 @@
-<impure-card-small>
+<impure-card-small status={status()}>
     <div class="card">
         <header class="card-header">
             <p class="card-header-title">
@@ -21,15 +21,24 @@
             </div>
         </div>
         <footer class="card-footer">
-            <a class="card-footer-item">Start</a>
-            <a class="card-footer-item">Stop</a>
-            <a class="card-footer-item" onclick={clickOpenButton}>Open</a>
+            <span class="card-footer-item start" action="start-action" onclick={clickButton}>Start</span>
+            <span class="card-footer-item stop"  action="stop-action"  onclick={clickButton}>Stop</span>
+            <span class="card-footer-item open"  action="switch-large" onclick={clickButton}>Open</span>
         </footer>
     </div>
 
     <script>
-     this.clickOpenButton = (e) => {
-         this.opts.callback('switch-large');
+     this.clickButton = (e) => {
+         let target = e.target;
+         let action = target.getAttribute('action');
+
+         if (action=='start-action' && this.isStart())
+             return;
+
+         if (action=='stop-action' && !this.isStart())
+             return;
+
+         this.opts.callback(action);
      };
      this.dragStart = (e) => {
          this.opts.callback('start-drag');
@@ -40,6 +49,15 @@
     </script>
 
     <script>
+     this.isStart = () => {
+         if (!this.opts.data) return false;
+         if (!this.opts.data.purge) return false;
+
+         return true;
+     }
+     this.status = () => {
+         return this.isStart() ? 'start' : '';
+     };
      this.name = () => {
          if (!this.opts.data) return '????????'
          return this.opts.data.name;
@@ -67,6 +85,18 @@
          height: calc(222px - 49px - 48px);
          padding: 11px 22px;
          overflow: auto;
+     }
+     impure-card-small span.card-footer-item.start {
+         color: inherit;
+     }
+     impure-card-small[status=start] span.card-footer-item.start {
+         color: #eeeeee;
+     }
+     impure-card-small span.card-footer-item.stop {
+         color: #eeeeee;
+     }
+     impure-card-small[status=start] span.card-footer-item.stop {
+         color: inherit;
      }
     </style>
 </impure-card-small>

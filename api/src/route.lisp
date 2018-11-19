@@ -29,14 +29,18 @@
 ;;;;;
 (defroute "/" () "")
 
+;;;;;
+;;;;; Maledict
+;;;;;
 (defroute "/maledicts" ()
   (render-json (hw.api.ctrl:find-maledicts)))
 
 
 (defroute "/maledicts/:id/impures" (&key id)
-  (let ((maledict (hw:get-maledict :id id)))
+  (let ((angel (get-angel))
+        (maledict (hw:get-maledict :id id)))
     (unless maledict (throw-code 404))
-    (render-json (hw.api.ctrl:find-impures :maledict maledict))))
+    (render-json (hw.api.ctrl:find-impures angel :maledict maledict))))
 
 
 (defroute ("/maledicts/:id/impures" :method :POST) (&key id _parsed)
@@ -51,6 +55,22 @@
                                           :description description
                                           :editor angel)
     (render-json (hw.api.ctrl:find-impures :maledict maledict))))
+
+
+;;;;;
+;;;;; Impure
+;;;;;
+(defroute ("/impures/:id/purges/start" :method :POST) (&key id)
+  (let* ((angel (get-angel))
+         (impure (hw::get-impure :id id)))
+    (unless impure (throw-code 404))
+    (render-json (hw.api.ctrl:start-action-4-impure angel impure))))
+
+(defroute ("/impures/:id/purges/stop" :method :POST) (&key id)
+  (let* ((angel (get-angel))
+         (impure (hw::get-impure :id id)))
+    (unless impure (throw-code 404))
+    (render-json (hw.api.ctrl:stop-action-4-impure angel impure))))
 
 
 ;;;;;

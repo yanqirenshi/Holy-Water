@@ -23,7 +23,9 @@
                  (:file "collect-impure")
                  (:file "angel")
                  (:file "maledict")
-                 (:file "impure"))))
+                 (:file "impure")
+                 (:file "purge")
+                 (:file "actions"))))
   :description ""
   :long-description
   #.(read-file-string

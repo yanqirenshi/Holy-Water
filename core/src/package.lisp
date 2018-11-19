@@ -6,8 +6,12 @@
            #:get-maledict-type)
   (:export #:find-impures
            #:create-impure
-           #:add-impure)
-  (:export #:get-angel))
+           #:add-impure
+           #:get-impure)
+  (:export #:get-angel)
+  (:export #:get-purge)
+  (:export #:start-action-impure
+           #:stop-action-impure))
 (in-package :holy-water)
 
 (mito:connect-toplevel :postgres :database-name "holy_water" :username "holy_water")

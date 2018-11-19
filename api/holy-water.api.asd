@@ -11,6 +11,7 @@
                 :components
                 ((:module "controller"
                   :components ((:file "package")
+                               (:file "purge")
                                (:file "maledict")
                                (:file "impure")))
                  (:file "package")

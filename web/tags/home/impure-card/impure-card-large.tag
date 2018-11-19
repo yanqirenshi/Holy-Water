@@ -26,14 +26,17 @@
         </div>
 
         <footer class="card-footer">
-            <a class="card-footer-item">Start</a>
-            <a class="card-footer-item">Stop</a>
-            <a class="card-footer-item" onclick={clickCloseButton}>Close</a>
+            <a class="card-footer-item" action="start-action" onclick={clickButton}>Start</a>
+            <a class="card-footer-item" action="stop-action"  onclick={clickButton}>Stop</a>
+            <a class="card-footer-item" action="switch-large" onclick={clickButton}>Small</a>
         </footer>
     </div>
 
     <script>
-     this.clickCloseButton = (e) => {
+     this.clickButton = (e) => {
+         let target = e.target;
+         let action = target.getAttribute('action');
+
          this.opts.callback('switch-small');
      };
      this.dragStart = (e) => {
@@ -72,7 +75,7 @@
 
     <style>
      impure-card-large > .card {
-         width: calc(222px + 222px + 22px);
+         width: calc(222px + 222px + 222px + 22px);
          height: calc(222px + 222px + 222px + 22px);
          float: left;
          margin-left: 22px;

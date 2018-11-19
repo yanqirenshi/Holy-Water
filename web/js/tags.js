@@ -172,11 +172,19 @@ riot.tag2('home_page_root-impures', '<div class="flex-parent" style="height:100%
              this.update();
          if (action.type=='CREATED-MALEDICT-IMPURES')
              this.update();
+         if (action.type=='STARTED-ACTION')
+             this.update();
+         if (action.type=='STOPED-ACTION')
+             this.update();
      });
 });
 
-riot.tag2('home_page_root-members', '<nav class="panel" style="width: 255px; margin-top: 22px;"> <p class="panel-heading">Members</p> <a each="{opts.data.list}" class="panel-block {isActive(id)}" maledict-id="{id}"> <span style="width: 177px;" maledict-id="{id}"> {name} </span> </a> </nav>', 'home_page_root-members home_page_root-buckets .move-door.close .opened-door,[data-is="home_page_root-members"] home_page_root-buckets .move-door.close .opened-door{ display: none; } home_page_root-members home_page_root-buckets .move-door.open .closed-door,[data-is="home_page_root-members"] home_page_root-buckets .move-door.open .closed-door{ display: none; }', '', function(opts) {
+riot.tag2('home_page_root-members', '<nav class="panel" style="width: 255px; margin-top: 22px;"> <p class="panel-heading">Members</p> <a each="{data()}" class="panel-block {isActive(id)}" maledict-id="{id}"> <span style="width: 177px;" maledict-id="{id}"> {name} </span> </a> </nav>', 'home_page_root-members home_page_root-buckets .move-door.close .opened-door,[data-is="home_page_root-members"] home_page_root-buckets .move-door.close .opened-door{ display: none; } home_page_root-members home_page_root-buckets .move-door.open .closed-door,[data-is="home_page_root-members"] home_page_root-buckets .move-door.open .closed-door{ display: none; }', '', function(opts) {
      this.dragging = false;
+
+     this.data = () => {
+         return opts.data ? opts.data.list : [];
+     };
 
      this.active_maledict = null;
      this.isActive = (id) => {
@@ -278,8 +286,11 @@ riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-buckets d
      };
 });
 
-riot.tag2('impure-card-large', '<div class="card" style="box-shadow: 0px 0px 8px #eeeeee;"> <header class="card-header"> <p class="card-header-title"> やること </p> <a href="#" class="card-header-icon" aria-label="more options"> <span class="icon" draggable="true" dragstart="{dragStart}" dragend="{dragEnd}"> <i class="fas fa-running"></i> </span> </a> </header> <div class="card-content"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> <div style="margin-top: 11px;"> <impure-card-large_tab_actions class="hide" data="{opts.data}"></impure-card-large_tab_actions> <impure-card-large_tab_edit class="hide" data="{opts.data}"></impure-card-large_tab_edit> <impure-card-large_tab_hisotry class="hide" data="{opts.data}"></impure-card-large_tab_hisotry> <impure-card-large_tab_show class="hide" data="{opts.data}"></impure-card-large_tab_show> </div> </div> <footer class="card-footer"> <a class="card-footer-item">Start</a> <a class="card-footer-item">Stop</a> <a class="card-footer-item" onclick="{clickCloseButton}">Close</a> </footer> </div>', 'impure-card-large > .card { width: calc(222px + 222px + 22px); height: calc(222px + 222px + 222px + 22px); float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; box-shadow: 0px 0px 8px #ffffff; border: 1px solid #dddddd; border-radius: 5px; } impure-card-large > .card .card-content{ height: calc(222px + 222px + 222px + 22px - 49px - 48px); padding: 11px 22px; overflow: auto; }', '', function(opts) {
-     this.clickCloseButton = (e) => {
+riot.tag2('impure-card-large', '<div class="card" style="box-shadow: 0px 0px 8px #eeeeee;"> <header class="card-header"> <p class="card-header-title"> やること </p> <a href="#" class="card-header-icon" aria-label="more options"> <span class="icon" draggable="true" dragstart="{dragStart}" dragend="{dragEnd}"> <i class="fas fa-running"></i> </span> </a> </header> <div class="card-content"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> <div style="margin-top: 11px;"> <impure-card-large_tab_actions class="hide" data="{opts.data}"></impure-card-large_tab_actions> <impure-card-large_tab_edit class="hide" data="{opts.data}"></impure-card-large_tab_edit> <impure-card-large_tab_hisotry class="hide" data="{opts.data}"></impure-card-large_tab_hisotry> <impure-card-large_tab_show class="hide" data="{opts.data}"></impure-card-large_tab_show> </div> </div> <footer class="card-footer"> <a class="card-footer-item" action="start-action" onclick="{clickButton}">Start</a> <a class="card-footer-item" action="stop-action" onclick="{clickButton}">Stop</a> <a class="card-footer-item" action="switch-large" onclick="{clickButton}">Small</a> </footer> </div>', 'impure-card-large > .card { width: calc(222px + 222px + 222px + 22px); height: calc(222px + 222px + 222px + 22px); float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; box-shadow: 0px 0px 8px #ffffff; border: 1px solid #dddddd; border-radius: 5px; } impure-card-large > .card .card-content{ height: calc(222px + 222px + 222px + 22px - 49px - 48px); padding: 11px 22px; overflow: auto; }', '', function(opts) {
+     this.clickButton = (e) => {
+         let target = e.target;
+         let action = target.getAttribute('action');
+
          this.opts.callback('switch-small');
      };
      this.dragStart = (e) => {
@@ -340,9 +351,18 @@ riot.tag2('impure-card-large_tab_show', '<div style="height:422px; height:505px;
      };
 });
 
-riot.tag2('impure-card-small', '<div class="card"> <header class="card-header"> <p class="card-header-title"> やること </p> <a href="#" class="card-header-icon" aria-label="more options"> <span class="icon" title="このアイコンを扉へドラッグ&ドロップすると、扉の場所へ移動できます。" draggable="true" dragstart="{dragStart}" dragend="{dragEnd}"> <i class="fas fa-running"></i> </span> </a> </header> <div class="card-content"> <div class="content"> <p>{name()}</p> </div> </div> <footer class="card-footer"> <a class="card-footer-item">Start</a> <a class="card-footer-item">Stop</a> <a class="card-footer-item" onclick="{clickOpenButton}">Open</a> </footer> </div>', 'impure-card-small > .card { width: 222px; height: 222px; float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; box-shadow: 0px 0px 8px #ffffff; border: 1px solid #dddddd; border-radius: 5px; } impure-card-small > .card .card-content{ height: calc(222px - 49px - 48px); padding: 11px 22px; overflow: auto; }', '', function(opts) {
-     this.clickOpenButton = (e) => {
-         this.opts.callback('switch-large');
+riot.tag2('impure-card-small', '<div class="card"> <header class="card-header"> <p class="card-header-title"> やること </p> <a href="#" class="card-header-icon" aria-label="more options"> <span class="icon" title="このアイコンを扉へドラッグ&ドロップすると、扉の場所へ移動できます。" draggable="true" dragstart="{dragStart}" dragend="{dragEnd}"> <i class="fas fa-running"></i> </span> </a> </header> <div class="card-content"> <div class="content"> <p>{name()}</p> </div> </div> <footer class="card-footer"> <span class="card-footer-item start" action="start-action" onclick="{clickButton}">Start</span> <span class="card-footer-item stop" action="stop-action" onclick="{clickButton}">Stop</span> <span class="card-footer-item open" action="switch-large" onclick="{clickButton}">Open</span> </footer> </div>', 'impure-card-small > .card { width: 222px; height: 222px; float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; box-shadow: 0px 0px 8px #ffffff; border: 1px solid #dddddd; border-radius: 5px; } impure-card-small > .card .card-content{ height: calc(222px - 49px - 48px); padding: 11px 22px; overflow: auto; } impure-card-small span.card-footer-item.start { color: inherit; } impure-card-small[status=start] span.card-footer-item.start { color: #eeeeee; } impure-card-small span.card-footer-item.stop { color: #eeeeee; } impure-card-small[status=start] span.card-footer-item.stop { color: inherit; }', 'status="{status()}"', function(opts) {
+     this.clickButton = (e) => {
+         let target = e.target;
+         let action = target.getAttribute('action');
+
+         if (action=='start-action' && this.isStart())
+             return;
+
+         if (action=='stop-action' && !this.isStart())
+             return;
+
+         this.opts.callback(action);
      };
      this.dragStart = (e) => {
          this.opts.callback('start-drag');
@@ -351,6 +371,15 @@ riot.tag2('impure-card-small', '<div class="card"> <header class="card-header"> 
          this.opts.callback('end-drag');
      };
 
+     this.isStart = () => {
+         if (!this.opts.data) return false;
+         if (!this.opts.data.purge) return false;
+
+         return true;
+     }
+     this.status = () => {
+         return this.isStart() ? 'start' : '';
+     };
      this.name = () => {
          if (!this.opts.data) return '????????'
          return this.opts.data.name;
@@ -374,6 +403,12 @@ riot.tag2('impure-card', '<impure-card-small data="{opts.data}" callback="{callb
 
          if ('end-drag'==action)
              ACTIONS.endDragImpureIcon();
+
+         if ('start-action'==action)
+             ACTIONS.startAction(this.opts.data);
+
+         if ('stop-action'==action)
+             ACTIONS.stopAction(this.opts.data);
 
      };
 });

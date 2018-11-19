@@ -8,5 +8,7 @@
   (:export #:find-maledicts
            #:get-maledict)
   (:export #:find-impures
-           #:create-impure-2-maledict))
+           #:create-impure-2-maledict
+           #:start-action-4-impure
+           #:stop-action-4-impure))
 (in-package :holy-water.api.controller)

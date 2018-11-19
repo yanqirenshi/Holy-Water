@@ -2,7 +2,7 @@
     <nav class="panel" style="width: 255px; margin-top: 22px;">
         <p class="panel-heading">Members</p>
 
-        <a each={opts.data.list}
+        <a each={data()}
            class="panel-block {isActive(id)}"
            maledict-id={id}>
 
@@ -14,6 +14,12 @@
 
     <script>
      this.dragging = false;
+    </script>
+
+    <script>
+     this.data = () => {
+         return opts.data ? opts.data.list : [];
+     };
     </script>
 
     <script>

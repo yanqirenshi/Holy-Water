@@ -16,6 +16,12 @@
          if ('end-drag'==action)
              ACTIONS.endDragImpureIcon();
 
+         if ('start-action'==action)
+             ACTIONS.startAction(this.opts.data);
+
+         if ('stop-action'==action)
+             ACTIONS.stopAction(this.opts.data);
+
      };
     </script>
 
