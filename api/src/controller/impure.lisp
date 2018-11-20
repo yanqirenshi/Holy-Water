@@ -25,9 +25,10 @@
     impure))
 
 (defun find-impures (angel &key maledict)
-  (mapcar #'(lambda (dao)
-              (dao2impure dao :angel angel))
-          (hw:find-impures :maledict maledict)))
+  (let ((list (hw:find-impures :maledict maledict)))
+    (mapcar #'(lambda (dao)
+                (dao2impure dao :angel angel))
+            list)))
 
 
 (defun create-impure-2-maledict (maledict &key (name "????????") (description "") editor)
@@ -43,4 +44,8 @@
 
 (defun stop-action-4-impure (angel impure)
   (dao2impure (hw:stop-action-impure angel impure :editor angel)
+              :angel angel))
+
+(defun finish-impure (angel impure)
+  (dao2impure (hw::finish-impure angel impure :editor angel)
               :angel angel))

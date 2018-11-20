@@ -10,5 +10,6 @@
   (:export #:find-impures
            #:create-impure-2-maledict
            #:start-action-4-impure
-           #:stop-action-4-impure))
+           #:stop-action-4-impure
+           #:finish-impure))
 (in-package :holy-water.api.controller)

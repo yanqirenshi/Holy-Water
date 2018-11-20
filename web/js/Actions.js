@@ -72,30 +72,43 @@ class Actions extends Vanilla_Redux_Actions {
     /////
     ///// Action
     /////
-    startAction (impure) {
+    startImpure (impure) {
         let path = '/impures/' + impure.id + '/purges/start';
 
         API.post(path, null, function (response) {
-            STORE.dispatch(this.startedAction(response));
+            STORE.dispatch(this.startedImpure(response));
         }.bind(this));
     }
-    startedAction (impure) {
+    startedImpure (impure) {
         return {
             type: 'STARTED-ACTION',
             data: { impures: this.mergeData([impure], STORE.get('impures')) },
         };
     }
-    stopAction (impure) {
+    stopImpure (impure) {
         let path = '/impures/' + impure.id + '/purges/stop';
 
         API.post(path, null, function (response) {
-            STORE.dispatch(this.startedAction(response));
+            STORE.dispatch(this.stopedImpure(response));
         }.bind(this));
     }
-    stopedAction (impure) {
+    stopedImpure (impure) {
         return {
             type: 'STOPED-ACTION',
             data: { impures: this.mergeData([impure], STORE.get('impures')) },
+        };
+    }
+    finishImpure (impure) {
+        let path = '/impures/' + impure.id + '/finish';
+
+        API.post(path, null, function (response) {
+            STORE.dispatch(this.finishedImpure(response));
+        }.bind(this));
+    }
+    finishedImpure (impure) {
+        return {
+            type: 'FINISHED-IMPURE',
+            data: {},
         };
     }
     /////

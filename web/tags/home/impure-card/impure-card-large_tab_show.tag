@@ -2,7 +2,20 @@
     <div style="height:422px; height:505px; overflow:auto;">
         <p style="font-weight: bold;">{name()}</p>
         <p style="margin-top:11px;">{description()}</p>
+        <div>
+            <a class="button is-danger"
+               action="finishe-impure"
+               onclick={clickButton}>完了</a>
+        </div>
     </div>
+
+    <script>
+     this.clickButton = (e) => {
+         let target = e.target;
+
+         this.opts.callback(target.getAttribute('action'));
+     };
+    </script>
 
     <script>
      this.name = () => {

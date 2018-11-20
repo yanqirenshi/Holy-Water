@@ -1,4 +1,4 @@
-<impure-card-small status={status()}>
+<impure-card-small>
     <div class="card">
         <header class="card-header">
             <p class="card-header-title">
@@ -32,10 +32,10 @@
          let target = e.target;
          let action = target.getAttribute('action');
 
-         if (action=='start-action' && this.isStart())
+         if (action=='start-action' && this.opts.status)
              return;
 
-         if (action=='stop-action' && !this.isStart())
+         if (action=='stop-action' && !this.opts.status)
              return;
 
          this.opts.callback(action);
@@ -49,15 +49,6 @@
     </script>
 
     <script>
-     this.isStart = () => {
-         if (!this.opts.data) return false;
-         if (!this.opts.data.purge) return false;
-
-         return true;
-     }
-     this.status = () => {
-         return this.isStart() ? 'start' : '';
-     };
      this.name = () => {
          if (!this.opts.data) return '????????'
          return this.opts.data.name;
@@ -85,18 +76,6 @@
          height: calc(222px - 49px - 48px);
          padding: 11px 22px;
          overflow: auto;
-     }
-     impure-card-small span.card-footer-item.start {
-         color: inherit;
-     }
-     impure-card-small[status=start] span.card-footer-item.start {
-         color: #eeeeee;
-     }
-     impure-card-small span.card-footer-item.stop {
-         color: #eeeeee;
-     }
-     impure-card-small[status=start] span.card-footer-item.stop {
-         color: inherit;
      }
     </style>
 </impure-card-small>

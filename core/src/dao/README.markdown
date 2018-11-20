@@ -27,6 +27,7 @@ drop table ev_purge_end;
 (mapc #'mito:execute-sql (mito:table-definition 'rs_impure-finished))
 (mapc #'mito:execute-sql (mito:table-definition 'rs_impure-discarded))
 (mapc #'mito:execute-sql (mito:table-definition 'ev_collect-impure))
+(mapc #'mito:execute-sql (mito:table-definition 'ev_collect-impure-history))
 (mapc #'mito:execute-sql (mito:table-definition 'ev_purge-start))
 (mapc #'mito:execute-sql (mito:table-definition 'ev_purge-end))
 ```

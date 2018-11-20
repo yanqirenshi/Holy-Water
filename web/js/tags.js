@@ -286,7 +286,7 @@ riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-buckets d
      };
 });
 
-riot.tag2('impure-card-large', '<div class="card" style="box-shadow: 0px 0px 8px #eeeeee;"> <header class="card-header"> <p class="card-header-title"> やること </p> <a href="#" class="card-header-icon" aria-label="more options"> <span class="icon" draggable="true" dragstart="{dragStart}" dragend="{dragEnd}"> <i class="fas fa-running"></i> </span> </a> </header> <div class="card-content"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> <div style="margin-top: 11px;"> <impure-card-large_tab_actions class="hide" data="{opts.data}"></impure-card-large_tab_actions> <impure-card-large_tab_edit class="hide" data="{opts.data}"></impure-card-large_tab_edit> <impure-card-large_tab_hisotry class="hide" data="{opts.data}"></impure-card-large_tab_hisotry> <impure-card-large_tab_show class="hide" data="{opts.data}"></impure-card-large_tab_show> </div> </div> <footer class="card-footer"> <a class="card-footer-item" action="start-action" onclick="{clickButton}">Start</a> <a class="card-footer-item" action="stop-action" onclick="{clickButton}">Stop</a> <a class="card-footer-item" action="switch-large" onclick="{clickButton}">Small</a> </footer> </div>', 'impure-card-large > .card { width: calc(222px + 222px + 222px + 22px); height: calc(222px + 222px + 222px + 22px); float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; box-shadow: 0px 0px 8px #ffffff; border: 1px solid #dddddd; border-radius: 5px; } impure-card-large > .card .card-content{ height: calc(222px + 222px + 222px + 22px - 49px - 48px); padding: 11px 22px; overflow: auto; }', '', function(opts) {
+riot.tag2('impure-card-large', '<div class="card" style="box-shadow: 0px 0px 8px #eeeeee;"> <header class="card-header"> <p class="card-header-title"> やること </p> <a href="#" class="card-header-icon" aria-label="more options"> <span class="icon" draggable="true" dragstart="{dragStart}" dragend="{dragEnd}"> <i class="fas fa-running"></i> </span> </a> </header> <div class="card-content"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> <div style="margin-top: 11px;"> <impure-card-large_tab_actions class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_actions> <impure-card-large_tab_edit class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_edit> <impure-card-large_tab_hisotry class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_hisotry> <impure-card-large_tab_show class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_show> <impure-card-large_tab_finish class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_finish> </div> </div> <footer class="card-footer"> <span class="card-footer-item start" action="start-action" onclick="{clickButton}">Start</span> <span class="card-footer-item stop" action="stop-action" onclick="{clickButton}">Stop</span> <span class="card-footer-item open" action="switch-large" onclick="{clickButton}">Close</span> </footer> </div>', 'impure-card-large > .card { width: calc(222px + 222px + 222px + 22px); height: calc(222px + 222px + 222px + 22px); float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; box-shadow: 0px 0px 8px #ffffff; border: 1px solid #dddddd; border-radius: 5px; } impure-card-large > .card .card-content{ height: calc(222px + 222px + 222px + 22px - 49px - 48px); padding: 11px 22px; overflow: auto; }', '', function(opts) {
      this.clickButton = (e) => {
          let target = e.target;
          let action = target.getAttribute('action');
@@ -310,6 +310,7 @@ riot.tag2('impure-card-large', '<div class="card" style="box-shadow: 0px 0px 8px
          {code: 'edit',    label: '編集',     tag: 'impure-card-large_tab_edit' },
          {code: 'actions', label: '実績',     tag: 'impure-card-large_tab_actions' },
          {code: 'history', label: '移動履歴', tag: 'impure-card-large_tab_hisotry' },
+         {code: 'finish',  label: '完了',     tag: 'impure-card-large_tab_finish' },
      ]);
 
      this.on('mount', () => {
@@ -337,10 +338,19 @@ riot.tag2('impure-card-large_tab_edit', '<input class="input" type="text" placeh
      };
 });
 
+riot.tag2('impure-card-large_tab_finish', '<a class="button is-danger" action="finishe-impure">完了</a>', '', '', function(opts) {
+});
+
 riot.tag2('impure-card-large_tab_hisotry', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"> <thead> <tr> <th>担当</th> <th>Maledict</th> <th>開始</th> <th>終了</th> <th>時間</th> </tr> </thead> <tbody> </tbody> </table>', '', '', function(opts) {
 });
 
-riot.tag2('impure-card-large_tab_show', '<div style="height:422px; height:505px; overflow:auto;"> <p style="font-weight: bold;">{name()}</p> <p style="margin-top:11px;">{description()}</p> </div>', '', '', function(opts) {
+riot.tag2('impure-card-large_tab_show', '<div style="height:422px; height:505px; overflow:auto;"> <p style="font-weight: bold;">{name()}</p> <p style="margin-top:11px;">{description()}</p> <div> <a class="button is-danger" action="finishe-impure" onclick="{clickButton}">完了</a> </div> </div>', '', '', function(opts) {
+     this.clickButton = (e) => {
+         let target = e.target;
+
+         this.opts.callback(target.getAttribute('action'));
+     };
+
      this.name = () => {
          if (!this.opts.data) return '????????'
          return this.opts.data.name;
@@ -351,15 +361,15 @@ riot.tag2('impure-card-large_tab_show', '<div style="height:422px; height:505px;
      };
 });
 
-riot.tag2('impure-card-small', '<div class="card"> <header class="card-header"> <p class="card-header-title"> やること </p> <a href="#" class="card-header-icon" aria-label="more options"> <span class="icon" title="このアイコンを扉へドラッグ&ドロップすると、扉の場所へ移動できます。" draggable="true" dragstart="{dragStart}" dragend="{dragEnd}"> <i class="fas fa-running"></i> </span> </a> </header> <div class="card-content"> <div class="content"> <p>{name()}</p> </div> </div> <footer class="card-footer"> <span class="card-footer-item start" action="start-action" onclick="{clickButton}">Start</span> <span class="card-footer-item stop" action="stop-action" onclick="{clickButton}">Stop</span> <span class="card-footer-item open" action="switch-large" onclick="{clickButton}">Open</span> </footer> </div>', 'impure-card-small > .card { width: 222px; height: 222px; float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; box-shadow: 0px 0px 8px #ffffff; border: 1px solid #dddddd; border-radius: 5px; } impure-card-small > .card .card-content{ height: calc(222px - 49px - 48px); padding: 11px 22px; overflow: auto; } impure-card-small span.card-footer-item.start { color: inherit; } impure-card-small[status=start] span.card-footer-item.start { color: #eeeeee; } impure-card-small span.card-footer-item.stop { color: #eeeeee; } impure-card-small[status=start] span.card-footer-item.stop { color: inherit; }', 'status="{status()}"', function(opts) {
+riot.tag2('impure-card-small', '<div class="card"> <header class="card-header"> <p class="card-header-title"> やること </p> <a href="#" class="card-header-icon" aria-label="more options"> <span class="icon" title="このアイコンを扉へドラッグ&ドロップすると、扉の場所へ移動できます。" draggable="true" dragstart="{dragStart}" dragend="{dragEnd}"> <i class="fas fa-running"></i> </span> </a> </header> <div class="card-content"> <div class="content"> <p>{name()}</p> </div> </div> <footer class="card-footer"> <span class="card-footer-item start" action="start-action" onclick="{clickButton}">Start</span> <span class="card-footer-item stop" action="stop-action" onclick="{clickButton}">Stop</span> <span class="card-footer-item open" action="switch-large" onclick="{clickButton}">Open</span> </footer> </div>', 'impure-card-small > .card { width: 222px; height: 222px; float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; box-shadow: 0px 0px 8px #ffffff; border: 1px solid #dddddd; border-radius: 5px; } impure-card-small > .card .card-content{ height: calc(222px - 49px - 48px); padding: 11px 22px; overflow: auto; }', '', function(opts) {
      this.clickButton = (e) => {
          let target = e.target;
          let action = target.getAttribute('action');
 
-         if (action=='start-action' && this.isStart())
+         if (action=='start-action' && this.opts.status)
              return;
 
-         if (action=='stop-action' && !this.isStart())
+         if (action=='stop-action' && !this.opts.status)
              return;
 
          this.opts.callback(action);
@@ -371,15 +381,6 @@ riot.tag2('impure-card-small', '<div class="card"> <header class="card-header"> 
          this.opts.callback('end-drag');
      };
 
-     this.isStart = () => {
-         if (!this.opts.data) return false;
-         if (!this.opts.data.purge) return false;
-
-         return true;
-     }
-     this.status = () => {
-         return this.isStart() ? 'start' : '';
-     };
      this.name = () => {
          if (!this.opts.data) return '????????'
          return this.opts.data.name;
@@ -390,7 +391,7 @@ riot.tag2('impure-card-small', '<div class="card"> <header class="card-header"> 
      };
 });
 
-riot.tag2('impure-card', '<impure-card-small data="{opts.data}" callback="{callback}"></impure-card-small> <impure-card-large data="{opts.data}" callback="{callback}"></impure-card-large>', 'impure-card.large > impure-card-small { display: none; } impure-card.small > impure-card-large { display: none; }', 'class="small"', function(opts) {
+riot.tag2('impure-card', '<impure-card-small data="{opts.data}" status="{status()}" callback="{callback}"></impure-card-small> <impure-card-large data="{opts.data}" status="{status()}" callback="{callback}"></impure-card-large>', 'impure-card.large > impure-card-small { display: none; } impure-card.small > impure-card-large { display: none; } impure-card span.card-footer-item.start { color: inherit; } impure-card[status=start] span.card-footer-item.start { color: #eeeeee; } impure-card span.card-footer-item.stop { color: #eeeeee; } impure-card[status=start] span.card-footer-item.stop { color: inherit; }', 'class="small" status="{status()}"', function(opts) {
      this.callback = (action) => {
          if ('switch-large'==action)
              this.root.setAttribute('class', 'large');
@@ -405,11 +406,23 @@ riot.tag2('impure-card', '<impure-card-small data="{opts.data}" callback="{callb
              ACTIONS.endDragImpureIcon();
 
          if ('start-action'==action)
-             ACTIONS.startAction(this.opts.data);
+             ACTIONS.startImpure(this.opts.data);
 
          if ('stop-action'==action)
-             ACTIONS.stopAction(this.opts.data);
+             ACTIONS.stopImpure(this.opts.data);
 
+         if ('finishe-impure'==action)
+             ACTIONS.finishImpure(this.opts.data);
+     };
+
+     this.isStart = () => {
+         if (!this.opts.data) return false;
+         if (!this.opts.data.purge) return false;
+
+         return true;
+     }
+     this.status = () => {
+         return this.isStart() ? 'start' : '';
      };
 });
 

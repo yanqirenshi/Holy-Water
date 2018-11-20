@@ -72,6 +72,12 @@
     (unless impure (throw-code 404))
     (render-json (hw.api.ctrl:stop-action-4-impure angel impure))))
 
+(defroute ("/impures/:id/finish" :method :POST) (&key id)
+  (let* ((angel (get-angel))
+         (impure (hw::get-impure :id id)))
+    (unless impure (throw-code 404))
+    (render-json (hw.api.ctrl:finish-impure angel impure))))
+
 
 ;;;;;
 ;;;;; Error pages

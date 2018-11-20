@@ -13,7 +13,7 @@
   ((maledict-id :col-type :bigserial     :accessor maledict-id)
    (impure-id   :col-type :bigserial     :accessor angel-id)
    (start       :col-type :timestamp     :accessor start)
-   (end         :col-type :timestamp     :accessor end)
+   (end         :col-type :timestamp     :accessor end :initform (local-time:now))
    ;;
    (created-by  :col-type :bigserial     :accessor created-by)
    (updated-by  :col-type :bigserial     :accessor updated-by))

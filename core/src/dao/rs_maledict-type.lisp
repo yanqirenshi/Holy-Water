@@ -4,7 +4,7 @@
 (defvar *maledict-type-nex-action*    2)
 (defvar *maledict-type-plan-project*  3)
 (defvar *maledict-type-someday-maybe* 4)
-(defvar *maledict-type-someday-done*  5)
+(defvar *maledict-type-done*          5)
 (defvar *maledict-type-user-create*   0)
 
 (defvar *maledict-types*
@@ -13,7 +13,7 @@
      (,*maledict-type-nex-action*    . (:name "Next Action"    :order 10  :deletable 1 :description ""))
      (,*maledict-type-plan-project*  . (:name "Plan Project"   :order 40  :deletable 1 :description ""))
      (,*maledict-type-someday-maybe* . (:name "Someday/Maybe"  :order 50  :deletable 1 :description ""))
-     (,*maledict-type-someday-done*  . (:name "Done"           :order 999 :deletable 0 :description ""))
+     (,*maledict-type-done*          . (:name "Done"           :order 999 :deletable 0 :description ""))
      (,*maledict-type-user-create*   . (:name "????????"       :order 100 :deletable 1 :description "")))))
 
 (defun %find-initial-maledict-types (&key (maledict-types *maledict-types*))
