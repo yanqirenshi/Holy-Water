@@ -1,12 +1,12 @@
 <home_page_root-buckets>
-    <nav class="panel" style="width: 255px; box-shadow: 0px 0px 8px #ffffff">
+    <nav class="panel">
         <p class="panel-heading">Buckets</p>
 
         <a each={data()}
            class="panel-block {isActive(id)}"
            onclick={clickItem}
            maledict-id={id}
-           style="background:#fff;">
+           style="">
 
             <span style="width: 177px;" maledict-id={id}>
                 {name}
@@ -87,6 +87,19 @@
     </script>
 
     <style>
+     home_page_root-buckets > .panel {
+         width: 255px;
+         box-shadow: 0px 0px 8px #ffffff;
+     }
+
+     home_page_root-buckets .panel-block {
+         background:#fff;
+     }
+
+     home_page_root-buckets .panel-block.is-active {
+         background:#eaf4fc;
+     }
+
      home_page_root-buckets .move-door.close .opened-door {
          display: none;
      }
