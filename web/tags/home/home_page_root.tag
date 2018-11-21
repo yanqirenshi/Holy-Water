@@ -17,26 +17,26 @@
 
     <home_page_root-modal-create-impure open={modal_open}
                                         callback={callback}
-                                        maledict={maledict}></home_page_root-modal-create-impure>
+                                        maledict={modal_maledict}></home_page_root-modal-create-impure>
 
     <script>
      this.modal_open = false;
+     this.modal_maledict = null;
      this.maledict = null; //選択された maledict
     </script>
 
     <script>
      this.callback = (action, data) => {
          if (action=='select-bucket') {
-             let id = data;
-             this.maledict = id;
+             this.maledict = data;
 
              this.update();
 
-             ACTIONS.fetchMaledictImpures(id);
+             ACTIONS.fetchMaledictImpures(data.id);
          }
 
          if (action=='open-modal-create-impure')
-             this.openModal();
+             this.openModal(data);
 
          if (action=='close-modal-create-impure')
              this.closeModal();
@@ -46,7 +46,6 @@
                  name: data.name,
                  description: data.description,
              });
-
      };
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-MALEDICTS') {
@@ -62,8 +61,10 @@
     </script>
 
     <script>
-     this.openModal = () => {
+     this.openModal = (maledict) => {
          this.modal_open = true;
+         this.modal_maledict = maledict;
+
          this.tags['home_page_root-modal-create-impure'].update();
      };
      this.closeModal = () => {

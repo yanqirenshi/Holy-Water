@@ -1,4 +1,6 @@
 <app>
+    <div class="kasumi"></div>
+
     <menu-bar brand={{label:'RT'}} site={site()} moves={[]}></menu-bar>
 
     <div ref="page-area" style="padding-left: 55px; width: 100vw; height: 100vh;"></div>
@@ -49,4 +51,17 @@
      if (location.hash=='')
          location.hash=STORE.get('site.active_page');
     </script>
+
+    <style>
+     app > div.kasumi {
+         position: fixed;
+         top: 0px;
+         left: 0px;
+         width: 100vw;
+         height: 100vh;
+         background: #ffffff;
+         opacity: 0.3;
+         z-index: -888888;
+     }
+    </style>
 </app>

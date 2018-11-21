@@ -1,5 +1,5 @@
 <home_page_root-members>
-    <nav class="panel" style="width: 255px; margin-top: 22px;">
+    <nav class="panel">
         <p class="panel-heading">Members</p>
 
         <a each={data()}
@@ -40,6 +40,11 @@
     </script>
 
     <style>
+     home_page_root-members > .panel {
+         width: 255px;
+         margin-top: 22px;
+         box-shadow: 0px 0px 8px #ffffff
+     }
      home_page_root-buckets .move-door.close .opened-door{
          display: none;
      }

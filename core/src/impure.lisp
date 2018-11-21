@@ -38,7 +38,7 @@
       (mito:select-dao (getf target :class)
         (sxql:inner-join :ev_collect-impure
                          :on (:= (getf target :id-column) :ev_collect-impure.impure-id))
-        (sxql:where (:= :ev_collect-impure.maledict-id 5))))))
+        (sxql:where (:= :ev_collect-impure.maledict-id (mito:object-id maledict)))))))
 
 
 (defun get-impure (&key id)

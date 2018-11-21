@@ -8,6 +8,8 @@
             </header>
 
             <section class="modal-card-body">
+                <h4 class="title is-6">場所: {maledictName()}</h4>
+
                 <input class="input" type="text" placeholder="Title" ref="name">
 
                 <textarea class="textarea"
@@ -18,11 +20,17 @@
             </section>
 
             <footer class="modal-card-foot">
-                <button class="button is-success" onclick={clickCreateButton}>Create!</button>
                 <button class="button" onclick={clickCloseButton}>Cancel</button>
+                <button class="button is-success" onclick={clickCreateButton}>Create!</button>
             </footer>
         </div>
     </div>
+
+    <script>
+     this.maledictName = () => {
+         return this.opts.maledict ? this.opts.maledict.name : '';
+     }
+    </script>
 
     <script>
      this.clickCreateButton = (e) => {
@@ -35,5 +43,8 @@
      this.clickCloseButton = (e) => {
          this.opts.callback('close-modal-create-impure');
      };
+     this.on('update', () => {
+         dump(this.opts);
+     });
     </script>
 </home_page_root-modal-create-impure>

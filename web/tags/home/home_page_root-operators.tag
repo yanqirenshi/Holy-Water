@@ -22,7 +22,7 @@
      this.clickButton = (e) => {
          let button = this.findUp(e.target, 'BUTTON');
 
-         opts.callback(button.getAttribute('action'));
+         opts.callback(button.getAttribute('action'), this.opts.maledict);
      };
     </script>
 

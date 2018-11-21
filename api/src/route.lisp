@@ -54,7 +54,7 @@
                                           :name name
                                           :description description
                                           :editor angel)
-    (render-json (hw.api.ctrl:find-impures :maledict maledict))))
+    (render-json (hw.api.ctrl:find-impures angel :maledict maledict))))
 
 
 ;;;;;

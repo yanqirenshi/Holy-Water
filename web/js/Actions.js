@@ -56,8 +56,8 @@ class Actions extends Vanilla_Redux_Actions {
             data: { impures: this.mergeData(response) },
         };
     }
-    createMaledictImpures (maledict_id, data) {
-        let path = '/maledicts/' + maledict_id + '/impures';
+    createMaledictImpures (maledict, data) {
+        let path = '/maledicts/' + maledict.id + '/impures';
 
         API.post(path, data, function (response) {
             STORE.dispatch(this.createdMaledictImpures(response));
