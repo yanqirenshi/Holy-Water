@@ -12,9 +12,6 @@
                                 callback={callback}></home_page_root-impures>
     </div>
 
-    <home_page_root-operators callback={callback}
-                              maledict={maledict}></home_page_root-operators>
-
     <home_page_root-modal-create-impure open={modal_open}
                                         callback={callback}
                                         maledict={modal_maledict}></home_page_root-modal-create-impure>

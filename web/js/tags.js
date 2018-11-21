@@ -141,9 +141,20 @@ riot.tag2('home', '', '', '', function(opts) {
      this.on('update', () => { this.draw(); });
 });
 
-
-riot.tag2('home_page_root-buckets', '<nav class="panel"> <p class="panel-heading">Buckets</p> <a each="{data()}" class="panel-block {isActive(id)}" onclick="{clickItem}" maledict-id="{id}" style=""> <span style="width: 177px;" maledict-id="{id}"> {name} </span> <span class="operators"> <span class="icon" title="ここに「やること」を追加する。" maledict-id="{id}" maledict-name="{name}" onclick="{clickAddButton}"> <i class="far fa-plus-square" maledict-id="{id}"></i> </span> <span class="move-door {dragging ? \'open\' : \'close\'}" ref="move-door" dragover="{mouseOver}" dragenter="{dragEnter}" dragleave="{dragLeave}"> <span class="icon closed-door"> <i class="fas fa-door-closed"></i> </span> <span class="icon opened-door"> <i class="fas fa-door-open"></i> </span> </span> </span> </a> </nav>', 'home_page_root-buckets > .panel { width: 255px; box-shadow: 0px 0px 8px #ffffff; } home_page_root-buckets .panel-block { background:#fff; } home_page_root-buckets .panel-block.is-active { background:#eaf4fc; } home_page_root-buckets .move-door.close .opened-door { display: none; } home_page_root-buckets .move-door.open .closed-door { display: none; } home_page_root-buckets .operators { width: 53px; } home_page_root-buckets .operators .icon { color: #cccccc; } home_page_root-buckets .operators .icon:hover { color: #880000; } home_page_root-buckets .operators .move-door.open .icon { color: #880000; }', '', function(opts) {
+riot.tag2('home_page_root-buckets', '<nav class="panel"> <p class="panel-heading">Buckets</p> <a each="{data()}" class="panel-block {isActive(id)}" onclick="{clickItem}" maledict-id="{id}" style=""> <span style="width: 177px;" maledict-id="{id}"> {name} </span> <span class="operators"> <span class="icon" title="ここに「やること」を追加する。" maledict-id="{id}" maledict-name="{name}" onclick="{clickAddButton}"> <i class="far fa-plus-square" maledict-id="{id}"></i> </span> <span class="move-door {dragging ? \'open\' : \'close\'}" ref="move-door" dragover="{dragover}" drop="{drop}"> <span class="icon closed-door"> <i class="fas fa-door-closed"></i> </span> <span class="icon opened-door" maledict-id="{id}"> <i class="fas fa-door-open" maledict-id="{id}"></i> </span> </span> </span> </a> </nav>', 'home_page_root-buckets > .panel { width: 255px; box-shadow: 0px 0px 8px #ffffff; } home_page_root-buckets .panel-block { background:#fff; } home_page_root-buckets .panel-block.is-active { background:#eaf4fc; } home_page_root-buckets .move-door.close .opened-door { display: none; } home_page_root-buckets .move-door.open .closed-door { display: none; } home_page_root-buckets .operators { width: 53px; } home_page_root-buckets .operators .icon { color: #cccccc; } home_page_root-buckets .operators .icon:hover { color: #880000; } home_page_root-buckets .operators .move-door.open .icon { color: #880000; }', '', function(opts) {
      this.dragging = false;
+
+     this.dragover = (e) => {
+         e.preventDefault();
+     };
+     this.drop = (e) => {
+         let impure = JSON.parse(e.dataTransfer.getData('impure'));
+         let maledict = this.opts.data.ht[e.target.getAttribute('maledict-id')];
+         dump(e.dataTransfer);
+         ACTIONS.moveImpure (maledict, impure);
+
+         e.preventDefault();
+     };
 
      this.clickItem = (e) => {
          let target = e.target;
@@ -244,29 +255,10 @@ riot.tag2('home_page_root-modal-create-impure', '<div class="modal {opts.open ? 
      });
 });
 
-riot.tag2('home_page_root-operators', '<div> <button class="button is-danger {isHide()}" action="open-modal-create-impure" onclick="{clickButton}"> 「やること」を追加 </button> </div>', 'home_page_root-operators { position: fixed; bottom: 22px; right: 33px; } home_page_root-operators .button { border-radius: 3px; margin-left: 11px; }', '', function(opts) {
-     this.isHide = () => {
-         return this.opts.maledict ? '' : 'hide'
-     };
-     this.findUp = (element, nodeName) => {
-         if (!element) return null;
-
-         if (element.nodeName == nodeName)
-             return element;
-
-         return this.findUp(element.parentElement, nodeName);
-     };
-     this.clickButton = (e) => {
-         let button = this.findUp(e.target, 'BUTTON');
-
-         opts.callback(button.getAttribute('action'), this.opts.maledict);
-     };
-});
-
 riot.tag2('home_page_root-tabs', '<div class="tabs is-boxed"> <ul> <li class="is-active" style="margin-left:22px;"> <a> <span class="icon is-small"><i class="fas fa-image" aria-hidden="true"></i></span> <span>Tasks</span> </a> </li> </ul> </div>', '', '', function(opts) {
 });
 
-riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-buckets data="{STORE.get(\'maledicts\')}" select="{maledict}" callback="{callback}" dragging="{dragging}"></home_page_root-buckets> <home_page_root-members></home_page_root-members> </div> <div class="contetns-area"> <home_page_root-impures maledict="{maledict}" callback="{callback}"></home_page_root-impures> </div> <home_page_root-operators callback="{callback}" maledict="{maledict}"></home_page_root-operators> <home_page_root-modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_page_root-modal-create-impure>', 'home_page_root { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page_root > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; }', '', function(opts) {
+riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-buckets data="{STORE.get(\'maledicts\')}" select="{maledict}" callback="{callback}" dragging="{dragging}"></home_page_root-buckets> <home_page_root-members></home_page_root-members> </div> <div class="contetns-area"> <home_page_root-impures maledict="{maledict}" callback="{callback}"></home_page_root-impures> </div> <home_page_root-modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_page_root-modal-create-impure>', 'home_page_root { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page_root > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; }', '', function(opts) {
      this.modal_open = false;
      this.modal_maledict = null;
      this.maledict = null;
@@ -405,6 +397,10 @@ riot.tag2('impure-card-small', '<div class="card"> <header class="card-header"> 
          this.opts.callback(action);
      };
      this.dragStart = (e) => {
+         let target = e.target;
+
+         e.dataTransfer.setData('impure', JSON.stringify(this.opts.data));
+
          this.opts.callback('start-drag');
      };
      this.dragEnd = (e) => {

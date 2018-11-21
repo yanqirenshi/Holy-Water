@@ -112,7 +112,7 @@ class Actions extends Vanilla_Redux_Actions {
         };
     }
     /////
-    /////
+    ///// Move Impure to Maledict
     /////
     startDragImpureIcon () {
         STORE.dispatch({
@@ -126,5 +126,17 @@ class Actions extends Vanilla_Redux_Actions {
             data: {},
         });
     }
+    moveImpure (maledict, impure) {
+        let path = '/maledicts/%d/impures/move'.format(maledict.id);
 
+        API.post(path, impure, function (response) {
+            STORE.dispatch(this.movedImpure(response));
+        }.bind(this));
+    }
+    movedImpure (impure) {
+        return {
+            type: 'FINISHED-IMPURE',
+            data: {},
+        };
+    }
 }

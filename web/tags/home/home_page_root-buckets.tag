@@ -22,14 +22,15 @@
 
                 <span class="move-door {dragging ? 'open' : 'close'}"
                       ref="move-door"
-                      dragover={mouseOver} dragenter={dragEnter} dragleave={dragLeave}>
+                      dragover={dragover}
+                      drop={drop}>
 
                     <span class="icon closed-door">
                         <i class="fas fa-door-closed"></i>
                     </span>
 
-                    <span class="icon opened-door">
-                        <i class="fas fa-door-open"></i>
+                    <span class="icon opened-door" maledict-id={id}>
+                        <i class="fas fa-door-open" maledict-id={id}></i>
                     </span>
 
                 </span>
@@ -39,6 +40,20 @@
 
     <script>
      this.dragging = false;
+    </script>
+
+    <script>
+     this.dragover = (e) => {
+         e.preventDefault();
+     };
+     this.drop = (e) => {
+         let impure = JSON.parse(e.dataTransfer.getData('impure'));
+         let maledict = this.opts.data.ht[e.target.getAttribute('maledict-id')];
+         dump(e.dataTransfer);
+         ACTIONS.moveImpure (maledict, impure);
+
+         e.preventDefault();
+     };
     </script>
 
     <script>
