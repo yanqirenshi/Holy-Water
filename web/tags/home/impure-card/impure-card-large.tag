@@ -29,7 +29,7 @@
         <footer class="card-footer">
             <span class="card-footer-item start" action="start-action" onclick={clickButton}>Start</span>
             <span class="card-footer-item stop"  action="stop-action"  onclick={clickButton}>Stop</span>
-            <span class="card-footer-item open"  action="switch-large" onclick={clickButton}>Close</span>
+            <span class="card-footer-item open"  action="switch-small" onclick={clickButton}>Close</span>
         </footer>
     </div>
 
@@ -38,7 +38,13 @@
          let target = e.target;
          let action = target.getAttribute('action');
 
-         this.opts.callback('switch-small');
+         if (action=='start-action' && this.opts.status)
+             return;
+
+         if (action=='stop-action' && !this.opts.status)
+             return;
+
+         this.opts.callback(action);
      };
      this.dragStart = (e) => {
          this.opts.callback('start-drag');
