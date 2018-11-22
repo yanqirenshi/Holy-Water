@@ -54,3 +54,6 @@
                    :finished-at (local-time:now)
                    :created-by  by-id
                    :updated-by  by-id)))
+
+(defun impure-purge-now-p (angel impure)
+  (get-purge :angel angel :impure impure))

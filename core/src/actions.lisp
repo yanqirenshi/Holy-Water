@@ -71,6 +71,8 @@
 ;;;;; Finish Impure
 ;;;;;
 (defun %finish-impure (angel impure &key editor)
+  (when (impure-purge-now-p angel impure)
+    (error "この Impure は purge 中です。"))
   (let ((done-maledict (get-maledict-done :angel angel))
         (done-impure   (make-impure-finished impure :editor editor)))
     (move-impure angel impure done-maledict :editor editor)
