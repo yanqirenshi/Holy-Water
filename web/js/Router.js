@@ -1,3 +1,30 @@
+/**
+ *   自分用ルーター。
+ *
+ *   store (hash-table)
+ *   ==================
+ *   site: {
+ *       pages: [
+ *          {
+ *             code: "home",
+ *             test: '{regex} or {function}'
+ *             sections: [ // ここは children に変更しよう。
+ *                 {
+ *                    code: 'root',
+ *                    test: 'regex' or function
+ *                    tag: 'home_page_root'
+ *                    children: [...]
+ *                 },
+ *             ]
+ *             active_section: 'root',  // これは自動で付与するようにしても良いのかもしれない
+ *             home_section: 'root',    //   〃
+ *          }
+ *       ]
+ *       active_page: 'home', // これは自動で付与するようにしても良いのかもしれない
+ *       home_page: 'home',   //   〃
+ *   }
+ *
+ */
 class Router {
     constructor(store, actions) {
         this._store = store;
@@ -8,45 +35,93 @@ class Router {
             self.routing(arguments);
         });
     }
-    routing (args) {
-        let store = this._store;
-        let actions = this._actions;
-
-        let site = store.state().get('site');
-
-        let len = args.length;
-        let page_code = args[0] ? args[0] : site.home_page;
-
-        site.active_page = page_code;
-
-        let page = site.pages.find((d) => { return d.code == page_code; });
-
-        page.active_section = args.length==2 ? args[1] : page.home_section;
-
-        store.dispatch(actions.movePage({
-            site: site
-        }));
-    }
     start () {
         route.start(function () {
             let hash = location.hash;
             let len = hash.length;
+
             if (len==0)
                 return '/';
+
             return hash.substring(1);
         }());
     }
     /* **************************************************************** *
-     * page
+     *  Routing
+     *  =======
+     *
      * **************************************************************** */
+    /**
+     * ???
+     * @param {hash-table}  site サイト(ページ)の全データ
+     * @param {array} args ハッシュを '/' で split した配列
+     */
+    getPageCode (site, args) {
+        let len = args.length;
+
+        return args[0] ? args[0] : site.home_page;
+    }
+    /**
+     * ???
+     * @param {hash-table}  site サイト(ページ)の全データ
+     * @param {string}      page_code 取得したいページのコード
+     */
+    getPage (site, page_code) {
+        return site.pages.find((d) => {
+            return d.code == page_code;
+        });
+    }
+    /**
+     * これ、何しているんだったっけ？
+     * @param {hash-table}  page サイトのデータ
+     * @param {array}       args ハッシュを '/' で split した配列
+     */
+    getActiveSection (page, args) {
+        // TODO: ここを階層でもイケるようにする。
+        //   args で page の階層を検索し、ヒットしたものを返す。
+        //   ヒットしない場合はエラーにする。
+        return args.length>=2 ? args[1] : page.home_section;
+    }
+    /**
+     * this is constructor description.
+     * @param {array} args ハッシュを '/' で split した配列
+     */
+    routing (args) {
+        let site = this._store.state().get('site');
+        let actions = this._actions;
+
+        let page_code = this.getPageCode(site, args);
+        let page = this.getPage (site, page_code);
+
+        site.active_page = page_code;
+        page.active_section = this.getActiveSection(page, args);
+
+        this._store.dispatch(actions.movePage({
+            site: site
+        }));
+    }
+    /* **************************************************************** *
+     *  Page
+     *  =======
+     *    site の階層再上位のものを page とします。
+     *    その page を切り換える処理です。
+     * **************************************************************** */
+    isfindPageTag (tag) {
+        let cls = tag.opts.class;
+
+        return cls && cls.split(' ').find((c)=>{
+            return c=='page';
+        });
+    }
     findPageTags (tags) {
         let page_tags = {};
+
         for (var k in tags) {
             let tag = tags[k];
-            let cls = tag.opts.class;
-            if (cls && cls.split(' ').find((c)=>{ return c=='page';}))
+            if (this.isfindPageTag(tag))
                 page_tags[k] = tag;
         }
+
         return page_tags;
     }
     switchPage (root_tag, page_holder_elem, site) {
@@ -57,7 +132,6 @@ class Router {
             let page = site.pages[i];
             let key = page.code;
             let tag = tags[key];
-
 
             if (site.active_page==key) {
                 if (!tag) {
@@ -89,7 +163,10 @@ class Router {
         }
     }
     /* **************************************************************** *
-     * section
+     *  Section
+     *  =======
+     *    page の配下(children) のノードを section とします。
+     *    その section を切り替える処理です。
      * **************************************************************** */
     mountSections (page, active_section_code, sections) {
         let root = page.root;
@@ -157,7 +234,9 @@ class Router {
         }
     };
     /* **************************************************************** *
-     * util
+     *  Util
+     *  =======
+     *
      * **************************************************************** */
     isHaveClass (class_trg, class_string) {
         if (!class_string) return false;

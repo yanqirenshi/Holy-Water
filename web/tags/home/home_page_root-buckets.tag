@@ -49,7 +49,7 @@
      this.drop = (e) => {
          let impure = JSON.parse(e.dataTransfer.getData('impure'));
          let maledict = this.opts.data.ht[e.target.getAttribute('maledict-id')];
-         dump(e.dataTransfer);
+
          ACTIONS.moveImpure (maledict, impure);
 
          e.preventDefault();

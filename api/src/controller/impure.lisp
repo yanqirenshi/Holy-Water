@@ -49,3 +49,7 @@
 (defun finish-impure (angel impure)
   (dao2impure (hw::finish-impure angel impure :editor angel)
               :angel angel))
+
+(defun move-impure (angel impure maledict)
+  (dao2impure (hw:move-impure angel impure maledict :editor angel)
+              :angel angel))

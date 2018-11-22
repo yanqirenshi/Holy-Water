@@ -150,7 +150,7 @@ riot.tag2('home_page_root-buckets', '<nav class="panel"> <p class="panel-heading
      this.drop = (e) => {
          let impure = JSON.parse(e.dataTransfer.getData('impure'));
          let maledict = this.opts.data.ht[e.target.getAttribute('maledict-id')];
-         dump(e.dataTransfer);
+
          ACTIONS.moveImpure (maledict, impure);
 
          e.preventDefault();
@@ -209,6 +209,8 @@ riot.tag2('home_page_root-impures', '<div class="flex-parent" style="height:100%
              this.update();
          if (action.type=='STOPED-ACTION')
              this.update();
+         if (action.type=='FINISHED-IMPURE')
+             ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
      });
 });
 
@@ -250,9 +252,6 @@ riot.tag2('home_page_root-modal-create-impure', '<div class="modal {opts.open ? 
      this.clickCloseButton = (e) => {
          this.opts.callback('close-modal-create-impure');
      };
-     this.on('update', () => {
-         dump(this.opts);
-     });
 });
 
 riot.tag2('home_page_root-tabs', '<div class="tabs is-boxed"> <ul> <li class="is-active" style="margin-left:22px;"> <a> <span class="icon is-small"><i class="fas fa-image" aria-hidden="true"></i></span> <span>Tasks</span> </a> </li> </ul> </div>', '', '', function(opts) {

@@ -43,8 +43,5 @@
      this.clickCloseButton = (e) => {
          this.opts.callback('close-modal-create-impure');
      };
-     this.on('update', () => {
-         dump(this.opts);
-     });
     </script>
 </home_page_root-modal-create-impure>

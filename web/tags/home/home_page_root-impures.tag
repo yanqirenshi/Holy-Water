@@ -21,6 +21,8 @@
              this.update();
          if (action.type=='STOPED-ACTION')
              this.update();
+         if (action.type=='FINISHED-IMPURE')
+             ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
      });
     </script>
 

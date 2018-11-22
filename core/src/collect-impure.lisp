@@ -24,15 +24,14 @@
                      :updated-by  by-id))))
 
 
-(defun make-collect-impure-history (collect-impure &key editor)
+(defun create-collect-impure-history (collect-impure &key editor)
   (let ((by-id (creator-id editor)))
-    (make-instance 'ev_collect-impure-history
-                   :id          (mito:object-id collect-impure)
-                   :maledict-id (maledict-id collect-impure)
-                   :impure-id   (impure-id collect-impure)
-                   :start       (start collect-impure)
-                   :created-by  by-id
-                   :updated-by  by-id)))
+    (mito:create-dao 'ev_collect-impure-history
+                     :maledict-id (maledict-id collect-impure)
+                     :impure-id   (impure-id collect-impure)
+                     :start       (start collect-impure)
+                     :created-by  by-id
+                     :updated-by  by-id)))
 
 
 (defun get-collect-impure (&key angel impure)

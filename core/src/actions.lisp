@@ -53,7 +53,9 @@
     (setf (updated-by  collect-impure) (mito:object-id to-maledict))
     (mito:save-dao collect-impure)
     ;; add history
-    (mito:save-dao (make-collect-impure-history collect-impure :editor editor))
+    (format t "1------~%")
+    (create-collect-impure-history collect-impure :editor editor)
+    (format t "2------~%")
     impure))
 
 (defgeneric move-impure (angel impure to-maledict &key editor)

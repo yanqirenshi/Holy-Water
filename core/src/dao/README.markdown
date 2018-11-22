@@ -6,9 +6,9 @@ drop table rs_angel;
 drop table rs_maledict;
 drop table th_angel_maledict;
 drop table rs_impure;
-drop table rs_impure_active
-drop table rs_impure_finished
-drop table rs_impure_discarded
+drop table rs_impure_active;
+drop table rs_impure_finished;
+drop table rs_impure_discarded;
 drop table ev_collect_impure;
 drop table ev_collect_impure_history;
 drop table ev_purge_start;

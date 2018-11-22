@@ -14,7 +14,8 @@
   (:export #:get-purge)
   (:export #:start-action-impure
            #:stop-action-impure
-           #:finish-impure))
+           #:finish-impure
+           #:move-impure))
 (in-package :holy-water)
 
 (mito:connect-toplevel :postgres :database-name "holy_water" :username "holy_water")

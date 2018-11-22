@@ -11,5 +11,6 @@
            #:create-impure-2-maledict
            #:start-action-4-impure
            #:stop-action-4-impure
-           #:finish-impure))
+           #:finish-impure
+           #:move-impure))
 (in-package :holy-water.api.controller)
