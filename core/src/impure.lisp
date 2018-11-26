@@ -44,7 +44,6 @@
 (defun get-impure (&key id)
   (mito:find-dao 'rs_impure-active :id id))
 
-
 (defun make-impure-finished (impure &key editor)
   (let ((by-id (creator-id editor)))
     (make-instance 'rs_impure-finished

@@ -16,6 +16,10 @@
         ((eq :end status ) nil)
         (t (error "bad status. status=~S" status))))
 
+(defun get-impure-started (&key angel)
+  (mito:select-dao 'ev_purge-start
+    (sxql:where (:= :ev_purge-start.angel-id (mito:object-id angel)))))
+
 (defun create-purge-start (angel impure &key editor description (start (local-time:now)))
   (let ((by-id (creator-id editor)))
     (mito:create-dao 'ev_purge-start

@@ -53,13 +53,17 @@
          color: inherit;
      }
      impure-card[status=start] span.card-footer-item.start {
-         color: #eeeeee;
+         color: #aaaaaa;
      }
      impure-card span.card-footer-item.stop {
-         color: #eeeeee;
+         color: #aaaaaa;
      }
      impure-card[status=start] span.card-footer-item.stop {
          color: inherit;
+     }
+     impure-card[status=start] div.card {
+         background: #eaedf7;
+         box-shadow: 0px 0px 11px #ec6d71;
      }
     </style>
 </impure-card>

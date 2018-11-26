@@ -10,7 +10,9 @@
 
     <script>
      this.impures = () => {
-         return STORE.get('impures').list;
+         return STORE.get('impures').list.sort((a, b) => {
+             return a.id > b.id ? 1 : -1;
+         });
      };
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-MALEDICT-IMPURES')

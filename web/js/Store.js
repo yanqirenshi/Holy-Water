@@ -15,15 +15,12 @@ class Store extends Vanilla_Redux_Store {
                 }
             },
             {
-                code: "page01",
-                menu_label: 'ペ1',
+                code: "purges",
+                menu_label: '浄歴',
                 active_section: 'root',
                 home_section: 'root',
                 sections: [
-                    { code: 'root', tag: 'page01_page_root', name: 'root' },
-                    { code: 'sec1', tag: 'page01_page1',     name: 'page1' },
-                    { code: 'sec2', tag: 'page01_page2',     name: 'page2' },
-                    { code: 'sec3', tag: 'page01_page3',     name: 'page3' },
+                    { code: 'root', tag: 'purges_page_root', name: 'root' },
                 ],
                 stye: {
                     color: { 1: '#fdeff2', 2: '#e0e0e0', 3: '#e198b4', 4: '#ffffff', 5: '#eeeeee', 5: '#333333' }
@@ -44,6 +41,14 @@ class Store extends Vanilla_Redux_Store {
                 stye: {
                     color: { 1: '#fdeff2', 2: '#e0e0e0', 3: '#e198b4', 4: '#ffffff', 5: '#eeeeee', 5: '#333333' }
                 }
+            },
+            {
+                code: "randing", menu_label: null,
+                active_section: 'root', home_section: 'root',
+                sections: [{ code: 'root', tag: 'randing_page_root', title: 'Home', description: '' }],
+                stye: {
+                    color: { 1: '#fdeff2', 2: '#e0e0e0', 3: '#e198b4', 4: '#ffffff', 5: '#eeeeee', 5: '#333333' }
+                }
             }
         ];
     }
@@ -54,6 +59,7 @@ class Store extends Vanilla_Redux_Store {
             site: {
                 active_page: 'home',
                 home_page: 'home',
+                randing_page: 'randing',
                 pages: this.pages(),
             }
         };

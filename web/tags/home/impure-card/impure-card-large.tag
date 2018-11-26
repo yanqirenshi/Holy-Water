@@ -1,5 +1,5 @@
 <impure-card-large>
-    <div class="card" style="box-shadow: 0px 0px 8px #eeeeee;">
+    <div class="card">
         <header class="card-header">
             <p class="card-header-title">
                 やること

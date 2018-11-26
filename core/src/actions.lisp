@@ -4,6 +4,8 @@
 ;;;;; Start Impure
 ;;;;;
 (defun %start-action-impure (angel impure &key editor)
+  (when (get-impure-started :angel angel)
+    (error "他のアクティビティで作業中です。"))
   (let ((started (get-purge :status :start :angel angel :impure impure)))
     ;; TODO: angel のバケットにあること
     (when started

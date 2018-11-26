@@ -59,7 +59,7 @@ class Router {
     getPageCode (site, args) {
         let len = args.length;
 
-        return args[0] ? args[0] : site.home_page;
+        return args[0] ? args[0] : site.randing_page;
     }
     /**
      * ???
