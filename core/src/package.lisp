@@ -23,7 +23,8 @@
   (:export #:find-impures
            #:create-impure
            #:add-impure
-           #:get-impure)
+           #:get-impure
+           #:save-impure)
   (:export #:get-angel)
   (:export #:get-purge
            #:find-purge-history)

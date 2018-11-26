@@ -42,7 +42,6 @@
     (unless maledict (throw-code 404))
     (render-json (hw.api.ctrl:find-impures angel :maledict maledict))))
 
-
 (defroute ("/maledicts/:id/impures" :method :POST) (&key id _parsed)
   (let* ((angel (get-angel))
          (maledict (hw:get-maledict :id id))
@@ -87,6 +86,15 @@
          (impure (hw::get-impure :id id)))
     (unless impure (throw-code 404))
     (render-json (hw.api.ctrl:finish-impure angel impure))))
+
+(defroute ("/impures/:id" :method :POST) (&key id _parsed)
+  (let* ((angel (get-angel))
+         (post-data (post-data _parsed))
+         (name (getf post-data :|name|))
+         (description (getf post-data :|description|))
+         (impure (hw::get-impure :id id)))
+    (unless impure (throw-code 404))
+    (render-json (hw.api.ctrl:save-impure angel impure :name name :description description :editor angel))))
 
 
 ;;;;;

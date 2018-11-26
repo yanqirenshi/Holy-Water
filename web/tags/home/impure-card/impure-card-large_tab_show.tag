@@ -1,7 +1,7 @@
 <impure-card-large_tab_show>
-    <div style="height:422px; height:505px; overflow:auto;">
+    <div>
         <p style="font-weight: bold;">{name()}</p>
-        <p style="margin-top:11px;">{description()}</p>
+        <p class="description">{description()}</p>
         <div>
             <a class="button is-danger"
                action="finishe-impure"
@@ -27,4 +27,20 @@
          return this.opts.data.description;
      };
     </script>
+
+    <style>
+     impure-card-large_tab_show > div {
+         height:422px;
+         height:505px;
+         overflow:auto;
+
+         display:flex;
+         flex-direction:column;
+     }
+     impure-card-large_tab_show .description {
+         margin-top:11px;
+         flex-grow:1;
+     }
+
+    </style>
 </impure-card-large_tab_show>

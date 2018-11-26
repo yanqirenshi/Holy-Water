@@ -12,6 +12,7 @@
            #:start-action-4-impure
            #:stop-action-4-impure
            #:finish-impure
-           #:move-impure)
+           #:move-impure
+           #:save-impure)
   (:export #:find-purge-history))
 (in-package :holy-water.api.controller)

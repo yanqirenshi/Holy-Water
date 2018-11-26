@@ -3,7 +3,7 @@
     <impure-card-large data={opts.data} status={status()} callback={callback}></impure-card-large>
 
     <script>
-     this.callback = (action) => {
+     this.callback = (action, data) => {
          if ('switch-large'==action)
              this.root.setAttribute('class', 'large');
 
@@ -24,6 +24,9 @@
 
          if ('finishe-impure'==action)
              ACTIONS.finishImpure(this.opts.data);
+
+         if ('save-impure-contents'==action)
+             ACTIONS.saveImpure(data);
      };
     </script>
 

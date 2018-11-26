@@ -70,6 +70,22 @@ class Actions extends Vanilla_Redux_Actions {
         };
     }
     /////
+    ///// Impure
+    /////
+    saveImpure (impure) {
+        let path = '/impures/' + impure.id;
+
+        API.post(path, impure, function (response) {
+            STORE.dispatch(this.savedImpure(response));
+        }.bind(this));
+    }
+    savedImpure (impure) {
+        return {
+            type: 'SAVED-IMPURE',
+            data: { impures: this.mergeData([impure]) },
+        };
+    }
+    /////
     ///// Action
     /////
     startImpure (impure) {

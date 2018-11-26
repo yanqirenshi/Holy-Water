@@ -53,3 +53,7 @@
 (defun move-impure (angel impure maledict)
   (dao2impure (hw:move-impure angel impure maledict :editor angel)
               :angel angel))
+
+(defun save-impure (angel impure &key name description editor)
+  (dao2impure (hw:save-impure angel impure :name name :description description :editor editor)
+              :angel angel))
