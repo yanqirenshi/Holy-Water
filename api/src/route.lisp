@@ -90,6 +90,13 @@
 
 
 ;;;;;
+;;;;; Purge
+;;;;;
+(defroute "/purges/history" ()
+  (let ((angel (get-angel)))
+    (render-json (hw.api.ctrl:find-purge-history angel))))
+
+;;;;;
 ;;;;; Error pages
 ;;;;;
 (defmethod on-exception ((app <router>) (code (eql 404)))

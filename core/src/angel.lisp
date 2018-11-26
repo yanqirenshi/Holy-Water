@@ -10,22 +10,22 @@
 
 (defun create-angel (&key (name "????????") creator)
   (let ((by-id (creator-id creator)))
-    (ensure-initial-maledict (mito:create-dao 'rs_angel
+    (ensure-initial-maledict (create-dao 'rs_angel
                                               :name name
                                               :created-by by-id
                                               :updated-by by-id)
                              :creator creator)))
 
 (defun get-angel (&key id)
-  (mito:find-dao 'rs_angel :id id))
+  (find-dao 'rs_angel :id id))
 
 
 (defgeneric find-angel-maledicts (angel)
   (:method ((angel rs_angel))
     (mapcar #'(lambda (d)
-                (mito:find-dao 'rs_maledict :id (maledict-id d)))
-            (mito:select-dao 'th_angel-maledict
-              (sxql:where (:= :angel-id (mito:object-id angel)))))))
+                (find-dao 'rs_maledict :id (maledict-id d)))
+            (select-dao 'th_angel-maledict
+              (sxql:where (:= :angel-id (object-id angel)))))))
 
 
 (defgeneric get-inbox-maledict (angel)

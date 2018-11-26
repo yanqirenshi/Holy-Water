@@ -4,11 +4,11 @@
 ;;;;; purge-start
 ;;;;;
 (defun get-purge-start (&key id angel impure)
-  (cond (id (mito:find-dao 'ev_purge-start :id id))
+  (cond (id (find-dao 'ev_purge-start :id id))
         ((and angel impure)
-         (mito:find-dao 'ev_purge-start
-                        :angel-id  (mito:object-id angel)
-                        :impure-id (mito:object-id impure)))))
+         (find-dao 'ev_purge-start
+                        :angel-id  (object-id angel)
+                        :impure-id (object-id impure)))))
 
 (defun get-purge (&key id angel impure (status :start))
   (cond ((eq :start status )
@@ -17,18 +17,18 @@
         (t (error "bad status. status=~S" status))))
 
 (defun get-impure-started (&key angel)
-  (mito:select-dao 'ev_purge-start
-    (sxql:where (:= :ev_purge-start.angel-id (mito:object-id angel)))))
+  (select-dao 'ev_purge-start
+    (where (:= :ev_purge-start.angel-id (object-id angel)))))
 
 (defun create-purge-start (angel impure &key editor description (start (local-time:now)))
   (let ((by-id (creator-id editor)))
-    (mito:create-dao 'ev_purge-start
-                     :angel-id  (mito:object-id angel)
-                     :impure-id (mito:object-id impure)
-                     :start start
-                     :description (or description "")
-                     :created-by by-id
-                     :updated-by by-id)))
+    (create-dao 'ev_purge-start
+                :angel-id  (object-id angel)
+                :impure-id (object-id impure)
+                :start start
+                :description (or description "")
+                :created-by by-id
+                :updated-by by-id)))
 
 ;;;;;
 ;;;;; purge-stop
@@ -36,15 +36,37 @@
 (defun create-purge-end (angel purge-start &key editor (stop (local-time:now)))
   (declare (ignore angel))
   (let ((by-id (creator-id editor)))
-    (mito:create-dao 'ev_purge-end
-                     :id          (mito:object-id         purge-start)
-                     :angel-id    (angel-id               purge-start)
-                     :impure-id   (impure-id              purge-start)
-                     :start       (start                  purge-start)
-                     :end         stop
-                     :description (description            purge-start)
-                     :created-by  (created-by             purge-start)
-                     :updated-by  by-id
-                     :created-at  (mito:object-updated-at purge-start)
-                     :updated-by  (mito:object-updated-at purge-start))
-    (mito:delete-dao purge-start)))
+    (create-dao 'ev_purge-end
+                :id          (object-id         purge-start)
+                :angel-id    (angel-id          purge-start)
+                :impure-id   (impure-id         purge-start)
+                :start       (start             purge-start)
+                :end         stop
+                :description (description       purge-start)
+                :created-by  (created-by        purge-start)
+                :updated-by  by-id
+                :created-at  (object-updated-at purge-start)
+                :updated-by  (object-updated-at purge-start))
+    (delete-dao purge-start)))
+
+;;;;;
+;;;;; find purge hisotry
+;;;;;
+(defun find-purge-history-sql (angel table)
+  (let* ((table-name (symbol-name table))
+         (id-col   (alexandria:make-keyword (concatenate 'string table-name ".ID")))
+         (name-col (alexandria:make-keyword (concatenate 'string table-name ".NAME"))))
+    (select (:ev_purge_end.*
+             (:as name-col :impure_name))
+      (from :ev_purge_end)
+      (inner-join table :on (:= :ev_purge_end.impure_id id-col))
+      (where (:= :ev_purge_end.angel_id (object-id angel))))))
+
+(defun find-purge-history (&key angel)
+  (multiple-value-bind (sql vals)
+      (sxql:yield
+       (union-all-queries
+        (find-purge-history-sql angel :rs_impure_active)
+        (find-purge-history-sql angel :rs_impure_finished)
+        (find-purge-history-sql angel :rs_impure_discarded)))
+    (dbi:fetch-all (apply #'dbi:execute (dbi:prepare mito:*connection* sql) vals))))

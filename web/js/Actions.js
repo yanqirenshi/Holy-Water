@@ -139,4 +139,23 @@ class Actions extends Vanilla_Redux_Actions {
             data: {},
         };
     }
+    /////
+    ///// Purge History
+    /////
+    fetchPurgeHistory () {
+        API.get('/purges/history', function (response) {
+            STORE.dispatch(this.fetchedPurgeHistory(response));
+        }.bind(this));
+    }
+    fetchedPurgeHistory (response) {
+
+        for (let purge of response) {
+            if (purge.start) purge.start = new Date(purge.start);
+            if (purge.end)   purge.end   = new Date(purge.end);
+        }
+        return {
+            type: 'FETCHED-PURGE-HISTORY',
+            data: { purges: this.mergeData(response) },
+        };
+    }
 }

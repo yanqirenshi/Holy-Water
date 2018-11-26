@@ -2,10 +2,10 @@
 
 (defun get-maledict (&key id)
   (when id
-    (mito:find-dao 'rs_maledict :id id)))
+    (find-dao 'rs_maledict :id id)))
 
 (defun find-maledicts ()
-  (mito:select-dao 'rs_maledict))
+  (select-dao 'rs_maledict))
 
 (defun get-maledict-type (&key maledict)
   (gethash (maledict-type-id maledict) *maledict-types*))
@@ -17,7 +17,7 @@
                           (deletable nil)
                           (description ""))
   (let ((by-id (creator-id creator)))
-    (mito:create-dao 'rs_maledict
+    (create-dao 'rs_maledict
                      :maledict-type-id maledict-type-id
                      :name name
                      :description description
@@ -29,10 +29,10 @@
 
 (defun get-maledict-done (&key angel)
   (when angel
-    (car (mito:select-dao 'rs_maledict
-           (sxql:inner-join :th_angel_maledict
-                            :on (:= :rs_maledict.id :th_angel_maledict.maledict-id))
-           (sxql:where (:and (:= :th_angel_maledict.angel-id
-                                 (mito:object-id angel))
-                             (:= :rs_maledict.maledict-type-id
-                                 *maledict-type-done*)))))))
+    (car (select-dao 'rs_maledict
+           (inner-join :th_angel_maledict
+                       :on (:= :rs_maledict.id :th_angel_maledict.maledict-id))
+           (where (:and (:= :th_angel_maledict.angel-id
+                            (object-id angel))
+                        (:= :rs_maledict.maledict-type-id
+                            *maledict-type-done*)))))))

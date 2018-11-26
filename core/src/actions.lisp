@@ -51,9 +51,9 @@
   (let ((collect-impure (get-collect-impure :angel angel :impure impure)))
     (unless collect-impure (error "あかん!"))
     ;; change maldect
-    (setf (maledict-id collect-impure) (mito:object-id to-maledict))
-    (setf (updated-by  collect-impure) (mito:object-id to-maledict))
-    (mito:save-dao collect-impure)
+    (setf (maledict-id collect-impure) (object-id to-maledict))
+    (setf (updated-by  collect-impure) (object-id to-maledict))
+    (save-dao collect-impure)
     ;; add history
     (create-collect-impure-history collect-impure :editor editor)
     impure))
@@ -78,8 +78,8 @@
   (let ((done-maledict (get-maledict-done :angel angel))
         (done-impure   (make-impure-finished impure :editor editor)))
     (move-impure angel impure done-maledict :editor editor)
-    (mito:delete-dao impure)
-    (mito:save-dao   done-impure)
+    (delete-dao impure)
+    (save-dao   done-impure)
     done-impure))
 
 (defgeneric finish-impure (angel impure &key editor)

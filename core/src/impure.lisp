@@ -4,7 +4,7 @@
                           (name "????????")
                           (description ""))
   (let ((by-id (creator-id creator)))
-    (mito:create-dao 'rs_impure-active
+    (create-dao 'rs_impure-active
                      :name name
                      :description description
                      :created-by by-id
@@ -23,9 +23,9 @@
   (when maledict
     (mapcar #'(lambda (d)
                 (print (hw::impure-id d))
-                (mito:find-dao 'hw::rs_impure-active :id (hw::impure-id d)))
-            (mito:select-dao 'ev_collect-impure
-              (sxql:where (:= :maledict-id (mito:object-id maledict)))))))
+                (find-dao 'hw::rs_impure-active :id (hw::impure-id d)))
+            (select-dao 'ev_collect-impure
+              (sxql:where (:= :maledict-id (object-id maledict)))))))
 
 (defun find-impures-target (maledict)
   (if (= *maledict-type-done* (maledict-type-id maledict))
@@ -35,19 +35,19 @@
 (defun find-impures (&key maledict)
   (when maledict
     (let ((target (find-impures-target maledict)))
-      (mito:select-dao (getf target :class)
+      (select-dao (getf target :class)
         (sxql:inner-join :ev_collect-impure
                          :on (:= (getf target :id-column) :ev_collect-impure.impure-id))
-        (sxql:where (:= :ev_collect-impure.maledict-id (mito:object-id maledict)))))))
+        (sxql:where (:= :ev_collect-impure.maledict-id (object-id maledict)))))))
 
 
 (defun get-impure (&key id)
-  (mito:find-dao 'rs_impure-active :id id))
+  (find-dao 'rs_impure-active :id id))
 
 (defun make-impure-finished (impure &key editor)
   (let ((by-id (creator-id editor)))
     (make-instance 'rs_impure-finished
-                   :id          (mito:object-id impure)
+                   :id          (object-id impure)
                    :name        (name impure)
                    :description (description impure)
                    :finished-at (local-time:now)
