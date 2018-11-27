@@ -30,4 +30,5 @@ drop table ev_purge_end;
 (mapc #'mito:execute-sql (mito:table-definition 'ev_collect-impure-history))
 (mapc #'mito:execute-sql (mito:table-definition 'ev_purge-start))
 (mapc #'mito:execute-sql (mito:table-definition 'ev_purge-end))
+(mapc #'mito:execute-sql (mito:table-definition 'ev_setting-auth))
 ```

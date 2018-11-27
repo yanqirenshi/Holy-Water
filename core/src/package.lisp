@@ -25,7 +25,8 @@
            #:add-impure
            #:get-impure
            #:save-impure)
-  (:export #:get-angel)
+  (:export #:get-angel
+           #:get-angel-at-auth)
   (:export #:get-purge
            #:find-purge-history)
   (:export #:start-action-impure

@@ -11,12 +11,14 @@
                 :components
                 ((:module "controller"
                   :components ((:file "package")
+                               (:file "angel")
                                (:file "utilities")
                                (:file "purge")
                                (:file "maledict")
                                (:file "impure")))
                  (:file "package")
                  (:file "render")
+                 (:file "utililties")
                  (:file "route"))))
   :description ""
   :long-description

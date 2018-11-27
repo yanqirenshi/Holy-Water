@@ -14,11 +14,22 @@ function signIn () {
 
     let uri = getUri();
 
-    fetch(uri, {
+    let contents = {
         method: 'POST',
-        body: {
+        body: JSON.stringify({
             email: email,
             password: password
+        }),
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
         }
-    });
+    };
+
+    fetch(uri, contents)
+        .then((res) => {
+            location.pathname = /hw/;
+        })
+        .then(console.log)
+        .catch(console.error);
 };
