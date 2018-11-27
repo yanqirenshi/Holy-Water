@@ -7,13 +7,25 @@
   (cond (id (find-dao 'ev_purge-start :id id))
         ((and angel impure)
          (find-dao 'ev_purge-start
-                        :angel-id  (object-id angel)
-                        :impure-id (object-id impure)))))
+                   :angel-id  (object-id angel)
+                   :impure-id (object-id impure)))))
+
+(defun get-purge-end (&key id angel impure)
+  (cond (id (find-dao 'ev_purge-end :id id))
+        ((and angel impure)
+         (find-dao 'ev_purge-end
+                   :angel-id  (object-id angel)
+                   :impure-id (object-id impure)))))
+
 
 (defun get-purge (&key id angel impure (status :start))
-  (cond ((eq :start status )
+  (cond ((eq :start status)
          (get-purge-start :id id :angel angel :impure impure))
-        ((eq :end status ) nil)
+        ((eq :end status)
+         (get-purge-end :id id :angel angel :impure impure))
+        ((eq :all status)
+         (or (get-purge :id id :angel angel :impure impure :status :start)
+             (get-purge :id id :angel angel :impure impure :status :end)))
         (t (error "bad status. status=~S" status))))
 
 (defun get-impure-started (&key angel)
@@ -70,3 +82,13 @@
         (find-purge-history-sql angel :rs_impure_finished)
         (find-purge-history-sql angel :rs_impure_discarded)))
     (dbi:fetch-all (apply #'dbi:execute (dbi:prepare mito:*connection* sql) vals))))
+
+(defun save-purge-term (angel purge start end &key editor)
+  (declare (ignore angel))
+  :: TODO: angel purge の関係をチェックする。
+  (let ((by-id (creator-id editor)))
+    (setf (start purge) start)
+    (setf (end purge) end)
+    (setf (updated-by purge) by-id)
+    (save-dao purge)
+    purge))

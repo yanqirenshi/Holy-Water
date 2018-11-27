@@ -60,13 +60,14 @@ class Actions extends Vanilla_Redux_Actions {
         let path = '/maledicts/' + maledict.id + '/impures';
 
         API.post(path, data, function (response) {
-            STORE.dispatch(this.createdMaledictImpures(response));
+            STORE.dispatch(this.createdMaledictImpures(response, maledict));
         }.bind(this));
     }
-    createdMaledictImpures (response) {
+    createdMaledictImpures (response, maledict) {
         return {
             type: 'CREATED-MALEDICT-IMPURES',
-            data: { impures: this.mergeData(response) },
+            data: {},
+            maledict: maledict
         };
     }
     /////
@@ -127,6 +128,22 @@ class Actions extends Vanilla_Redux_Actions {
             data: {},
         };
     }
+    saveActionResult (action_result) {
+        let path = '/purges/' + action_result.id + '/term';
+        let data = {
+            start: action_result.start,
+            end: action_result.end
+        };
+
+        API.post(path, data, function (response) {
+            STORE.dispatch(this.savedActionResult(response));
+        }.bind(this));
+    }
+    savedActionResult () {
+        return {
+            type: 'SAVED-ACTION-RESULT'
+        };
+    }
     /////
     ///// Move Impure to Maledict
     /////
@@ -151,7 +168,7 @@ class Actions extends Vanilla_Redux_Actions {
     }
     movedImpure (impure) {
         return {
-            type: 'FINISHED-IMPURE',
+            type: 'MOVED-IMPURE',
             data: {},
         };
     }

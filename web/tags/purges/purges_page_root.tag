@@ -32,6 +32,11 @@
              this.tags['purge-result-editor'].update();
              return;
          }
+
+         if (action=='save-purge-result-editor') {
+             ACTIONS.saveActionResult(data);
+             return;
+         }
      };
     </script>
 

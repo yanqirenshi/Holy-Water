@@ -60,3 +60,6 @@
 (defun find-purge-history (angel)
   (mapcar #'plist2purge-history
           (hw:find-purge-history :angel angel)))
+
+(defun save-purge-term (angel purge start end &key editor)
+  (dao2purge (hw:save-purgek-term angel purge start end :editor editor)))

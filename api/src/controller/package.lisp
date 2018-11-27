@@ -14,7 +14,8 @@
            #:finish-impure
            #:move-impure
            #:save-impure)
-  (:export #:find-purge-history)
+  (:export #:find-purge-history
+           #:save-purge-term)
   (:export #:sing-in
            #:sing-out))
 (in-package :holy-water.api.controller)

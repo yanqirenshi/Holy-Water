@@ -17,12 +17,16 @@
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-MALEDICT-IMPURES')
              this.update();
-         if (action.type=='CREATED-MALEDICT-IMPURES')
-             this.update();
+         if (action.type=='CREATED-MALEDICT-IMPURES') {
+             if (this.opts.maledict.id == action.maledict.id)
+                 ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
+         }
          if (action.type=='STARTED-ACTION')
              this.update();
          if (action.type=='STOPED-ACTION')
              this.update();
+         if (action.type=='MOVED-IMPURE')
+             ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
          if (action.type=='FINISHED-IMPURE')
              ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
      });

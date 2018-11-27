@@ -112,6 +112,15 @@
   (with-angel (angel)
     (render-json (hw.api.ctrl:find-purge-history angel))))
 
+(defroute ("/purges/:id/term" :method :POST) (&key id _parsed)
+  (with-angel (angel)
+    (let* ((post-data (post-data _parsed))
+           (start (local-time:parse-timestring (getf post-data :|start|)))
+           (end   (local-time:parse-timestring (getf post-data :|end|)))
+           (purge (hw::get-purge :id (parse-integer id) :status :all)))
+      (unless purge (throw-code 404))
+      (render-json (hw.api.ctrl:save-purge-term angel purge start end :editor angel)))))
+
 ;;;;;
 ;;;;; Error pages
 ;;;;;

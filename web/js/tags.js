@@ -151,7 +151,7 @@ riot.tag2('home_page_root-buckets', '<nav class="panel"> <p class="panel-heading
          let impure = JSON.parse(e.dataTransfer.getData('impure'));
          let maledict = this.opts.data.ht[e.target.getAttribute('maledict-id')];
 
-         ACTIONS.moveImpure (maledict, impure);
+         ACTIONS.moveImpure(maledict, impure);
 
          e.preventDefault();
      };
@@ -205,12 +205,16 @@ riot.tag2('home_page_root-impures', '<div class="flex-parent" style="height:100%
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-MALEDICT-IMPURES')
              this.update();
-         if (action.type=='CREATED-MALEDICT-IMPURES')
-             this.update();
+         if (action.type=='CREATED-MALEDICT-IMPURES') {
+             if (this.opts.maledict.id == action.maledict.id)
+                 ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
+         }
          if (action.type=='STARTED-ACTION')
              this.update();
          if (action.type=='STOPED-ACTION')
              this.update();
+         if (action.type=='MOVED-IMPURE')
+             ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
          if (action.type=='FINISHED-IMPURE')
              ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
      });
@@ -490,10 +494,22 @@ riot.tag2('page03', '', '', '', function(opts) {
 riot.tag2('page03_page_root', '', '', '', function(opts) {
 });
 
-riot.tag2('purge-result-editor', '<div class="modal {opts.data ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head"> <p class="modal-card-title">作業時間の変更</p> <button class="delete" aria-label="close" action="close-purge-result-editor" onclick="{clickButton}"></button> </header> <section class="modal-card-body"> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">Impure</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'impure_name\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">作業時間</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" value="" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">Start</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'start\'))}" type="{\'datetime\'}"> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">End</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'end\'))}" type="{\'datetime\'}"> </p> </div> </div> </div> </section> <footer class="modal-card-foot"> <button class="button is-success">Save changes</button> <button class="button" action="close-purge-result-editor" onclick="{clickButton}">Cancel</button> </footer> </div> </div>', '', '', function(opts) {
+riot.tag2('purge-result-editor', '<div class="modal {opts.data ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head"> <p class="modal-card-title">作業時間の変更</p> <button class="delete" aria-label="close" action="close-purge-result-editor" onclick="{clickButton}"></button> </header> <section class="modal-card-body"> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">Impure</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'impure_name\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">作業時間</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'elapsed-time\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">Start</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'start\'))}" ref="start" type="{\'datetime\'}"> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">End</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'end\'))}" ref="end" type="{\'datetime\'}"> </p> </div> </div> </div> </section> <footer class="modal-card-foot"> <button class="button is-success" action="save-purge-result-editor" onclick="{clickButton}">Save changes</button> <button class="button" action="close-purge-result-editor" onclick="{clickButton}">Cancel</button> </footer> </div> </div>', '', '', function(opts) {
      this.clickButton = (e) => {
          let action = e.target.getAttribute('action');
-         this.opts.callback(action);
+
+         if (action != 'save-purge-result-editor') {
+             this.opts.callback(action);
+             return;
+         }
+
+         let stripper = new TimeStripper();
+
+         this.opts.callback(action, {
+             id: this.opts.data.id,
+             start: stripper.str2date(this.refs.start.value),
+             end: stripper.str2date(this.refs.end.value)
+         })
      };
 
      this.getVal = (key) => {
@@ -501,6 +517,9 @@ riot.tag2('purge-result-editor', '<div class="modal {opts.data ? \'is-active\' :
 
          if (!data)
              return '';
+
+         if (key=='elapsed-time')
+             return new TimeStripper().format_elapsedTime(this.opts.data.start, this.opts.data.end);
 
          return data[key];
      };
@@ -521,33 +540,10 @@ riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow i
      };
 
      this.fdt = (dt) => {
-         return dt ? moment(dt).format("YYYY-MM-DD HH:mm:ss") : '---';
+         return new TimeStripper().format(dt);
      }
      this.elapsedTime = (start, end) => {
-         if (!start || !end) return '';
-
-         let int2dstr = (i) => {
-             return (i<10) ? '0' + i : i + '';
-         };
-
-         let elapse = moment(end).diff(moment(start)) / 1000;
-
-         let sec = elapse % 60;
-
-         let elapse_min = (elapse - sec) / 60;
-
-         let min = elapse_min % 60;
-
-         let elapse_hour = (elapse_min - min) / 60;
-
-         let hour = elapse_hour % 24;
-
-         let day = (elapse_hour - hour) / 24;
-
-         let time_str = int2dstr(hour) + ':' + int2dstr(min) + ':' + int2dstr(sec);
-         let day_str = (day>0) ? day + ' 日 ' : '';
-
-         return day_str + time_str;
+         return new TimeStripper().format_elapsedTime(start, end);
      };
 });
 
@@ -574,6 +570,11 @@ riot.tag2('purges_page_root', '<div style="padding:22px;"> <div class="card"> <h
          if (action=='close-purge-result-editor') {
              this.edit_target = null;
              this.tags['purge-result-editor'].update();
+             return;
+         }
+
+         if (action=='save-purge-result-editor') {
+             ACTIONS.saveActionResult(data);
              return;
          }
      };

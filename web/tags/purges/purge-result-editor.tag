@@ -32,7 +32,7 @@
                     <div class="field-body">
                         <div class="field">
                             <p class="control">
-                                <input class="input is-static" type="text" value="" readonly>
+                                <input class="input is-static" type="text" value={getVal('elapsed-time')} readonly>
                             </p>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                     <div class="field-body">
                         <div class="field">
                             <p class="control">
-                                <input class="input" type="datetime" value={date2str(getVal('start'))}>
+                                <input class="input" type="datetime" value={date2str(getVal('start'))} ref="start">
                             </p>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
                     <div class="field-body">
                         <div class="field">
                             <p class="control">
-                                <input class="input" type="datetime" value={date2str(getVal('end'))}>
+                                <input class="input" type="datetime" value={date2str(getVal('end'))} ref="end">
                             </p>
                         </div>
                     </div>
@@ -67,7 +67,7 @@
             </section>
 
             <footer class="modal-card-foot">
-                <button class="button is-success">Save changes</button>
+                <button class="button is-success" action="save-purge-result-editor" onclick={clickButton}>Save changes</button>
                 <button class="button" action="close-purge-result-editor" onclick={clickButton}>Cancel</button>
             </footer>
         </div>
@@ -76,7 +76,19 @@
     <script>
      this.clickButton = (e) => {
          let action = e.target.getAttribute('action');
-         this.opts.callback(action);
+
+         if (action != 'save-purge-result-editor') {
+             this.opts.callback(action);
+             return;
+         }
+
+         let stripper = new TimeStripper();
+
+         this.opts.callback(action, {
+             id: this.opts.data.id,
+             start: stripper.str2date(this.refs.start.value),
+             end: stripper.str2date(this.refs.end.value)
+         })
      };
     </script>
 
@@ -86,6 +98,9 @@
 
          if (!data)
              return '';
+
+         if (key=='elapsed-time')
+             return new TimeStripper().format_elapsedTime(this.opts.data.start, this.opts.data.end);
 
          return data[key];
      };

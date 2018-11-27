@@ -50,7 +50,7 @@
          let impure = JSON.parse(e.dataTransfer.getData('impure'));
          let maledict = this.opts.data.ht[e.target.getAttribute('maledict-id')];
 
-         ACTIONS.moveImpure (maledict, impure);
+         ACTIONS.moveImpure(maledict, impure);
 
          e.preventDefault();
      };

@@ -28,7 +28,8 @@
   (:export #:get-angel
            #:get-angel-at-auth)
   (:export #:get-purge
-           #:find-purge-history)
+           #:find-purge-history
+           #:save-purge-term)
   (:export #:start-action-impure
            #:stop-action-impure
            #:finish-impure
