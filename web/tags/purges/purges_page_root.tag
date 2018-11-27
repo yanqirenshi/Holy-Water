@@ -7,35 +7,42 @@
             </header>
 
             <div class="card-content">
-                <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-                    <thead>
-                        <tr>
-                            <th rowspan="2">Impure</th>
-                            <th colspan="3">Purge</th>
-                        </tr>
-                        <tr>
-                            <th>開始</th>
-                            <th>終了</th>
-                            <th>時間</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr each={data()}>
-                            <td>{impure_name}</td>
-                            <td>{fdt(start)}</td>
-                            <td>{fdt(end)}</td>
-                            <td style="text-align: right;">{elapsedTime(start, end)}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <purges-list data={data()} callback={callback}></purges-list>
             </div>
         </div>
     </div>
 
+    <purge-result-editor data={edit_target} callback={callback}></purge-result-editor>
+
     <script>
+     this.edit_target = null;
+
      this.clickRefresh = () => {
          ACTIONS.fetchPurgeHistory();
      };
+     this.callback = (action, data) => {
+         if (action=='open-purge-result-editor') {
+             this.edit_target = STORE.get('purges').ht[data.id];
+             this.tags['purge-result-editor'].update();
+             return;
+         }
+
+         if (action=='close-purge-result-editor') {
+             this.edit_target = null;
+             this.tags['purge-result-editor'].update();
+             return;
+         }
+     };
+    </script>
+
+    <script>
+     this.on('mount', () => {
+         ACTIONS.fetchPurgeHistory();
+     });
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-PURGE-HISTORY')
+             this.update();
+     });
     </script>
 
     <script>
@@ -46,42 +53,6 @@
 
          return list;
      };
-     this.fdt = (dt) => {
-         return dt ? moment(dt).format("YYYY-MM-DD HH:mm:ss") : '---';
-     }
-     this.elapsedTime = (start, end) => {
-         if (!start || !end) return '';
-
-         let int2dstr = (i) => {
-             return (i<10) ? '0' + i : i + '';
-         };
-
-         let elapse = moment(end).diff(moment(start)) / 1000;
-
-         let sec = elapse % 60;
-
-         let elapse_min = (elapse - sec) / 60;
-
-         let min = elapse_min % 60;
-
-         let elapse_hour = (elapse_min - min) / 60;
-
-         let hour = elapse_hour % 24;
-
-         let day = (elapse_hour - hour) / 24;
-
-         let time_str = int2dstr(hour) + ':' + int2dstr(min) + ':' + int2dstr(sec);
-         let day_str = (day>0) ? day + ' 日 ' : '';
-
-         return day_str + time_str;
-     };
-     this.on('mount', () => {
-         ACTIONS.fetchPurgeHistory();
-     });
-     STORE.subscribe((action) => {
-         if (action.type=='FETCHED-PURGE-HISTORY')
-             this.update();
-     });
     </script>
 
     <style>

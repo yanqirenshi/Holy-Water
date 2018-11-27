@@ -490,25 +490,36 @@ riot.tag2('page03', '', '', '', function(opts) {
 riot.tag2('page03_page_root', '', '', '', function(opts) {
 });
 
-riot.tag2('purges', '', '', '', function(opts) {
-     this.mixin(MIXINS.page);
+riot.tag2('purge-result-editor', '<div class="modal {opts.data ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head"> <p class="modal-card-title">作業時間の変更</p> <button class="delete" aria-label="close" action="close-purge-result-editor" onclick="{clickButton}"></button> </header> <section class="modal-card-body"> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">Impure</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'impure_name\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">作業時間</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" value="" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">Start</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'start\'))}" type="{\'datetime\'}"> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">End</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'end\'))}" type="{\'datetime\'}"> </p> </div> </div> </div> </section> <footer class="modal-card-foot"> <button class="button is-success">Save changes</button> <button class="button" action="close-purge-result-editor" onclick="{clickButton}">Cancel</button> </footer> </div> </div>', '', '', function(opts) {
+     this.clickButton = (e) => {
+         let action = e.target.getAttribute('action');
+         this.opts.callback(action);
+     };
 
-     this.on('mount', () => { this.draw(); });
-     this.on('update', () => { this.draw(); });
+     this.getVal = (key) => {
+         let data = this.opts.data;
+
+         if (!data)
+             return '';
+
+         return data[key];
+     };
+     this.date2str = (date) => {
+         if (!date) return '';
+
+         return moment(date).format("YYYY-MM-DD HH:mm:ss");
+     };
 });
 
-riot.tag2('purges_page_root', '<div style="padding:22px;"> <div class="card"> <header class="card-header"> <p class="card-header-title">Purge hisotry</p> <button class="button refresh" onclick="{clickRefresh}">Refresh</button> </header> <div class="card-content"> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"> <thead> <tr> <th rowspan="2">Impure</th> <th colspan="3">Purge</th> </tr> <tr> <th>開始</th> <th>終了</th> <th>時間</th> </tr> </thead> <tbody> <tr each="{data()}"> <td>{impure_name}</td> <td>{fdt(start)}</td> <td>{fdt(end)}</td> <td style="text-align: right;">{elapsedTime(start, end)}</td> </tr> </tbody> </table> </div> </div> </div>', 'purges_page_root { height: 100%; width: 100%; display: block; overflow: auto; } purges_page_root .card { border-radius: 8px; } purges_page_root button.refresh{ margin-top:6px; margin-right:8px; }', '', function(opts) {
-     this.clickRefresh = () => {
-         ACTIONS.fetchPurgeHistory();
+riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"> <thead> <tr> <th rowspan="2">Impure</th> <th colspan="4">Purge</th> </tr> <tr> <th>開始</th> <th>終了</th> <th>時間</th> <th>操作</th> </tr> </thead> <tbody> <tr each="{opts.data}"> <td>{impure_name}</td> <td>{fdt(start)}</td> <td>{fdt(end)}</td> <td style="text-align: right;">{elapsedTime(start, end)}</td> <td><button class="button" data-id="{id}" onclick="{clickEditButton}">変更</button></td> </tr> </tbody> </table>', '', '', function(opts) {
+     this.clickEditButton = (e) => {
+         let target = e.target;
+
+         this.opts.callback('open-purge-result-editor', {
+             id: target.getAttribute('data-id')
+         })
      };
 
-     this.data = () => {
-         let list = STORE.get('purges').list.sort((a, b) => {
-             return a.start < b.start ? 1 : -1;
-         });
-
-         return list;
-     };
      this.fdt = (dt) => {
          return dt ? moment(dt).format("YYYY-MM-DD HH:mm:ss") : '---';
      }
@@ -538,6 +549,35 @@ riot.tag2('purges_page_root', '<div style="padding:22px;"> <div class="card"> <h
 
          return day_str + time_str;
      };
+});
+
+riot.tag2('purges', '', '', '', function(opts) {
+     this.mixin(MIXINS.page);
+
+     this.on('mount', () => { this.draw(); });
+     this.on('update', () => { this.draw(); });
+});
+
+riot.tag2('purges_page_root', '<div style="padding:22px;"> <div class="card"> <header class="card-header"> <p class="card-header-title">Purge hisotry</p> <button class="button refresh" onclick="{clickRefresh}">Refresh</button> </header> <div class="card-content"> <purges-list data="{data()}" callback="{callback}"></purges-list> </div> </div> </div> <purge-result-editor data="{edit_target}" callback="{callback}"></purge-result-editor>', 'purges_page_root { height: 100%; width: 100%; display: block; overflow: auto; } purges_page_root .card { border-radius: 8px; } purges_page_root button.refresh{ margin-top:6px; margin-right:8px; }', '', function(opts) {
+     this.edit_target = null;
+
+     this.clickRefresh = () => {
+         ACTIONS.fetchPurgeHistory();
+     };
+     this.callback = (action, data) => {
+         if (action=='open-purge-result-editor') {
+             this.edit_target = STORE.get('purges').ht[data.id];
+             this.tags['purge-result-editor'].update();
+             return;
+         }
+
+         if (action=='close-purge-result-editor') {
+             this.edit_target = null;
+             this.tags['purge-result-editor'].update();
+             return;
+         }
+     };
+
      this.on('mount', () => {
          ACTIONS.fetchPurgeHistory();
      });
@@ -545,6 +585,14 @@ riot.tag2('purges_page_root', '<div style="padding:22px;"> <div class="card"> <h
          if (action.type=='FETCHED-PURGE-HISTORY')
              this.update();
      });
+
+     this.data = () => {
+         let list = STORE.get('purges').list.sort((a, b) => {
+             return a.start < b.start ? 1 : -1;
+         });
+
+         return list;
+     };
 });
 
 riot.tag2('randing', '', '', '', function(opts) {
