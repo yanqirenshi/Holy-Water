@@ -28,9 +28,9 @@
       (setf (maledict-type maledict) (hw:get-maledict-type :maledict dao))
       maledict)))
 
-(defun find-maledicts ()
+(defun find-maledicts (angel)
   (mapcar #'dao2maledict
-          (hw:find-maledicts)))
+          (hw:find-maledicts :angel angel)))
 
 (defun get-maledict (&key id)
   (when id

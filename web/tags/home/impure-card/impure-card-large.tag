@@ -83,8 +83,8 @@
 
     <style>
      impure-card-large > .card {
-         width: calc(222px + 222px + 222px + 22px);
-         height: calc(222px + 222px + 222px + 22px);
+         width: calc(222px + 222px + 222px + 22px + 22px);
+         height: calc(222px + 222px + 222px + 22px + 22px);
          float: left;
          margin-left: 22px;
          margin-top: 1px;
@@ -95,7 +95,7 @@
          border-radius: 5px;
      }
      impure-card-large > .card .card-content{
-         height: calc(222px + 222px + 222px + 22px - 49px - 48px);
+         height: calc(222px + 222px + 222px + 22px + 22px - 49px - 48px);
          padding: 11px 22px;
          overflow: auto;
      }

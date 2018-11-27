@@ -41,8 +41,7 @@
 ;;;;;
 (defroute "/maledicts" ()
   (with-angel (angel)
-    (declare (ignore angel))
-    (render-json (hw.api.ctrl:find-maledicts))))
+    (render-json (hw.api.ctrl:find-maledicts angel))))
 
 
 (defroute "/maledicts/:id/impures" (&key id)

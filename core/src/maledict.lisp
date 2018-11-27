@@ -4,8 +4,10 @@
   (when id
     (find-dao 'rs_maledict :id id)))
 
-(defun find-maledicts ()
-  (select-dao 'rs_maledict))
+(defun find-maledicts (&key angel)
+  (select-dao 'rs_maledict
+    (inner-join :th_angel-maledict :on (:= :rs_maledict.id :th_angel-maledict.maledict-id))
+    (where (:= :th_angel-maledict.angel-id (object-id angel)))))
 
 (defun get-maledict-type (&key maledict)
   (gethash (maledict-type-id maledict) *maledict-types*))
