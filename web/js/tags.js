@@ -1,4 +1,4 @@
-riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" site="{site()}" moves="{[]}"></menu-bar> <div ref="page-area" style="padding-left: 55px; width: 100vw; height: 100vh;"></div> <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p>', 'app > .page { width: 100vw; height: 100vh; overflow: hidden; display: block; } app .hide,[data-is="app"] .hide{ display: none; } app > .image-ref { position: fixed; bottom: 3px; right: 22px; font-size: 11px; color: #fff; } app > .image-ref > a:link { color: #fff; } app > .image-ref > a:visited { color: #fff; } app > .image-ref > a:hover { color: #fff; } app > .image-ref > a:active { color: #fff; } app > div.kasumi { position: fixed; top: 0px; left: 0px; width: 100vw; height: 100vh; background: #ffffff; opacity: 0.3; z-index: -888888; }', '', function(opts) {
+riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" site="{site()}" moves="{[]}"></menu-bar> <div ref="page-area" style="padding-left: 55px; width: 100vw; height: 100vh;"></div> <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p> <message-area></message-area>', 'app > .page { width: 100vw; height: 100vh; overflow: hidden; display: block; } app .hide,[data-is="app"] .hide{ display: none; } app > .image-ref { position: fixed; bottom: 3px; right: 22px; font-size: 11px; color: #fff; } app > .image-ref > a:link { color: #fff; } app > .image-ref > a:visited { color: #fff; } app > .image-ref > a:hover { color: #fff; } app > .image-ref > a:active { color: #fff; } app > div.kasumi { position: fixed; top: 0px; left: 0px; width: 100vw; height: 100vh; background: #ffffff; opacity: 0.3; z-index: -888888; }', '', function(opts) {
      this.site = () => {
          return STORE.state().get('site');
      };
@@ -59,6 +59,27 @@ riot.tag2('menu-bar', '<aside class="menu"> <p ref="brand" class="menu-label" on
              this.brandStatus('close');
          }
          panel.setAttribute('class', classes.join(' '));
+     };
+});
+
+riot.tag2('message-area', '<message-item each="{msg in messages()}" data="{msg}" callback="{callback}"></message-item>', 'message-area { position: fixed; right: 22px; top: 22px; z-index: 666666; } message-area > message-item { margin-bottom: 11px; } message-area > message-item:last-child { margin-bottom: 0px; }', '', function(opts) {
+     this.callback = (action, data) => {
+         if ('close-message'==action)
+             ACTIONS.closeMessage(data);
+     };
+     STORE.subscribe((action) => {
+         if ('CLOSED-MESSAGE'==action.type)
+             this.update();
+     });
+
+     this.messages = () => {
+         return STORE.get('messages');
+     };
+});
+
+riot.tag2('message-item', '<article class="message is-{opts.data.type}"> <div class="message-header"> <p>{opts.data.title}</p> <button class="delete" aria-label="delete" onclick="{clickCloseButton}"></button> </div> <div class="message-body" style="padding: 11px 22px;"> <div class="contents" style="overflow: auto;"> <p>{opts.data.contents}</p> </div> </div> </article>', 'message-item > .message{ min-height: calc(46px + 44px); min-width: 111px; max-height: 222px; max-width: 333px; } message-item { display: block; }', '', function(opts) {
+     this.clickCloseButton = () => {
+         this.opts.callback('close-message', this.opts.data);
      };
 });
 
@@ -385,7 +406,12 @@ riot.tag2('impure-card-large_tab_finish', '<a class="button is-danger" action="f
 riot.tag2('impure-card-large_tab_hisotry', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"> <thead> <tr> <th>担当</th> <th>Maledict</th> <th>開始</th> <th>終了</th> <th>時間</th> </tr> </thead> <tbody> </tbody> </table>', '', '', function(opts) {
 });
 
-riot.tag2('impure-card-large_tab_show', '<div> <p style="font-weight: bold;">{name()}</p> <p class="description">{description()}</p> <div> <a class="button is-danger" action="finishe-impure" onclick="{clickButton}">完了</a> </div> </div>', 'impure-card-large_tab_show > div { height:422px; height:505px; overflow:auto; display:flex; flex-direction:column; } impure-card-large_tab_show .description { margin-top:11px; flex-grow:1; }', '', function(opts) {
+riot.tag2('impure-card-large_tab_show-description', '', 'impure-card-large_tab_show-description h1 { font-weight: bold; font-size: 20px; } impure-card-large_tab_show-description h2 { font-weight: bold; font-size: 18px; } impure-card-large_tab_show-description h3 { font-weight: bold; font-size: 16px; } impure-card-large_tab_show-description h4 { font-weight: bold; font-size: 14px; } impure-card-large_tab_show-description h5 { font-weight: bold; font-size: 12px; } impure-card-large_tab_show-description * { font-size: 12px; }', '', function(opts) {
+    this.root.innerHTML = opts.contents
+
+});
+
+riot.tag2('impure-card-large_tab_show', '<div> <p style="font-weight: bold;">{name()}</p> <p class="description" style="padding:11px;"> <impure-card-large_tab_show-description contents="{marked(this.description())}"></impure-card-large_tab_show-description> </p> <div> <a class="button is-danger" action="finishe-impure" onclick="{clickButton}">完了</a> </div> </div>', 'impure-card-large_tab_show > div { height:422px; height:505px; overflow:auto; display:flex; flex-direction:column; } impure-card-large_tab_show .description { margin-top:11px; flex-grow:1; }', '', function(opts) {
      this.clickButton = (e) => {
          let target = e.target;
 

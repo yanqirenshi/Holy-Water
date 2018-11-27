@@ -7,6 +7,8 @@
 
     <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p>
 
+    <message-area></message-area>
+
     <style>
      app > .page {
          width: 100vw;

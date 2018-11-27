@@ -54,7 +54,19 @@ class Store extends Vanilla_Redux_Store {
                 home_page: 'home',
                 randing_page: 'randing',
                 pages: this.pages(),
-            }
+            },
+            messages: [
+                // {
+                //     title: 'test',
+                //     contents: "aaa",
+                //     type: 'danger'
+                // },
+                // {
+                //     title: 'test',
+                //     contents: "aaa",
+                //     type: 'danger'
+                // }
+            ],
         };
 
         for (var i in data.site.pages) {

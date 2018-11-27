@@ -191,4 +191,18 @@ class Actions extends Vanilla_Redux_Actions {
             data: { purges: this.mergeData(response) },
         };
     }
+    /////
+    ///// Message
+    /////
+    closeMessage (message) {
+        let messages = STORE.get('messages');
+        let new_messages = messages.filter((msg) => {
+            return msg != message;
+        });
+
+        STORE.dispatch({
+            type: 'CLOSED-MESSAGE',
+            data: { messages: new_messages },
+        });
+    }
 }

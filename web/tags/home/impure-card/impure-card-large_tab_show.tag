@@ -1,7 +1,10 @@
 <impure-card-large_tab_show>
     <div>
         <p style="font-weight: bold;">{name()}</p>
-        <p class="description">{description()}</p>
+        <p class="description" style="padding:11px;">
+            <impure-card-large_tab_show-description contents={marked(this.description())}></impure-card-large_tab_show-description>
+        </p>
+
         <div>
             <a class="button is-danger"
                action="finishe-impure"
