@@ -14,7 +14,8 @@
      (,*maledict-type-plan-project*  . (:name "Plan Project"   :order 40  :deletable 1 :description ""))
      (,*maledict-type-someday-maybe* . (:name "Someday/Maybe"  :order 50  :deletable 1 :description ""))
      (,*maledict-type-done*          . (:name "Done"           :order 999 :deletable 0 :description ""))
-     (,*maledict-type-user-create*   . (:name "????????"       :order 100 :deletable 1 :description "")))))
+     (,*maledict-type-user-create*   . (:name "????????"       :order 100 :deletable 1 :description ""))
+     (,*maledict-type-user-create*   . (:name "Regular work"   :order 100 :deletable 1 :description "日々の繰返し実施している作業")))))
 
 (defun %find-initial-maledict-types (&key (maledict-types *maledict-types*))
   (mapcar #'(lambda (d)
