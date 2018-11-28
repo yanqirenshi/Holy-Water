@@ -1,4 +1,7 @@
 class Actions extends Vanilla_Redux_Actions {
+    /////
+    ///// util
+    /////
     mergeData (source, target) {
         let target_ht;
         let target_list;
@@ -32,6 +35,9 @@ class Actions extends Vanilla_Redux_Actions {
             data: data
         };
     }
+    /////
+    ///// Maledict
+    /////
     fetchMaledicts () {
         API.get('/maledicts', function (json, success) {
             if (!success)
@@ -64,6 +70,8 @@ class Actions extends Vanilla_Redux_Actions {
         API.post(path, data, function (json, success) {
             if (!success)
                 STORE.dispatch(this.createdMaledictImpures(json, maledict));
+            else
+                this.pushFetchErrorMessage(json);
         }.bind(this));
     }
     createdMaledictImpures (response, maledict) {
@@ -82,6 +90,8 @@ class Actions extends Vanilla_Redux_Actions {
         API.post(path, impure, function (json, success) {
             if (!success)
                 STORE.dispatch(this.savedImpure(json));
+            else
+                this.pushFetchErrorMessage(json);
         }.bind(this));
     }
     savedImpure (impure) {
@@ -99,6 +109,8 @@ class Actions extends Vanilla_Redux_Actions {
         API.post(path, null, function (json, success) {
             if (!success)
                 STORE.dispatch(this.startedImpure(json));
+            else
+                this.pushFetchErrorMessage(json);
         }.bind(this));
     }
     startedImpure (impure) {
@@ -113,6 +125,8 @@ class Actions extends Vanilla_Redux_Actions {
         API.post(path, null, function (json, success) {
             if (!success)
                 STORE.dispatch(this.stopedImpure(json));
+            else
+                this.pushFetchErrorMessage(json);
         }.bind(this));
     }
     stopedImpure (impure) {
@@ -128,12 +142,7 @@ class Actions extends Vanilla_Redux_Actions {
             if (!success)
                 STORE.dispatch(this.finishedImpure(json));
             else
-                this.pushMessage({
-                    title: json['ERROR-TYPE'] + ' (' + json['CODE'] + ')',
-                    contents: json['MESSAGE'],
-                    type: 'danger',
-                    json: json,
-                });
+                this.pushFetchErrorMessage(json);
         }.bind(this));
     }
     finishedImpure (impure) {
@@ -152,6 +161,8 @@ class Actions extends Vanilla_Redux_Actions {
         API.post(path, data, function (json, success) {
             if (!success)
                 STORE.dispatch(this.savedActionResult(json));
+            else
+                this.pushFetchErrorMessage(json);
         }.bind(this));
     }
     savedActionResult () {
@@ -180,6 +191,8 @@ class Actions extends Vanilla_Redux_Actions {
         API.post(path, impure, function (json, success) {
             if (!success)
                 STORE.dispatch(this.movedImpure(json));
+            else
+                this.pushFetchErrorMessage(json);
         }.bind(this));
     }
     movedImpure (impure) {
@@ -220,6 +233,14 @@ class Actions extends Vanilla_Redux_Actions {
             data: { messages: new_messages },
         });
     }
+    pushFetchErrorMessage (json) {
+        this.pushMessage({
+            title: json['ERROR-TYPE'] + ' (' + json['CODE'] + ')',
+            contents: json['MESSAGE'],
+            type: 'danger',
+            json: json,
+        });
+    };
     closeMessage (message) {
         let messages = STORE.get('messages');
         let new_messages = messages.filter((msg) => {
