@@ -33,8 +33,9 @@ class Actions extends Vanilla_Redux_Actions {
         };
     }
     fetchMaledicts () {
-        API.get('/maledicts', function (response) {
-            STORE.dispatch(this.fetchedMaledicts(response));
+        API.get('/maledicts', function (json, success) {
+            if (!success)
+                STORE.dispatch(this.fetchedMaledicts(json));
         }.bind(this));
     }
     fetchedMaledicts (response) {
@@ -46,8 +47,9 @@ class Actions extends Vanilla_Redux_Actions {
     fetchMaledictImpures (maledict_id) {
         let path = '/maledicts/' + maledict_id + '/impures';
 
-        API.get(path, function (response) {
-            STORE.dispatch(this.fetchedMaledictImpures(response));
+        API.get(path, function (json, success) {
+            if (!success)
+                STORE.dispatch(this.fetchedMaledictImpures(json));
         }.bind(this));
     }
     fetchedMaledictImpures (response) {
@@ -59,8 +61,9 @@ class Actions extends Vanilla_Redux_Actions {
     createMaledictImpures (maledict, data) {
         let path = '/maledicts/' + maledict.id + '/impures';
 
-        API.post(path, data, function (response) {
-            STORE.dispatch(this.createdMaledictImpures(response, maledict));
+        API.post(path, data, function (json, success) {
+            if (!success)
+                STORE.dispatch(this.createdMaledictImpures(json, maledict));
         }.bind(this));
     }
     createdMaledictImpures (response, maledict) {
@@ -76,8 +79,9 @@ class Actions extends Vanilla_Redux_Actions {
     saveImpure (impure) {
         let path = '/impures/' + impure.id;
 
-        API.post(path, impure, function (response) {
-            STORE.dispatch(this.savedImpure(response));
+        API.post(path, impure, function (json, success) {
+            if (!success)
+                STORE.dispatch(this.savedImpure(json));
         }.bind(this));
     }
     savedImpure (impure) {
@@ -92,8 +96,9 @@ class Actions extends Vanilla_Redux_Actions {
     startImpure (impure) {
         let path = '/impures/' + impure.id + '/purges/start';
 
-        API.post(path, null, function (response) {
-            STORE.dispatch(this.startedImpure(response));
+        API.post(path, null, function (json, success) {
+            if (!success)
+                STORE.dispatch(this.startedImpure(json));
         }.bind(this));
     }
     startedImpure (impure) {
@@ -105,8 +110,9 @@ class Actions extends Vanilla_Redux_Actions {
     stopImpure (impure) {
         let path = '/impures/' + impure.id + '/purges/stop';
 
-        API.post(path, null, function (response) {
-            STORE.dispatch(this.stopedImpure(response));
+        API.post(path, null, function (json, success) {
+            if (!success)
+                STORE.dispatch(this.stopedImpure(json));
         }.bind(this));
     }
     stopedImpure (impure) {
@@ -118,8 +124,16 @@ class Actions extends Vanilla_Redux_Actions {
     finishImpure (impure) {
         let path = '/impures/' + impure.id + '/finish';
 
-        API.post(path, null, function (response) {
-            STORE.dispatch(this.finishedImpure(response));
+        API.post(path, null, function (json, success) {
+            if (!success)
+                STORE.dispatch(this.finishedImpure(json));
+            else
+                this.pushMessage({
+                    title: json['ERROR-TYPE'] + ' (' + json['CODE'] + ')',
+                    contents: json['MESSAGE'],
+                    type: 'danger',
+                    json: json,
+                });
         }.bind(this));
     }
     finishedImpure (impure) {
@@ -135,8 +149,9 @@ class Actions extends Vanilla_Redux_Actions {
             end: action_result.end
         };
 
-        API.post(path, data, function (response) {
-            STORE.dispatch(this.savedActionResult(response));
+        API.post(path, data, function (json, success) {
+            if (!success)
+                STORE.dispatch(this.savedActionResult(json));
         }.bind(this));
     }
     savedActionResult () {
@@ -162,8 +177,9 @@ class Actions extends Vanilla_Redux_Actions {
     moveImpure (maledict, impure) {
         let path = '/maledicts/%d/impures/move'.format(maledict.id);
 
-        API.post(path, impure, function (response) {
-            STORE.dispatch(this.movedImpure(response));
+        API.post(path, impure, function (json, success) {
+            if (!success)
+                STORE.dispatch(this.movedImpure(json));
         }.bind(this));
     }
     movedImpure (impure) {
@@ -176,8 +192,9 @@ class Actions extends Vanilla_Redux_Actions {
     ///// Purge History
     /////
     fetchPurgeHistory () {
-        API.get('/purges/history', function (response) {
-            STORE.dispatch(this.fetchedPurgeHistory(response));
+        API.get('/purges/history', function (json, success) {
+            if (!success)
+                STORE.dispatch(this.fetchedPurgeHistory(json));
         }.bind(this));
     }
     fetchedPurgeHistory (response) {
@@ -194,6 +211,15 @@ class Actions extends Vanilla_Redux_Actions {
     /////
     ///// Message
     /////
+    pushMessage (message) {
+        let new_messages = STORE.get('messages');
+        new_messages.push(message);
+
+        STORE.dispatch({
+            type: 'PUSHED-MESSAGE',
+            data: { messages: new_messages },
+        });
+    }
     closeMessage (message) {
         let messages = STORE.get('messages');
         let new_messages = messages.filter((msg) => {

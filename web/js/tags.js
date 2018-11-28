@@ -70,6 +70,8 @@ riot.tag2('message-area', '<message-item each="{msg in messages()}" data="{msg}"
      STORE.subscribe((action) => {
          if ('CLOSED-MESSAGE'==action.type)
              this.update();
+         if ('PUSHED-MESSAGE'==action.type)
+             this.update();
      });
 
      this.messages = () => {

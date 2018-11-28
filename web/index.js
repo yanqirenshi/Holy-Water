@@ -10,8 +10,13 @@ var API = new Vanilla_Ajax({
     path: _CONFIG.api.path,
     credentials: 'include',
     callback: {
-        401: function (r, api) {
+        401: (r, api) => {
             location.pathname = '/hw/sign/in/';
+
+            return {};
+        },
+        other: () => {
+            return {};
         }
     }
 });

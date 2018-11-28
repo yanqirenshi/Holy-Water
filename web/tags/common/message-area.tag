@@ -11,6 +11,8 @@
      STORE.subscribe((action) => {
          if ('CLOSED-MESSAGE'==action.type)
              this.update();
+         if ('PUSHED-MESSAGE'==action.type)
+             this.update();
      });
     </script>
 
