@@ -97,7 +97,7 @@ class Actions extends Vanilla_Redux_Actions {
     savedImpure (impure) {
         return {
             type: 'SAVED-IMPURE',
-            data: { impures: this.mergeData([impure]) },
+            data: { impures: this.mergeData([impure], STORE.get('impures')) },
         };
     }
     /////

@@ -10,23 +10,30 @@
 
     <script>
      this.impures = () => {
-         return STORE.get('impures').list.sort((a, b) => {
+         let out = STORE.get('impures').list.sort((a, b) => {
              return a.id > b.id ? 1 : -1;
          });
+
+         return out;
      };
      STORE.subscribe((action) => {
-         if (action.type=='FETCHED-MALEDICT-IMPURES')
+         let update_only = [
+             'FETCHED-MALEDICT-IMPURES',
+             'STARTED-ACTION',
+             'STOPED-ACTION',
+             'SAVED-IMPURE',
+         ]
+
+         if (update_only.indexOf(action.type)>=0)
              this.update();
-         if (action.type=='CREATED-MALEDICT-IMPURES') {
+
+         if (action.type=='CREATED-MALEDICT-IMPURES')
              if (this.opts.maledict.id == action.maledict.id)
                  ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
-         }
-         if (action.type=='STARTED-ACTION')
-             this.update();
-         if (action.type=='STOPED-ACTION')
-             this.update();
+
          if (action.type=='MOVED-IMPURE')
              ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
+
          if (action.type=='FINISHED-IMPURE')
              ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
      });

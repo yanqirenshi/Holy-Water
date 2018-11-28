@@ -26,4 +26,10 @@
          font-size: 12px;
      }
     </style>
+
+    <script>
+     this.on('update', () => {
+         this.root.innerHTML = this.opts.contents;
+     });
+    </script>
 </impure-card-large_tab_show-description>

@@ -221,23 +221,30 @@ riot.tag2('home_page_root-buckets', '<nav class="panel"> <p class="panel-heading
 
 riot.tag2('home_page_root-impures', '<div class="flex-parent" style="height:100%; margin-top: -8px;"> <div class="card-container"> <div style="overflow: hidden; padding-bottom: 222px; padding-top: 8px;"> <impure-card each="{impure in impures()}" data="{impure}"></impure-card> </div> </div> </div>', 'home_page_root-impures .flex-parent { display: flex; flex-direction: column; } home_page_root-impures .card-container { padding-right: 22px; display: block; overflow: auto; overflow-x: hidden; flex-grow: 1; }', '', function(opts) {
      this.impures = () => {
-         return STORE.get('impures').list.sort((a, b) => {
+         let out = STORE.get('impures').list.sort((a, b) => {
              return a.id > b.id ? 1 : -1;
          });
+
+         return out;
      };
      STORE.subscribe((action) => {
-         if (action.type=='FETCHED-MALEDICT-IMPURES')
+         let update_only = [
+             'FETCHED-MALEDICT-IMPURES',
+             'STARTED-ACTION',
+             'STOPED-ACTION',
+             'SAVED-IMPURE',
+         ]
+
+         if (update_only.indexOf(action.type)>=0)
              this.update();
-         if (action.type=='CREATED-MALEDICT-IMPURES') {
+
+         if (action.type=='CREATED-MALEDICT-IMPURES')
              if (this.opts.maledict.id == action.maledict.id)
                  ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
-         }
-         if (action.type=='STARTED-ACTION')
-             this.update();
-         if (action.type=='STOPED-ACTION')
-             this.update();
+
          if (action.type=='MOVED-IMPURE')
              ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
+
          if (action.type=='FINISHED-IMPURE')
              ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
      });
@@ -409,6 +416,10 @@ riot.tag2('impure-card-large_tab_hisotry', '<table class="table is-bordered is-s
 });
 
 riot.tag2('impure-card-large_tab_show-description', '', 'impure-card-large_tab_show-description h1 { font-weight: bold; font-size: 20px; } impure-card-large_tab_show-description h2 { font-weight: bold; font-size: 18px; } impure-card-large_tab_show-description h3 { font-weight: bold; font-size: 16px; } impure-card-large_tab_show-description h4 { font-weight: bold; font-size: 14px; } impure-card-large_tab_show-description h5 { font-weight: bold; font-size: 12px; } impure-card-large_tab_show-description * { font-size: 12px; }', '', function(opts) {
+     this.on('update', () => {
+         this.root.innerHTML = this.opts.contents;
+     });
+
     this.root.innerHTML = opts.contents
 
 });
