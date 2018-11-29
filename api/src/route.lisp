@@ -23,7 +23,7 @@
 
 
 ;;;;;
-;;;;; Routing rules
+;;;;; Angels
 ;;;;;
 (defroute ("/sign/in" :method :POST) (&key |email| |password|)
   (let* ((email     |email|)
@@ -34,6 +34,10 @@
 (defroute ("/sign/out" :method :POST) ()
   (hw.api.ctrl:sing-out (get-session-key))
   (render-json nil))
+
+(defroute "/angels" ()
+  (with-angel (angel)
+    (render-json (hw.api.ctrl:find-angels angel))))
 
 
 ;;;;;

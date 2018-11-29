@@ -1,13 +1,27 @@
 <home_page_root>
     <div class="bucket-area">
-        <home_page_root-buckets data={STORE.get('maledicts')}
+        <home_page_root-maledicts data={STORE.get('maledicts')}
                                 select={maledict}
                                 callback={callback}
-                                dragging={dragging}></home_page_root-buckets>
-        <home_page_root-members></home_page_root-members>
+                                dragging={dragging}></home_page_root-maledicts>
+        <home_page_root-angels></home_page_root-angels>
     </div>
 
     <div class="contetns-area">
+        <div style="width:88%; margin-bottom:22px; margin-left:22px;">
+            <div class="control has-icons-left has-icons-right">
+                <input class="input is-rounded"
+                       type="text"
+                       placeholder="Squeeze Impure※ まだ表示のみで機能しません。">
+                <span class="icon is-left">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                </span>
+                <span class="icon is-right">
+                    <i class="fas fa-times-circle"></i>
+                </span>
+            </div>
+        </div>
+
         <home_page_root-impures maledict={maledict}
                                 callback={callback}></home_page_root-impures>
     </div>
@@ -54,6 +68,7 @@
      });
      this.on('mount', () => {
          ACTIONS.fetchMaledicts();
+         ACTIONS.fetchAngels();
      });
     </script>
 

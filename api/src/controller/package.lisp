@@ -17,5 +17,6 @@
   (:export #:find-purge-history
            #:save-purge-term)
   (:export #:sing-in
-           #:sing-out))
+           #:sing-out
+           #:find-angels))
 (in-package :holy-water.api.controller)

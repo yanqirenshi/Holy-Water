@@ -16,6 +16,9 @@
                                               :updated-by by-id)
                              :creator creator)))
 
+(defun find-angels ()
+  (select-dao 'rs_angel))
+
 (defun get-angel (&key id)
   (find-dao 'rs_angel :id id))
 

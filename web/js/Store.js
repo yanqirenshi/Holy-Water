@@ -49,24 +49,14 @@ class Store extends Vanilla_Redux_Store {
             maledicts: { ht: {}, list: [] },
             impures: { ht: {}, list: [] },
             purges: { ht: {}, list: [] },
+            angels: { ht: {}, list: [] },
             site: {
                 active_page: 'home',
                 home_page: 'home',
                 randing_page: 'randing',
                 pages: this.pages(),
             },
-            messages: [
-                // {
-                //     title: 'test',
-                //     contents: "aaa",
-                //     type: 'danger'
-                // },
-                // {
-                //     title: 'test',
-                //     contents: "aaa",
-                //     type: 'danger'
-                // }
-            ],
+            messages: [],
         };
 
         for (var i in data.site.pages) {

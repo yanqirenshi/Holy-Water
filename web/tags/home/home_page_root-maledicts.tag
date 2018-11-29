@@ -1,6 +1,6 @@
-<home_page_root-buckets>
+<home_page_root-maledicts>
     <nav class="panel">
-        <p class="panel-heading">Buckets</p>
+        <p class="panel-heading">Maledicts</p>
 
         <a each={data()}
            class="panel-block {isActive(id)}"
@@ -102,36 +102,36 @@
     </script>
 
     <style>
-     home_page_root-buckets > .panel {
+     home_page_root-maledicts > .panel {
          width: 255px;
          box-shadow: 0px 0px 8px #ffffff;
      }
 
-     home_page_root-buckets .panel-block {
+     home_page_root-maledicts .panel-block {
          background:#fff;
      }
 
-     home_page_root-buckets .panel-block.is-active {
+     home_page_root-maledicts .panel-block.is-active {
          background:#eaf4fc;
      }
 
-     home_page_root-buckets .move-door.close .opened-door {
+     home_page_root-maledicts .move-door.close .opened-door {
          display: none;
      }
-     home_page_root-buckets .move-door.open .closed-door {
+     home_page_root-maledicts .move-door.open .closed-door {
          display: none;
      }
-     home_page_root-buckets .operators {
+     home_page_root-maledicts .operators {
          width: 53px;
      }
-     home_page_root-buckets .operators .icon {
+     home_page_root-maledicts .operators .icon {
          color: #cccccc;
      }
-     home_page_root-buckets .operators .icon:hover {
+     home_page_root-maledicts .operators .icon:hover {
          color: #880000;
      }
-     home_page_root-buckets .operators .move-door.open .icon {
+     home_page_root-maledicts .operators .move-door.open .icon {
          color: #880000;
      }
     </style>
-</home_page_root-buckets>
+</home_page_root-maledicts>

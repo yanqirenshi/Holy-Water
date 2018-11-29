@@ -36,6 +36,21 @@ class Actions extends Vanilla_Redux_Actions {
         };
     }
     /////
+    ///// Angels
+    /////
+    fetchAngels () {
+        API.get('/angels', function (json, success) {
+            if (!success)
+                STORE.dispatch(this.fetchedAngels(json));
+        }.bind(this));
+    }
+    fetchedAngels (response) {
+        return {
+            type: 'FETCHED-ANGELS',
+            data: { angels: this.mergeData(response, STORE.get('angels')) },
+        };
+    }
+    /////
     ///// Maledict
     /////
     fetchMaledicts () {
