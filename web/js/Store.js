@@ -5,7 +5,7 @@ class Store extends Vanilla_Redux_Store {
     pages() {
         return [
             {
-                code: "home", menu_label: '家',
+                code: "home", menu_label: '戦',
                 active_section: 'root', home_section: 'root',
                 sections: [
                     { code: 'root', tag: 'home_page_root' },
@@ -27,17 +27,17 @@ class Store extends Vanilla_Redux_Store {
                 }
             },
             {
-                code: "page02", menu_label: 'ペ2',
+                code: "cemetery", menu_label: '墓地',
                 active_section: 'root', home_section: 'root',
-                sections: [{ code: 'root', tag: 'page02_page_root' }],
+                sections: [{ code: 'root', tag: 'cemetery_page_root' }],
                 stye: {
                     color: { 1: '#fdeff2', 2: '#e0e0e0', 3: '#e198b4', 4: '#ffffff', 5: '#eeeeee', 5: '#333333' }
                 }
             },
             {
-                code: "page03", menu_label: 'ペ3',
+                code: "angel", menu_label: '天使',
                 active_section: 'root', home_section: 'root',
-                sections: [{ code: 'root', tag: 'page03_page_root', title: 'Home', description: '' }],
+                sections: [{ code: 'root', tag: 'angel_page_root', title: 'Home', description: '' }],
                 stye: {
                     color: { 1: '#fdeff2', 2: '#e0e0e0', 3: '#e198b4', 4: '#ffffff', 5: '#eeeeee', 5: '#333333' }
                 }

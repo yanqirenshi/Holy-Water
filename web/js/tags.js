@@ -1,3 +1,13 @@
+riot.tag2('angel', '', '', '', function(opts) {
+     this.mixin(MIXINS.page);
+
+     this.on('mount', () => { this.draw(); });
+     this.on('update', () => { this.draw(); });
+});
+
+riot.tag2('angel_page_root', '<section class="section"> <div class="container"> <h1 class="title">パスワード変更</h1> <h2 class="subtitle">準備中</h2> </div> </section> <section class="section"> <div class="container"> <h1 class="title">サインアウト</h1> <h2 class="subtitle">準備中</h2> </div> </section>', '', '', function(opts) {
+});
+
 riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" site="{site()}" moves="{[]}"></menu-bar> <div ref="page-area" style="padding-left: 55px; width: 100vw; height: 100vh;"></div> <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p> <message-area></message-area>', 'app > .page { width: 100vw; height: 100vh; overflow: hidden; display: block; } app .hide,[data-is="app"] .hide{ display: none; } app > .image-ref { position: fixed; bottom: 3px; right: 22px; font-size: 11px; color: #fff; } app > .image-ref > a:link { color: #fff; } app > .image-ref > a:visited { color: #fff; } app > .image-ref > a:hover { color: #fff; } app > .image-ref > a:active { color: #fff; } app > div.kasumi { position: fixed; top: 0px; left: 0px; width: 100vw; height: 100vh; background: #ffffff; opacity: 0.3; z-index: -888888; }', '', function(opts) {
      this.site = () => {
          return STORE.state().get('site');
@@ -21,12 +31,39 @@ riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" 
          location.hash=STORE.get('site.active_page');
 });
 
-riot.tag2('menu-bar', '<aside class="menu"> <p ref="brand" class="menu-label" onclick="{clickBrand}"> {opts.brand.label} </p> <ul class="menu-list"> <li each="{opts.site.pages}"> <a class="{opts.site.active_page==code ? \'is-active\' : \'\'}" href="{\'#\' + code}"> {menu_label} </a> </li> </ul> </aside> <div class="move-page-menu hide" ref="move-panel"> <p each="{moves()}"> <a href="{href}">{label}</a> </p> </div>', 'menu-bar .move-page-menu { z-index: 666665; background: #ffffff; position: fixed; left: 55px; top: 0px; min-width: 111px; height: 100vh; box-shadow: 2px 0px 8px 0px #e0e0e0; padding: 22px 55px 22px 22px; } menu-bar .move-page-menu.hide { display: none; } menu-bar .move-page-menu > p { margin-bottom: 11px; } menu-bar > .menu { z-index: 666666; height: 100vh; width: 55px; padding: 11px 0px 11px 11px; position: fixed; left: 0px; top: 0px; background: #e198b4; } menu-bar .menu-label, menu-bar .menu-list a { padding: 0; width: 33px; height: 33px; text-align: center; margin-top: 8px; border-radius: 3px; background: none; color: #ffffff; font-weight: bold; padding-top: 7px; font-size: 14px; } menu-bar .menu-label,[data-is="menu-bar"] .menu-label{ background: #ffffff; color: #e198b4; } menu-bar .menu-label.open,[data-is="menu-bar"] .menu-label.open{ background: #ffffff; color: #e198b4; width: 44px; border-radius: 3px 0px 0px 3px; text-shadow: 0px 0px 1px #eee; padding-right: 11px; } menu-bar .menu-list a.is-active { width: 44px; padding-right: 11px; border-radius: 3px 0px 0px 3px; background: #ffffff; color: #333333; }', '', function(opts) {
+riot.tag2('cemetery', '', '', '', function(opts) {
+     this.mixin(MIXINS.page);
+
+     this.on('mount', () => { this.draw(); });
+     this.on('update', () => { this.draw(); });
+});
+
+riot.tag2('cemetery_page_root', '<section class="section"> <div class="container"> <h1 class="title">準備中</h1> <h2 class="subtitle">自身が Purge 完了したものの一覧を照会するページ。</h2> </div> </section>', '', '', function(opts) {
+});
+
+riot.tag2('menu-bar', '<aside class="menu"> <p ref="brand" class="menu-label" onclick="{clickBrand}"> {opts.brand.label} </p> <ul class="menu-list"> <li each="{opts.site.pages}"> <a class="{opts.site.active_page==code ? \'is-active\' : \'\'}" href="{\'#\' + code}"> {menu_label} </a> </li> </ul> </aside> <div class="move-page-menu hide" ref="move-panel"> <p each="{moves()}"> <a href="{href}">{label}</a> </p> </div>', 'menu-bar .move-page-menu { z-index: 666665; background: #ffffff; position: fixed; left: 55px; top: 0px; min-width: 111px; height: 100vh; box-shadow: 2px 0px 8px 0px #e0e0e0; padding: 22px 55px 22px 22px; } menu-bar .move-page-menu.hide { display: none; } menu-bar .move-page-menu > p { margin-bottom: 11px; } menu-bar > .menu { z-index: 666666; height: 100vh; width: 55px; padding: 11px 0px 11px 11px; position: fixed; left: 0px; top: 0px; background: #e198b4; } menu-bar .menu-label, menu-bar .menu-list a { padding: 0; width: 33px; height: 33px; text-align: center; margin-top: 8px; border-radius: 3px; background: none; color: #ffffff; font-weight: bold; padding-top: 7px; font-size: 14px; } menu-bar .menu-label,[data-is="menu-bar"] .menu-label{ background: #ffffff; color: #e198b4; } menu-bar .menu-label.open,[data-is="menu-bar"] .menu-label.open{ background: #ffffff; color: #e198b4; width: 44px; border-radius: 3px 0px 0px 3px; text-shadow: 0px 0px 1px #eee; padding-right: 11px; } menu-bar .menu-list a.is-active { border-radius: 3px; background: #ffffff; color: #333333; }', '', function(opts) {
      this.moves = () => {
          let moves = [
-             { code: 'link-a', href: '', label: 'Link A' },
-             { code: 'link-b', href: '', label: 'Link B' },
-             { code: 'link-c', href: '', label: 'Link C' },
+             {
+                 code: 'link-a',
+                 href: 'https://ja.wikipedia.org/wiki/Getting_Things_Done',
+                 label: 'Getting Things Done - ウィキペディア'
+             },
+             {
+                 code: 'link-b',
+                 href: 'https://postd.cc/gtd-in-15-minutes/',
+                 label: '15分で分かるGTD – 仕事を成し遂げる技術の実用的ガイド | POSTD'
+             },
+             {
+                 code: 'link-c',
+                 href: 'http://gtd-japan.jp/about',
+                 label: 'GTD®とは - 日本唯一のGTD公式サイト。GTD Japan'
+             },
+             {
+                 code: 'link-d',
+                 href: 'https://teamhackers.io/work-efficiency-rises-three-times',
+                 label: '作業効率が3倍上がる、質を落とさず早く仕上げるタスク管理・時短編'
+             },
          ]
          return moves.filter((d)=>{
              return d.code != this.opts.current;
@@ -512,16 +549,6 @@ riot.tag2('impure-card', '<impure-card-small data="{opts.data}" status="{status(
      this.status = () => {
          return this.isStart() ? 'start' : '';
      };
-});
-
-riot.tag2('page02', '', '', '', function(opts) {
-     this.mixin(MIXINS.page);
-
-     this.on('mount', () => { this.draw(); });
-     this.on('update', () => { this.draw(); });
-});
-
-riot.tag2('page02_page_root', '', '', '', function(opts) {
 });
 
 riot.tag2('page03', '', '', '', function(opts) {

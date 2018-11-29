@@ -78,9 +78,7 @@
          padding-right: 11px;
      }
      menu-bar .menu-list a.is-active {
-         width: 44px;
-         padding-right: 11px;
-         border-radius: 3px 0px 0px 3px;
+         border-radius: 3px;
          background: #ffffff;
          color: #333333;
      }
@@ -89,9 +87,26 @@
     <script>
      this.moves = () => {
          let moves = [
-             { code: 'link-a', href: '', label: 'Link A' },
-             { code: 'link-b', href: '', label: 'Link B' },
-             { code: 'link-c', href: '', label: 'Link C' },
+             {
+                 code: 'link-a',
+                 href: 'https://ja.wikipedia.org/wiki/Getting_Things_Done',
+                 label: 'Getting Things Done - ウィキペディア'
+             },
+             {
+                 code: 'link-b',
+                 href: 'https://postd.cc/gtd-in-15-minutes/',
+                 label: '15分で分かるGTD – 仕事を成し遂げる技術の実用的ガイド | POSTD'
+             },
+             {
+                 code: 'link-c',
+                 href: 'http://gtd-japan.jp/about',
+                 label: 'GTD®とは - 日本唯一のGTD公式サイト。GTD Japan'
+             },
+             {
+                 code: 'link-d',
+                 href: 'https://teamhackers.io/work-efficiency-rises-three-times',
+                 label: '作業効率が3倍上がる、質を落とさず早く仕上げるタスク管理・時短編'
+             },
          ]
          return moves.filter((d)=>{
              return d.code != this.opts.current;
