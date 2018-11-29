@@ -38,7 +38,27 @@ riot.tag2('cemetery', '', '', '', function(opts) {
      this.on('update', () => { this.draw(); });
 });
 
-riot.tag2('cemetery_page_root', '<section class="section"> <div class="container"> <h1 class="title">準備中</h1> <h2 class="subtitle">自身が Purge 完了したものの一覧を照会するページ。</h2> </div> </section>', '', '', function(opts) {
+riot.tag2('cemetery_page_root', '<section class="section"> <div class="container"> <h1 class="title" style="text-shadow: 0px 0px 11px #fff;">自身が Purge(完了) した Impure</h1> <h2 class="subtitle" style="text-shadow: 0px 0px 11px #fff;">準備中</h2> <div style="padding-bottom:22px;"> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"> <thead> <tr> <th>id</th> <th>name</th> <th>description</th> </tr> </thead> <tbody> <tr each="{impure in impures()}"> <td nowrap>{impure.id}</td> <td nowrap>{impure.name}</td> <td>{description(impure.description)}</td> </tr> </tbody> </table> </div> </div> </section>', 'cemetery_page_root { height: 100%; display: block; overflow: scroll; }', '', function(opts) {
+     this.description = (str) => {
+         if (str.length<=222)
+             return str;
+
+         return str.substring(0, 222) + '........';
+     };
+     this.impures = () => {
+         return STORE.get('impures_done').list.sort((a, b) => {
+             return a.id*1 < b.id*1 ? 1 : -1;
+         });
+     };
+
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-DONE-IMPURES')
+             this.update();
+     });
+
+     this.on('mount', () => {
+         ACTIONS.fetchDoneImpures();
+     });
 });
 
 riot.tag2('menu-bar', '<aside class="menu"> <p ref="brand" class="menu-label" onclick="{clickBrand}"> {opts.brand.label} </p> <ul class="menu-list"> <li each="{opts.site.pages}"> <a class="{opts.site.active_page==code ? \'is-active\' : \'\'}" href="{\'#\' + code}"> {menu_label} </a> </li> </ul> </aside> <div class="move-page-menu hide" ref="move-panel"> <p each="{moves()}"> <a href="{href}">{label}</a> </p> </div>', 'menu-bar .move-page-menu { z-index: 666665; background: #ffffff; position: fixed; left: 55px; top: 0px; min-width: 111px; height: 100vh; box-shadow: 2px 0px 8px 0px #e0e0e0; padding: 22px 55px 22px 22px; } menu-bar .move-page-menu.hide { display: none; } menu-bar .move-page-menu > p { margin-bottom: 11px; } menu-bar > .menu { z-index: 666666; height: 100vh; width: 55px; padding: 11px 0px 11px 11px; position: fixed; left: 0px; top: 0px; background: #e198b4; } menu-bar .menu-label, menu-bar .menu-list a { padding: 0; width: 33px; height: 33px; text-align: center; margin-top: 8px; border-radius: 3px; background: none; color: #ffffff; font-weight: bold; padding-top: 7px; font-size: 14px; } menu-bar .menu-label,[data-is="menu-bar"] .menu-label{ background: #ffffff; color: #e198b4; } menu-bar .menu-label.open,[data-is="menu-bar"] .menu-label.open{ background: #ffffff; color: #e198b4; width: 44px; border-radius: 3px 0px 0px 3px; text-shadow: 0px 0px 1px #eee; padding-right: 11px; } menu-bar .menu-list a.is-active { border-radius: 3px; background: #ffffff; color: #333333; }', '', function(opts) {

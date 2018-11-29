@@ -48,6 +48,7 @@ class Store extends Vanilla_Redux_Store {
         let data = {
             maledicts: { ht: {}, list: [] },
             impures: { ht: {}, list: [] },
+            impures_done: { ht: {}, list: [] },
             purges: { ht: {}, list: [] },
             angels: { ht: {}, list: [] },
             site: {

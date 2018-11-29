@@ -99,6 +99,19 @@ class Actions extends Vanilla_Redux_Actions {
     /////
     ///// Impure
     /////
+    fetchDoneImpures () {
+        let path = '/impures/status/done';
+        API.get(path, function (json, success) {
+            if (success)
+                STORE.dispatch(this.fetchedDoneImpures(json));
+        }.bind(this));
+    }
+    fetchedDoneImpures (response) {
+        return {
+            type: 'FETCHED-DONE-IMPURES',
+            data: { impures_done: this.mergeData(response, STORE.get('impures_done')) },
+        };
+    }
     saveImpure (impure) {
         let path = '/impures/' + impure.id;
 
