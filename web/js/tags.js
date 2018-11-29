@@ -237,11 +237,18 @@ riot.tag2('home_page_root-angels', '<nav class="panel"> <p class="panel-heading"
 
 riot.tag2('home_page_root-impures', '<div class="flex-parent" style="height:100%; margin-top: -8px;"> <div class="card-container"> <div style="overflow: hidden; padding-bottom: 222px; padding-top: 8px;"> <impure-card each="{impure in impures()}" data="{impure}"></impure-card> </div> </div> </div>', 'home_page_root-impures .flex-parent { display: flex; flex-direction: column; } home_page_root-impures .card-container { padding-right: 22px; display: block; overflow: auto; overflow-x: hidden; flex-grow: 1; }', '', function(opts) {
      this.impures = () => {
+         dump(this.opts.filter);
          let out = STORE.get('impures').list.sort((a, b) => {
              return a.id > b.id ? 1 : -1;
          });
 
-         return out;
+         let filter = this.opts.filter;
+         if (this.opts.filter===null)
+             return out;
+
+         return out.filter((d) => {
+             return d.name.toLowerCase().indexOf(filter.toLowerCase()) >= 0;
+         });
      };
      STORE.subscribe((action) => {
          let update_only = [
@@ -377,13 +384,14 @@ riot.tag2('home_page_root-modal-create-impure', '<div class="modal {opts.open ? 
 riot.tag2('home_page_root-tabs', '<div class="tabs is-boxed"> <ul> <li class="is-active" style="margin-left:22px;"> <a> <span class="icon is-small"><i class="fas fa-image" aria-hidden="true"></i></span> <span>Tasks</span> </a> </li> </ul> </div>', '', '', function(opts) {
 });
 
-riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts data="{STORE.get(\'maledicts\')}" select="{maledict}" callback="{callback}" dragging="{dragging}"></home_page_root-maledicts> <home_page_root-angels></home_page_root-angels> </div> <div class="contetns-area"> <div style="width:88%; margin-bottom:22px; margin-left:22px;"> <div class="control has-icons-left has-icons-right"> <input class="input is-rounded" type="text" placeholder="Squeeze Impure※ まだ表示のみで機能しません。"> <span class="icon is-left"> <i class="fas fa-search" aria-hidden="true"></i> </span> <span class="icon is-right"> <i class="fas fa-times-circle"></i> </span> </div> </div> <home_page_root-impures maledict="{maledict}" callback="{callback}"></home_page_root-impures> </div> <home_page_root-modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_page_root-modal-create-impure>', 'home_page_root { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page_root > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; }', '', function(opts) {
+riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts data="{STORE.get(\'maledicts\')}" select="{maledict}" callback="{callback}" dragging="{dragging}"></home_page_root-maledicts> <home_page_root-angels></home_page_root-angels> </div> <div class="contetns-area"> <home_page_squeeze-area callback="{callback}"></home_page_squeeze-area> <home_page_root-impures maledict="{maledict}" callback="{callback}" filter="{squeeze_word}"></home_page_root-impures> </div> <home_page_root-modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_page_root-modal-create-impure>', 'home_page_root { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page_root > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; }', '', function(opts) {
      this.modal_open = false;
      this.modal_maledict = null;
      this.maledict = null;
+     this.squeeze_word = null;
 
      this.callback = (action, data) => {
-         if (action=='select-bucket') {
+         if ('select-bucket'==action) {
              this.maledict = data;
 
              this.update();
@@ -391,17 +399,22 @@ riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts
              ACTIONS.fetchMaledictImpures(data.id);
          }
 
-         if (action=='open-modal-create-impure')
+         if ('open-modal-create-impure'==action)
              this.openModal(data);
 
-         if (action=='close-modal-create-impure')
+         if ('close-modal-create-impure'==action)
              this.closeModal();
 
-         if (action=='create-impure')
+         if ('create-impure'==action)
              ACTIONS.createMaledictImpures(data.maledict, {
                  name: data.name,
                  description: data.description,
              });
+
+         if ('squeeze-impure'==action) {
+             this.squeeze_word = (data.trim().length==0 ? null : data);
+             this.tags['home_page_root-impures'].update();
+         }
      };
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-MALEDICTS') {
@@ -425,6 +438,17 @@ riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts
      this.closeModal = () => {
          this.modal_open = false;
          this.tags['home_page_root-modal-create-impure'].update();
+     };
+});
+
+riot.tag2('home_page_squeeze-area', '<div style="width:33%; margin-bottom:22px; margin-left:22px;"> <div class="control has-icons-left has-icons-right"> <input class="input is-rounded" type="text" placeholder="Squeeze Impure※ まだ表示のみで機能しません。" onkeyup="{onKeyUp}" ref="word"> <span class="icon is-left"> <i class="fas fa-search" aria-hidden="true"></i> </span> </div> </div> <button class="button" onclick="{clickClearButton}"> <i class="fas fa-times-circle"></i> </button>', 'home_page_squeeze-area { display: flex; } home_page_squeeze-area .button{ padding: 0px; margin-left: 8px; background: none; border: none; color: #ffff; } home_page_squeeze-area .button:hover{ color: #880000; } home_page_squeeze-area .button i{ font-size: 33px; }', '', function(opts) {
+     this.clickClearButton = (e) => {
+         this.refs.word.value = '';
+         this.opts.callback('squeeze-impure', '');
+     };
+
+     this.onKeyUp = (e) => {
+         this.opts.callback('squeeze-impure', e.target.value);
      };
 });
 

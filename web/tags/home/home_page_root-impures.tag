@@ -10,11 +10,18 @@
 
     <script>
      this.impures = () => {
+         dump(this.opts.filter);
          let out = STORE.get('impures').list.sort((a, b) => {
              return a.id > b.id ? 1 : -1;
          });
 
-         return out;
+         let filter = this.opts.filter;
+         if (this.opts.filter===null)
+             return out;
+
+         return out.filter((d) => {
+             return d.name.toLowerCase().indexOf(filter.toLowerCase()) >= 0;
+         });
      };
      STORE.subscribe((action) => {
          let update_only = [
