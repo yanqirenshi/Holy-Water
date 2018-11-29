@@ -9,7 +9,7 @@
                       draggable="true"
                       dragstart={dragStart}
                       dragend={dragEnd}>
-                    <i class="fas fa-running"></i>
+                    <icon-ranning></icon-ranning>
                 </span>
             </a>
         </header>

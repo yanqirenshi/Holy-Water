@@ -40,7 +40,7 @@ class Actions extends Vanilla_Redux_Actions {
     /////
     fetchAngels () {
         API.get('/angels', function (json, success) {
-            if (!success)
+            if (success)
                 STORE.dispatch(this.fetchedAngels(json));
         }.bind(this));
     }
@@ -55,7 +55,7 @@ class Actions extends Vanilla_Redux_Actions {
     /////
     fetchMaledicts () {
         API.get('/maledicts', function (json, success) {
-            if (!success)
+            if (success)
                 STORE.dispatch(this.fetchedMaledicts(json));
         }.bind(this));
     }
@@ -69,7 +69,7 @@ class Actions extends Vanilla_Redux_Actions {
         let path = '/maledicts/' + maledict_id + '/impures';
 
         API.get(path, function (json, success) {
-            if (!success)
+            if (success)
                 STORE.dispatch(this.fetchedMaledictImpures(json));
         }.bind(this));
     }
@@ -83,7 +83,7 @@ class Actions extends Vanilla_Redux_Actions {
         let path = '/maledicts/' + maledict.id + '/impures';
 
         API.post(path, data, function (json, success) {
-            if (!success)
+            if (success)
                 STORE.dispatch(this.createdMaledictImpures(json, maledict));
             else
                 this.pushFetchErrorMessage(json);
@@ -103,10 +103,13 @@ class Actions extends Vanilla_Redux_Actions {
         let path = '/impures/' + impure.id;
 
         API.post(path, impure, function (json, success) {
-            if (!success)
-                STORE.dispatch(this.savedImpure(json));
-            else
+            if (!success) {
                 this.pushFetchErrorMessage(json);
+                return;
+            }
+
+            STORE.dispatch(this.savedImpure(json));
+            this.pushSuccessMessage('Impure の更新が完了しました。');
         }.bind(this));
     }
     savedImpure (impure) {
@@ -122,7 +125,7 @@ class Actions extends Vanilla_Redux_Actions {
         let path = '/impures/' + impure.id + '/purges/start';
 
         API.post(path, null, function (json, success) {
-            if (!success)
+            if (success)
                 STORE.dispatch(this.startedImpure(json));
             else
                 this.pushFetchErrorMessage(json);
@@ -138,7 +141,7 @@ class Actions extends Vanilla_Redux_Actions {
         let path = '/impures/' + impure.id + '/purges/stop';
 
         API.post(path, null, function (json, success) {
-            if (!success)
+            if (success)
                 STORE.dispatch(this.stopedImpure(json));
             else
                 this.pushFetchErrorMessage(json);
@@ -154,7 +157,7 @@ class Actions extends Vanilla_Redux_Actions {
         let path = '/impures/' + impure.id + '/finish';
 
         API.post(path, null, function (json, success) {
-            if (!success)
+            if (success)
                 STORE.dispatch(this.finishedImpure(json));
             else
                 this.pushFetchErrorMessage(json);
@@ -174,7 +177,7 @@ class Actions extends Vanilla_Redux_Actions {
         };
 
         API.post(path, data, function (json, success) {
-            if (!success)
+            if (success)
                 STORE.dispatch(this.savedActionResult(json));
             else
                 this.pushFetchErrorMessage(json);
@@ -204,7 +207,7 @@ class Actions extends Vanilla_Redux_Actions {
         let path = '/maledicts/%d/impures/move'.format(maledict.id);
 
         API.post(path, impure, function (json, success) {
-            if (!success)
+            if (success)
                 STORE.dispatch(this.movedImpure(json));
             else
                 this.pushFetchErrorMessage(json);
@@ -221,7 +224,7 @@ class Actions extends Vanilla_Redux_Actions {
     /////
     fetchPurgeHistory () {
         API.get('/purges/history', function (json, success) {
-            if (!success)
+            if (success)
                 STORE.dispatch(this.fetchedPurgeHistory(json));
         }.bind(this));
     }
@@ -256,6 +259,13 @@ class Actions extends Vanilla_Redux_Actions {
             json: json,
         });
     };
+    pushSuccessMessage (message) {
+        this.pushMessage({
+            title: 'Success',
+            contents: message,
+            type: 'success',
+        });
+    }
     closeMessage (message) {
         let messages = STORE.get('messages');
         let new_messages = messages.filter((msg) => {
