@@ -235,8 +235,11 @@ class Actions extends Vanilla_Redux_Actions {
     /////
     ///// Purge History
     /////
-    fetchPurgeHistory () {
-        API.get('/purges/history', function (json, success) {
+    fetchPurgeHistory (from, to) {
+        let path_str = '/purges/history?from=%s&to=%s';
+        let path = path_str.format(from.toISOString(), to.toISOString());
+
+        API.get(path, function (json, success) {
             if (success)
                 STORE.dispatch(this.fetchedPurgeHistory(json));
         }.bind(this));

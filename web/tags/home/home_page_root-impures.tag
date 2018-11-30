@@ -10,7 +10,6 @@
 
     <script>
      this.impures = () => {
-         dump(this.opts.filter);
          let out = STORE.get('impures').list.sort((a, b) => {
              return a.id > b.id ? 1 : -1;
          });

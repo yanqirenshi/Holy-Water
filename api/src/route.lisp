@@ -118,9 +118,11 @@
 ;;;;;
 ;;;;; Purge
 ;;;;;
-(defroute "/purges/history" ()
+(defroute "/purges/history" (&key |from| |to|)
   (with-angel (angel)
-    (render-json (hw.api.ctrl:find-purge-history angel))))
+    (let ((from (local-time:parse-timestring |from|))
+          (to   (local-time:parse-timestring |to|)))
+      (render-json (hw.api.ctrl:find-purge-history angel :from from :to to)))))
 
 (defroute ("/purges/:id/term" :method :POST) (&key id _parsed)
   (with-angel (angel)

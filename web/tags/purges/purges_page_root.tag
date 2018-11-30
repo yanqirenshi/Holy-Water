@@ -3,10 +3,14 @@
         <div class="card">
             <header class="card-header">
                 <p class="card-header-title">Purge hisotry</p>
-                <button class="button refresh" onclick={clickRefresh}>Refresh</button>
             </header>
 
             <div class="card-content">
+                <purges_page_filter style="margin-bottom:22px;"
+                                    from={from}
+                                    to={to}
+                                    callback={callback}></purges_page_filter>
+
                 <purges-list data={data()} callback={callback}></purges-list>
             </div>
         </div>
@@ -15,34 +19,55 @@
     <purge-result-editor data={edit_target} callback={callback}></purge-result-editor>
 
     <script>
+     this.from = moment().add(-1, 'd').startOf('day');
+     this.to   = moment().add(1, 'd').startOf('day');
+     this.moveDate = (unit, amount) => {
+         this.from = this.from.add(amount, unit);
+         this.to   = this.to.add(amount, unit);
+
+         this.tags['purges_page_filter'].update();
+     };
+    </script>
+
+    <script>
      this.edit_target = null;
 
-     this.clickRefresh = () => {
-         ACTIONS.fetchPurgeHistory();
-     };
      this.callback = (action, data) => {
-         if (action=='open-purge-result-editor') {
+         if ('open-purge-result-editor'==action) {
              this.edit_target = STORE.get('purges').ht[data.id];
              this.tags['purge-result-editor'].update();
              return;
          }
 
-         if (action=='close-purge-result-editor') {
+         if ('close-purge-result-editor'==action) {
              this.edit_target = null;
              this.tags['purge-result-editor'].update();
              return;
          }
 
-         if (action=='save-purge-result-editor') {
+         if ('save-purge-result-editor'==action) {
              ACTIONS.saveActionResult(data);
+             return;
+         }
+
+         if ('move-date'==action) {
+             this.moveDate(data.unit, data.amount);
+             return;
+         }
+
+         if ('refresh'==action) {
+             this.refreshData();
              return;
          }
      };
     </script>
 
     <script>
+     this.refreshData = () => {
+         ACTIONS.fetchPurgeHistory(this.from, this.to);
+     };
      this.on('mount', () => {
-         ACTIONS.fetchPurgeHistory();
+         this.refreshData();
      });
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-PURGE-HISTORY')

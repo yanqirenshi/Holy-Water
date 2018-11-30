@@ -64,7 +64,7 @@
 ;;;;;
 ;;;;; find purge hisotry
 ;;;;;
-(defun find-purge-history-sql (angel table)
+(defun find-purge-history-sql (angel table &key from to)
   (let* ((table-name (symbol-name table))
          (id-col   (alexandria:make-keyword (concatenate 'string table-name ".ID")))
          (name-col (alexandria:make-keyword (concatenate 'string table-name ".NAME"))))
@@ -72,15 +72,19 @@
              (:as name-col :impure_name))
       (from :ev_purge_end)
       (inner-join table :on (:= :ev_purge_end.impure_id id-col))
-      (where (:= :ev_purge_end.angel_id (object-id angel))))))
+      (where (:and (:= :ev_purge_end.angel_id (object-id angel))
+                   (:or (:and (:<= :ev_purge_end.start from)
+                              (:>= :ev_purge_end.end   from))
+                        (:and (:>= :ev_purge_end.start from)
+                              (:<  :ev_purge_end.start to))))))))
 
-(defun find-purge-history (&key angel)
+(defun find-purge-history (&key angel from to)
   (multiple-value-bind (sql vals)
       (sxql:yield
        (union-all-queries
-        (find-purge-history-sql angel :rs_impure_active)
-        (find-purge-history-sql angel :rs_impure_finished)
-        (find-purge-history-sql angel :rs_impure_discarded)))
+        (find-purge-history-sql angel :rs_impure_active    :from from :to to)
+        (find-purge-history-sql angel :rs_impure_finished  :from from :to to)
+        (find-purge-history-sql angel :rs_impure_discarded :from from :to to)))
     (dbi:fetch-all (apply #'dbi:execute (dbi:prepare mito:*connection* sql) vals))))
 
 (defun save-purge-term (angel purge start end &key editor)

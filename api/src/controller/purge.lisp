@@ -57,9 +57,11 @@
     (write-key-value "end"         (timestamp2str (slot-value obj 'end)))
     (write-key-value "description" (slot-value obj 'description))))
 
-(defun find-purge-history (angel)
+(defun find-purge-history (angel &key from to)
   (mapcar #'plist2purge-history
-          (hw:find-purge-history :angel angel)))
+          (hw:find-purge-history :angel angel
+                                 :from from
+                                 :to to)))
 
 (defun save-purge-term (angel purge start end &key editor)
   (dao2purge (hw:save-purgek-term angel purge start end :editor editor)))

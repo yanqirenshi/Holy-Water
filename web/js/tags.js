@@ -237,7 +237,6 @@ riot.tag2('home_page_root-angels', '<nav class="panel"> <p class="panel-heading"
 
 riot.tag2('home_page_root-impures', '<div class="flex-parent" style="height:100%; margin-top: -8px;"> <div class="card-container"> <div style="overflow: hidden; padding-bottom: 222px; padding-top: 8px;"> <impure-card each="{impure in impures()}" data="{impure}"></impure-card> </div> </div> </div>', 'home_page_root-impures .flex-parent { display: flex; flex-direction: column; } home_page_root-impures .card-container { padding-right: 22px; display: block; overflow: auto; overflow-x: hidden; flex-grow: 1; }', '', function(opts) {
      this.impures = () => {
-         dump(this.opts.filter);
          let out = STORE.get('impures').list.sort((a, b) => {
              return a.id > b.id ? 1 : -1;
          });
@@ -641,6 +640,21 @@ riot.tag2('page03', '', '', '', function(opts) {
 riot.tag2('page03_page_root', '', '', '', function(opts) {
 });
 
+riot.tag2('move-date-operator', '<div class="operator"> <div class="befor"> <button class="button" onclick="{clickBefor}"><</button> </div> <div class="trg"> <span>{opts.label}</span> </div> <div class="after"> <button class="button" onclick="{clickAfter}">></button> </div> </div>', 'move-date-operator .operator { display: flex; margin-left:11px; } move-date-operator .operator span { font-size:18px; } move-date-operator .button{ border: none; } move-date-operator .befor, move-date-operator .befor .button{ border-radius: 8px 0px 0px 8px; } move-date-operator .after, move-date-operator .after .button{ border-radius: 0px 8px 8px 0px; } move-date-operator .operator > div { border: 1px solid #dbdbdb; width: 36px; } move-date-operator .operator > div.trg{ padding-top: 5px; padding-left: 8px; border-left: none; border-right: none; }', '', function(opts) {
+     this.clickBefor = () => {
+         this.opts.callback('move-date', {
+             unit: this.opts.unit,
+             amount: -1,
+         });
+     }
+     this.clickAfter = () => {
+         this.opts.callback('move-date', {
+             unit: this.opts.unit,
+             amount: 1,
+         });
+     }
+});
+
 riot.tag2('purge-result-editor', '<div class="modal {opts.data ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head"> <p class="modal-card-title">作業時間の変更</p> <button class="delete" aria-label="close" action="close-purge-result-editor" onclick="{clickButton}"></button> </header> <section class="modal-card-body"> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">Impure</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'impure_name\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">作業時間</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'elapsed-time\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">Start</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'start\'))}" ref="start" type="{\'datetime\'}"> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">End</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'end\'))}" ref="end" type="{\'datetime\'}"> </p> </div> </div> </div> </section> <footer class="modal-card-foot"> <button class="button is-success" action="save-purge-result-editor" onclick="{clickButton}">Save changes</button> <button class="button" action="close-purge-result-editor" onclick="{clickButton}">Cancel</button> </footer> </div> </div>', '', '', function(opts) {
      this.clickButton = (e) => {
          let action = e.target.getAttribute('action');
@@ -701,33 +715,70 @@ riot.tag2('purges', '', '', '', function(opts) {
      this.on('update', () => { this.draw(); });
 });
 
-riot.tag2('purges_page_root', '<div style="padding:22px;"> <div class="card"> <header class="card-header"> <p class="card-header-title">Purge hisotry</p> <button class="button refresh" onclick="{clickRefresh}">Refresh</button> </header> <div class="card-content"> <purges-list data="{data()}" callback="{callback}"></purges-list> </div> </div> </div> <purge-result-editor data="{edit_target}" callback="{callback}"></purge-result-editor>', 'purges_page_root { height: 100%; width: 100%; display: block; overflow: auto; } purges_page_root .card { border-radius: 8px; } purges_page_root button.refresh{ margin-top:6px; margin-right:8px; }', '', function(opts) {
-     this.edit_target = null;
+riot.tag2('purges_page_filter', '<span style="font-size:24px;">期間：</Span> <input class="input" type="text" placeholder="From" riot-value="{date2str(opts.from)}"> <span style="font-size:24px;"> 〜 </span> <input class="input" type="text" placeholder="To" riot-value="{date2str(opts.to)}"> <div class="operators"> <move-date-operator label="日" unit="d" callback="{callback}"></move-date-operator> <move-date-operator label="週" unit="w" callback="{callback}"></move-date-operator> <move-date-operator label="月" unit="M" callback="{callback}"></move-date-operator> <button class="button refresh" style="margin-top:1px; margin-left:11px;" onclick="{clickRefresh}">Refresh</button> </div>', 'purges_page_filter, purges_page_filter .operators { display: flex; } purges_page_filter .input { width: 111px; }', '', function(opts) {
+     this.date2str = (date) => {
+         if (!date) return '';
+         return date.format('YYYY-MM-DD');
+     };
 
      this.clickRefresh = () => {
-         ACTIONS.fetchPurgeHistory();
+         this.opts.callback('refresh');
      };
+
      this.callback = (action, data) => {
-         if (action=='open-purge-result-editor') {
+         this.opts.callback('move-date', {
+             unit: data.unit,
+             amount: data.amount,
+         })
+     };
+});
+
+riot.tag2('purges_page_root', '<div style="padding:22px;"> <div class="card"> <header class="card-header"> <p class="card-header-title">Purge hisotry</p> </header> <div class="card-content"> <purges_page_filter style="margin-bottom:22px;" from="{from}" to="{to}" callback="{callback}"></purges_page_filter> <purges-list data="{data()}" callback="{callback}"></purges-list> </div> </div> </div> <purge-result-editor data="{edit_target}" callback="{callback}"></purge-result-editor>', 'purges_page_root { height: 100%; width: 100%; display: block; overflow: auto; } purges_page_root .card { border-radius: 8px; } purges_page_root button.refresh{ margin-top:6px; margin-right:8px; }', '', function(opts) {
+     this.from = moment().add(-1, 'd').startOf('day');
+     this.to   = moment().add(1, 'd').startOf('day');
+     this.moveDate = (unit, amount) => {
+         this.from = this.from.add(amount, unit);
+         this.to   = this.to.add(amount, unit);
+
+         this.tags['purges_page_filter'].update();
+     };
+
+     this.edit_target = null;
+
+     this.callback = (action, data) => {
+         if ('open-purge-result-editor'==action) {
              this.edit_target = STORE.get('purges').ht[data.id];
              this.tags['purge-result-editor'].update();
              return;
          }
 
-         if (action=='close-purge-result-editor') {
+         if ('close-purge-result-editor'==action) {
              this.edit_target = null;
              this.tags['purge-result-editor'].update();
              return;
          }
 
-         if (action=='save-purge-result-editor') {
+         if ('save-purge-result-editor'==action) {
              ACTIONS.saveActionResult(data);
+             return;
+         }
+
+         if ('move-date'==action) {
+             this.moveDate(data.unit, data.amount);
+             return;
+         }
+
+         if ('refresh'==action) {
+             this.refreshData();
              return;
          }
      };
 
+     this.refreshData = () => {
+         ACTIONS.fetchPurgeHistory(this.from, this.to);
+     };
      this.on('mount', () => {
-         ACTIONS.fetchPurgeHistory();
+         this.refreshData();
      });
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-PURGE-HISTORY')
