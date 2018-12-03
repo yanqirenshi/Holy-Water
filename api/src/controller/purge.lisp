@@ -64,4 +64,4 @@
                                  :to to)))
 
 (defun save-purge-term (angel purge start end &key editor)
-  (dao2purge (hw:save-purgek-term angel purge start end :editor editor)))
+  (dao2purge (hw:save-purge-term angel purge start end :editor editor)))

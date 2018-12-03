@@ -4,14 +4,14 @@
     <input class="input"
            type="text"
            placeholder="From"
-           value={date2str(opts.from)}>
+           value={date2str(opts.from)} readonly>
 
     <span style="font-size:24px;"> 〜 </span>
 
     <input class="input"
            type="text"
            placeholder="To"
-           value={date2str(opts.to)}>
+           value={date2str(opts.to)} readonly>
 
     <div class="operators">
         <move-date-operator label="日" unit="d" callback={callback}></move-date-operator>
@@ -50,6 +50,7 @@
 
      purges_page_filter .input {
          width: 111px;
+         border: none;
      }
     </style>
 </purges_page_filter>

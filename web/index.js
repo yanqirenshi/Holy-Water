@@ -43,3 +43,14 @@ var Metronome = new Vanilla_metronome({
 /* ****** */
 var ROUTER = new Router(STORE, ACTIONS);
 ROUTER.start();
+
+/* *********** */
+/*  Metronome  */
+/* *********** */
+const METRONOME = new Vanilla_metronome({
+    interval: 1000,
+    tick: () => {
+        ACTIONS.closePastedMessage();
+    }
+});
+METRONOME.start();

@@ -335,6 +335,7 @@ riot.tag2('home_page_root-modal-create-impure', '<div class="modal {opts.open ? 
          { label: 'HW：' },
          { label: 'WBS：' },
          { label: 'TER：' },
+         { label: 'Ill：' },
      ];
      this.clickTitlePrefix = (e) => {
          let prefix = e.target.getAttribute('value');
@@ -715,7 +716,7 @@ riot.tag2('purges', '', '', '', function(opts) {
      this.on('update', () => { this.draw(); });
 });
 
-riot.tag2('purges_page_filter', '<span style="font-size:24px;">期間：</Span> <input class="input" type="text" placeholder="From" riot-value="{date2str(opts.from)}"> <span style="font-size:24px;"> 〜 </span> <input class="input" type="text" placeholder="To" riot-value="{date2str(opts.to)}"> <div class="operators"> <move-date-operator label="日" unit="d" callback="{callback}"></move-date-operator> <move-date-operator label="週" unit="w" callback="{callback}"></move-date-operator> <move-date-operator label="月" unit="M" callback="{callback}"></move-date-operator> <button class="button refresh" style="margin-top:1px; margin-left:11px;" onclick="{clickRefresh}">Refresh</button> </div>', 'purges_page_filter, purges_page_filter .operators { display: flex; } purges_page_filter .input { width: 111px; }', '', function(opts) {
+riot.tag2('purges_page_filter', '<span style="font-size:24px;">期間：</Span> <input class="input" type="text" placeholder="From" riot-value="{date2str(opts.from)}" readonly> <span style="font-size:24px;"> 〜 </span> <input class="input" type="text" placeholder="To" riot-value="{date2str(opts.to)}" readonly> <div class="operators"> <move-date-operator label="日" unit="d" callback="{callback}"></move-date-operator> <move-date-operator label="週" unit="w" callback="{callback}"></move-date-operator> <move-date-operator label="月" unit="M" callback="{callback}"></move-date-operator> <button class="button refresh" style="margin-top:1px; margin-left:11px;" onclick="{clickRefresh}">Refresh</button> </div>', 'purges_page_filter, purges_page_filter .operators { display: flex; } purges_page_filter .input { width: 111px; border: none; }', '', function(opts) {
      this.date2str = (date) => {
          if (!date) return '';
          return date.format('YYYY-MM-DD');

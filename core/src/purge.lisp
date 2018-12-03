@@ -89,7 +89,7 @@
 
 (defun save-purge-term (angel purge start end &key editor)
   (declare (ignore angel))
-  :: TODO: angel purge の関係をチェックする。
+  ;; TODO: angel purge の関係をチェックする。
   (let ((by-id (creator-id editor)))
     (setf (start purge) start)
     (setf (end purge) end)

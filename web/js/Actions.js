@@ -273,6 +273,7 @@ class Actions extends Vanilla_Redux_Actions {
             contents: json['MESSAGE'],
             type: 'danger',
             json: json,
+            accrual_time: moment()
         });
     };
     pushSuccessMessage (message) {
@@ -280,6 +281,7 @@ class Actions extends Vanilla_Redux_Actions {
             title: 'Success',
             contents: message,
             type: 'success',
+            accrual_time: moment()
         });
     }
     closeMessage (message) {
@@ -287,6 +289,22 @@ class Actions extends Vanilla_Redux_Actions {
         let new_messages = messages.filter((msg) => {
             return msg != message;
         });
+
+        STORE.dispatch({
+            type: 'CLOSED-MESSAGE',
+            data: { messages: new_messages },
+        });
+    }
+    closePastedMessage () {
+        let list = STORE.get('messages');
+
+        let new_messages = [];
+        for (let msg of list) {
+            let past_time_ms = moment().diff(msg.accrual_time);
+            let threshold_ms = 30 * 1000;
+            if (msg.type=='success' && past_time_ms < threshold_ms)
+                new_messages.push(msg);
+        }
 
         STORE.dispatch({
             type: 'CLOSED-MESSAGE',
