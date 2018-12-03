@@ -99,8 +99,10 @@ class Actions extends Vanilla_Redux_Actions {
     /////
     ///// Impure
     /////
-    fetchDoneImpures () {
-        let path = '/impures/status/done';
+    fetchDoneImpures (from, to) {
+        let path_str = '/impures/status/done?from=%s&to=%s';
+        let path = path_str.format(from.toISOString(), to.toISOString());
+
         API.get(path, function (json, success) {
             if (success)
                 STORE.dispatch(this.fetchedDoneImpures(json));

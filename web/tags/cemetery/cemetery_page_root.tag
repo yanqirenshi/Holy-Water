@@ -32,6 +32,10 @@
              this.moveDate(data.unit, data.amount);
              return;
          }
+         if ('refresh'==action) {
+             ACTIONS.fetchDoneImpures(this.from, this.to);
+             return;
+         }
      };
     </script>
 
@@ -50,7 +54,7 @@
      });
 
      this.on('mount', () => {
-         ACTIONS.fetchDoneImpures();
+         ACTIONS.fetchDoneImpures(this.from, this.to);
      });
     </script>
 

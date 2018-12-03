@@ -108,9 +108,11 @@
       (unless impure (throw-code 404))
       (render-json (hw.api.ctrl:save-impure angel impure :name name :description description :editor angel)))))
 
-(defroute "/impures/status/done" ()
+(defroute "/impures/status/done" (&key |from| |to|)
   (with-angel (angel)
-    (render-json (hw.api.ctrl:find-impures-cemetery angel))))
+    (let ((from (local-time:parse-timestring |from|))
+          (to   (local-time:parse-timestring |to|)))
+    (render-json (hw.api.ctrl:find-impures-cemetery angel :from from :to to)))))
 
 
 ;;;;;

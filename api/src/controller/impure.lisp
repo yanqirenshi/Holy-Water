@@ -14,7 +14,7 @@
     (write-key-value "id"          (slot-value obj 'id))
     (write-key-value "name"        (slot-value obj 'name))
     (write-key-value "description" (slot-value obj 'description))
-    (write-key-value "purge"       (slot-value obj 'purge))
+    (write-key-value "purge"       (or (slot-value obj 'purge) :null))
     (write-key-value "finished_at" (or (slot-value obj 'finished-at) :null))
     (write-key-value "start"       (or (slot-value obj 'start) :null))
     (write-key-value "end"         (or (slot-value obj 'end)   :null))))
@@ -64,7 +64,7 @@
   (dao2impure (hw:save-impure angel impure :name name :description description :editor editor)
               :angel angel))
 
-(defun find-impures-cemetery (angel)
+(defun find-impures-cemetery (angel &key from to)
   (mapcar #'(lambda (plist)
               (make-instance 'impure
                              :id          (getf plist :|id|)
@@ -74,4 +74,4 @@
                              :finished-at (timestamp2str (local-time:universal-to-timestamp (getf plist :|finished_at|)))
                              :start       (timestamp2str (local-time:universal-to-timestamp (getf plist :|start|)))
                              :end         (timestamp2str (local-time:universal-to-timestamp (getf plist :|end|)))))
-          (hw:find-impures-cemetery angel)))
+          (hw:find-impures-cemetery angel :from from :to to)))

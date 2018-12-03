@@ -86,6 +86,10 @@ riot.tag2('cemetery_page_root', '<section class="section"> <div class="container
              this.moveDate(data.unit, data.amount);
              return;
          }
+         if ('refresh'==action) {
+             ACTIONS.fetchDoneImpures(this.from, this.to);
+             return;
+         }
      };
 
      this.impures = () => {
@@ -100,7 +104,7 @@ riot.tag2('cemetery_page_root', '<section class="section"> <div class="container
      });
 
      this.on('mount', () => {
-         ACTIONS.fetchDoneImpures();
+         ACTIONS.fetchDoneImpures(this.from, this.to);
      });
 });
 
