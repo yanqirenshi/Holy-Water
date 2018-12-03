@@ -306,7 +306,7 @@ class Actions extends Vanilla_Redux_Actions {
         let new_messages = [];
         for (let msg of list) {
             let past_time_ms = moment().diff(msg.accrual_time);
-            let threshold_ms = 30 * 1000;
+            let threshold_ms = 8 * 1000;
             if (msg.type=='success' && past_time_ms < threshold_ms)
                 new_messages.push(msg);
         }

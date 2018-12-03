@@ -852,6 +852,12 @@ riot.tag2('purges_page_root', '<div style="padding:22px;"> <div class="card"> <h
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-PURGE-HISTORY')
              this.update();
+
+         if (action.type=='SAVED-ACTION-RESULT') {
+             this.edit_target = null;
+             ACTIONS.pushSuccessMessage('Purge の実績の変更が完了しました。');
+             ACTIONS.fetchPurgeHistory(this.from, this.to);
+         }
      });
 
      this.data = () => {

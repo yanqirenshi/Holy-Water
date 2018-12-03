@@ -72,6 +72,12 @@
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-PURGE-HISTORY')
              this.update();
+
+         if (action.type=='SAVED-ACTION-RESULT') {
+             this.edit_target = null;
+             ACTIONS.pushSuccessMessage('Purge の実績の変更が完了しました。');
+             ACTIONS.fetchPurgeHistory(this.from, this.to);
+         }
      });
     </script>
 
