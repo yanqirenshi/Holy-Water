@@ -5,7 +5,10 @@ riot.tag2('angel', '', '', '', function(opts) {
      this.on('update', () => { this.draw(); });
 });
 
-riot.tag2('angel_page_root', '<section class="section"> <div class="container"> <h1 class="title">パスワード変更</h1> <h2 class="subtitle">準備中</h2> </div> </section> <section class="section"> <div class="container"> <h1 class="title">サインアウト</h1> <h2 class="subtitle">準備中</h2> </div> </section>', '', '', function(opts) {
+riot.tag2('angel_page_root', '<section class="section"> <div class="container"> <h1 class="title">パスワード変更</h1> <h2 class="subtitle">準備中</h2> </div> </section> <section class="section"> <div class="container"> <h1 class="title" style="text-shadow: 0px 0px 11px #ffffff;">サインアウト</h1> <h2 class="subtitle"></h2> <div class="contents"> <button class="button is-danger" style="margin-left:22px; margin-top:11px;box-shadow: 0px 0px 11px #ffffff;" onclick="{clickSignOut}">Sign Out</button> </div> </div> </section>', '', '', function(opts) {
+     this.clickSignOut = () => {
+         ACTIONS.signOut();
+     };
 });
 
 riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" site="{site()}" moves="{[]}"></menu-bar> <div ref="page-area" style="padding-left: 55px; width: 100vw; height: 100vh;"></div> <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p> <message-area></message-area>', 'app > .page { width: 100vw; height: 100vh; overflow: hidden; display: block; } app .hide,[data-is="app"] .hide{ display: none; } app > .image-ref { position: fixed; bottom: 3px; right: 22px; font-size: 11px; color: #fff; } app > .image-ref > a:link { color: #fff; } app > .image-ref > a:visited { color: #fff; } app > .image-ref > a:hover { color: #fff; } app > .image-ref > a:active { color: #fff; } app > div.kasumi { position: fixed; top: 0px; left: 0px; width: 100vw; height: 100vh; background: #ffffff; opacity: 0.3; z-index: -888888; }', '', function(opts) {
@@ -31,7 +34,7 @@ riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" 
          location.hash=STORE.get('site.active_page');
 });
 
-riot.tag2('cemetery-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"> <thead> <tr> <th colspan="3">Impure</th> <th colspan="2">Purge</th> <th rowspan="2">備考</th> </tr> <tr> <th>ID</th> <th>名称</th> <th>完了</th> <th>開始</th> <th>終了</th> </tr> </thead> <tbody style="font-size:12px;"> <tr each="{impure in opts.data}"> <td nowrap>{impure.id}</td> <td nowrap>{impure.name}</td> <td nowrap>{dt(impure.finished_at)}</td> <td nowrap>{dt(impure.start)}</td> <td nowrap>{dt(impure.end)}</td> <td>{description(impure.description)}</td> </tr> </tbody> </table>', '', '', function(opts) {
+riot.tag2('cemetery-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"> <thead> <tr> <th colspan="3">Impure</th> <th colspan="2">Purge</th> <th rowspan="2">備考</th> </tr> <tr> <th>ID</th> <th>名称</th> <th>完了</th> <th>開始</th> <th>終了</th> </tr> </thead> <tbody style="font-size:12px;"> <tr each="{impure in opts.data}"> <td nowrap>{impure.id}</td> <td nowrap>{impure.name}</td> <td nowrap>{dt(impure.finished_at)}</td> <td nowrap>{dt(impure.start)}</td> <td nowrap>{dt(impure.end)}</td> <td style="word-break: break-word;">{description(impure.description)}</td> </tr> </tbody> </table>', '', '', function(opts) {
      this.dt = (v) => {
          if (!v) return '---'
 

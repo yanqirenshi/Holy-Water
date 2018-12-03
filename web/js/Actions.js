@@ -50,6 +50,16 @@ class Actions extends Vanilla_Redux_Actions {
             data: { angels: this.mergeData(response, STORE.get('angels')) },
         };
     }
+    signOut () {
+        let path = '/sign/out';
+
+        API.post(path, {}, function (json, success) {
+            if (success)
+                location.pathname = '/hw/sign/in/';
+            else
+                this.pushFetchErrorMessage(json);
+        }.bind(this));
+    }
     /////
     ///// Maledict
     /////

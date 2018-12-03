@@ -21,7 +21,7 @@
                 <td nowrap>{dt(impure.finished_at)}</td>
                 <td nowrap>{dt(impure.start)}</td>
                 <td nowrap>{dt(impure.end)}</td>
-                <td>{description(impure.description)}</td>
+                <td style="word-break: break-word;">{description(impure.description)}</td>
             </tr>
         </tbody>
     </table>
