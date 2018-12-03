@@ -108,11 +108,9 @@
       (unless impure (throw-code 404))
       (render-json (hw.api.ctrl:save-impure angel impure :name name :description description :editor angel)))))
 
-(defroute "/impures/status/done" (&key)
+(defroute "/impures/status/done" ()
   (with-angel (angel)
-    (let ((maledict (hw:get-maledict-done :angel angel)))
-      (unless maledict (throw-code 404))
-      (render-json (hw.api.ctrl:find-impures angel :maledict maledict)))))
+    (render-json (hw.api.ctrl:find-impures-cemetery angel))))
 
 
 ;;;;;

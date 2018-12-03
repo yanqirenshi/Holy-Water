@@ -31,6 +31,21 @@ riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" 
          location.hash=STORE.get('site.active_page');
 });
 
+riot.tag2('cemetery-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"> <thead> <tr> <th colspan="3">Impure</th> <th colspan="2">Purge</th> <th rowspan="2">備考</th> </tr> <tr> <th>ID</th> <th>名称</th> <th>完了</th> <th>開始</th> <th>終了</th> </tr> </thead> <tbody style="font-size:12px;"> <tr each="{impure in opts.data}"> <td nowrap>{impure.id}</td> <td nowrap>{impure.name}</td> <td nowrap>{dt(impure.finished_at)}</td> <td nowrap>{dt(impure.start)}</td> <td nowrap>{dt(impure.end)}</td> <td>{description(impure.description)}</td> </tr> </tbody> </table>', '', '', function(opts) {
+     this.dt = (v) => {
+         if (!v) return '---'
+
+         return moment(v).format('YYYY-MM-DD HH:mm:ss')
+     };
+
+     this.description = (str) => {
+         if (str.length<=222)
+             return str;
+
+         return str.substring(0, 222) + '........';
+     };
+});
+
 riot.tag2('cemetery', '', '', '', function(opts) {
      this.mixin(MIXINS.page);
 
@@ -38,13 +53,41 @@ riot.tag2('cemetery', '', '', '', function(opts) {
      this.on('update', () => { this.draw(); });
 });
 
-riot.tag2('cemetery_page_root', '<section class="section"> <div class="container"> <h1 class="title" style="text-shadow: 0px 0px 11px #fff;">自身が Purge(完了) した Impure</h1> <h2 class="subtitle" style="text-shadow: 0px 0px 11px #fff;">準備中</h2> <div style="padding-bottom:22px;"> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"> <thead> <tr> <th>id</th> <th>name</th> <th>description</th> </tr> </thead> <tbody> <tr each="{impure in impures()}"> <td nowrap>{impure.id}</td> <td nowrap>{impure.name}</td> <td>{description(impure.description)}</td> </tr> </tbody> </table> </div> </div> </section>', 'cemetery_page_root { height: 100%; display: block; overflow: scroll; }', '', function(opts) {
-     this.description = (str) => {
-         if (str.length<=222)
-             return str;
-
-         return str.substring(0, 222) + '........';
+riot.tag2('cemetery_page_filter', '<span style="font-size:24px; text-shadow: 0px 0px 11px #fff;">期間：</Span> <input class="input" type="text" placeholder="From" riot-value="{date2str(opts.from)}" readonly> <span style="font-size:24px;"> 〜 </span> <input class="input" type="text" placeholder="To" riot-value="{date2str(opts.to)}" readonly> <div class="operators"> <move-date-operator label="日" unit="d" callback="{callback}"></move-date-operator> <move-date-operator label="週" unit="w" callback="{callback}"></move-date-operator> <move-date-operator label="月" unit="M" callback="{callback}"></move-date-operator> <button class="button refresh" style="margin-top:1px; margin-left:11px;" onclick="{clickRefresh}">Refresh</button> </div>', 'cemetery_page_filter, cemetery_page_filter .operators { display: flex; } cemetery_page_filter .input { width: 111px; border: none; }', '', function(opts) {
+     this.date2str = (date) => {
+         if (!date) return '';
+         return date.format('YYYY-MM-DD');
      };
+
+     this.clickRefresh = () => {
+         this.opts.callback('refresh');
+     };
+
+     this.callback = (action, data) => {
+         this.opts.callback('move-date', {
+             unit: data.unit,
+             amount: data.amount,
+         })
+     };
+});
+
+riot.tag2('cemetery_page_root', '<section class="section"> <div class="container"> <h1 class="title" style="text-shadow: 0px 0px 11px #fff;">自身が Purge(完了) した Impure</h1> <h2 class="subtitle" style="text-shadow: 0px 0px 11px #fff;"></h2> <div> <cemetery_page_filter style="margin-bottom:22px;" from="{from}" to="{to}" callback="{callback}"></cemetery_page_filter> </div> <div style="padding-bottom:22px;"> <cemetery-list data="{impures()}"></cemetery-list> </div> </div> </section>', 'cemetery_page_root { height: 100%; display: block; overflow: scroll; }', '', function(opts) {
+     this.from = moment().add(-1, 'd').startOf('day');
+     this.to   = moment().add(1, 'd').startOf('day');
+     this.moveDate = (unit, amount) => {
+         this.from = this.from.add(amount, unit);
+         this.to   = this.to.add(amount, unit);
+
+         this.tags['cemetery_page_filter'].update();
+     };
+
+     this.callback = (action, data) => {
+         if ('move-date'==action) {
+             this.moveDate(data.unit, data.amount);
+             return;
+         }
+     };
+
      this.impures = () => {
          return STORE.get('impures_done').list.sort((a, b) => {
              return a.id*1 < b.id*1 ? 1 : -1;
@@ -641,7 +684,7 @@ riot.tag2('page03', '', '', '', function(opts) {
 riot.tag2('page03_page_root', '', '', '', function(opts) {
 });
 
-riot.tag2('move-date-operator', '<div class="operator"> <div class="befor"> <button class="button" onclick="{clickBefor}"><</button> </div> <div class="trg"> <span>{opts.label}</span> </div> <div class="after"> <button class="button" onclick="{clickAfter}">></button> </div> </div>', 'move-date-operator .operator { display: flex; margin-left:11px; } move-date-operator .operator span { font-size:18px; } move-date-operator .button{ border: none; } move-date-operator .befor, move-date-operator .befor .button{ border-radius: 8px 0px 0px 8px; } move-date-operator .after, move-date-operator .after .button{ border-radius: 0px 8px 8px 0px; } move-date-operator .operator > div { border: 1px solid #dbdbdb; width: 36px; } move-date-operator .operator > div.trg{ padding-top: 5px; padding-left: 8px; border-left: none; border-right: none; }', '', function(opts) {
+riot.tag2('move-date-operator', '<div class="operator"> <div class="befor"> <button class="button" onclick="{clickBefor}"><</button> </div> <div class="trg"> <span>{opts.label}</span> </div> <div class="after"> <button class="button" onclick="{clickAfter}">></button> </div> </div>', 'move-date-operator .operator { display: flex; margin-left:11px; } move-date-operator .operator span { font-size:18px; } move-date-operator .button{ border: none; } move-date-operator .befor, move-date-operator .befor .button{ border-radius: 8px 0px 0px 8px; } move-date-operator .after, move-date-operator .after .button{ border-radius: 0px 8px 8px 0px; } move-date-operator .operator > div { border: 1px solid #dbdbdb; width: 36px; } move-date-operator .operator > div.trg{ padding-top: 5px; padding-left: 8px; border-left: none; border-right: none; background: #ffffff; }', '', function(opts) {
      this.clickBefor = () => {
          this.opts.callback('move-date', {
              unit: this.opts.unit,

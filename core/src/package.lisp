@@ -21,11 +21,12 @@
            #:get-maledict
            #:get-maledict-type
            #:get-maledict-done)
-  (:export #:find-impures
-           #:create-impure
+  (:export #:create-impure
            #:add-impure
            #:get-impure
-           #:save-impure)
+           #:save-impure
+           #:find-impures
+           #:find-impures-cemetery)
   (:export #:find-angels
            #:get-angel
            #:get-angel-at-auth)

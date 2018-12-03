@@ -56,6 +56,7 @@
          padding-left: 8px;
          border-left: none;
          border-right: none;
+         background: #ffffff;
      }
     </style>
 </move-date-operator>

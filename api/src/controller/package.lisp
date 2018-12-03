@@ -13,7 +13,8 @@
            #:stop-action-4-impure
            #:finish-impure
            #:move-impure
-           #:save-impure)
+           #:save-impure
+           #:find-impures-cemetery)
   (:export #:find-purge-history
            #:save-purge-term)
   (:export #:sing-in
