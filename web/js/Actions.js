@@ -82,6 +82,8 @@ class Actions extends Vanilla_Redux_Actions {
     createMaledictImpures (maledict, data) {
         let path = '/maledicts/' + maledict.id + '/impures';
 
+        data.description = encodeURIComponent(data.description);
+
         API.post(path, data, function (json, success) {
             if (success)
                 STORE.dispatch(this.createdMaledictImpures(json, maledict));
@@ -116,6 +118,7 @@ class Actions extends Vanilla_Redux_Actions {
     }
     saveImpure (impure) {
         let path = '/impures/' + impure.id;
+        impure.description = encodeURIComponent(impure.description);
 
         API.post(path, impure, function (json, success) {
             if (!success) {
