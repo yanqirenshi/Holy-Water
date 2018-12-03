@@ -879,3 +879,13 @@ riot.tag2('randing', '', '', '', function(opts) {
 
 riot.tag2('randing_page_root', '', '', '', function(opts) {
 });
+
+riot.tag2('war-history', '', '', '', function(opts) {
+     this.mixin(MIXINS.page);
+
+     this.on('mount', () => { this.draw(); });
+     this.on('update', () => { this.draw(); });
+});
+
+riot.tag2('war-history_page_root', '', '', '', function(opts) {
+});
