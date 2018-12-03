@@ -12,6 +12,8 @@ class TimeStripper  {
 
         let elapse = moment(end).diff(moment(start)) / 1000;
 
+        if (elapse<0) elapse = elapse * -1;
+
         let sec = elapse % 60;
 
         let elapse_min = (elapse - sec) / 60;

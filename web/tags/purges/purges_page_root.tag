@@ -77,9 +77,7 @@
 
     <script>
      this.data = () => {
-         let list = STORE.get('purges').list.sort((a, b) => {
-             return a.start < b.start ? 1 : -1;
-         });
+         let list = STORE.get('purges');
 
          return list;
      };
