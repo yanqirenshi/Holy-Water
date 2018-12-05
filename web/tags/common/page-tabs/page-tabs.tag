@@ -10,7 +10,7 @@
     </div>
 
     <style>
-     page-tabs li:first-child { margin-left: 55px; }
+     page-tabs li:first-child { margin-left: 22px; }
     </style>
 
     <script>
