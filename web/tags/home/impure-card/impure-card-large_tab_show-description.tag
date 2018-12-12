@@ -2,32 +2,38 @@
     this.root.innerHTML = opts.contents
 
     <style>
-     .hw-markdown h1 {
+     impure-card-large_tab_show-description h1 {
          font-weight: bold;
          font-size: 20px;
+         margin-top: 11px;
+         text-decoration: underline;
      }
-     .hw-markdown h2 {
+     impure-card-large_tab_show-description h1:first-child {
+         margin-top: 0px;
+     }
+     impure-card-large_tab_show-description h2 {
          font-weight: bold;
          font-size: 18px;
+         margin-top: 11px;
+         text-decoration: underline;
      }
-     .hw-markdown h3 {
+     impure-card-large_tab_show-description h3 {
          font-weight: bold;
          font-size: 16px;
+         text-decoration: underline;
      }
-     .hw-markdown h4 {
+     impure-card-large_tab_show-description h4 {
          font-weight: bold;
          font-size: 14px;
      }
-     .hw-markdown h5 {
+     impure-card-large_tab_show-description h5 {
          font-weight: bold;
          font-size: 12px;
      }
-     .hw-markdown * {
+     impure-card-large_tab_show-description * {
          font-size: 12px;
      }
-    </style>
 
-    <style>
      impure-card-large_tab_show-description table {
          border-collapse:  collapse;
      }
@@ -41,9 +47,7 @@
          padding: 2px 5px;
          background: #eeeeee;
      }
-    </style>
 
-    <style>
      impure-card-large_tab_show-description li {
          list-style-type: square;
          margin-left: 22px;
