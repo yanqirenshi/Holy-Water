@@ -35,6 +35,15 @@ class Actions extends Vanilla_Redux_Actions {
             data: data
         };
     }
+    encodePostData (data_ht) {
+        if (!data_ht) return {};
+
+        let out = Object.assign({}, data_ht);
+        for (let key in out)
+            out[key] = encodeURIComponent(out[key]);
+
+        return out;
+    }
     /////
     ///// Angels
     /////
@@ -92,9 +101,7 @@ class Actions extends Vanilla_Redux_Actions {
     createMaledictImpures (maledict, data) {
         let path = '/maledicts/' + maledict.id + '/impures';
 
-        data.description = encodeURIComponent(data.description);
-
-        API.post(path, data, function (json, success) {
+        API.post(path, this.encodePostData(data), function (json, success) {
             if (success)
                 STORE.dispatch(this.createdMaledictImpures(json, maledict));
             else
@@ -128,9 +135,8 @@ class Actions extends Vanilla_Redux_Actions {
     }
     saveImpure (impure) {
         let path = '/impures/' + impure.id;
-        impure.description = encodeURIComponent(impure.description);
 
-        API.post(path, impure, function (json, success) {
+        API.post(path, this.encodePostData(impure), function (json, success) {
             if (!success) {
                 this.pushFetchErrorMessage(json);
                 return;
@@ -234,7 +240,7 @@ class Actions extends Vanilla_Redux_Actions {
     moveImpure (maledict, impure) {
         let path = '/maledicts/%d/impures/move'.format(maledict.id);
 
-        API.post(path, impure, function (json, success) {
+        API.post(path, this.encodePostData(impure), function (json, success) {
             if (success)
                 STORE.dispatch(this.movedImpure(json));
             else
