@@ -46,6 +46,7 @@
          { label: 'HW：' },
          { label: 'WBS：' },
          { label: 'TER：' },
+         { label: '人事：' },
          { label: 'Ill：' },
      ];
      this.clickTitlePrefix = (e) => {
