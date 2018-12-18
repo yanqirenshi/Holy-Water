@@ -79,3 +79,9 @@
 
 (defun impure-purge-now-p (angel impure)
   (get-purge :angel angel :impure impure))
+
+(defun get-impure-purging (angel)
+  (car (select-dao 'rs_impure-active
+         (inner-join :ev_purge-start
+                     :on (:= :rs_impure-active.id :ev_purge-start.impure-id))
+         (where (:= :ev_purge-start.angel-id (object-id angel))))))

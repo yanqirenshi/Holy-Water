@@ -28,7 +28,7 @@
              (get-purge :id id :angel angel :impure impure :status :end)))
         (t (error "bad status. status=~S" status))))
 
-(defun get-impure-started (&key angel)
+(defun get-purge-started (&key angel)
   (select-dao 'ev_purge-start
     (where (:= :ev_purge-start.angel-id (object-id angel)))))
 

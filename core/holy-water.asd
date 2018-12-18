@@ -27,7 +27,13 @@
                  (:file "maledict")
                  (:file "impure")
                  (:file "purge")
-                 (:file "actions"))))
+                 (:file "actions")
+                 (:module "dao"
+                  :components ((:file "stop-impure")
+                               (:file "start-impure")
+                               (:file "move-impure")
+                               (:file "finish-impure")
+                               (:file "save-impure"))))))
   :description ""
   :long-description
   #.(read-file-string

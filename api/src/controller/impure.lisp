@@ -45,8 +45,10 @@
                  :creator editor))
 
 (defun start-action-4-impure (angel impure)
-  (dao2impure (hw:start-action-impure angel impure :editor angel)
-              :angel angel))
+  (multiple-value-bind (impure stopped-impure)
+      (hw:start-action-impure angel impure :editor angel)
+    (list :|impure_started| (dao2impure impure :angel angel)
+          :|impure_stopped| (dao2impure stopped-impure :angel angel))))
 
 (defun stop-action-4-impure (angel impure)
   (dao2impure (hw:stop-action-impure angel impure :editor angel)

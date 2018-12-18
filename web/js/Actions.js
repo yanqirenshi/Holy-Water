@@ -165,10 +165,16 @@ class Actions extends Vanilla_Redux_Actions {
                 this.pushFetchErrorMessage(json);
         }.bind(this));
     }
-    startedImpure (impure) {
+    startedImpure (impures) {
+        let impure_started = impures.impure_started;
+        let impure_stopped = impures.impure_stopped;
+
         return {
             type: 'STARTED-ACTION',
-            data: { impures: this.mergeData([impure], STORE.get('impures')) },
+            data: {
+                impures: this.mergeData([impure_started, impure_stopped],
+                                        STORE.get('impures'))
+            },
         };
     }
     stopImpure (impure) {
