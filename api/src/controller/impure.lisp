@@ -20,15 +20,16 @@
     (write-key-value "end"         (or (slot-value obj 'end)   :null))))
 
 (defun dao2impure (dao &key angel)
-  (let ((impure (make-instance 'impure)))
-    (setf (id impure)            (mito:object-id dao))
-    (setf (name impure)          (hw::name dao))
-    (setf (description impure)   (hw::description dao))
-    (when angel
-      (let ((purge (hw:get-purge :angel angel :impure dao :status :start)))
-        (setf (purge impure)
-              (if purge (dao2purge purge) :null))))
-    impure))
+  (when dao
+    (let ((impure (make-instance 'impure)))
+      (setf (id impure)            (mito:object-id dao))
+      (setf (name impure)          (hw::name dao))
+      (setf (description impure)   (hw::description dao))
+      (when angel
+        (let ((purge (hw:get-purge :angel angel :impure dao :status :start)))
+          (setf (purge impure)
+                (if purge (dao2purge purge) :null))))
+      impure)))
 
 (defun find-impures (angel &key maledict)
   (let ((list (hw:find-impures :maledict maledict)))
@@ -48,7 +49,8 @@
   (multiple-value-bind (impure stopped-impure)
       (hw:start-action-impure angel impure :editor angel)
     (list :|impure_started| (dao2impure impure :angel angel)
-          :|impure_stopped| (dao2impure stopped-impure :angel angel))))
+          :|impure_stopped| (or (dao2impure stopped-impure :angel angel)
+                                :null))))
 
 (defun stop-action-4-impure (angel impure)
   (dao2impure (hw:stop-action-impure angel impure :editor angel)
