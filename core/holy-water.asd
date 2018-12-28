@@ -27,8 +27,7 @@
                  (:file "maledict")
                  (:file "impure")
                  (:file "purge")
-                 (:file "actions")
-                 (:module "dao"
+                 (:module "actions"
                   :components ((:file "stop-impure")
                                (:file "start-impure")
                                (:file "move-impure")
