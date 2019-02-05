@@ -473,13 +473,18 @@ riot.tag2('home_page_root-other-services', '<nav class="panel"> <p class="panel-
 riot.tag2('home_page_root-tabs', '<div class="tabs is-boxed"> <ul> <li class="is-active" style="margin-left:22px;"> <a> <span class="icon is-small"><i class="fas fa-image" aria-hidden="true"></i></span> <span>Tasks</span> </a> </li> </ul> </div>', '', '', function(opts) {
 });
 
-riot.tag2('home_page_root-working-action', '<button class="button is-small" style="margin-right:11px;" onclick="{clickStop}">Stop</button> <span>{name()}</span> <div style="margin-top: 8px;"> <p style="display:inline; font-size:12px; margin-right:22px;"> <span style="width:88px;display:inline-block;">経過: {distance()}</span> <span>開始: </span> <span>{start()}</span> </p> <button class="button is-small">Stop & Close</button> </div>', 'home_page_root-working-action { display: block; position: fixed; bottom: 33px; right: 33px; background: #fff; padding: 11px 22px; border-radius: 8px; }', 'class="{hide()}"', function(opts) {
+riot.tag2('home_page_root-working-action', '<button class="button is-small" style="margin-right:11px;" onclick="{clickStop}">Stop</button> <span>{name()}</span> <div style="margin-top: 8px;"> <p style="display:inline; font-size:12px; margin-right:22px;"> <span style="width:88px;display:inline-block;">経過: {distance()}</span> <span>開始: </span> <span>{start()}</span> </p> <button class="button is-small" onclick="{clickStopAndClose}">Stop & Close</button> </div>', 'home_page_root-working-action { display: block; position: fixed; bottom: 33px; right: 33px; background: #fff; padding: 11px 22px; border-radius: 8px; }', 'class="{hide()}"', function(opts) {
 
      this.clickStop = () => {
          let impure = this.opts.data;
          if (impure)
              ACTIONS.stopImpure(impure);
      }
+     this.clickStopAndClose = () => {
+         let impure = this.opts.data;
+         if (impure)
+             ACTIONS.finishImpure(impure, true);
+     };
 
      this.hide = () => {
          return opts.data ? '' : 'hide';

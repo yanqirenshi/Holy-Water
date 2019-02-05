@@ -12,7 +12,8 @@
             <span>{start()}</span>
         </p>
 
-        <button class="button is-small">Stop & Close</button>
+        <button class="button is-small"
+                onclick={clickStopAndClose}>Stop & Close</button>
     </div>
 
     <script>
@@ -22,7 +23,11 @@
          if (impure)
              ACTIONS.stopImpure(impure);
      }
-     // 
+     this.clickStopAndClose = () => {
+         let impure = this.opts.data;
+         if (impure)
+             ACTIONS.finishImpure(impure, true);
+     };
     </script>
 
     <script>

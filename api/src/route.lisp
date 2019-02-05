@@ -91,11 +91,11 @@
       (unless impure (throw-code 404))
       (render-json (hw.api.ctrl:stop-action-4-impure angel impure)))))
 
-(defroute ("/impures/:id/finish" :method :POST) (&key id)
+(defroute ("/impures/:id/finish" :method :POST) (&key id |with-stop|)
   (with-angel (angel)
     (let ((impure (hw::get-impure :id id)))
       (unless impure (throw-code 404))
-      (render-json (hw.api.ctrl:finish-impure angel impure)))))
+      (render-json (hw.api.ctrl:finish-impure angel impure :with-stop |with-stop|)))))
 
 (defroute ("/impures/:id" :method :POST) (&key id |name| |description|)
   (with-angel (angel)

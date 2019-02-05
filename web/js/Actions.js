@@ -170,6 +170,25 @@ class Actions extends Vanilla_Redux_Actions {
             data: { purging: state },
         };
     }
+    finishImpure (impure, with_stop) {
+        let path = '/impures/' + impure.id + '/finish';
+        let post_data = {
+            'with-stop': (with_stop==true ? true : false),
+        };
+
+        API.post(path, post_data, function (json, success) {
+            if (success)
+                STORE.dispatch(this.finishedImpure(json));
+            else
+                this.pushFetchErrorMessage(json);
+        }.bind(this));
+    }
+    finishedImpure (impure) {
+        return {
+            type: 'FINISHED-IMPURE',
+            data: {},
+        };
+    }
     /////
     ///// Action
     /////
@@ -222,22 +241,6 @@ class Actions extends Vanilla_Redux_Actions {
         return {
             type: 'STOPED-ACTION',
             data: { impures: this.mergeData([impure], STORE.get('impures')) },
-        };
-    }
-    finishImpure (impure) {
-        let path = '/impures/' + impure.id + '/finish';
-
-        API.post(path, null, function (json, success) {
-            if (success)
-                STORE.dispatch(this.finishedImpure(json));
-            else
-                this.pushFetchErrorMessage(json);
-        }.bind(this));
-    }
-    finishedImpure (impure) {
-        return {
-            type: 'FINISHED-IMPURE',
-            data: {},
         };
     }
     saveActionResult (action_result) {

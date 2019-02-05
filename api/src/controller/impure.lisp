@@ -59,8 +59,10 @@
   (dao2impure (hw:stop-action-impure angel impure :editor angel)
               :angel angel))
 
-(defun finish-impure (angel impure)
-  (dao2impure (hw::finish-impure angel impure :editor angel)
+(defun finish-impure (angel impure &key with-stop)
+  (dao2impure (hw::finish-impure angel impure
+                                 :editor angel
+                                 :with-stop with-stop)
               :angel angel))
 
 (defun move-impure (angel impure maledict)
