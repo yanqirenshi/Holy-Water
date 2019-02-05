@@ -5,8 +5,8 @@
 
     <div style="margin-top: 8px;">
         <p style="display:inline; font-size:12px; margin-right:22px;">
-            <span>経過: {distance()}</span>
-            <span>, 開始: </span>
+            <span style="width:88px;display:inline-block;">経過: {distance()}</span>
+            <span>開始: </span>
             <span>{start()}</span>
         </p>
 
@@ -38,7 +38,7 @@
              return v<10 ? '0'+v : v;
          }
 
-         return fmt(hour) + ':' + fmt(min) + ':' + fmt(sec);
+         return fmt(hour) + ':' + fmt(min) + ':' + fmt(sec) + ', ';
      }
      this.start = () => {
          if (!opts.data || !opts.data.purge || !opts.data.purge.start)
