@@ -111,6 +111,9 @@
           (to   (local-time:parse-timestring |to|)))
     (render-json (hw.api.ctrl:find-impures-cemetery angel :from from :to to)))))
 
+(defroute "/impures/purging" ()
+  (with-angel (angel)
+    (render-json (hw.api.ctrl:get-impure-purging angel))))
 
 ;;;;;
 ;;;;; Purge
@@ -129,6 +132,7 @@
            (purge (hw::get-purge :id (parse-integer id) :status :all)))
       (unless purge (throw-code 404))
       (render-json (hw.api.ctrl:save-purge-term angel purge start end :editor angel)))))
+
 
 ;;;;;
 ;;;;; Error pages

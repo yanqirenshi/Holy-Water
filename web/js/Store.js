@@ -73,6 +73,9 @@ class Store extends Vanilla_Redux_Store {
                 randing_page: 'randing',
                 pages: this.pages(),
             },
+            purging: {
+                impure: null,
+            },
             messages: [],
         };
 

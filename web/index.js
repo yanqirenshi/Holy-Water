@@ -51,6 +51,7 @@ const METRONOME = new Vanilla_metronome({
     interval: 1000,
     tick: () => {
         ACTIONS.closePastedMessage();
+        ACTIONS.fetchImpurePurging();
     }
 });
 METRONOME.start();

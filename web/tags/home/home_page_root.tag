@@ -20,7 +20,7 @@
                                 filter={squeeze_word}></home_page_root-impures>
     </div>
 
-    <home_page_root-working-action></home_page_root-working-action>
+    <home_page_root-working-action data={impure()}></home_page_root-working-action>
 
     <home_page_root-modal-create-impure open={modal_open}
                                         callback={callback}
@@ -31,6 +31,12 @@
      this.modal_maledict = null;
      this.maledict = null; //選択された maledict
      this.squeeze_word = null;
+    </script>
+
+    <script>
+     this.impure = () => {
+         return STORE.get('purging.impure');
+     }
     </script>
 
     <script>
@@ -60,14 +66,20 @@
              this.tags['home_page_root-impures'].update();
          }
      };
+
      STORE.subscribe((action) => {
-         if (action.type=='FETCHED-MALEDICTS') {
+         if (action.type=='FETCHED-MALEDICTS')
              this.update();
-         }
-         if (action.type=='CREATED-MALEDICT-IMPURES') {
+
+         if (action.type=='CREATED-MALEDICT-IMPURES')
              this.closeModal();
+
+         if (action.type=='FETCHED-IMPURE-PURGING') {
+             dump(this.tags['home_page_root-impures']);
+             this.tags['home_page_root-working-action'].update();
          }
      });
+
      this.on('mount', () => {
          ACTIONS.fetchMaledicts();
          ACTIONS.fetchAngels();

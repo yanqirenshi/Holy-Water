@@ -8,7 +8,10 @@
         ((and angel impure)
          (find-dao 'ev_purge-start
                    :angel-id  (object-id angel)
-                   :impure-id (object-id impure)))))
+                   :impure-id (object-id impure)))
+        ((and angel (null impure))
+         (find-dao 'ev_purge-start
+                   :angel-id  (object-id angel)))))
 
 (defun get-purge-end (&key id angel impure)
   (cond (id (find-dao 'ev_purge-end :id id))
@@ -20,7 +23,9 @@
 
 (defun get-purge (&key id angel impure (status :start))
   (cond ((eq :start status)
-         (get-purge-start :id id :angel angel :impure impure))
+         (if impure
+             (get-purge-start :id id :angel angel :impure impure)
+             (get-purge-start :id id :angel angel)))
         ((eq :end status)
          (get-purge-end :id id :angel angel :impure impure))
         ((eq :all status)

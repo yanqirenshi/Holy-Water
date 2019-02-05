@@ -14,7 +14,8 @@
            #:finish-impure
            #:move-impure
            #:save-impure
-           #:find-impures-cemetery)
+           #:find-impures-cemetery
+           #:get-impure-purging)
   (:export #:find-purge-history
            #:save-purge-term)
   (:export #:sing-in

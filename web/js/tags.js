@@ -467,14 +467,46 @@ riot.tag2('home_page_root-other-services', '<nav class="panel"> <p class="panel-
 riot.tag2('home_page_root-tabs', '<div class="tabs is-boxed"> <ul> <li class="is-active" style="margin-left:22px;"> <a> <span class="icon is-small"><i class="fas fa-image" aria-hidden="true"></i></span> <span>Tasks</span> </a> </li> </ul> </div>', '', '', function(opts) {
 });
 
-riot.tag2('home_page_root-working-action', '<button class="button is-small" style="margin-right:11px;">Stop</button> <span>XX：ABCDEFGHIJKLMNOPQRSTUVWXYZ012345678!@#$%^&*()+|~</span> <div style="margin-top: 8px;"> <p style="display:inline; font-size:12px; margin-right:22px;"> <span>経過: HH:HH:SS</span> <span>, </span> <span>MM-DD HH:HH:SS</span> <span>〜</span> <span>MM-DD HH:HH:SS</span> </p> <button class="button is-small">Stop & Close</button> </div>', 'home_page_root-working-action { display: block; position: fixed; bottom: 33px; right: 33px; background: #fff; padding: 11px 22px; border-radius: 8px; }', '', function(opts) {
+riot.tag2('home_page_root-working-action', '<button class="button is-small" style="margin-right:11px;">Stop</button> <span>{opts.data.name}</span> <div style="margin-top: 8px;"> <p style="display:inline; font-size:12px; margin-right:22px;"> <span>経過: {distance()}</span> <span>, 開始: </span> <span>{start()}</span> </p> <button class="button is-small">Stop & Close</button> </div>', 'home_page_root-working-action { display: block; position: fixed; bottom: 33px; right: 33px; background: #fff; padding: 11px 22px; border-radius: 8px; }', 'class="{opts.data ? \'\' : \'hide\'}"', function(opts) {
+     this.name = () => {
+         return opts.data ? opts.data.name : '';
+     };
+     this.distance = () => {
+         let start = opts.data.purge.start;
+         let sec_tmp   = moment().diff(start, 'second');
+
+         let sec = sec_tmp % 60;
+         sec_tmp -= sec;
+         let min_tmp = sec_tmp / 60;
+         let min = min_tmp % 60;
+         min_tmp -= min;
+         let hour = min_tmp / 60;
+
+         let fmt = (v) => {
+             return v<10 ? '0'+v : v;
+         }
+
+         return fmt(hour) + ':' + fmt(min) + ':' + fmt(sec);
+     }
+     this.start = () => {
+         if (!opts.data || !opts.data.purge)
+             return '????-??-?? ??:??:??';
+
+         let start = opts.data.purge.start;
+
+         return moment(start).format('YYYY-MM-DD HH:mm:ss');
+     };
 });
 
-riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts data="{STORE.get(\'maledicts\')}" select="{maledict}" callback="{callback}" dragging="{dragging}"></home_page_root-maledicts> <home_page_root-angels></home_page_root-angels> <home_page_root-other-services></home_page_root-other-services> </div> <div class="contetns-area"> <div style="display:flex;"> <home_page_squeeze-area callback="{callback}"></home_page_squeeze-area> <home_page_root-close-impure-area style="margin-left:88px;margin-top:-5px;"></home_page_root-close-impure-area> </div> <home_page_root-impures maledict="{maledict}" callback="{callback}" filter="{squeeze_word}"></home_page_root-impures> </div> <home_page_root-working-action></home_page_root-working-action> <home_page_root-modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_page_root-modal-create-impure>', 'home_page_root { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page_root > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; }', '', function(opts) {
+riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts data="{STORE.get(\'maledicts\')}" select="{maledict}" callback="{callback}" dragging="{dragging}"></home_page_root-maledicts> <home_page_root-angels></home_page_root-angels> <home_page_root-other-services></home_page_root-other-services> </div> <div class="contetns-area"> <div style="display:flex;"> <home_page_squeeze-area callback="{callback}"></home_page_squeeze-area> <home_page_root-close-impure-area style="margin-left:88px;margin-top:-5px;"></home_page_root-close-impure-area> </div> <home_page_root-impures maledict="{maledict}" callback="{callback}" filter="{squeeze_word}"></home_page_root-impures> </div> <home_page_root-working-action data="{impure()}"></home_page_root-working-action> <home_page_root-modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_page_root-modal-create-impure>', 'home_page_root { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page_root > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; }', '', function(opts) {
      this.modal_open = false;
      this.modal_maledict = null;
      this.maledict = null;
      this.squeeze_word = null;
+
+     this.impure = () => {
+         return STORE.get('purging.impure');
+     }
 
      this.callback = (action, data) => {
          if ('select-bucket'==action) {
@@ -502,14 +534,20 @@ riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts
              this.tags['home_page_root-impures'].update();
          }
      };
+
      STORE.subscribe((action) => {
-         if (action.type=='FETCHED-MALEDICTS') {
+         if (action.type=='FETCHED-MALEDICTS')
              this.update();
-         }
-         if (action.type=='CREATED-MALEDICT-IMPURES') {
+
+         if (action.type=='CREATED-MALEDICT-IMPURES')
              this.closeModal();
+
+         if (action.type=='FETCHED-IMPURE-PURGING') {
+             dump(this.tags['home_page_root-impures']);
+             this.tags['home_page_root-working-action'].update();
          }
      });
+
      this.on('mount', () => {
          ACTIONS.fetchMaledicts();
          ACTIONS.fetchAngels();

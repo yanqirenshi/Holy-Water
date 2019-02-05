@@ -152,6 +152,24 @@ class Actions extends Vanilla_Redux_Actions {
             data: { impures: this.mergeData([impure], STORE.get('impures')) },
         };
     }
+    fetchImpurePurging () {
+        let path = '/impures/purging';
+
+        API.get(path, function (json, success) {
+            if (success)
+                STORE.dispatch(this.fetchedImpurePurging(json));
+        }.bind(this));
+    }
+    fetchedImpurePurging (response) {
+        let state = STORE.get('purging');
+
+        state.impure = response;
+
+        return {
+            type: 'FETCHED-IMPURE-PURGING',
+            data: { purging: state },
+        };
+    }
     /////
     ///// Action
     /////
