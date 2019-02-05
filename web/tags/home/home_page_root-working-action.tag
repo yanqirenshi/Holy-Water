@@ -1,6 +1,8 @@
 <home_page_root-working-action class={hide()}>
 
-    <button class="button is-small" style="margin-right:11px;">Stop</button>
+    <button class="button is-small"
+            style="margin-right:11px;"
+            onclick={clickStop}>Stop</button>
     <span>{name()}</span>
 
     <div style="margin-top: 8px;">
@@ -14,6 +16,17 @@
     </div>
 
     <script>
+     /// Events
+     this.clickStop = () => {
+         let impure = this.opts.data;
+         if (impure)
+             ACTIONS.stopImpure(impure);
+     }
+     // 
+    </script>
+
+    <script>
+     /// Views
      this.hide = () => {
          return opts.data ? '' : 'hide';
      }
