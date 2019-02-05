@@ -8,12 +8,18 @@
         </div>
         <div class="message-body" style="padding: 11px 22px;">
             <div class="contents" style="overflow: auto;">
-                <p>{opts.data.contents}</p>
+                <p each={txt in contents()}>{txt}</p>
             </div>
         </div>
     </article>
 
     <script>
+     this.contents = () => {
+         if (!opts.data || !opts.data.contents)
+             return [];
+
+         return opts.data.contents.split('\n');
+     };
      this.clickCloseButton = () => {
          this.opts.callback('close-message', this.opts.data);
      };

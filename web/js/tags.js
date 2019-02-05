@@ -186,7 +186,13 @@ riot.tag2('message-area', '<message-item each="{msg in messages()}" data="{msg}"
      };
 });
 
-riot.tag2('message-item', '<article class="message is-{opts.data.type}"> <div class="message-header"> <p>{opts.data.title}</p> <button class="delete" aria-label="delete" onclick="{clickCloseButton}"></button> </div> <div class="message-body" style="padding: 11px 22px;"> <div class="contents" style="overflow: auto;"> <p>{opts.data.contents}</p> </div> </div> </article>', 'message-item > .message{ min-height: calc(46px + 44px); min-width: 111px; max-height: 222px; max-width: 333px; } message-item { display: block; }', '', function(opts) {
+riot.tag2('message-item', '<article class="message is-{opts.data.type}"> <div class="message-header"> <p>{opts.data.title}</p> <button class="delete" aria-label="delete" onclick="{clickCloseButton}"></button> </div> <div class="message-body" style="padding: 11px 22px;"> <div class="contents" style="overflow: auto;"> <p each="{txt in contents()}">{txt}</p> </div> </div> </article>', 'message-item > .message{ min-height: calc(46px + 44px); min-width: 111px; max-height: 222px; max-width: 333px; } message-item { display: block; }', '', function(opts) {
+     this.contents = () => {
+         if (!opts.data || !opts.data.contents)
+             return [];
+
+         return opts.data.contents.split('\n');
+     };
      this.clickCloseButton = () => {
          this.opts.callback('close-message', this.opts.data);
      };
@@ -555,10 +561,8 @@ riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts
          if (action.type=='CREATED-MALEDICT-IMPURES')
              this.closeModal();
 
-         if (action.type=='FETCHED-IMPURE-PURGING') {
-             dump(this.tags['home_page_root-impures']);
+         if (action.type=='FETCHED-IMPURE-PURGING')
              this.tags['home_page_root-working-action'].update();
-         }
      });
 
      this.on('mount', () => {

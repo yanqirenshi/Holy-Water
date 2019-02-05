@@ -74,10 +74,8 @@
          if (action.type=='CREATED-MALEDICT-IMPURES')
              this.closeModal();
 
-         if (action.type=='FETCHED-IMPURE-PURGING') {
-             dump(this.tags['home_page_root-impures']);
+         if (action.type=='FETCHED-IMPURE-PURGING')
              this.tags['home_page_root-working-action'].update();
-         }
      });
 
      this.on('mount', () => {

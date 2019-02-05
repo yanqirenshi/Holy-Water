@@ -184,6 +184,12 @@ class Actions extends Vanilla_Redux_Actions {
         }.bind(this));
     }
     startedImpure (response) {
+        let impure = response.impure_started;
+        this.pushSuccessMessage('' +
+                                'Impure の Purge を開始しました。\n'+
+                                '■ Impure\n' +
+                                ' ' + impure.name);
+
         let impure_started = response.impure_started;
         let impure_stopped = response.impure_stopped;
 
@@ -209,6 +215,10 @@ class Actions extends Vanilla_Redux_Actions {
         }.bind(this));
     }
     stopedImpure (impure) {
+        this.pushSuccessMessage('' +
+                                'Impure の Purge を停止しました。\n'+
+                                '■ Impure\n' +
+                                ' ' + impure.name);
         return {
             type: 'STOPED-ACTION',
             data: { impures: this.mergeData([impure], STORE.get('impures')) },
