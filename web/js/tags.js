@@ -295,6 +295,9 @@ riot.tag2('home_page_root-angels', '<nav class="panel"> <p class="panel-heading"
      });
 });
 
+riot.tag2('home_page_root-close-impure-area', '<div> <p>Close Impure. Drag & Drop here</p> </div>', 'home_page_root-close-impure-area > div{ background: #fefefe; padding: 5px; border-radius: 5px; } home_page_root-close-impure-area > div > p{ border: 1px dashed #f0f0f0; border-radius: 5px; padding: 5px 11px; background: #fcfcfc; }', '', function(opts) {
+});
+
 riot.tag2('home_page_root-impures', '<div class="flex-parent" style="height:100%; margin-top: -8px;"> <div class="card-container"> <div style="overflow: hidden; padding-bottom: 222px; padding-top: 8px;"> <impure-card each="{impure in impures()}" data="{impure}"></impure-card> </div> </div> </div>', 'home_page_root-impures .flex-parent { display: flex; flex-direction: column; } home_page_root-impures .card-container { padding-right: 22px; display: block; overflow: auto; overflow-x: hidden; flex-grow: 1; }', '', function(opts) {
      this.impures = () => {
          let out = STORE.get('impures').list.sort((a, b) => {
@@ -442,10 +445,32 @@ riot.tag2('home_page_root-modal-create-impure', '<div class="modal {opts.open ? 
      };
 });
 
+riot.tag2('home_page_root-other-services', '<nav class="panel"> <p class="panel-heading">Services</p> <a each="{data()}" class="panel-block" angel-id="{id}"> <span style="width: 205px;" maledict-id="{id}"> {name} </span> <span class="operators"> </span> </a> </nav>', 'home_page_root-other-services > .panel { width: 255px; margin-top: 22px; box-shadow: 0px 0px 8px #ffffff; } home_page_root-other-services > .panel > a { background: #ffffff; } home_page_root-other-services .move-door.close .opened-door{ display: none; } home_page_root-other-services .move-door.open .closed-door{ display: none; }', '', function(opts) {
+     this.dragging = false;
+
+     this.data = () => {
+         return [
+             { name: 'Gitlab' },
+             { name: 'Redmine' },
+             { name: 'Backlog' },
+             { name: 'Jira' },
+         ];
+     };
+
+     this.active_maledict = null;
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-ANGELS')
+             this.update();
+     });
+});
+
 riot.tag2('home_page_root-tabs', '<div class="tabs is-boxed"> <ul> <li class="is-active" style="margin-left:22px;"> <a> <span class="icon is-small"><i class="fas fa-image" aria-hidden="true"></i></span> <span>Tasks</span> </a> </li> </ul> </div>', '', '', function(opts) {
 });
 
-riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts data="{STORE.get(\'maledicts\')}" select="{maledict}" callback="{callback}" dragging="{dragging}"></home_page_root-maledicts> <home_page_root-angels></home_page_root-angels> </div> <div class="contetns-area"> <home_page_squeeze-area callback="{callback}"></home_page_squeeze-area> <home_page_root-impures maledict="{maledict}" callback="{callback}" filter="{squeeze_word}"></home_page_root-impures> </div> <home_page_root-modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_page_root-modal-create-impure>', 'home_page_root { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page_root > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; }', '', function(opts) {
+riot.tag2('home_page_root-working-action', '<button class="button is-small" style="margin-right:11px;">Stop</button> <span>XX：ABCDEFGHIJKLMNOPQRSTUVWXYZ012345678!@#$%^&*()+|~</span> <div style="margin-top: 8px;"> <p style="display:inline; font-size:12px; margin-right:22px;"> <span>経過: HH:HH:SS</span> <span>, </span> <span>MM-DD HH:HH:SS</span> <span>〜</span> <span>MM-DD HH:HH:SS</span> </p> <button class="button is-small">Stop & Close</button> </div>', 'home_page_root-working-action { display: block; position: fixed; bottom: 33px; right: 33px; background: #fff; padding: 11px 22px; border-radius: 8px; }', '', function(opts) {
+});
+
+riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts data="{STORE.get(\'maledicts\')}" select="{maledict}" callback="{callback}" dragging="{dragging}"></home_page_root-maledicts> <home_page_root-angels></home_page_root-angels> <home_page_root-other-services></home_page_root-other-services> </div> <div class="contetns-area"> <div style="display:flex;"> <home_page_squeeze-area callback="{callback}"></home_page_squeeze-area> <home_page_root-close-impure-area style="margin-left:88px;margin-top:-5px;"></home_page_root-close-impure-area> </div> <home_page_root-impures maledict="{maledict}" callback="{callback}" filter="{squeeze_word}"></home_page_root-impures> </div> <home_page_root-working-action></home_page_root-working-action> <home_page_root-modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_page_root-modal-create-impure>', 'home_page_root { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page_root > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; }', '', function(opts) {
      this.modal_open = false;
      this.modal_maledict = null;
      this.maledict = null;
@@ -502,7 +527,7 @@ riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts
      };
 });
 
-riot.tag2('home_page_squeeze-area', '<div style="width:33%; margin-bottom:22px; margin-left:22px;"> <div class="control has-icons-left has-icons-right"> <input class="input is-rounded" type="text" placeholder="Squeeze Impure※ まだ表示のみで機能しません。" onkeyup="{onKeyUp}" ref="word"> <span class="icon is-left"> <i class="fas fa-search" aria-hidden="true"></i> </span> </div> </div> <button class="button" onclick="{clickClearButton}"> <i class="fas fa-times-circle"></i> </button>', 'home_page_squeeze-area { display: flex; } home_page_squeeze-area .button{ padding: 0px; margin-left: 8px; background: none; border: none; color: #ffff; } home_page_squeeze-area .button:hover{ color: #880000; } home_page_squeeze-area .button i{ font-size: 33px; }', '', function(opts) {
+riot.tag2('home_page_squeeze-area', '<div style="width:444px; margin-bottom:22px; margin-left:22px;"> <div class="control has-icons-left has-icons-right"> <input class="input is-rounded" type="text" placeholder="Squeeze Impure※ まだ表示のみで機能しません。" onkeyup="{onKeyUp}" ref="word"> <span class="icon is-left"> <i class="fas fa-search" aria-hidden="true"></i> </span> </div> </div> <button class="button" onclick="{clickClearButton}"> <i class="fas fa-times-circle"></i> </button>', 'home_page_squeeze-area { display: flex; } home_page_squeeze-area .button{ padding: 0px; margin-left: 8px; background: none; border: none; color: #ffff; } home_page_squeeze-area .button:hover{ color: #880000; } home_page_squeeze-area .button i{ font-size: 33px; }', '', function(opts) {
      this.clickClearButton = (e) => {
          this.refs.word.value = '';
          this.opts.callback('squeeze-impure', '');

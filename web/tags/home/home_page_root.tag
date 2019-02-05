@@ -5,15 +5,22 @@
                                   callback={callback}
                                   dragging={dragging}></home_page_root-maledicts>
         <home_page_root-angels></home_page_root-angels>
+
+        <home_page_root-other-services></home_page_root-other-services>
     </div>
 
     <div class="contetns-area">
-        <home_page_squeeze-area callback={callback}></home_page_squeeze-area>
+        <div style="display:flex;">
+            <home_page_squeeze-area callback={callback}></home_page_squeeze-area>
+            <home_page_root-close-impure-area style="margin-left:88px;margin-top:-5px;"></home_page_root-close-impure-area>
+        </div>
 
         <home_page_root-impures maledict={maledict}
                                 callback={callback}
                                 filter={squeeze_word}></home_page_root-impures>
     </div>
+
+    <home_page_root-working-action></home_page_root-working-action>
 
     <home_page_root-modal-create-impure open={modal_open}
                                         callback={callback}

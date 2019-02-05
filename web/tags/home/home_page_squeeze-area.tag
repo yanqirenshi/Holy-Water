@@ -1,5 +1,5 @@
 <home_page_squeeze-area>
-    <div style="width:33%; margin-bottom:22px; margin-left:22px;">
+    <div style="width:444px; margin-bottom:22px; margin-left:22px;">
         <div class="control has-icons-left has-icons-right">
             <input class="input is-rounded"
                    type="text"
