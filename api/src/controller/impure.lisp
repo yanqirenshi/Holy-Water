@@ -39,7 +39,7 @@
 
 (defun get-impure-purging (angel)
   (let ((impure (hw::get-impure-purging angel)))
-    (dao2impure impure :angel angel)))
+    (or (dao2impure impure :angel angel) :null)))
 
 (defun create-impure-2-maledict (maledict &key (name "????????") (description "") editor)
   (hw:add-impure maledict

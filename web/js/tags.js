@@ -467,11 +467,17 @@ riot.tag2('home_page_root-other-services', '<nav class="panel"> <p class="panel-
 riot.tag2('home_page_root-tabs', '<div class="tabs is-boxed"> <ul> <li class="is-active" style="margin-left:22px;"> <a> <span class="icon is-small"><i class="fas fa-image" aria-hidden="true"></i></span> <span>Tasks</span> </a> </li> </ul> </div>', '', '', function(opts) {
 });
 
-riot.tag2('home_page_root-working-action', '<button class="button is-small" style="margin-right:11px;">Stop</button> <span>{opts.data.name}</span> <div style="margin-top: 8px;"> <p style="display:inline; font-size:12px; margin-right:22px;"> <span>経過: {distance()}</span> <span>, 開始: </span> <span>{start()}</span> </p> <button class="button is-small">Stop & Close</button> </div>', 'home_page_root-working-action { display: block; position: fixed; bottom: 33px; right: 33px; background: #fff; padding: 11px 22px; border-radius: 8px; }', 'class="{opts.data ? \'\' : \'hide\'}"', function(opts) {
+riot.tag2('home_page_root-working-action', '<button class="button is-small" style="margin-right:11px;">Stop</button> <span>{name()}</span> <div style="margin-top: 8px;"> <p style="display:inline; font-size:12px; margin-right:22px;"> <span>経過: {distance()}</span> <span>, 開始: </span> <span>{start()}</span> </p> <button class="button is-small">Stop & Close</button> </div>', 'home_page_root-working-action { display: block; position: fixed; bottom: 33px; right: 33px; background: #fff; padding: 11px 22px; border-radius: 8px; }', 'class="{hide()}"', function(opts) {
+     this.hide = () => {
+         return opts.data ? '' : 'hide';
+     }
      this.name = () => {
          return opts.data ? opts.data.name : '';
      };
      this.distance = () => {
+         if (!opts.data || !opts.data.purge || !opts.data.purge.start)
+             return '??:??:??'
+
          let start = opts.data.purge.start;
          let sec_tmp   = moment().diff(start, 'second');
 
@@ -489,7 +495,7 @@ riot.tag2('home_page_root-working-action', '<button class="button is-small" styl
          return fmt(hour) + ':' + fmt(min) + ':' + fmt(sec);
      }
      this.start = () => {
-         if (!opts.data || !opts.data.purge)
+         if (!opts.data || !opts.data.purge || !opts.data.purge.start)
              return '????-??-?? ??:??:??';
 
          let start = opts.data.purge.start;

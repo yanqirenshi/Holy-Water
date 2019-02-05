@@ -1,7 +1,7 @@
-<home_page_root-working-action class={opts.data ? '' : 'hide'}>
+<home_page_root-working-action class={hide()}>
 
     <button class="button is-small" style="margin-right:11px;">Stop</button>
-    <span>{opts.data.name}</span>
+    <span>{name()}</span>
 
     <div style="margin-top: 8px;">
         <p style="display:inline; font-size:12px; margin-right:22px;">
@@ -14,10 +14,16 @@
     </div>
 
     <script>
+     this.hide = () => {
+         return opts.data ? '' : 'hide';
+     }
      this.name = () => {
          return opts.data ? opts.data.name : '';
      };
      this.distance = () => {
+         if (!opts.data || !opts.data.purge || !opts.data.purge.start)
+             return '??:??:??'
+
          let start = opts.data.purge.start;
          let sec_tmp   = moment().diff(start, 'second');
 
@@ -35,7 +41,7 @@
          return fmt(hour) + ':' + fmt(min) + ':' + fmt(sec);
      }
      this.start = () => {
-         if (!opts.data || !opts.data.purge)
+         if (!opts.data || !opts.data.purge || !opts.data.purge.start)
              return '????-??-?? ??:??:??';
 
          let start = opts.data.purge.start;
