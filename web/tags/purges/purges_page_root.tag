@@ -1,16 +1,29 @@
 <purges_page_root>
-    <div style="padding:22px;">
-        <div class="card">
-            <header class="card-header">
-                <p class="card-header-title">Purge hisotry</p>
-            </header>
+    <div style="padding: 33px 88px 88px 88px;">
+        <div>
+            <h1 class="title">期間</h1>
+            <purges_page_filter style="margin-bottom:22px; padding-left:33px; padding-right:33px;"
+                                from={from}
+                                to={to}
+                                callback={callback}></purges_page_filter>
 
-            <div class="card-content">
-                <purges_page_filter style="margin-bottom:22px;"
-                                    from={from}
-                                    to={to}
-                                    callback={callback}></purges_page_filter>
+        </div>
 
+        <div>
+            <h1 class="title">Summary</h1>
+            <div style="display:flex; padding-left:33px; padding-right:33px;">
+                <div style="height:222px; margin-right: 88px;">
+                    <purges_page_group-span data={data()}></purges_page_group-span>
+                </div>
+                <div style="height:222px;">
+                    <purges_page_group-span-deamon data={data()}></purges_page_group-span-deamon>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:33px;">
+            <h1 class="title">Purge hisotry</h1>
+            <div style="display:flex; padding-left:33px; padding-right:33px;">
                 <purges-list data={data()} callback={callback}></purges-list>
             </div>
         </div>
@@ -19,7 +32,7 @@
     <purge-result-editor data={edit_target} callback={callback}></purge-result-editor>
 
     <script>
-     this.from = moment().add(-1, 'd').startOf('day');
+     this.from = moment().startOf('day');
      this.to   = moment().add(1, 'd').startOf('day');
      this.moveDate = (unit, amount) => {
          this.from = this.from.add(amount, unit);
@@ -45,20 +58,14 @@
              return;
          }
 
-         if ('save-purge-result-editor'==action) {
+         if ('save-purge-result-editor'==action)
              ACTIONS.saveActionResult(data);
-             return;
-         }
 
-         if ('move-date'==action) {
+         if ('move-date'==action)
              this.moveDate(data.unit, data.amount);
-             return;
-         }
 
-         if ('refresh'==action) {
+         if ('refresh'==action)
              this.refreshData();
-             return;
-         }
      };
     </script>
 

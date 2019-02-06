@@ -1,19 +1,17 @@
 <purges_page_filter>
-    <Span style="font-size:24px;">期間：</Span>
-
     <input class="input"
            type="text"
            placeholder="From"
            value={date2str(opts.from)} readonly>
 
-    <span style="font-size:24px;"> 〜 </span>
+    <span style="font-size:24px; margin-left:11px; margin-right:11px;"> 〜 </span>
 
     <input class="input"
            type="text"
            placeholder="To"
            value={date2str(opts.to)} readonly>
 
-    <div class="operators">
+    <div class="operators" style="margin-top:-1px;">
         <move-date-operator label="日" unit="d" callback={callback}></move-date-operator>
         <move-date-operator label="週" unit="w" callback={callback}></move-date-operator>
         <move-date-operator label="月" unit="M" callback={callback}></move-date-operator>

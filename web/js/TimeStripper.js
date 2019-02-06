@@ -3,16 +3,10 @@ class TimeStripper  {
     format (dt) {
         return dt ? moment(dt).format("YYYY-MM-DD HH:mm:ss") : '---';
     }
-    format_elapsedTime (start, end) {
-        if (!start || !end) return '';
-
+    format_sec (elapse) {
         let int2dstr = (i) => {
             return (i<10) ? '0' + i : i + '';
         };
-
-        let elapse = moment(end).diff(moment(start)) / 1000;
-
-        if (elapse<0) elapse = elapse * -1;
 
         let sec = elapse % 60;
 
@@ -30,6 +24,19 @@ class TimeStripper  {
         let day_str = (day>0) ? day + ' 日 ' : '';
 
         return day_str + time_str;
+    }
+    format_elapsedTime (start, end) {
+        if (!start || !end) return '';
+
+        let int2dstr = (i) => {
+            return (i<10) ? '0' + i : i + '';
+        };
+
+        let elapse = moment(end).diff(moment(start)) / 1000;
+
+        if (elapse<0) elapse = elapse * -1;
+
+        return this.format_sec(elapse);
     };
     str2date (str) {
         let val = str;

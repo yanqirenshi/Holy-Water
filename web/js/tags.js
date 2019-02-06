@@ -883,7 +883,7 @@ riot.tag2('purges', '', '', '', function(opts) {
      this.on('update', () => { this.draw(); });
 });
 
-riot.tag2('purges_page_filter', '<span style="font-size:24px;">期間：</Span> <input class="input" type="text" placeholder="From" riot-value="{date2str(opts.from)}" readonly> <span style="font-size:24px;"> 〜 </span> <input class="input" type="text" placeholder="To" riot-value="{date2str(opts.to)}" readonly> <div class="operators"> <move-date-operator label="日" unit="d" callback="{callback}"></move-date-operator> <move-date-operator label="週" unit="w" callback="{callback}"></move-date-operator> <move-date-operator label="月" unit="M" callback="{callback}"></move-date-operator> <button class="button refresh" style="margin-top:1px; margin-left:11px;" onclick="{clickRefresh}">Refresh</button> </div>', 'purges_page_filter, purges_page_filter .operators { display: flex; } purges_page_filter .input { width: 111px; border: none; }', '', function(opts) {
+riot.tag2('purges_page_filter', '<input class="input" type="text" placeholder="From" riot-value="{date2str(opts.from)}" readonly> <span style="font-size:24px; margin-left:11px; margin-right:11px;"> 〜 </span> <input class="input" type="text" placeholder="To" riot-value="{date2str(opts.to)}" readonly> <div class="operators" style="margin-top:-1px;"> <move-date-operator label="日" unit="d" callback="{callback}"></move-date-operator> <move-date-operator label="週" unit="w" callback="{callback}"></move-date-operator> <move-date-operator label="月" unit="M" callback="{callback}"></move-date-operator> <button class="button refresh" style="margin-top:1px; margin-left:11px;" onclick="{clickRefresh}">Refresh</button> </div>', 'purges_page_filter, purges_page_filter .operators { display: flex; } purges_page_filter .input { width: 111px; border: none; }', '', function(opts) {
      this.date2str = (date) => {
          if (!date) return '';
          return date.format('YYYY-MM-DD');
@@ -901,8 +901,25 @@ riot.tag2('purges_page_filter', '<span style="font-size:24px;">期間：</Span> 
      };
 });
 
-riot.tag2('purges_page_root', '<div style="padding:22px;"> <div class="card"> <header class="card-header"> <p class="card-header-title">Purge hisotry</p> </header> <div class="card-content"> <purges_page_filter style="margin-bottom:22px;" from="{from}" to="{to}" callback="{callback}"></purges_page_filter> <purges-list data="{data()}" callback="{callback}"></purges-list> </div> </div> </div> <purge-result-editor data="{edit_target}" callback="{callback}"></purge-result-editor>', 'purges_page_root { height: 100%; width: 100%; display: block; overflow: auto; } purges_page_root .card { border-radius: 8px; } purges_page_root button.refresh{ margin-top:6px; margin-right:8px; }', '', function(opts) {
-     this.from = moment().add(-1, 'd').startOf('day');
+riot.tag2('purges_page_group-span-deamon', '<p>区分毎の作業時間</p> <table class="table" style="margin-top: 33px;"> <thead> <tr> <th>Naem</th> <th>Time</th> <th>Count</th> </tr> </thead> <tbody> <tr each="{deamon in data()}"> <td>{deamon.name}</td> <td>{ts.format_sec(deamon.time)}</td> <td>{deamon.list.length}</td> </tr> </tbody> </table>', 'purges_page_group-span-deamon > p { width: 100%; color: #fff; font-weight: bold; text-shadow: 0px 0px 22px #333333; text-align: center; font-size: 22px; }', '', function(opts) {
+     this.hw = new HolyWater();
+     this.ts = new TimeStripper();
+
+     this.data = () => {
+         return this.hw.summaryPurgesAtDeamons(this.opts.data.list);
+     };
+});
+
+riot.tag2('purges_page_group-span', '<p style="width:100%; color:#fff; font-weight:bold;text-shadow: 0px 0px 22px #333333;text-align: center;font-size: 22px;"> 合計作業時間 </p> <p style="font-size: 111px;color: #fff;text-shadow: 0px 0px 22px #333333;"> {sumHours()} </p>', '', '', function(opts) {
+     this.sumHours = () => {
+         let time_sec = new HolyWater().summaryPurges(this.opts.data.list);
+
+         return new TimeStripper().format_sec(time_sec)
+     };
+});
+
+riot.tag2('purges_page_root', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 class="title">期間</h1> <purges_page_filter style="margin-bottom:22px; padding-left:33px; padding-right:33px;" from="{from}" to="{to}" callback="{callback}"></purges_page_filter> </div> <div> <h1 class="title">Summary</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <div style="height:222px; margin-right: 88px;"> <purges_page_group-span data="{data()}"></purges_page_group-span> </div> <div style="height:222px;"> <purges_page_group-span-deamon data="{data()}"></purges_page_group-span-deamon> </div> </div> </div> <div style="margin-top:33px;"> <h1 class="title">Purge hisotry</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <purges-list data="{data()}" callback="{callback}"></purges-list> </div> </div> </div> <purge-result-editor data="{edit_target}" callback="{callback}"></purge-result-editor>', 'purges_page_root { height: 100%; width: 100%; display: block; overflow: auto; } purges_page_root .card { border-radius: 8px; } purges_page_root button.refresh{ margin-top:6px; margin-right:8px; }', '', function(opts) {
+     this.from = moment().startOf('day');
      this.to   = moment().add(1, 'd').startOf('day');
      this.moveDate = (unit, amount) => {
          this.from = this.from.add(amount, unit);
@@ -926,20 +943,14 @@ riot.tag2('purges_page_root', '<div style="padding:22px;"> <div class="card"> <h
              return;
          }
 
-         if ('save-purge-result-editor'==action) {
+         if ('save-purge-result-editor'==action)
              ACTIONS.saveActionResult(data);
-             return;
-         }
 
-         if ('move-date'==action) {
+         if ('move-date'==action)
              this.moveDate(data.unit, data.amount);
-             return;
-         }
 
-         if ('refresh'==action) {
+         if ('refresh'==action)
              this.refreshData();
-             return;
-         }
      };
 
      this.refreshData = () => {
