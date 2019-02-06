@@ -109,6 +109,8 @@ class Actions extends Vanilla_Redux_Actions {
         }.bind(this));
     }
     createdMaledictImpures (response, maledict) {
+        this.pushSuccessMessage('Impure の作成が完了しました');
+
         return {
             type: 'CREATED-MALEDICT-IMPURES',
             data: {},
