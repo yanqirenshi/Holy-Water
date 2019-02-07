@@ -1,5 +1,5 @@
 <impure-card-large>
-    <div class="card">
+    <div class="card hw-box-shadow">
         <header class="card-header">
             <p class="card-header-title">
                 やること
@@ -90,7 +90,6 @@
          margin-top: 1px;
          margin-bottom: 22px;
 
-         box-shadow: 0px 0px 8px #ffffff;
          border: 1px solid #dddddd;
          border-radius: 5px;
      }

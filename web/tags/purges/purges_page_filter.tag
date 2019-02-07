@@ -1,12 +1,12 @@
 <purges_page_filter>
-    <input class="input"
+    <input class="input hw-box-shadow"
            type="text"
            placeholder="From"
            value={date2str(opts.from)} readonly>
 
     <span style="font-size:24px; margin-left:11px; margin-right:11px;"> 〜 </span>
 
-    <input class="input"
+    <input class="input hw-box-shadow"
            type="text"
            placeholder="To"
            value={date2str(opts.to)} readonly>
@@ -16,7 +16,7 @@
         <move-date-operator label="週" unit="w" callback={callback}></move-date-operator>
         <move-date-operator label="月" unit="M" callback={callback}></move-date-operator>
 
-        <button class="button refresh"
+        <button class="button refresh hw-box-shadow"
                 style="margin-top:1px; margin-left:11px;"
                 onclick={clickRefresh}>Refresh</button>
     </div>

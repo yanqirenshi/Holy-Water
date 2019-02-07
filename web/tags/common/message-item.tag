@@ -1,5 +1,5 @@
 <message-item>
-    <article class="message is-{opts.data.type}">
+    <article class="message hw-box-shadow is-{opts.data.type}">
         <div class="message-header">
             <p>{opts.data.title}</p>
             <button class="delete"

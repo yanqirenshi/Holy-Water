@@ -1,9 +1,9 @@
 <purges_page_group-span>
-    <p style="width:100%; color:#fff; font-weight:bold;text-shadow: 0px 0px 22px #333333;text-align: center;font-size: 22px;">
+    <p class="hw-text-white" style="width:100%; font-weight:bold; text-align: center;font-size: 22px;">
         合計作業時間
     </p>
 
-    <p style="font-size: 111px;color: #fff;text-shadow: 0px 0px 22px #333333;">
+    <p class="hw-text-white" style="font-size: 111px;">
         {sumHours()}
     </p>
 

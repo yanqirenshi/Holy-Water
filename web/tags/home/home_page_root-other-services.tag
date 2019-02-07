@@ -1,5 +1,5 @@
 <home_page_root-other-services>
-    <nav class="panel">
+    <nav class="panel hw-box-shadow">
         <p class="panel-heading">Services</p>
 
         <a each={data()}
@@ -42,7 +42,7 @@
      home_page_root-other-services > .panel {
          width: 255px;
          margin-top: 22px;
-         box-shadow: 0px 0px 8px #ffffff;
+         border-radius: 4px 4px 0 0;
      }
      home_page_root-other-services > .panel > a {
          background: #ffffff;

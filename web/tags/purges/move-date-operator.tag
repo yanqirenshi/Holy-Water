@@ -1,5 +1,5 @@
 <move-date-operator>
-    <div class="operator">
+    <div class="operator hw-box-shadow">
         <div class="befor">
             <button class="button" onclick={clickBefor}><</button>
         </div>
@@ -32,6 +32,7 @@
      move-date-operator .operator {
          display: flex;
          margin-left:11px;
+         border-radius: 8px;
      }
      move-date-operator .operator span {
          font-size:18px;

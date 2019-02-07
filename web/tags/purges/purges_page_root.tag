@@ -1,7 +1,7 @@
 <purges_page_root>
     <div style="padding: 33px 88px 88px 88px;">
         <div>
-            <h1 class="title">期間</h1>
+            <h1 class="title hw-text-white">期間</h1>
             <purges_page_filter style="margin-bottom:22px; padding-left:33px; padding-right:33px;"
                                 from={from}
                                 to={to}
@@ -10,19 +10,26 @@
         </div>
 
         <div>
-            <h1 class="title">Summary</h1>
+            <h1 class="title hw-text-white">Summary</h1>
             <div style="display:flex; padding-left:33px; padding-right:33px;">
-                <div style="height:222px; margin-right: 88px;">
+                <div style="margin-right: 88px;">
                     <purges_page_group-span data={data()}></purges_page_group-span>
                 </div>
-                <div style="height:222px;">
+                <div>
                     <purges_page_group-span-deamon data={data()}></purges_page_group-span-deamon>
                 </div>
             </div>
         </div>
 
         <div style="margin-top:33px;">
-            <h1 class="title">Purge hisotry</h1>
+            <h1 class="title hw-text-white">Guntt Chart</h1>
+            <div style="padding-left:33px; padding-right:33px;">
+                <purges_page_guntt-chart></purges_page_guntt-chart>
+            </div>
+        </div>
+
+        <div style="margin-top:33px;">
+            <h1 class="title hw-text-white">Purge hisotry</h1>
             <div style="display:flex; padding-left:33px; padding-right:33px;">
                 <purges-list data={data()} callback={callback}></purges-list>
             </div>

@@ -1,5 +1,5 @@
 <purges-list>
-    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth hw-box-shadow">
         <thead>
             <tr>
                 <th rowspan="2">Impure</th>

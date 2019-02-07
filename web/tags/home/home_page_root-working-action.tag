@@ -1,4 +1,4 @@
-<home_page_root-working-action class={hide()}>
+<home_page_root-working-action class="hw-box-shadow {hide()}">
 
     <button class="button is-small"
             style="margin-right:11px;"

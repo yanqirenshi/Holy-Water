@@ -1,7 +1,7 @@
 <purges_page_group-span-deamon>
     <p>区分毎の作業時間</p>
 
-    <table class="table" style="margin-top: 33px;">
+    <table class="table hw-box-shadow" style="margin-top: 33px;">
         <thead>
             <tr>
                 <th>Naem</th>

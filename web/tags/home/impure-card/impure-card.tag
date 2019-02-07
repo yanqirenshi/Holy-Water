@@ -66,7 +66,6 @@
      }
      impure-card[status=start] div.card {
          background: #eaedf7;
-         box-shadow: 0px 0px 11px #ec6d71;
      }
     </style>
 </impure-card>

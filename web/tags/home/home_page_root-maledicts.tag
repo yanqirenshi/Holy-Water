@@ -1,5 +1,5 @@
 <home_page_root-maledicts>
-    <nav class="panel">
+    <nav class="panel hw-box-shadow">
         <p class="panel-heading">Maledicts</p>
 
         <a each={data()}
@@ -104,7 +104,7 @@
     <style>
      home_page_root-maledicts > .panel {
          width: 255px;
-         box-shadow: 0px 0px 8px #ffffff;
+         border-radius: 4px 4px 0 0;
      }
 
      home_page_root-maledicts .panel-block {
