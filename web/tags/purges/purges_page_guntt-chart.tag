@@ -1,7 +1,20 @@
 <purges_page_guntt-chart>
     <div>
-        <svg></svg>
+        <svg class="chart-yabane"></svg>
     </div>
+
+    <script>
+     let now   = moment().millisecond(0).second(0).minute(0).hour(0);
+     let start = moment(now).add(-2, 'w');
+     let end   = moment(now).add( 6, 'M');
+     let selector = 'svg.chart-yabane';
+
+     let d3yabane = new D3jsYabane()
+         .config(selector, start, end)
+         .makeStage()
+     /* .data(yabane_data) // with sizing and positioning
+      * .draw(); */
+    </script>
 
     <style>
      purges_page_guntt-chart {
