@@ -304,7 +304,7 @@ riot.tag2('home_page_root-angels', '<nav class="panel hw-box-shadow"> <p class="
 riot.tag2('home_page_root-close-impure-area', '<div> <p>Close Impure. Drag & Drop here</p> </div>', 'home_page_root-close-impure-area > div{ background: #fefefe; padding: 5px; border-radius: 5px; } home_page_root-close-impure-area > div > p{ border: 1px dashed #f0f0f0; border-radius: 5px; padding: 5px 11px; background: #fcfcfc; }', '', function(opts) {
 });
 
-riot.tag2('home_page_root-impures', '<div class="flex-parent" style="height:100%; margin-top: -8px;"> <div class="card-container"> <div style="overflow: hidden; padding-bottom: 222px; padding-top: 22px;"> <impure-card each="{impure in impures()}" data="{impure}"></impure-card> </div> </div> </div>', 'home_page_root-impures .flex-parent { display: flex; flex-direction: column; } home_page_root-impures .card-container { padding-right: 22px; display: block; overflow: auto; overflow-x: hidden; flex-grow: 1; }', '', function(opts) {
+riot.tag2('home_page_root-impures', '<div style="padding-left:22px;">Debug: maledict={this.opts.maledict.name}</div> <div class="flex-parent" style="height:100%; margin-top: -8px;"> <div class="card-container"> <div style="overflow: hidden; padding-bottom: 222px; padding-top: 22px;"> <impure-card each="{impure in impures()}" data="{impure}"></impure-card> </div> </div> </div>', 'home_page_root-impures .flex-parent { display: flex; flex-direction: column; } home_page_root-impures .card-container { padding-right: 22px; display: block; overflow: auto; overflow-x: hidden; flex-grow: 1; }', '', function(opts) {
      this.impures = () => {
          let out = STORE.get('impures').list.sort((a, b) => {
              return a.id > b.id ? 1 : -1;
@@ -918,16 +918,30 @@ riot.tag2('purges_page_group-span', '<p class="hw-text-white" style="width:100%;
      };
 });
 
-riot.tag2('purges_page_guntt-chart', '<div> <svg class="chart-yabane"></svg> </div>', 'purges_page_guntt-chart { display: block; padding-left: 22px; padding-right: 22px; } purges_page_guntt-chart > div { width: 100% } purges_page_guntt-chart > div > svg{ background: #fff; width: 100%; height: 333px; }', '', function(opts) {
-     let now   = moment().millisecond(0).second(0).minute(0).hour(0);
-     let start = moment(now).add(-2, 'w');
-     let end   = moment(now).add( 6, 'M');
-     let selector = 'svg.chart-yabane';
+riot.tag2('purges_page_guntt-chart', '<div style="overflow:auto;"> <svg class="chart-yabane"></svg> </div>', 'purges_page_guntt-chart { display: block; padding-left: 22px; padding-right: 22px; } purges_page_guntt-chart > div { width: 100%; border-radius: 3px; } purges_page_guntt-chart > div > svg{ background: #fff; }', '', function(opts) {
+     this.on('mount', () => {
+         let now   = moment().millisecond(0).second(0).minute(0).hour(0);
 
-     let d3yabane = new D3jsYabane()
-         .config(selector, start, end)
-         .makeStage()
+         let options = {
+             scale: {
+                 x: {
+                     cycle: 'hours',
+                     tick:  88,
+                     start: moment(now).add(-1, 'd'),
+                     end:   moment(now).add( 1, 'd'),
+                 }
+             },
+             stage: {
+                 selector: 'svg.chart-yabane',
+             }
+         }
 
+         let d3yabane = new D3jsYabane()
+             .config(options)
+             .makeStage()
+             .data(yabane_data)
+             .draw();
+     });
 });
 
 riot.tag2('purges_page_root', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 class="title hw-text-white">期間</h1> <purges_page_filter style="margin-bottom:22px; padding-left:33px; padding-right:33px;" from="{from}" to="{to}" callback="{callback}"></purges_page_filter> </div> <div> <h1 class="title hw-text-white">Summary</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <div style="margin-right: 88px;"> <purges_page_group-span data="{data()}"></purges_page_group-span> </div> <div> <purges_page_group-span-deamon data="{data()}"></purges_page_group-span-deamon> </div> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Guntt Chart</h1> <div style="padding-left:33px; padding-right:33px;"> <purges_page_guntt-chart></purges_page_guntt-chart> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Purge hisotry</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <purges-list data="{data()}" callback="{callback}"></purges-list> </div> </div> </div> <purge-result-editor data="{edit_target}" callback="{callback}"></purge-result-editor>', 'purges_page_root { height: 100%; width: 100%; display: block; overflow: auto; } purges_page_root .card { border-radius: 8px; } purges_page_root button.refresh{ margin-top:6px; margin-right:8px; }', '', function(opts) {

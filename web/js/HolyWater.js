@@ -30,4 +30,18 @@ class HolyWater {
 
         return out;
     }
+    makeGunntChartData () {
+        return {
+            _class: 'WBS',
+            _id: 1,
+            code: '1',
+            name: 'www.yahoo.co.jp',
+            uri: 'https://www.yahoo.co.jp/',
+            schedule: {
+                start: moment().add(-1, 'day').toDate(),
+                end: moment().add(1, 'day').toDate(),
+            },
+            children: [],
+        };
+    }
 }
