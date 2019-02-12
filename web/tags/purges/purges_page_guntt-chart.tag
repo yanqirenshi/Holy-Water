@@ -1,10 +1,10 @@
 <purges_page_guntt-chart>
-    <div style="overflow:auto;">
+    <div style="overflow:auto; background:#fff; padding:22px;">
         <svg class="chart-yabane"></svg>
     </div>
 
     <script>
-     this.on('mount', () => {
+     this.on('update', () => {
          let now   = moment().millisecond(0).second(0).minute(0).hour(0);
 
          let options = {
@@ -12,8 +12,8 @@
                  x: {
                      cycle: 'hours',
                      tick:  88,
-                     start: moment(now).add(-1, 'd'),
-                     end:   moment(now).add( 1, 'd'),
+                     start: moment(now).startOf('d').hour(7),
+                     end:   moment(now).add( 1, 'd').startOf('d'),
                  }
              },
              stage: {
@@ -21,10 +21,15 @@
              }
          }
 
+         let hw = new HolyWater()
+         let data = this.opts.data.list.map((d) => {
+             return hw.makeGunntChartData(d);
+         });
+
          let d3yabane = new D3jsYabane()
              .config(options)
              .makeStage()
-             .data(yabane_data) // with sizing and positioning
+             .data(data) // with sizing and positioning
              .draw();
      });
     </script>

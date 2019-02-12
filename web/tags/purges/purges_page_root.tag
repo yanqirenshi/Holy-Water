@@ -24,7 +24,7 @@
         <div style="margin-top:33px;">
             <h1 class="title hw-text-white">Guntt Chart</h1>
             <div style="padding-left:33px; padding-right:33px;">
-                <purges_page_guntt-chart></purges_page_guntt-chart>
+                <purges_page_guntt-chart data={data()}></purges_page_guntt-chart>
             </div>
         </div>
 

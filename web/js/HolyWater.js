@@ -30,18 +30,19 @@ class HolyWater {
 
         return out;
     }
-    makeGunntChartData () {
+    makeGunntChartData (core) {
         return {
-            _class: 'WBS',
-            _id: 1,
-            code: '1',
-            name: 'www.yahoo.co.jp',
-            uri: 'https://www.yahoo.co.jp/',
+            _class: 'WORKPACKAGE',
+            _id: core._id,
+            code: core.impure_id,
+            name: core.impure_name,
+            uri: '',
             schedule: {
-                start: moment().add(-1, 'day').toDate(),
-                end: moment().add(1, 'day').toDate(),
+                start: core.start,
+                end: core.end,
             },
             children: [],
+            _core: core,
         };
     }
 }
