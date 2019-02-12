@@ -20,7 +20,7 @@
 (defclass rs_impure-finished ()
   ((name        :col-type (:varchar 255) :accessor name)
    (description :col-type :text          :accessor description)
-   (finished-at :col-type :datetime      :accessor finished-at)
+   (finished-at :col-type :timestamptz   :accessor finished-at)
    ;;
    (created-by  :col-type :bigserial     :accessor created-by)
    (updated-by  :col-type :bigserial     :accessor updated-by))
@@ -29,7 +29,7 @@
 (defclass rs_impure-discarded ()
   ((name         :col-type (:varchar 255) :accessor name)
    (description  :col-type :text          :accessor description)
-   (discarded-at :col-type :datetime      :accessor discarded-at)
+   (discarded-at :col-type :timestamptz   :accessor discarded-at)
    ;;
    (created-by   :col-type :bigserial     :accessor created-by)
    (updated-by   :col-type :bigserial     :accessor updated-by))
