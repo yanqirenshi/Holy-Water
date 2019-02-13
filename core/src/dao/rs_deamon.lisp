@@ -2,6 +2,7 @@
 
 (defclass rs_deamon ()
   ((name       :col-type (:varchar 255) :accessor name)
+   (name-short :col-type (:varchar 255) :accessor name-short)
    ;;
    (created-by :col-type :bigserial     :accessor created-by)
    (updated-by :col-type :bigserial     :accessor updated-by))

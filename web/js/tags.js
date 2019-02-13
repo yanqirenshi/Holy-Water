@@ -270,6 +270,16 @@ riot.tag2('section-list', '<table class="table is-bordered is-striped is-narrow 
 riot.tag2('sections-list', '<table class="table"> <tbody> <tr each="{opts.data}"> <td><a href="{hash}">{name}</a></td> </tr> </tbody> </table>', '', '', function(opts) {
 });
 
+riot.tag2('deamons', '', '', '', function(opts) {
+     this.mixin(MIXINS.page);
+
+     this.on('mount', () => { this.draw(); });
+     this.on('update', () => { this.draw(); });
+});
+
+riot.tag2('deamons_page_root', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">Deamons</h1> <h2 class="subtitle"></h2> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-3 hw-text-white">List</h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Name(Short)</th> </tr> </thead> </table> </div> </div> </section>', '', '', function(opts) {
+});
+
 riot.tag2('help', '', '', '', function(opts) {
      this.mixin(MIXINS.page);
 
@@ -304,7 +314,7 @@ riot.tag2('home_page_root-angels', '<nav class="panel hw-box-shadow"> <p class="
 riot.tag2('home_page_root-close-impure-area', '<div> <p>Close Impure. Drag & Drop here</p> </div>', 'home_page_root-close-impure-area > div{ background: #fefefe; padding: 5px; border-radius: 5px; } home_page_root-close-impure-area > div > p{ border: 1px dashed #f0f0f0; border-radius: 5px; padding: 5px 11px; background: #fcfcfc; }', '', function(opts) {
 });
 
-riot.tag2('home_page_root-impures', '<div style="padding-left:22px;">Debug: maledict={this.opts.maledict.name}</div> <div class="flex-parent" style="height:100%; margin-top: -8px;"> <div class="card-container"> <div style="overflow: hidden; padding-bottom: 222px; padding-top: 22px;"> <impure-card each="{impure in impures()}" data="{impure}"></impure-card> </div> </div> </div>', 'home_page_root-impures .flex-parent { display: flex; flex-direction: column; } home_page_root-impures .card-container { padding-right: 22px; display: block; overflow: auto; overflow-x: hidden; flex-grow: 1; }', '', function(opts) {
+riot.tag2('home_page_root-impures', '<div style="padding-left:22px;">Debug: maledict={this.opts.maledict ? this.opts.maledict.name : \'\'}</div> <div class="flex-parent" style="height:100%; margin-top: -8px;"> <div class="card-container"> <div style="overflow: hidden; padding-bottom: 222px; padding-top: 22px;"> <impure-card each="{impure in impures()}" data="{impure}"></impure-card> </div> </div> </div>', 'home_page_root-impures .flex-parent { display: flex; flex-direction: column; } home_page_root-impures .card-container { padding-right: 22px; display: block; overflow: auto; overflow-x: hidden; flex-grow: 1; }', '', function(opts) {
      this.impures = () => {
          let out = STORE.get('impures').list.sort((a, b) => {
              return a.id > b.id ? 1 : -1;

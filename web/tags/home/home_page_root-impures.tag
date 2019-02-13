@@ -1,5 +1,5 @@
 <home_page_root-impures>
-    <div style="padding-left:22px;">Debug: maledict={this.opts.maledict.name}</div>
+    <div style="padding-left:22px;">Debug: maledict={this.opts.maledict ? this.opts.maledict.name : ''}</div>
     <div class="flex-parent" style="height:100%; margin-top: -8px;">
         <div class="card-container">
             <div style="overflow: hidden; padding-bottom: 222px; padding-top: 22px;">

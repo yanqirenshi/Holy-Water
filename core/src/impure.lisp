@@ -22,7 +22,6 @@
 (defun find-impures (&key maledict)
   (when maledict
     (mapcar #'(lambda (d)
-                (print (hw::impure-id d))
                 (find-dao 'hw::rs_impure-active :id (hw::impure-id d)))
             (select-dao 'ev_collect-impure
               (sxql:where (:= :maledict-id (object-id maledict)))))))
