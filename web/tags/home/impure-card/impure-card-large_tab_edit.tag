@@ -34,8 +34,7 @@
 
     <style>
      impure-card-large_tab_edit > div {
-         height:422px;
-         height:505px;
+         height:295px;
          overflow:auto;
 
          display:flex;
