@@ -17,6 +17,7 @@
                 #:where
                 #:inner-join
                 #:union-all-queries)
+  (:export #:find-deamons)
   (:export #:find-maledicts
            #:get-maledict
            #:get-maledict-type

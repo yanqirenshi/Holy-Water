@@ -277,7 +277,17 @@ riot.tag2('deamons', '', '', '', function(opts) {
      this.on('update', () => { this.draw(); });
 });
 
-riot.tag2('deamons_page_root', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">Deamons</h1> <h2 class="subtitle"></h2> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-3 hw-text-white">List</h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Name(Short)</th> </tr> </thead> </table> </div> </div> </section>', '', '', function(opts) {
+riot.tag2('deamons_page_root', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">Deamons</h1> <h2 class="subtitle"></h2> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-3 hw-text-white">List</h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Name(Short)</th> </tr> </thead> <tbody> <tr each="{deamon in deamons()}"> <td>{deamon.id}</td> <td>{deamon.name}</td> <td>{deamon.name_short}</td> </tr> </tbody> </table> </div> </div> </section>', '', '', function(opts) {
+     this.deamons = () => {
+         return STORE.get('deamons.list');
+     };
+     this.on('mount', () => {
+         ACTIONS.fetchDeamons();
+     });
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-DEAMONS')
+             this.update();
+     });
 });
 
 riot.tag2('help', '', '', '', function(opts) {
@@ -1035,5 +1045,5 @@ riot.tag2('war-history', '', '', '', function(opts) {
      this.on('update', () => { this.draw(); });
 });
 
-riot.tag2('war-history_page_root', '', '', '', function(opts) {
+riot.tag2('war-history_page_root', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">エクソシスト実績</h1> <h2 class="subtitle hw-text-white"> 悪魔毎についやした工数 </h2> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">悪魔別</h1> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">日別</h1> </div> </section> </div> </section> <section class="section"> <div class="container"> <h1 class="title hw-text-white">作業時間統計</h1> <h2 class="subtitle hw-text-white"> Purge の統計情報。どれくらいの作業時間か。とか。 </h2> </div> </section>', '', '', function(opts) {
 });

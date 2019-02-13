@@ -15,6 +15,7 @@
                                (:file "utilities")
                                (:file "purge")
                                (:file "maledict")
+                               (:file "deamon")
                                (:file "impure")))
                  (:file "package")
                  (:file "render")

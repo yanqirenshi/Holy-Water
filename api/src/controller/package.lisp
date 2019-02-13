@@ -7,6 +7,7 @@
                 #:write-key-value)
   (:export #:find-maledicts
            #:get-maledict)
+  (:export #:find-deamons)
   (:export #:find-impures
            #:create-impure-2-maledict
            #:start-action-4-impure

@@ -75,6 +75,14 @@
       (unless impure   (throw-code 404))
       (render-json (hw.api.ctrl:move-impure angel impure maledict)))))
 
+;;;;;
+;;;;; Deamons
+;;;;;
+;;find-deamons
+(defroute "/deamons" ()
+  (with-angel (angel)
+    (declare (ignore angel))
+    (render-json (hw.api.ctrl:find-deamons))))
 
 ;;;;;
 ;;;;; Impure

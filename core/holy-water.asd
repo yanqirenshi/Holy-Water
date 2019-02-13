@@ -29,6 +29,7 @@
                  (:file "maledict")
                  (:file "impure")
                  (:file "purge")
+                 (:file "deamon")
                  (:module "actions"
                   :components ((:file "stop-impure")
                                (:file "start-impure")

@@ -118,6 +118,23 @@ class Actions extends Vanilla_Redux_Actions {
         };
     }
     /////
+    ///// Deamons
+    /////
+    fetchDeamons () {
+        let path = '/deamons';
+
+        API.get(path, function (json, success) {
+            if (success)
+                STORE.dispatch(this.fetchedDeamons(json));
+        }.bind(this));
+    }
+    fetchedDeamons (response) {
+        return {
+            type: 'FETCHED-DEAMONS',
+            data: { deamons: this.mergeData(response, STORE.get('deamons')) },
+        };
+    }
+    /////
     ///// Impure
     /////
     fetchDoneImpures (from, to) {

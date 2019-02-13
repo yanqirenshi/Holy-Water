@@ -19,8 +19,29 @@
                             <th>Name(Short)</th>
                         </tr>
                     </thead>
+                    <tbody>
+                        <tr each={deamon in deamons()}>
+                            <td>{deamon.id}</td>
+                            <td>{deamon.name}</td>
+                            <td>{deamon.name_short}</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
     </section>
+
+    <script>
+     this.deamons = () => {
+         return STORE.get('deamons.list');
+     };
+     this.on('mount', () => {
+         ACTIONS.fetchDeamons();
+     });
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-DEAMONS')
+             this.update();
+     });
+    </script>
+
 </deamons_page_root>
