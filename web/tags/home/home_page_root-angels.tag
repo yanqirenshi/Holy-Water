@@ -1,6 +1,9 @@
 <home_page_root-angels>
     <nav class="panel hw-box-shadow">
-        <p class="panel-heading">Angels</p>
+        <p class="panel-heading">Exorcists</p>
+        <a class="panel-block">
+            <orthodox-doropdown></orthodox-doropdown>
+        </a>
 
         <a each={data()}
            class="panel-block"

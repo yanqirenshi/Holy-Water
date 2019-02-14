@@ -307,7 +307,7 @@ riot.tag2('home', '', '', '', function(opts) {
      this.on('update', () => { this.draw(); });
 });
 
-riot.tag2('home_page_root-angels', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Angels</p> <a each="{data()}" class="panel-block" angel-id="{id}"> <span style="width: 205px;" maledict-id="{id}"> {name} </span> <span class="operators"> <icon-door-closed></icon-door-closed> </span> </a> </nav>', 'home_page_root-angels > .panel { width: 255px; margin-top: 22px; border-radius: 4px 4px 0 0; } home_page_root-angels > .panel > a { background: #ffffff; } home_page_root-angels .move-door.close .opened-door{ display: none; } home_page_root-angels .move-door.open .closed-door{ display: none; }', '', function(opts) {
+riot.tag2('home_page_root-angels', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Exorcists</p> <a class="panel-block"> <orthodox-doropdown></orthodox-doropdown> </a> <a each="{data()}" class="panel-block" angel-id="{id}"> <span style="width: 205px;" maledict-id="{id}"> {name} </span> <span class="operators"> <icon-door-closed></icon-door-closed> </span> </a> </nav>', 'home_page_root-angels > .panel { width: 255px; margin-top: 22px; border-radius: 4px 4px 0 0; } home_page_root-angels > .panel > a { background: #ffffff; } home_page_root-angels .move-door.close .opened-door{ display: none; } home_page_root-angels .move-door.open .closed-door{ display: none; }', '', function(opts) {
      this.dragging = false;
 
      this.data = () => {
@@ -795,6 +795,20 @@ riot.tag2('impure-card', '<impure-card-small data="{opts.data}" status="{status(
      this.status = () => {
          return this.isStart() ? 'start' : '';
      };
+});
+
+riot.tag2('orthodox-doropdown', '<div class="dropdown {open ? \'is-active\' : \'\'}" style="width:100%;"> <div class="dropdown-trigger" style="width:100%;"> <button class="button" style="width:100%" aria-haspopup="true" aria-controls="dropdown-menu" onclick="{clickButton}"> <span>Orthodox</span> <span class="icon is-small"> <i class="fas fa-angle-down" aria-hidden="true"></i> </span> </button> </div> <div class="dropdown-menu" style="width:100%" id="dropdown-menu" role="menu"> <div class="dropdown-content"> <a each="{orthodox in orthodoxs}" href="" class="dropdown-item"> {orthodox.name} </a> </div> </div> </div>', '', 'style="width:100%;"', function(opts) {
+     this.open = false;
+     this.clickButton = () => {
+         this.open = !this.open;
+         this.update();
+     };
+
+     this.orthodoxs = [
+         { name: 'サーバーサイド' },
+         { name: 'アプリ' },
+         { name: 'ディレクター' },
+     ];
 });
 
 riot.tag2('page03', '', '', '', function(opts) {
