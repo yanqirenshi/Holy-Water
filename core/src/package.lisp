@@ -30,7 +30,8 @@
            #:find-impures-cemetery)
   (:export #:find-angels
            #:get-angel
-           #:get-angel-at-auth)
+           #:get-angel-at-auth
+           #:get-angel-at-ghost-shadow-id)
   (:export #:get-purge
            #:find-purge-history
            #:save-purge-term)

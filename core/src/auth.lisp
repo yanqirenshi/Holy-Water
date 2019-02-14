@@ -1,5 +1,13 @@
 (in-package :holy-water)
 
+(defun get-angel-at-ghost-shadow-id (ghost-id)
+  (car (select-dao 'rs_angel
+         (inner-join :th_ghost-shadow_angel
+                     :on (:= :rs_angel.id :th_ghost-shadow_angel.angel-id))
+         (inner-join :rs_ghost-shadow
+                     :on (:= :th_ghost-shadow_angel.ghost-shadow-id  :rs_ghost-shadow.ghost-id))
+         (where (:= :rs_ghost-shadow.ghost-id ghost-id)))))
+
 (defgeneric get-angel-at-auth (email password)
   (:method ((email string) (password string))
     (let ((auth (find-dao 'ev_setting-auth :email email :password password)))

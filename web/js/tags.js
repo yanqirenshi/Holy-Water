@@ -5,7 +5,7 @@ riot.tag2('angel', '', '', '', function(opts) {
      this.on('update', () => { this.draw(); });
 });
 
-riot.tag2('angel_page_root', '<section class="section"> <div class="container"> <h1 class="title">パスワード変更</h1> <h2 class="subtitle">準備中</h2> </div> </section> <section class="section"> <div class="container"> <h1 class="title" style="text-shadow: 0px 0px 11px #ffffff;">サインアウト</h1> <h2 class="subtitle"></h2> <div class="contents"> <button class="button is-danger" style="margin-left:22px; margin-top:11px;box-shadow: 0px 0px 11px #ffffff;" onclick="{clickSignOut}">Sign Out</button> </div> </div> </section>', '', '', function(opts) {
+riot.tag2('angel_page_root', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">祓魔師</h1> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">パスワード変更</h1> <h2 class="subtitle hw-text-white">準備中</h2> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">サインアウト</h1> <h2 class="subtitle hw-text-white"></h2> <div class="contents"> <button class="button is-danger hw-box-shadow" style="margin-left:22px; margin-top:11px;" onclick="{clickSignOut}">Sign Out</button> </div> </div> </section> </div> </section>', '', '', function(opts) {
      this.clickSignOut = () => {
          ACTIONS.signOut();
      };
@@ -74,7 +74,7 @@ riot.tag2('cemetery_page_filter', '<span style="font-size:24px; text-shadow: 0px
      };
 });
 
-riot.tag2('cemetery_page_root', '<section class="section"> <div class="container"> <h1 class="title" style="text-shadow: 0px 0px 11px #fff;">自身が Purge(完了) した Impure</h1> <h2 class="subtitle" style="text-shadow: 0px 0px 11px #fff;"></h2> <div> <cemetery_page_filter style="margin-bottom:22px;" from="{from}" to="{to}" callback="{callback}"></cemetery_page_filter> </div> <div style="padding-bottom:22px;"> <cemetery-list data="{impures()}"></cemetery-list> </div> </div> </section>', 'cemetery_page_root { height: 100%; display: block; overflow: scroll; }', '', function(opts) {
+riot.tag2('cemetery_page_root', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">自身が Purge(完了) した Impure</h1> <h2 class="subtitle" style="text-shadow: 0px 0px 11px #fff;"></h2> <div> <cemetery_page_filter style="margin-bottom:22px;" from="{from}" to="{to}" callback="{callback}"></cemetery_page_filter> </div> <div style="padding-bottom:22px;"> <cemetery-list data="{impures()}"></cemetery-list> </div> </div> </section>', 'cemetery_page_root { height: 100%; display: block; overflow: scroll; }', '', function(opts) {
      this.from = moment().add(-1, 'd').startOf('day');
      this.to   = moment().add(1, 'd').startOf('day');
      this.moveDate = (unit, amount) => {
@@ -297,7 +297,7 @@ riot.tag2('help', '', '', '', function(opts) {
      this.on('update', () => { this.draw(); });
 });
 
-riot.tag2('help_page_root', '', '', '', function(opts) {
+riot.tag2('help_page_root', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">聖書</h1> <h2 class="subtitle hw-text-white">ヘルプ的ななにか</h2> <div class="contents hw-text-white"> <p>準備中</p> </div> </div> </section>', '', '', function(opts) {
 });
 
 riot.tag2('home', '', '', '', function(opts) {
@@ -809,6 +809,16 @@ riot.tag2('orthodox-doropdown', '<div class="dropdown {open ? \'is-active\' : \'
          { name: 'アプリ' },
          { name: 'ディレクター' },
      ];
+});
+
+riot.tag2('orthodox', '', '', '', function(opts) {
+     this.mixin(MIXINS.page);
+
+     this.on('mount', () => { this.draw(); });
+     this.on('update', () => { this.draw(); });
+});
+
+riot.tag2('orthodox_page_root', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">正教会</h1> <h2 class="subtitle hw-text-white">正教会=チーム</h2> <div class="contents hw-text-white"> <p>準備中</p> </div> </div> </section>', '', '', function(opts) {
 });
 
 riot.tag2('page03', '', '', '', function(opts) {

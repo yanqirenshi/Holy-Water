@@ -51,7 +51,15 @@ class Store extends Vanilla_Redux_Store {
                 }
             },
             {
-                code: "help", menu_label: 'H',
+                code: "orthodox", menu_label: '正教',
+                active_section: 'root', home_section: 'root',
+                sections: [{ code: 'root', tag: 'orthodox_page_root', title: 'Home', description: '' }],
+                stye: {
+                    color: { 1: '#fdeff2', 2: '#e0e0e0', 3: '#e198b4', 4: '#ffffff', 5: '#eeeeee', 5: '#333333' }
+                }
+            },
+            {
+                code: "help", menu_label: '聖書',
                 active_section: 'root', home_section: 'root',
                 sections: [{ code: 'root', tag: 'help_page_root', title: 'Home', description: '' }],
                 stye: {
@@ -59,7 +67,7 @@ class Store extends Vanilla_Redux_Store {
                 }
             },
             {
-                code: "angel", menu_label: '天使',
+                code: "angel", menu_label: '祓師',
                 active_section: 'root', home_section: 'root',
                 sections: [{ code: 'root', tag: 'angel_page_root', title: 'Home', description: '' }],
                 stye: {
