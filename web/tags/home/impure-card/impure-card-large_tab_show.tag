@@ -26,7 +26,9 @@
          return this.opts.data.name;
      };
      this.description = () => {
-         if (!this.opts.data) return ''
+         if (!this.opts.data || !this.opts.data.description)
+             return ''
+
          return this.opts.data.description;
      };
     </script>

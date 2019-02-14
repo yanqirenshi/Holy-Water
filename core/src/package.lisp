@@ -28,6 +28,7 @@
            #:save-impure
            #:find-impures
            #:find-impures-cemetery)
+  (:export #:find-orthodoxs)
   (:export #:find-angels
            #:get-angel
            #:get-angel-at-auth

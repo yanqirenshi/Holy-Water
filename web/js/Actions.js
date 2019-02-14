@@ -45,6 +45,27 @@ class Actions extends Vanilla_Redux_Actions {
         return out;
     }
     /////
+    ///// HolyWater
+    /////
+    fetchHolyWater () {
+        API.get('/holy-water', function (json, success) {
+            if (success)
+                STORE.dispatch(this.fetchedHolyWater(json));
+        }.bind(this));
+    }
+    fetchedHolyWater (response) {
+        let state = STORE.state().toJS();
+
+        return {
+            type: 'FETCHED-HOLYWATER',
+            data: {
+                orthodoxs: this.mergeData(response.ORTHODOXS, state.orthodoxs),
+                maledicts: this.mergeData(response.MALEDITDS, state.orthodoxs),
+                deamons: this.mergeData(response.DEAMONS, state.orthodoxs),
+            },
+        };
+    }
+    /////
     ///// Angels
     /////
     fetchAngels () {
@@ -68,6 +89,23 @@ class Actions extends Vanilla_Redux_Actions {
             else
                 this.pushFetchErrorMessage(json);
         }.bind(this));
+    }
+    /////
+    ///// orthodoxs
+    /////
+    fetchOrthodoxs () {
+        API.get('/orthodoxs', function (json, success) {
+            if (success)
+                STORE.dispatch(this.fetchedOrthodoxs(json));
+        }.bind(this));
+    }
+    fetchedOrthodoxs (response) {
+        return {
+            type: 'FETCHED-ORTHODOXS',
+            data: {
+                orthodoxs: this.mergeData(response, STORE.get('orthodoxs')),
+            },
+        };
     }
     /////
     ///// Maledict

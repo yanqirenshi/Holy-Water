@@ -11,7 +11,7 @@ riot.tag2('angel_page_root', '<section class="section"> <div class="container"> 
      };
 });
 
-riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" site="{site()}" moves="{[]}"></menu-bar> <div ref="page-area" style="padding-left: 55px; width: 100vw; height: 100vh;"></div> <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p> <message-area></message-area>', 'app > .page { width: 100vw; height: 100vh; overflow: hidden; display: block; } app .hide,[data-is="app"] .hide{ display: none; } app > .image-ref { position: fixed; bottom: 3px; right: 22px; font-size: 11px; color: #fff; } app > .image-ref > a:link { color: #fff; } app > .image-ref > a:visited { color: #fff; } app > .image-ref > a:hover { color: #fff; } app > .image-ref > a:active { color: #fff; } app > div.kasumi { position: fixed; top: 0px; left: 0px; width: 100vw; height: 100vh; background: #ffffff; opacity: 0.3; z-index: -888888; }', '', function(opts) {
+riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" site="{site()}" moves="{[]}"></menu-bar> <div ref="page-area"></div> <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p> <message-area></message-area>', 'app > .page { width: 100vw; height: 100vh; overflow: hidden; display: block; } app .hide,[data-is="app"] .hide{ display: none; } app > .image-ref { position: fixed; bottom: 3px; right: 22px; font-size: 11px; color: #fff; } app > .image-ref > a:link { color: #fff; } app > .image-ref > a:visited { color: #fff; } app > .image-ref > a:hover { color: #fff; } app > .image-ref > a:active { color: #fff; } app > div.kasumi { position: fixed; top: 0px; left: 0px; width: 100vw; height: 100vh; background: #ffffff; opacity: 0.3; z-index: -888888; } app > div[ref=page-area] { padding-left: 55px; width: 100vw; height: 100vh; }', '', function(opts) {
      this.site = () => {
          return STORE.state().get('site');
      };
@@ -277,7 +277,7 @@ riot.tag2('deamons', '', '', '', function(opts) {
      this.on('update', () => { this.draw(); });
 });
 
-riot.tag2('deamons_page_root', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">Deamons</h1> <h2 class="subtitle"></h2> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-3 hw-text-white">List</h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Name(Short)</th> </tr> </thead> <tbody> <tr each="{deamon in deamons()}"> <td>{deamon.id}</td> <td>{deamon.name}</td> <td>{deamon.name_short}</td> </tr> </tbody> </table> </div> </div> </section>', '', '', function(opts) {
+riot.tag2('deamons_page_root', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">Deamons</h1> <h2 class="subtitle hw-text-white">実績を集計するためのグループ</h2> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">List</h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Name(Short)</th> </tr> </thead> <tbody> <tr each="{deamon in deamons()}"> <td>{deamon.id}</td> <td>{deamon.name}</td> <td>{deamon.name_short}</td> </tr> </tbody> </table> </div> </div> </section> </div> </section>', '', '', function(opts) {
      this.deamons = () => {
          return STORE.get('deamons.list');
      };
@@ -720,7 +720,9 @@ riot.tag2('impure-card-large_tab_show', '<div> <p style="font-weight: bold;">{na
          return this.opts.data.name;
      };
      this.description = () => {
-         if (!this.opts.data) return ''
+         if (!this.opts.data || !this.opts.data.description)
+             return ''
+
          return this.opts.data.description;
      };
 });
@@ -818,7 +820,18 @@ riot.tag2('orthodox', '', '', '', function(opts) {
      this.on('update', () => { this.draw(); });
 });
 
-riot.tag2('orthodox_page_root', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">正教会</h1> <h2 class="subtitle hw-text-white">正教会=チーム</h2> <div class="contents hw-text-white"> <p>準備中</p> </div> </div> </section>', '', '', function(opts) {
+riot.tag2('orthodox_page_root', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">正教会</h1> <h2 class="subtitle hw-text-white">正教会=チーム</h2> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">List</h1> <div class="contents hw-text-white"> <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Description</th> </tr> </thead> <tbody> <tr each="{orthodox in orthodoxs()}"> <td>{orthodox.id}</td> <td>{orthodox.name}</td> <td>{orthodox.description}</td> </tr> </tbody> </table> </div> </div> </section> </div> </section>', '', '', function(opts) {
+     this.orthodoxs = () => {
+         return STORE.get('orthodoxs.list');
+     };
+
+     this.on('mount', () => {
+         ACTIONS.fetchOrthodoxs();
+     });
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-ORTHODOXS')
+             this.update();
+     });
 });
 
 riot.tag2('page03', '', '', '', function(opts) {

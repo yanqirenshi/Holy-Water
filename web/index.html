@@ -50,6 +50,12 @@
 
         <app></app>
 
-        <script>riot.mount('app');</script>
+        <script>
+         STORE.subscribe((action) => {
+             if (action.type=='FETCHED-HOLYWATER')
+                 riot.mount('app');
+         });
+         ACTIONS.fetchHolyWater(); 
+        </script>
     </body>
 </html>

@@ -41,6 +41,16 @@
 
 
 ;;;;;
+;;;;; holy-water
+;;;;;
+(defroute "/holy-water" ()
+  (with-angel (angel)
+    (render-json (list :maleditds (hw.api.ctrl:find-maledicts angel)
+                       :deamons   (hw.api.ctrl:find-deamons)
+                       :orthodoxs (hw.api.ctrl:find-orthodoxs)))))
+
+
+;;;;;
 ;;;;; Maledict
 ;;;;;
 (defroute "/maledicts" ()
@@ -78,11 +88,20 @@
 ;;;;;
 ;;;;; Deamons
 ;;;;;
-;;find-deamons
 (defroute "/deamons" ()
   (with-angel (angel)
     (declare (ignore angel))
     (render-json (hw.api.ctrl:find-deamons))))
+
+
+;;;;;
+;;;;; Orthodoxs
+;;;;;
+(defroute "/orthodoxs" ()
+  (with-angel (angel)
+    (declare (ignore angel))
+    (render-json (hw.api.ctrl:find-orthodoxs))))
+
 
 ;;;;;
 ;;;;; Impure

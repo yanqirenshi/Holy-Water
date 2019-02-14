@@ -27,6 +27,7 @@
                  (:file "creator")
                  (:file "angel-maledict")
                  (:file "collect-impure")
+                 (:file "orthodox")
                  (:file "angel")
                  (:file "maledict")
                  (:file "impure")

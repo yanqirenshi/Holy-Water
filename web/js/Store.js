@@ -5,7 +5,7 @@ class Store extends Vanilla_Redux_Store {
     pages() {
         return [
             {
-                code: "home", menu_label: '戦',
+                code: "home", menu_label: '戦場',
                 active_section: 'root', home_section: 'root',
                 sections: [
                     { code: 'root', tag: 'home_page_root' },
@@ -78,6 +78,7 @@ class Store extends Vanilla_Redux_Store {
     }
     init () {
         let data = {
+            orthodoxs: { ht: {}, list: [] },
             maledicts: { ht: {}, list: [] },
             deamons: { ht: {}, list: [] },
             impures: { ht: {}, list: [] },

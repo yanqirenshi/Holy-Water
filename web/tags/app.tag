@@ -3,7 +3,7 @@
 
     <menu-bar brand={{label:'RT'}} site={site()} moves={[]}></menu-bar>
 
-    <div ref="page-area" style="padding-left: 55px; width: 100vw; height: 100vh;"></div>
+    <div ref="page-area"></div>
 
     <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p>
 
@@ -64,6 +64,11 @@
          background: #ffffff;
          opacity: 0.3;
          z-index: -888888;
+     }
+     app > div[ref=page-area] {
+         padding-left: 55px;
+         width: 100vw;
+         height: 100vh;
      }
     </style>
 </app>

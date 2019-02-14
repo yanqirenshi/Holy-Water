@@ -17,6 +17,7 @@
            #:save-impure
            #:find-impures-cemetery
            #:get-impure-purging)
+  (:export #:find-orthodoxs)
   (:export #:find-purge-history
            #:save-purge-term)
   (:export #:sing-in
