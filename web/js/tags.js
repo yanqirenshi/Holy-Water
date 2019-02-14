@@ -938,17 +938,18 @@ riot.tag2('purges_page_group-span', '<p class="hw-text-white" style="width:100%;
      };
 });
 
-riot.tag2('purges_page_guntt-chart', '<div style="overflow:auto; background:#fff; padding:22px;"> <svg class="chart-yabane"></svg> </div>', 'purges_page_guntt-chart { display: block; padding-left: 22px; padding-right: 22px; } purges_page_guntt-chart > div { width: 100%; border-radius: 3px; } purges_page_guntt-chart > div > svg{ background: #fff; }', '', function(opts) {
+riot.tag2('purges_page_guntt-chart', '<div style="overflow:auto; background:#fff; padding:22px;"> <svg class="chart-yabane"></svg> </div>', 'purges_page_guntt-chart { display: block; margin-left: 22px; margin-right: 22px; padding: 22px 11px; background: #fff; border-radius: 3px; } purges_page_guntt-chart > div { width: 100%; border-radius: 3px; } purges_page_guntt-chart > div > svg{ background: #fff; }', '', function(opts) {
      this.on('update', () => {
          let now   = moment().millisecond(0).second(0).minute(0).hour(0);
+         let start = moment(now).startOf('d').hour(7);
 
          let options = {
              scale: {
                  x: {
                      cycle: 'hours',
                      tick:  88,
-                     start: moment(now).startOf('d').hour(7),
-                     end:   moment(now).add( 1, 'd').startOf('d'),
+                     start: start,
+                     end:   moment(now).add( 1, 'd').startOf('d').hour(6),
                  }
              },
              stage: {
