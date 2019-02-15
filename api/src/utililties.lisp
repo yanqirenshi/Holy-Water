@@ -24,7 +24,8 @@
 
 (defun get-auth-by-ghost ()
   (let ((ghost-id (ghost.ctlr:get-session)))
-    (hw:get-angel-at-ghost-shadow-id ghost-id)))
+    (when ghost-id
+      (hw:get-angel-at-ghost-shadow-id ghost-id))))
 
 (defun get-auth-angel ()
   (or (get-auth-by-ghost)

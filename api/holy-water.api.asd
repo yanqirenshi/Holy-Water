@@ -11,6 +11,7 @@
                 :components
                 ((:module "controller"
                   :components ((:file "package")
+                               (:file "orthodox")
                                (:file "angel")
                                (:file "utilities")
                                (:file "purge")
