@@ -1,7 +1,6 @@
 <cemetery_page_root>
     <section class="section">
         <div class="container">
-            <h1 class="title hw-text-white">自身が Purge(完了) した Impure</h1>
             <h2 class="subtitle" style="text-shadow: 0px 0px 11px #fff;"></h2>
 
             <div>
@@ -28,6 +27,7 @@
      };
 
      this.callback = (action, data) => {
+         dump(action);
          if ('move-date'==action) {
              this.moveDate(data.unit, data.amount);
              return;

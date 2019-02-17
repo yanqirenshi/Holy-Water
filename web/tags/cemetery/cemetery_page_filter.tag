@@ -1,5 +1,6 @@
 <cemetery_page_filter>
-    <Span style="font-size:24px; text-shadow: 0px 0px 11px #fff;">期間：</Span>
+    <Span class="hw-text-white"
+          style="font-size:24px; font-weight:bold;">期間：</Span>
 
     <input class="input"
            type="text"
@@ -18,7 +19,7 @@
         <move-date-operator label="週" unit="w" callback={callback}></move-date-operator>
         <move-date-operator label="月" unit="M" callback={callback}></move-date-operator>
 
-        <button class="button refresh"
+        <button class="button refresh hw-box-shadow"
                 style="margin-top:1px; margin-left:11px;"
                 onclick={clickRefresh}>Refresh</button>
     </div>

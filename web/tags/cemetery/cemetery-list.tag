@@ -14,7 +14,7 @@
                 <th>終了</th>
             </tr>
         </thead>
-        <tbody style="font-size:12px;">
+        <tbody>
             <tr each={impure in opts.data}>
                 <td nowrap>{impure.id}</td>
                 <td nowrap>{impure.name}</td>

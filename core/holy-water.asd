@@ -12,7 +12,7 @@
                 ((:file "package")
                  (:module "dao"
                   :components ((:file "rs_angel")
-                               (:file "orthodox")
+                               (:file "rs_orthodox")
                                (:file "rs_maledict-type")
                                (:file "rs_maledict")
                                (:file "rs_deamon")

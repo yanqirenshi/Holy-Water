@@ -34,7 +34,7 @@ riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" 
          location.hash=STORE.get('site.active_page');
 });
 
-riot.tag2('cemetery-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"> <thead> <tr> <th colspan="3">Impure</th> <th colspan="2">Purge</th> <th rowspan="2">備考</th> </tr> <tr> <th>ID</th> <th>名称</th> <th>完了</th> <th>開始</th> <th>終了</th> </tr> </thead> <tbody style="font-size:12px;"> <tr each="{impure in opts.data}"> <td nowrap>{impure.id}</td> <td nowrap>{impure.name}</td> <td nowrap>{dt(impure.finished_at)}</td> <td nowrap>{dt(impure.start)}</td> <td nowrap>{dt(impure.end)}</td> <td style="word-break: break-word;">{description(impure.description)}</td> </tr> </tbody> </table>', '', '', function(opts) {
+riot.tag2('cemetery-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"> <thead> <tr> <th colspan="3">Impure</th> <th colspan="2">Purge</th> <th rowspan="2">備考</th> </tr> <tr> <th>ID</th> <th>名称</th> <th>完了</th> <th>開始</th> <th>終了</th> </tr> </thead> <tbody> <tr each="{impure in opts.data}"> <td nowrap>{impure.id}</td> <td nowrap>{impure.name}</td> <td nowrap>{dt(impure.finished_at)}</td> <td nowrap>{dt(impure.start)}</td> <td nowrap>{dt(impure.end)}</td> <td style="word-break: break-word;">{description(impure.description)}</td> </tr> </tbody> </table>', '', '', function(opts) {
      this.dt = (v) => {
          if (!v) return '---'
 
@@ -56,7 +56,7 @@ riot.tag2('cemetery', '', '', '', function(opts) {
      this.on('update', () => { this.draw(); });
 });
 
-riot.tag2('cemetery_page_filter', '<span style="font-size:24px; text-shadow: 0px 0px 11px #fff;">期間：</Span> <input class="input" type="text" placeholder="From" riot-value="{date2str(opts.from)}" readonly> <span style="font-size:24px;"> 〜 </span> <input class="input" type="text" placeholder="To" riot-value="{date2str(opts.to)}" readonly> <div class="operators"> <move-date-operator label="日" unit="d" callback="{callback}"></move-date-operator> <move-date-operator label="週" unit="w" callback="{callback}"></move-date-operator> <move-date-operator label="月" unit="M" callback="{callback}"></move-date-operator> <button class="button refresh" style="margin-top:1px; margin-left:11px;" onclick="{clickRefresh}">Refresh</button> </div>', 'cemetery_page_filter, cemetery_page_filter .operators { display: flex; } cemetery_page_filter .input { width: 111px; border: none; }', '', function(opts) {
+riot.tag2('cemetery_page_filter', '<span class="hw-text-white" style="font-size:24px; font-weight:bold;">期間：</Span> <input class="input" type="text" placeholder="From" riot-value="{date2str(opts.from)}" readonly> <span style="font-size:24px;"> 〜 </span> <input class="input" type="text" placeholder="To" riot-value="{date2str(opts.to)}" readonly> <div class="operators"> <move-date-operator label="日" unit="d" callback="{callback}"></move-date-operator> <move-date-operator label="週" unit="w" callback="{callback}"></move-date-operator> <move-date-operator label="月" unit="M" callback="{callback}"></move-date-operator> <button class="button refresh hw-box-shadow" style="margin-top:1px; margin-left:11px;" onclick="{clickRefresh}">Refresh</button> </div>', 'cemetery_page_filter, cemetery_page_filter .operators { display: flex; } cemetery_page_filter .input { width: 111px; border: none; }', '', function(opts) {
      this.date2str = (date) => {
          if (!date) return '';
          return date.format('YYYY-MM-DD');
@@ -74,7 +74,7 @@ riot.tag2('cemetery_page_filter', '<span style="font-size:24px; text-shadow: 0px
      };
 });
 
-riot.tag2('cemetery_page_root', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">自身が Purge(完了) した Impure</h1> <h2 class="subtitle" style="text-shadow: 0px 0px 11px #fff;"></h2> <div> <cemetery_page_filter style="margin-bottom:22px;" from="{from}" to="{to}" callback="{callback}"></cemetery_page_filter> </div> <div style="padding-bottom:22px;"> <cemetery-list data="{impures()}"></cemetery-list> </div> </div> </section>', 'cemetery_page_root { height: 100%; display: block; overflow: scroll; }', '', function(opts) {
+riot.tag2('cemetery_page_root', '<section class="section"> <div class="container"> <h2 class="subtitle" style="text-shadow: 0px 0px 11px #fff;"></h2> <div> <cemetery_page_filter style="margin-bottom:22px;" from="{from}" to="{to}" callback="{callback}"></cemetery_page_filter> </div> <div style="padding-bottom:22px;"> <cemetery-list data="{impures()}"></cemetery-list> </div> </div> </section>', 'cemetery_page_root { height: 100%; display: block; overflow: scroll; }', '', function(opts) {
      this.from = moment().add(-1, 'd').startOf('day');
      this.to   = moment().add(1, 'd').startOf('day');
      this.moveDate = (unit, amount) => {
@@ -85,6 +85,7 @@ riot.tag2('cemetery_page_root', '<section class="section"> <div class="container
      };
 
      this.callback = (action, data) => {
+         dump(action);
          if ('move-date'==action) {
              this.moveDate(data.unit, data.amount);
              return;
@@ -1076,6 +1077,7 @@ riot.tag2('randing', '', '', '', function(opts) {
 riot.tag2('randing_page_root', '', '', '', function(opts) {
 });
 
+
 riot.tag2('war-history', '', '', '', function(opts) {
      this.mixin(MIXINS.page);
 
@@ -1083,5 +1085,31 @@ riot.tag2('war-history', '', '', '', function(opts) {
      this.on('update', () => { this.draw(); });
 });
 
-riot.tag2('war-history_page_root', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">エクソシスト実績</h1> <h2 class="subtitle hw-text-white"> 悪魔毎についやした工数 </h2> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">悪魔別</h1> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">日別</h1> </div> </section> </div> </section> <section class="section"> <div class="container"> <h1 class="title hw-text-white">作業時間統計</h1> <h2 class="subtitle hw-text-white"> Purge の統計情報。どれくらいの作業時間か。とか。 </h2> </div> </section>', '', '', function(opts) {
+riot.tag2('war-history_page_root', '<section class="section"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> </section> <div> <war-history_root_tab_days class="hide"></war-history_root_tab_days> <war-history_root_tab_weeks class="hide"></war-history_root_tab_weeks> <war-history_root_tab_month class="hide"></war-history_root_tab_month> </div>', '', '', function(opts) {
+     this.default_tag = 'home';
+     this.active_tag = null;
+     this.page_tabs = new PageTabs([
+         {code: 'days',  label: '日', tag: 'war-history_root_tab_days' },
+         {code: 'weeks', label: '週', tag: 'war-history_root_tab_weeks' },
+         {code: 'month', label: '月', tag: 'war-history_root_tab_month' },
+     ]);
+     this.on('mount', () => {
+         this.page_tabs.switchTab(this.tags)
+         this.update();
+     });
+
+     this.clickTab = (e, action, data) => {
+         if (this.page_tabs.switchTab(this.tags, data.code))
+             this.update();
+     };
+});
+
+riot.tag2('war-history_root_tab_days', '<section class="section"> <div class="container"> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">悪魔別</h1> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">日別</h1> </div> </section> </div> </section> <section class="section"> <div class="container"> <h1 class="title hw-text-white">作業時間統計</h1> <h2 class="subtitle hw-text-white"> Purge の統計情報。どれくらいの作業時間か。とか。 </h2> </div> </section>', '', '', function(opts) {
+});
+
+riot.tag2('war-history_root_tab_month', '<section class="section"> <div class="container"> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">悪魔別</h1> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">日別</h1> </div> </section> </div> </section> <section class="section"> <div class="container"> <h1 class="title hw-text-white">作業時間統計</h1> <h2 class="subtitle hw-text-white"> Purge の統計情報。どれくらいの作業時間か。とか。 </h2> </div> </section>', '', '', function(opts) {
+});
+
+
+riot.tag2('war-history_root_tab_weeks', '<section class="section"> <div class="container"> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">悪魔別</h1> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">日別</h1> </div> </section> </div> </section> <section class="section"> <div class="container"> <h1 class="title hw-text-white">作業時間統計</h1> <h2 class="subtitle hw-text-white"> Purge の統計情報。どれくらいの作業時間か。とか。 </h2> </div> </section>', '', '', function(opts) {
 });
