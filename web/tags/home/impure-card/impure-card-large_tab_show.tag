@@ -2,7 +2,7 @@
     <div>
         <p style="font-weight: bold;">{name()}</p>
         <p class="description" style="padding:11px;">
-            <impure-card-large_tab_show-description contents={marked(this.description())}></impure-card-large_tab_show-description>
+            <impure-card-large_tab_show-description contents={this.description()}></impure-card-large_tab_show-description>
         </p>
 
         <div>
@@ -23,13 +23,22 @@
     <script>
      this.name = () => {
          if (!this.opts.data) return '????????'
+
          return this.opts.data.name;
      };
      this.description = () => {
          if (!this.opts.data || !this.opts.data.description)
              return ''
+         let out = '';
 
-         return this.opts.data.description;
+         try {
+             out = marked(this.opts.data.description)
+             dump(out);
+         } catch (e) {
+             dump(e);
+         }
+
+         return out;
      };
     </script>
 

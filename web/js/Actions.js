@@ -40,7 +40,8 @@ class Actions extends Vanilla_Redux_Actions {
 
         let out = Object.assign({}, data_ht);
         for (let key in out)
-            out[key] = encodeURIComponent(out[key]);
+            if (out[key])
+                out[key] = encodeURIComponent(out[key].trim());
 
         return out;
     }

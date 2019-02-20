@@ -28,7 +28,7 @@
      };
      this.description = () => {
          if (!this.opts.data) return ''
-         return this.opts.data.description;
+         return this.opts.data.description.trim();
      };
     </script>
 
