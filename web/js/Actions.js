@@ -387,12 +387,22 @@ class Actions extends Vanilla_Redux_Actions {
         });
     }
     pushFetchErrorMessage (json) {
+        dump(json['MESSAGE']);
         this.pushMessage({
             title: json['ERROR-TYPE'] + ' (' + json['CODE'] + ')',
             contents: json['MESSAGE'],
             type: 'danger',
             json: json,
             accrual_time: moment()
+        });
+    };
+    pushErrorMessage (msg) {
+        dump(msg);
+        this.pushMessage({
+            title: 'ERror',
+            contents: msg,
+            type: 'danger',
+            accrual_time: moment(),
         });
     };
     pushSuccessMessage (message) {

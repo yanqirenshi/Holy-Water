@@ -1009,11 +1009,16 @@ riot.tag2('purges_page_guntt-chart', '<div style="overflow:auto; background:#fff
              return hw.makeGunntChartData(d);
          });
 
-         let d3yabane = new D3jsYabane()
-             .config(options)
-             .makeStage()
-             .data(data)
-             .draw();
+         try {
+             new D3jsYabane()
+                 .config(options)
+                 .makeStage()
+                 .data(data)
+                 .draw();
+         } catch (e) {
+             ACTIONS.pushErrorMessage('Guntt Chart の描画に失敗しました。');
+             dump(e);
+         }
      });
 });
 

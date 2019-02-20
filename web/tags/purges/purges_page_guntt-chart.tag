@@ -27,11 +27,16 @@
              return hw.makeGunntChartData(d);
          });
 
-         let d3yabane = new D3jsYabane()
-             .config(options)
-             .makeStage()
-             .data(data) // with sizing and positioning
-             .draw();
+         try {
+             new D3jsYabane()
+                 .config(options)
+                 .makeStage()
+                 .data(data) // with sizing and positioning
+                 .draw();
+         } catch (e) {
+             ACTIONS.pushErrorMessage('Guntt Chart の描画に失敗しました。');
+             dump(e);
+         }
      });
     </script>
 
