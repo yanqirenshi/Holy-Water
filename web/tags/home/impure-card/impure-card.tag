@@ -65,7 +65,7 @@
          color: inherit;
      }
      impure-card[status=start] div.card {
-         background: #eaedf7;
+         background: rgba(254, 242, 99, 0.888);
      }
     </style>
 </impure-card>
