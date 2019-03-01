@@ -17,8 +17,4 @@
          padding: 0.0rem 1.5rem 2.0rem 1.5rem;
      }
     </style>
-
-    <script>
-     // dump(this.opts.no)
-    </script>
 </section-contents>

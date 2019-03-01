@@ -27,7 +27,6 @@
      };
 
      this.callback = (action, data) => {
-         dump(action);
          if ('move-date'==action) {
              this.moveDate(data.unit, data.amount);
              return;

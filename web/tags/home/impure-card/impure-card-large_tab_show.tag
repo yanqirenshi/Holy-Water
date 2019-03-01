@@ -33,7 +33,6 @@
 
          try {
              out = marked(this.opts.data.description)
-             dump(out);
          } catch (e) {
              dump(e);
          }

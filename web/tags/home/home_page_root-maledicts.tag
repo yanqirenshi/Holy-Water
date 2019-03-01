@@ -32,8 +32,8 @@
                     <span class="icon opened-door" maledict-id={id}>
                         <i class="fas fa-door-open" maledict-id={id}></i>
                     </span>
-
                 </span>
+
             </span>
         </a>
     </nav>

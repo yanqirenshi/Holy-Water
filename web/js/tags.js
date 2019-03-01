@@ -11,7 +11,7 @@ riot.tag2('angel_page_root', '<section class="section"> <div class="container"> 
      };
 });
 
-riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" site="{site()}" moves="{[]}"></menu-bar> <div ref="page-area"></div> <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p> <message-area></message-area>', 'app > .page { width: 100vw; height: 100vh; overflow: hidden; display: block; } app .hide,[data-is="app"] .hide{ display: none; } app > .image-ref { position: fixed; bottom: 3px; right: 22px; font-size: 11px; color: #fff; } app > .image-ref > a:link { color: #fff; } app > .image-ref > a:visited { color: #fff; } app > .image-ref > a:hover { color: #fff; } app > .image-ref > a:active { color: #fff; } app > div.kasumi { position: fixed; top: 0px; left: 0px; width: 100vw; height: 100vh; background: #ffffff; opacity: 0.3; z-index: -888888; } app > div[ref=page-area] { padding-left: 55px; width: 100vw; height: 100vh; }', '', function(opts) {
+riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" site="{site()}" moves="{[]}"></menu-bar> <div ref="page-area"></div> <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p> <message-area></message-area>', '', '', function(opts) {
      this.site = () => {
          return STORE.state().get('site');
      };
@@ -32,6 +32,10 @@ riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" 
 
      if (location.hash=='')
          location.hash=STORE.get('site.active_page');
+
+     this.on('mount', () => {
+         ACTIONS.movePage(STORE.get('site'));
+     });
 });
 
 riot.tag2('cemetery-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"> <thead> <tr> <th colspan="3">Impure</th> <th colspan="2">Purge</th> <th rowspan="2">備考</th> </tr> <tr> <th>ID</th> <th>名称</th> <th>完了</th> <th>開始</th> <th>終了</th> </tr> </thead> <tbody> <tr each="{impure in opts.data}"> <td nowrap>{impure.id}</td> <td nowrap>{impure.name}</td> <td nowrap>{dt(impure.finished_at)}</td> <td nowrap>{dt(impure.start)}</td> <td nowrap>{dt(impure.end)}</td> <td style="word-break: break-word;">{description(impure.description)}</td> </tr> </tbody> </table>', '', '', function(opts) {
@@ -85,7 +89,6 @@ riot.tag2('cemetery_page_root', '<section class="section"> <div class="container
      };
 
      this.callback = (action, data) => {
-         dump(action);
          if ('move-date'==action) {
              this.moveDate(data.unit, data.amount);
              return;
@@ -308,7 +311,33 @@ riot.tag2('home', '', '', '', function(opts) {
      this.on('update', () => { this.draw(); });
 });
 
-riot.tag2('home_page_root-angels', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Exorcists</p> <a class="panel-block"> <orthodox-doropdown></orthodox-doropdown> </a> <a each="{data()}" class="panel-block" angel-id="{id}"> <span style="width: 205px;" maledict-id="{id}"> {name} </span> <span class="operators"> <icon-door-closed></icon-door-closed> </span> </a> </nav>', 'home_page_root-angels > .panel { width: 255px; margin-top: 22px; border-radius: 4px 4px 0 0; } home_page_root-angels > .panel > a { background: #ffffff; } home_page_root-angels .move-door.close .opened-door{ display: none; } home_page_root-angels .move-door.open .closed-door{ display: none; }', '', function(opts) {
+riot.tag2('home_emergency-door', '<span class="move-door {dragging ? \'open\' : \'close\'}" ref="move-door" dragover="{dragover}" drop="{drop}"> <span class="icon closed-door"> <i class="fas fa-door-closed"></i> </span> <span class="icon opened-door" angel-id="{opts.source.id}"> <i class="fas fa-door-open" angel-id="{opts.source.id}"></i> </span> </span>', 'home_emergency-door .move-door.close .opened-door{ display: none; } home_emergency-door .move-door.open .closed-door{ display: none; } home_emergency-door { width: 24px; } home_emergency-door .icon { color: #cccccc; } home_emergency-door .icon:hover { color: #880000; } home_emergency-door .move-door.open .icon { color: #880000; }', '', function(opts) {
+     this.dragging = false;
+     this.dragover = (e) => {
+         e.preventDefault();
+     };
+     this.drop = (e) => {
+         let impure = e.dataTransfer.getData('impure');
+         let angel  = this.opts.source;
+
+         ACTIONS.pushWarningMessage('祓魔師間の移動は実装中です。')
+
+         e.preventDefault();
+     };
+
+     STORE.subscribe((action) => {
+         if (action.type=='START-DRAG-IMPURE-ICON') {
+             this.dragging = true;
+             this.update();
+         }
+         if (action.type=='END-DRAG-IMPURE-ICON') {
+             this.dragging = false;
+             this.update();
+         }
+     });
+});
+
+riot.tag2('home_page_root-angels', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Exorcists</p> <a class="panel-block"> <orthodox-doropdown></orthodox-doropdown> </a> <a each="{obj in data()}" class="panel-block" angel-id="{obj.id}"> <span style="width: 205px;" maledict-id="{obj.id}"> {obj.name} </span> <home_emergency-door source="{obj}"></home_emergency-door> </a> </nav>', 'home_page_root-angels > .panel { width: 255px; margin-top: 22px; border-radius: 4px 4px 0 0; } home_page_root-angels > .panel > a { background: #ffffff; }', '', function(opts) {
      this.dragging = false;
 
      this.data = () => {
@@ -728,7 +757,6 @@ riot.tag2('impure-card-large_tab_show', '<div> <p style="font-weight: bold;">{na
 
          try {
              out = marked(this.opts.data.description)
-             dump(out);
          } catch (e) {
              dump(e);
          }

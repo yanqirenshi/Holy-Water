@@ -5,17 +5,15 @@
             <orthodox-doropdown></orthodox-doropdown>
         </a>
 
-        <a each={data()}
+        <a each={obj in data()}
            class="panel-block"
-           angel-id={id}>
+           angel-id={obj.id}>
 
-            <span style="width: 205px;" maledict-id={id}>
-                {name}
+            <span style="width: 205px;" maledict-id={obj.id}>
+                {obj.name}
             </span>
 
-            <span class="operators">
-                <icon-door-closed></icon-door-closed>
-            </span>
+            <home_emergency-door source={obj}></home_emergency-door>
         </a>
     </nav>
 
@@ -45,12 +43,6 @@
      }
      home_page_root-angels > .panel > a {
          background: #ffffff;
-     }
-     home_page_root-angels .move-door.close .opened-door{
-         display: none;
-     }
-     home_page_root-angels .move-door.open .closed-door{
-         display: none;
      }
     </style>
 </home_page_root-angels>

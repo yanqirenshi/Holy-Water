@@ -30,10 +30,10 @@ class Actions extends Vanilla_Redux_Actions {
         return { ht: target_ht, list: target_list };
     }
     movePage (data) {
-        return {
+        STORE.dispatch({
             type: 'MOVE-PAGE',
             data: data
-        };
+        });
     }
     encodePostData (data_ht) {
         if (!data_ht) return {};
@@ -392,7 +392,6 @@ class Actions extends Vanilla_Redux_Actions {
         });
     }
     pushFetchErrorMessage (json) {
-        dump(json['MESSAGE']);
         this.pushMessage({
             title: json['ERROR-TYPE'] + ' (' + json['CODE'] + ')',
             contents: json['MESSAGE'],
@@ -402,7 +401,6 @@ class Actions extends Vanilla_Redux_Actions {
         });
     };
     pushErrorMessage (msg) {
-        dump(msg);
         this.pushMessage({
             title: 'ERror',
             contents: msg,
@@ -415,6 +413,14 @@ class Actions extends Vanilla_Redux_Actions {
             title: 'Success',
             contents: message,
             type: 'success',
+            accrual_time: moment()
+        });
+    }
+    pushWarningMessage (message) {
+        this.pushMessage({
+            title: 'Warning',
+            contents: message,
+            type: 'warning',
             accrual_time: moment()
         });
     }

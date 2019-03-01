@@ -96,9 +96,9 @@ class Router {
         site.active_page = page_code;
         page.active_section = this.getActiveSection(page, args);
 
-        this._store.dispatch(actions.movePage({
+        actions.movePage({
             site: site
-        }));
+        });
     }
     /* **************************************************************** *
      *  Page

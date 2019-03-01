@@ -1,3 +1,6 @@
+/* **************************************************************** */
+/*   Common                                                         */
+/* **************************************************************** */
 .hw-text-white {
     color: #fff;
     text-shadow: 0px 0px 22px #333333;
@@ -5,11 +8,50 @@
 
 .hw-box-shadow, .input.hw-box-shadow,
 .card.hw-box-shadow, .panel.hw-box-shadow
- {
+{
     box-shadow: 0px 0px 22px #333333;
 }
 
 .table > thead > tr > th {
     color: #fff;
     background: #E198B4;
+}
+
+
+/* **************************************************************** */
+/*   Page: app                                                      */
+/* **************************************************************** */
+app > .page {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: block;
+}
+.hide { display: none; }
+
+app > .image-ref {
+    position: fixed;
+    bottom: 3px;
+    right: 22px;
+    font-size: 11px;
+    color: #fff;
+}
+app > .image-ref > a:link    { color: #fff; }
+app > .image-ref > a:visited { color: #fff; }
+app > .image-ref > a:hover   { color: #fff; }
+app > .image-ref > a:active  { color: #fff; }
+app > div.kasumi {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+    background: #ffffff;
+    opacity: 0.3;
+    z-index: -888888;
+}
+app > div[ref=page-area] {
+    padding-left: 55px;
+    width: 100vw;
+    height: 100vh;
 }

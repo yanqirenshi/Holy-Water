@@ -9,28 +9,6 @@
 
     <message-area></message-area>
 
-    <style>
-     app > .page {
-         width: 100vw;
-         height: 100vh;
-         overflow: hidden;
-         display: block;
-     }
-     .hide { display: none; }
-
-     app > .image-ref {
-         position: fixed;
-         bottom: 3px;
-         right: 22px;
-         font-size: 11px;
-         color: #fff;
-     }
-     app > .image-ref > a:link    { color: #fff; }
-     app > .image-ref > a:visited { color: #fff; }
-     app > .image-ref > a:hover   { color: #fff; }
-     app > .image-ref > a:active  { color: #fff; }
-    </style>
-
     <script>
      this.site = () => {
          return STORE.state().get('site');
@@ -52,23 +30,9 @@
 
      if (location.hash=='')
          location.hash=STORE.get('site.active_page');
-    </script>
 
-    <style>
-     app > div.kasumi {
-         position: fixed;
-         top: 0px;
-         left: 0px;
-         width: 100vw;
-         height: 100vh;
-         background: #ffffff;
-         opacity: 0.3;
-         z-index: -888888;
-     }
-     app > div[ref=page-area] {
-         padding-left: 55px;
-         width: 100vw;
-         height: 100vh;
-     }
-    </style>
+     this.on('mount', () => {
+         ACTIONS.movePage(STORE.get('site'));
+     });
+    </script>
 </app>
