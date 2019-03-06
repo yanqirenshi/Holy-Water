@@ -16,8 +16,10 @@
                                               :updated-by by-id)
                              :creator creator)))
 
-(defun find-angels ()
-  (select-dao 'rs_angel))
+(defun find-angels (&key without-angel)
+  (if without-angel
+      (select-dao 'rs_angel (where (:!= :id (mito:object-id without-angel))))
+      (select-dao 'rs_angel)))
 
 (defun get-angel (&key id)
   (find-dao 'rs_angel :id id))

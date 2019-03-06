@@ -36,6 +36,5 @@
       angel)))
 
 (defun find-angels (angel)
-  (declare (ignore angel))
   (mapcar #'dao2angel
-          (hw:find-angels)))
+          (hw:find-angels :without-angel angel)))
