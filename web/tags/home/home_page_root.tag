@@ -26,11 +26,14 @@
                                         callback={callback}
                                         maledict={modal_maledict}></home_page_root-modal-create-impure>
 
+    <modal_request-impure source={request_impure}></modal_request-impure>
+
     <script>
      this.modal_open = false;
      this.modal_maledict = null;
      this.maledict = null; //選択された maledict
      this.squeeze_word = null;
+     this.request_impure = null;
     </script>
 
     <script>
@@ -76,6 +79,17 @@
 
          if (action.type=='FETCHED-IMPURE-PURGING')
              this.tags['home_page_root-working-action'].update();
+
+         if (action.type=='START-TRANSFERD-IMPURE-TO-ANGEL') {
+             this.request_impure = action.contents;
+             this.tags['modal_request-impure'].update();
+         }
+
+         if (action.type=='STOP-TRANSFERD-IMPURE-TO-ANGEL') {
+             this.request_impure = null;
+             this.tags['modal_request-impure'].update();
+         }
+
      });
 
      this.on('mount', () => {

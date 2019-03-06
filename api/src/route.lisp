@@ -142,6 +142,12 @@
   (with-angel (angel)
     (render-json (hw.api.ctrl:get-impure-purging angel))))
 
+
+(defroute "/impures/:impure-id/transfer/angel/:angel-id" (&key impure-id angel-id)
+  (with-angel (angel)
+    (declare (ignorable angel))
+    (render-json (list impure-id angel-id))))
+
 ;;;;;
 ;;;;; Purge
 ;;;;;

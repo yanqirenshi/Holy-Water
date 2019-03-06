@@ -20,11 +20,10 @@
          e.preventDefault();
      };
      this.drop = (e) => {
-         let impure = e.dataTransfer.getData('impure');
+         let impure = JSON.parse(e.dataTransfer.getData('impure'));
          let angel  = this.opts.source;
 
-         // ACTIONS.moveImpureToAngel(impure, angel);
-         ACTIONS.pushWarningMessage('祓魔師間の移動は実装中です。')
+         ACTIONS.startTransferImpureToAngel(impure, angel);
 
          e.preventDefault();
      };

@@ -252,6 +252,40 @@ class Actions extends Vanilla_Redux_Actions {
             data: {},
         };
     }
+    startTransferImpureToAngel (impure, angel) {
+        STORE.dispatch({
+            type: 'START-TRANSFERD-IMPURE-TO-ANGEL',
+            contents: {
+                impure:  impure,
+                angel:   angel,
+            }
+        });
+    }
+    stopTransferImpureToAngel () {
+        STORE.dispatch({
+            type: 'START-TRANSFERD-IMPURE-TO-ANGEL',
+        });
+    }
+    transferImpureToAngel (impure, angel, message) {
+        ACTIONS.pushWarningMessage('祓魔師間の移動は実装中です。');
+
+        if (!(impure && angel))
+            throw new Error('akan');
+
+        let path = '/impures/%s/transfer/angel/%s'.format(impure.id, angel.id);
+        let post_data = {
+            message: encodeURIComponent(message),
+        };
+
+        API.post(path, post_data, (json, success) => {
+                STORE.dispatch(this.transferdImpureToAngel(json));
+        });
+    }
+    transferdImpureToAngel () {
+        return {
+            type: 'TRANSFERD-IMPURE-TO-ANGEL'
+        };
+    }
     /////
     ///// Action
     /////

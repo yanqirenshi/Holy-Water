@@ -317,10 +317,10 @@ riot.tag2('home_emergency-door', '<span class="move-door {dragging ? \'open\' : 
          e.preventDefault();
      };
      this.drop = (e) => {
-         let impure = e.dataTransfer.getData('impure');
+         let impure = JSON.parse(e.dataTransfer.getData('impure'));
          let angel  = this.opts.source;
 
-         ACTIONS.pushWarningMessage('祓魔師間の移動は実装中です。')
+         ACTIONS.startTransferImpureToAngel(impure, angel);
 
          e.preventDefault();
      };
@@ -572,11 +572,12 @@ riot.tag2('home_page_root-working-action', '<button class="button is-small" styl
      };
 });
 
-riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts data="{STORE.get(\'maledicts\')}" select="{maledict}" callback="{callback}" dragging="{dragging}"></home_page_root-maledicts> <home_page_root-angels></home_page_root-angels> <home_page_root-other-services></home_page_root-other-services> </div> <div class="contetns-area"> <div style="display:flex;"> <home_page_squeeze-area callback="{callback}"></home_page_squeeze-area> <home_page_root-close-impure-area style="margin-left:88px;margin-top:-5px;"></home_page_root-close-impure-area> </div> <home_page_root-impures maledict="{maledict}" callback="{callback}" filter="{squeeze_word}"></home_page_root-impures> </div> <home_page_root-working-action data="{impure()}"></home_page_root-working-action> <home_page_root-modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_page_root-modal-create-impure>', 'home_page_root { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page_root > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; }', '', function(opts) {
+riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts data="{STORE.get(\'maledicts\')}" select="{maledict}" callback="{callback}" dragging="{dragging}"></home_page_root-maledicts> <home_page_root-angels></home_page_root-angels> <home_page_root-other-services></home_page_root-other-services> </div> <div class="contetns-area"> <div style="display:flex;"> <home_page_squeeze-area callback="{callback}"></home_page_squeeze-area> <home_page_root-close-impure-area style="margin-left:88px;margin-top:-5px;"></home_page_root-close-impure-area> </div> <home_page_root-impures maledict="{maledict}" callback="{callback}" filter="{squeeze_word}"></home_page_root-impures> </div> <home_page_root-working-action data="{impure()}"></home_page_root-working-action> <home_page_root-modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_page_root-modal-create-impure> <modal_request-impure source="{request_impure}"></modal_request-impure>', 'home_page_root { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page_root > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; }', '', function(opts) {
      this.modal_open = false;
      this.modal_maledict = null;
      this.maledict = null;
      this.squeeze_word = null;
+     this.request_impure = null;
 
      this.impure = () => {
          return STORE.get('purging.impure');
@@ -618,6 +619,17 @@ riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts
 
          if (action.type=='FETCHED-IMPURE-PURGING')
              this.tags['home_page_root-working-action'].update();
+
+         if (action.type=='START-TRANSFERD-IMPURE-TO-ANGEL') {
+             this.request_impure = action.contents;
+             this.tags['modal_request-impure'].update();
+         }
+
+         if (action.type=='STOP-TRANSFERD-IMPURE-TO-ANGEL') {
+             this.request_impure = null;
+             this.tags['modal_request-impure'].update();
+         }
+
      });
 
      this.on('mount', () => {
@@ -834,6 +846,28 @@ riot.tag2('impure-card', '<impure-card-small data="{opts.data}" status="{status(
      }
      this.status = () => {
          return this.isStart() ? 'start' : '';
+     };
+});
+
+riot.tag2('modal_request-impure', '<div class="modal {opts.source ? \'is-active\' : \'\'}"> <div class="modal-background" onclick="{clickClose}"></div> <div class="modal-content"> <div class="card"> <header class="card-header"> <p class="card-header-title"> Request Impure </p> </header> <div class="card-content"> <div class="content"> <div class="field"> <label class="label">依頼内容</label> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"> <thead> <tr> <th>Type</th> <th>ID</th> <th>Name</th></tr> </thead> <tbody> <tr> <th>Impure</th> <td>{val(\'impure\', \'id\')}</td> <td>{val(\'impure\', \'name\')}</td> </tr> <tr> <th>Angel</th> <td>{val(\'angel\', \'id\')}</td> <td>{val(\'angel\', \'name\')}</td> </tr> </tbody> </table> </div> <div class="field"> <label class="label">お願い文章を書いてください。(必須ではありません)</label> <textarea ref="message" class="textarea" placeholder="一言あるだけで気分が大分変りますので。"></textarea> </div> </div> <div style="overflow: hidden;"> <a class="button is-danger" style="float:left;" onclick="{clickClose}">Cancel</a> <a class="button is-primary" style="float:right;" onclick="{clickCommit}">Request</a> </div> </div> </div> <button class="modal-close is-large" aria-label="close" onclick="{clickClose}"></button> </div> </div>', '', '', function(opts) {
+     this.val = (name, key) => {
+         if (!opts.source || !opts.source[name])
+             return null;
+
+         let obj = opts.source[name];
+
+         return obj[key];
+     };
+
+     this.clickCommit = () => {
+         ACTIONS.transferImpureToAngel(
+             this.opts.source.impure,
+             this.opts.source.angel,
+             this.refs.message.value.trim(),
+         );
+     };
+     this.clickClose = () => {
+         ACTIONS.stopTransferImpureToAngel();
      };
 });
 
