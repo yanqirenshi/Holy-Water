@@ -143,10 +143,14 @@
     (render-json (hw.api.ctrl:get-impure-purging angel))))
 
 
-(defroute "/impures/:impure-id/transfer/angel/:angel-id" (&key impure-id angel-id)
+(defroute ("/impures/:impure-id/transfer/angel/:angel-id" :method :post) (&key impure-id angel-id |message|)
   (with-angel (angel)
-    (declare (ignorable angel))
-    (render-json (list impure-id angel-id))))
+    (let ((message (quri:url-decode (or |message| "")))
+          (impure   (hw::get-impure         :id impure-id))
+          (to-angel (hw.api.ctrl:get-angels :id angel-id)))
+      (unless impure   (throw-code 404))
+      (unless to-angel (throw-code 404))
+      (render-json (hw.api.ctrl:transfer-impure angel to-angel impure message)))))
 
 ;;;;;
 ;;;;; Purge

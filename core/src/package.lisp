@@ -39,7 +39,8 @@
   (:export #:start-action-impure
            #:stop-action-impure
            #:finish-impure
-           #:move-impure))
+           #:move-impure
+           #:create-request-message))
 (in-package :holy-water)
 
 (mito:connect-toplevel :postgres :database-name "holy_water" :username "holy_water")

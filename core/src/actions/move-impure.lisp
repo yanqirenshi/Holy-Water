@@ -3,7 +3,8 @@
 
 (defun %move-impure (angel impure to-maledict &key editor)
   (let ((collect-impure (get-collect-impure :angel angel :impure impure)))
-    (unless collect-impure (error "あかん!"))
+    (unless collect-impure
+      (error "あかん! あんたんちゃうわ。impure=~S" impure))
     ;; change maldect
     (setf (maledict-id collect-impure) (object-id to-maledict))
     (setf (updated-by  collect-impure) (object-id to-maledict))

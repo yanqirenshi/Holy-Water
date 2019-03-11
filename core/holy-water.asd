@@ -34,6 +34,7 @@
                  (:file "maledict")
                  (:file "impure")
                  (:file "purge")
+                 (:file "request-message")
                  (:file "deamon")
                  (:module "actions"
                   :components ((:file "stop-impure")

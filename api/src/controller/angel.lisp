@@ -38,3 +38,6 @@
 (defun find-angels (angel)
   (mapcar #'dao2angel
           (hw:find-angels :without-angel angel)))
+
+(defun get-angels (&key id)
+  (hw:get-angel :id id))

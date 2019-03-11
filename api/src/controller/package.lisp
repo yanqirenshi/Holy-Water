@@ -16,11 +16,13 @@
            #:move-impure
            #:save-impure
            #:find-impures-cemetery
-           #:get-impure-purging)
+           #:get-impure-purging
+           #:transfer-impure)
   (:export #:find-orthodoxs)
   (:export #:find-purge-history
            #:save-purge-term)
   (:export #:sing-in
            #:sing-out
-           #:find-angels))
+           #:find-angels
+           #:get-angels))
 (in-package :holy-water.api.controller)

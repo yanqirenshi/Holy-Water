@@ -84,3 +84,13 @@
                              :start       (timestamp2str (local-time:universal-to-timestamp (getf plist :|start|)))
                              :end         (timestamp2str (local-time:universal-to-timestamp (getf plist :|end|)))))
           (hw:find-impures-cemetery angel :from from :to to)))
+
+(defun transfer-impure (angel to-angel impure message)
+  (let ((to-maledict (hw::get-inbox-maledict to-angel))
+        (collected   (hw::get-collect-impure :angel angel :impure impure)))
+    (unless collected   (caveman2:throw-code 404))
+    (unless to-maledict (caveman2:throw-code 500))
+    (when (hw::impure-purge-now-p angel impure)
+      (caveman2:throw-code 500))
+    (hw:create-request-message impure angel to-angel message)
+    (hw.api.ctrl:move-impure angel impure to-maledict)))

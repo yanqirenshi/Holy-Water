@@ -43,7 +43,7 @@
 
     <style>
      impure-card-large_tab_show > div {
-         height:295px;
+         height:294px;
          overflow:auto;
 
          display:flex;

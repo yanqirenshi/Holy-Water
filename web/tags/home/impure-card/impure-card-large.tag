@@ -83,7 +83,7 @@
 
     <style>
      impure-card-large > .card {
-         width: calc(222px + 222px + 22px);
+         width: calc(222px + 222px + 222px + 22px + 22px);
          height: calc(222px + 222px + 22px);
          float: left;
          margin-left: 22px;
