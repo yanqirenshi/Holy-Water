@@ -33,7 +33,7 @@ class HolyWater {
     makeGunntChartData (core) {
         return {
             _class: 'WORKPACKAGE',
-            _id: core._id,
+            _id: core.id,
             code: core.impure_id,
             name: core.impure_name,
             uri: '',
@@ -41,7 +41,7 @@ class HolyWater {
                 start: core.start,
                 end: core.end,
             },
-            children: [],
+            children: { ht: {}, list: [] },
             _core: core,
         };
     }
