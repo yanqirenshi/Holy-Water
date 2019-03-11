@@ -161,6 +161,18 @@ class Actions extends Vanilla_Redux_Actions {
             maledict: maledict
         };
     }
+    selectedHomeMaledict (maledict) {
+        let state = STORE.get('selected');
+
+        state.home.maledict = maledict;
+
+        STORE.dispatch({
+            type: 'SELECTED-HOME-MALEDICT',
+            data: {
+                selected: state
+            },
+        });
+    }
     /////
     ///// Deamons
     /////
@@ -267,8 +279,6 @@ class Actions extends Vanilla_Redux_Actions {
         });
     }
     transferImpureToAngel (impure, angel, message) {
-        ACTIONS.pushWarningMessage('祓魔師間の移動は実装中です。');
-
         if (!(impure && angel))
             throw new Error('akan');
 
@@ -278,10 +288,12 @@ class Actions extends Vanilla_Redux_Actions {
         };
 
         API.post(path, post_data, (json, success) => {
-                STORE.dispatch(this.transferdImpureToAngel(json));
+            STORE.dispatch(this.transferdImpureToAngel(json));
         });
     }
     transferdImpureToAngel () {
+        this.pushSuccessMessage('Impure の依頼が完了しました。');
+
         return {
             type: 'TRANSFERD-IMPURE-TO-ANGEL'
         };

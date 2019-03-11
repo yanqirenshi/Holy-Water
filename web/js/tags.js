@@ -383,11 +383,12 @@ riot.tag2('home_page_root-impures', '<div style="padding-left:22px;">Debug: male
              if (this.opts.maledict.id == action.maledict.id)
                  ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
 
-         if (action.type=='MOVED-IMPURE')
-             ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
+         if (action.type=='MOVED-IMPURE' ||
+             action.type=='FINISHED-IMPURE' ||
+             action.type=='TRANSFERD-IMPURE-TO-ANGEL') {
 
-         if (action.type=='FINISHED-IMPURE')
              ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
+         }
      });
 });
 
@@ -409,7 +410,8 @@ riot.tag2('home_page_root-maledicts', '<nav class="panel hw-box-shadow"> <p clas
      this.clickItem = (e) => {
          let target = e.target;
          let maledict = this.opts.data.ht[target.getAttribute('maledict-id')];
-         this.opts.callback('select-bucket', maledict)
+
+         ACTIONS.selectedHomeMaledict(maledict);
      };
      this.clickAddButton = (e) => {
          let target = e.target;
@@ -572,7 +574,7 @@ riot.tag2('home_page_root-working-action', '<button class="button is-small" styl
      };
 });
 
-riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts data="{STORE.get(\'maledicts\')}" select="{maledict}" callback="{callback}" dragging="{dragging}"></home_page_root-maledicts> <home_page_root-angels></home_page_root-angels> <home_page_root-other-services></home_page_root-other-services> </div> <div class="contetns-area"> <div style="display:flex;"> <home_page_squeeze-area callback="{callback}"></home_page_squeeze-area> <home_page_root-close-impure-area style="margin-left:88px;margin-top:-5px;"></home_page_root-close-impure-area> </div> <home_page_root-impures maledict="{maledict}" callback="{callback}" filter="{squeeze_word}"></home_page_root-impures> </div> <home_page_root-working-action data="{impure()}"></home_page_root-working-action> <home_page_root-modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_page_root-modal-create-impure> <modal_request-impure source="{request_impure}"></modal_request-impure>', 'home_page_root { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page_root > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; }', '', function(opts) {
+riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts data="{STORE.get(\'maledicts\')}" select="{maledict()}" callback="{callback}" dragging="{dragging}"></home_page_root-maledicts> <home_page_root-angels></home_page_root-angels> <home_page_root-other-services></home_page_root-other-services> </div> <div class="contetns-area"> <div style="display:flex;"> <home_page_squeeze-area callback="{callback}"></home_page_squeeze-area> <home_page_root-close-impure-area style="margin-left:88px;margin-top:-5px;"></home_page_root-close-impure-area> </div> <home_page_root-impures maledict="{maledict()}" callback="{callback}" filter="{squeeze_word}"></home_page_root-impures> </div> <home_page_root-working-action data="{impure()}"></home_page_root-working-action> <home_page_root-modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_page_root-modal-create-impure> <modal_request-impure source="{request_impure}"></modal_request-impure>', 'home_page_root { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page_root > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; }', '', function(opts) {
      this.modal_open = false;
      this.modal_maledict = null;
      this.maledict = null;
@@ -582,16 +584,11 @@ riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts
      this.impure = () => {
          return STORE.get('purging.impure');
      }
+     this.maledict = () => {
+         return STORE.get('selected.home.maledict');
+     };
 
      this.callback = (action, data) => {
-         if ('select-bucket'==action) {
-             this.maledict = data;
-
-             this.update();
-
-             ACTIONS.fetchMaledictImpures(data.id);
-         }
-
          if ('open-modal-create-impure'==action)
              this.openModal(data);
 
@@ -611,6 +608,14 @@ riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts
      };
 
      STORE.subscribe((action) => {
+         if (action.type=='SELECTED-HOME-MALEDICT') {
+
+             this.update();
+
+             let maledict = this.maledict();
+             ACTIONS.fetchMaledictImpures(maledict.id);
+         }
+
          if (action.type=='FETCHED-MALEDICTS')
              this.update();
 
@@ -626,6 +631,11 @@ riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts
          }
 
          if (action.type=='STOP-TRANSFERD-IMPURE-TO-ANGEL') {
+             this.request_impure = null;
+             this.tags['modal_request-impure'].update();
+         }
+
+         if (action.type=='TRANSFERD-IMPURE-TO-ANGEL') {
              this.request_impure = null;
              this.tags['modal_request-impure'].update();
          }

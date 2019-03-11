@@ -76,8 +76,8 @@ class Store extends Vanilla_Redux_Store {
             },
         ];
     }
-    init () {
-        let data = {
+    coreData() {
+        return {
             orthodoxs: { ht: {}, list: [] },
             maledicts: { ht: {}, list: [] },
             deamons: { ht: {}, list: [] },
@@ -85,17 +85,44 @@ class Store extends Vanilla_Redux_Store {
             impures_done: { ht: {}, list: [] },
             purges: { ht: {}, list: [] },
             angels: { ht: {}, list: [] },
+        };
+    }
+    initRouteData () {
+        return {
+            active_page: 'home',
+            home_page: 'home',
+            randing_page: 'randing',
+            pages: this.pages(),
+        };
+    }
+    initSelectedData () {
+        return {
+            home: {
+                maledict: null,
+            },
+        };
+    }
+    init () {
+        let core_data = this.coreData();
+        let site_data = {
             site: {
                 active_page: 'home',
                 home_page: 'home',
                 randing_page: 'randing',
                 pages: this.pages(),
-            },
-            purging: {
-                impure: null,
-            },
-            messages: [],
+            }
         };
+
+        let data = Object.assign(
+            {
+                purging: {
+                    impure: null,
+                },
+                messages: [],
+                site: this.initRouteData(),
+                selected: this.initSelectedData(),
+            },
+            core_data);
 
         for (var i in data.site.pages) {
             let page = data.site.pages[i];

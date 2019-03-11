@@ -1,5 +1,6 @@
 <home_page_root-impures>
     <div style="padding-left:22px;">Debug: maledict={this.opts.maledict ? this.opts.maledict.name : ''}</div>
+
     <div class="flex-parent" style="height:100%; margin-top: -8px;">
         <div class="card-container">
             <div style="overflow: hidden; padding-bottom: 222px; padding-top: 22px;">
@@ -38,11 +39,12 @@
              if (this.opts.maledict.id == action.maledict.id)
                  ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
 
-         if (action.type=='MOVED-IMPURE')
-             ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
+         if (action.type=='MOVED-IMPURE' ||
+             action.type=='FINISHED-IMPURE' ||
+             action.type=='TRANSFERD-IMPURE-TO-ANGEL') {
 
-         if (action.type=='FINISHED-IMPURE')
              ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
+         }
      });
     </script>
 

@@ -60,7 +60,9 @@
      this.clickItem = (e) => {
          let target = e.target;
          let maledict = this.opts.data.ht[target.getAttribute('maledict-id')];
-         this.opts.callback('select-bucket', maledict)
+
+         // this.opts.callback('select-bucket', maledict)
+         ACTIONS.selectedHomeMaledict(maledict);
      };
      this.clickAddButton = (e) => {
          let target = e.target;

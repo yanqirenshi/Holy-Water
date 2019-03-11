@@ -1,7 +1,7 @@
 <home_page_root>
     <div class="bucket-area">
         <home_page_root-maledicts data={STORE.get('maledicts')}
-                                  select={maledict}
+                                  select={maledict()}
                                   callback={callback}
                                   dragging={dragging}></home_page_root-maledicts>
         <home_page_root-angels></home_page_root-angels>
@@ -15,7 +15,7 @@
             <home_page_root-close-impure-area style="margin-left:88px;margin-top:-5px;"></home_page_root-close-impure-area>
         </div>
 
-        <home_page_root-impures maledict={maledict}
+        <home_page_root-impures maledict={maledict()}
                                 callback={callback}
                                 filter={squeeze_word}></home_page_root-impures>
     </div>
@@ -40,18 +40,13 @@
      this.impure = () => {
          return STORE.get('purging.impure');
      }
+     this.maledict = () => {
+         return STORE.get('selected.home.maledict');
+     };
     </script>
 
     <script>
      this.callback = (action, data) => {
-         if ('select-bucket'==action) {
-             this.maledict = data;
-
-             this.update();
-
-             ACTIONS.fetchMaledictImpures(data.id);
-         }
-
          if ('open-modal-create-impure'==action)
              this.openModal(data);
 
@@ -71,6 +66,15 @@
      };
 
      STORE.subscribe((action) => {
+         if (action.type=='SELECTED-HOME-MALEDICT') {
+
+             this.update();
+
+             let maledict = this.maledict();
+             ACTIONS.fetchMaledictImpures(maledict.id);
+         }
+
+
          if (action.type=='FETCHED-MALEDICTS')
              this.update();
 
@@ -86,6 +90,11 @@
          }
 
          if (action.type=='STOP-TRANSFERD-IMPURE-TO-ANGEL') {
+             this.request_impure = null;
+             this.tags['modal_request-impure'].update();
+         }
+
+         if (action.type=='TRANSFERD-IMPURE-TO-ANGEL') {
              this.request_impure = null;
              this.tags['modal_request-impure'].update();
          }
