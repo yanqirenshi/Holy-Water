@@ -679,7 +679,7 @@ riot.tag2('icon-door-opened', '<span class="icon opened-door" maledict-id="{id}"
 riot.tag2('icon-ranning', '<i class="fas fa-running"></i>', 'icon-ranning i { color: #cccccc; } icon-ranning i:hover { color: #880000; }', '', function(opts) {
 });
 
-riot.tag2('impure-card-large', '<div class="card hw-box-shadow"> <header class="card-header"> <p class="card-header-title"> やること </p> <a href="#" class="card-header-icon" aria-label="more options"> <span class="icon" draggable="true" dragstart="{dragStart}" dragend="{dragEnd}"> <icon-ranning></icon-ranning> </span> </a> </header> <div class="card-content"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> <div style="margin-top: 11px;"> <impure-card-large_tab_actions class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_actions> <impure-card-large_tab_edit class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_edit> <impure-card-large_tab_hisotry class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_hisotry> <impure-card-large_tab_show class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_show> <impure-card-large_tab_finish class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_finish> </div> </div> <footer class="card-footer"> <span class="card-footer-item start" action="start-action" onclick="{clickButton}">Start</span> <span class="card-footer-item stop" action="stop-action" onclick="{clickButton}">Stop</span> <span class="card-footer-item open" action="switch-small" onclick="{clickButton}">Small</span> </footer> </div>', 'impure-card-large > .card { width: calc(222px + 222px + 222px + 22px + 22px); height: calc(222px + 222px + 22px); float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; border: 1px solid #dddddd; border-radius: 5px; } impure-card-large > .card .card-content{ height: calc(222px + 222px + 22px - 49px - 48px); padding: 11px 22px; overflow: auto; }', '', function(opts) {
+riot.tag2('impure-card-large', '<div class="card hw-box-shadow"> <header class="card-header"> <p class="card-header-title"> やること </p> <a href="#" class="card-header-icon" aria-label="more options"> <span class="icon" draggable="true" dragstart="{dragStart}" dragend="{dragEnd}"> <icon-ranning></icon-ranning> </span> </a> </header> <div class="card-content"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> <div style="margin-top: 11px;"> <impure-card-large_tab_show class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_show> <impure-card-large_tab_edit class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_edit> <impure-card-large_tab_finish class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_finish> </div> </div> <footer class="card-footer"> <span class="card-footer-item start" action="start-action" onclick="{clickButton}">Start</span> <span class="card-footer-item stop" action="stop-action" onclick="{clickButton}">Stop</span> <span class="card-footer-item open" action="switch-small" onclick="{clickButton}">Small</span> </footer> </div>', 'impure-card-large > .card { width: calc(222px + 222px + 222px + 22px + 22px); height: calc(222px + 222px + 22px); float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; border: 1px solid #dddddd; border-radius: 5px; } impure-card-large > .card .card-content{ height: calc(222px + 222px + 22px - 49px - 48px); padding: 11px 22px; overflow: auto; }', '', function(opts) {
      this.clickButton = (e) => {
          let target = e.target;
          let action = target.getAttribute('action');
@@ -705,11 +705,9 @@ riot.tag2('impure-card-large', '<div class="card hw-box-shadow"> <header class="
      };
 
      this.page_tabs = new PageTabs([
-         {code: 'show',    label: '照会',     tag: 'impure-card-large_tab_show' },
-         {code: 'edit',    label: '編集',     tag: 'impure-card-large_tab_edit' },
-         {code: 'actions', label: '実績',     tag: 'impure-card-large_tab_actions' },
-         {code: 'history', label: '移動履歴', tag: 'impure-card-large_tab_hisotry' },
-         {code: 'finish',  label: '完了',     tag: 'impure-card-large_tab_finish' },
+         {code: 'show',      label: '照会',     tag: 'impure-card-large_tab_show' },
+         {code: 'edit',      label: '編集',     tag: 'impure-card-large_tab_edit' },
+         {code: 'finish',    label: '完了',     tag: 'impure-card-large_tab_finish' },
      ]);
 
      this.on('mount', () => {
@@ -721,9 +719,6 @@ riot.tag2('impure-card-large', '<div class="card hw-box-shadow"> <header class="
          if (this.page_tabs.switchTab(this.tags, data.code))
              this.update();
      };
-});
-
-riot.tag2('impure-card-large_tab_actions', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"> <thead> <tr> <th>担当</th> <th>開始</th> <th>終了</th> <th>時間</th> </tr> </thead> <tbody> </tbody> </table>', '', '', function(opts) {
 });
 
 riot.tag2('impure-card-large_tab_edit', '<div> <input class="input" type="text" placeholder="Text input" riot-value="{name()}" ref="name"> <textarea class="textarea description" placeholder="10 lines of textarea" rows="10" style="height: 411px;" ref="description">{description()}</textarea> <div> <button class="button" onclick="{clickSave}">Save</button> </div> </div>', 'impure-card-large_tab_edit > div { height:295px; overflow:auto; display:flex; flex-direction:column; } impure-card-large_tab_edit > description { margin-top:11px; flex-grow:1; } impure-card-large_tab_edit > div > * { margin-top: 11px; } impure-card-large_tab_edit > div > *:first-child { margin-top: 0px; }', '', function(opts) {
@@ -746,9 +741,6 @@ riot.tag2('impure-card-large_tab_edit', '<div> <input class="input" type="text" 
 });
 
 riot.tag2('impure-card-large_tab_finish', '<a class="button is-danger" action="finishe-impure">完了</a>', '', '', function(opts) {
-});
-
-riot.tag2('impure-card-large_tab_hisotry', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"> <thead> <tr> <th>担当</th> <th>Maledict</th> <th>開始</th> <th>終了</th> <th>時間</th> </tr> </thead> <tbody> </tbody> </table>', '', '', function(opts) {
 });
 
 riot.tag2('impure-card-large_tab_show-description', '', 'impure-card-large_tab_show-description h1 { font-weight: bold; font-size: 20px; margin-top: 11px; text-decoration: underline; } impure-card-large_tab_show-description h1:first-child { margin-top: 0px; } impure-card-large_tab_show-description h2 { font-weight: bold; font-size: 18px; margin-top: 11px; text-decoration: underline; } impure-card-large_tab_show-description h3 { font-weight: bold; font-size: 16px; text-decoration: underline; } impure-card-large_tab_show-description h4 { font-weight: bold; font-size: 14px; } impure-card-large_tab_show-description h5 { font-weight: bold; font-size: 12px; } impure-card-large_tab_show-description * { font-size: 12px; } impure-card-large_tab_show-description table { border-collapse: collapse; } impure-card-large_tab_show-description td { border: solid 1px; padding: 2px 5px; } impure-card-large_tab_show-description th { border: solid 1px; padding: 2px 5px; background: #eeeeee; } impure-card-large_tab_show-description li { list-style-type: square; margin-left: 22px; }', 'class="hw-markdown"', function(opts) {

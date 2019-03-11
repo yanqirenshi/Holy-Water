@@ -18,11 +18,9 @@
             <page-tabs core={page_tabs} callback={clickTab}></page-tabs>
 
             <div style="margin-top: 11px;">
-                <impure-card-large_tab_actions class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_actions>
-                <impure-card-large_tab_edit    class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_edit>
-                <impure-card-large_tab_hisotry class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_hisotry>
-                <impure-card-large_tab_show    class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_show>
-                <impure-card-large_tab_finish  class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_finish>
+                <impure-card-large_tab_show     class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_show>
+                <impure-card-large_tab_edit     class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_edit>
+                <impure-card-large_tab_finish   class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_finish>
             </div>
         </div>
 
@@ -63,11 +61,9 @@
 
     <script>
      this.page_tabs = new PageTabs([
-         {code: 'show',    label: '照会',     tag: 'impure-card-large_tab_show' },
-         {code: 'edit',    label: '編集',     tag: 'impure-card-large_tab_edit' },
-         {code: 'actions', label: '実績',     tag: 'impure-card-large_tab_actions' },
-         {code: 'history', label: '移動履歴', tag: 'impure-card-large_tab_hisotry' },
-         {code: 'finish',  label: '完了',     tag: 'impure-card-large_tab_finish' },
+         {code: 'show',      label: '照会',     tag: 'impure-card-large_tab_show' },
+         {code: 'edit',      label: '編集',     tag: 'impure-card-large_tab_edit' },
+         {code: 'finish',    label: '完了',     tag: 'impure-card-large_tab_finish' },
      ]);
 
      this.on('mount', () => {

@@ -40,7 +40,8 @@
            #:stop-action-impure
            #:finish-impure
            #:move-impure
-           #:create-request-message))
+           #:create-request-message
+           #:find-impure-request-messages))
 (in-package :holy-water)
 
 (mito:connect-toplevel :postgres :database-name "holy_water" :username "holy_water")
