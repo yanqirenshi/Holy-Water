@@ -11,10 +11,15 @@
               style="margin-top:11px;"
               ref="description"></textarea>
 
-    <div style="margin-top:22px;">
-        <button class="button">Reset</button>
-        <button class="button">Clear</button>
-        <button class="button is-success">Create!</button>
+    <div style="margin-top:22px; display: flex; justify-content: space-between;">
+        <div>
+            <button class="button">Reset</button>
+            <button class="button">Clear</button>
+        </div>
+
+        <div>
+            <button class="button is-success">Create!</button>
+        </div>
     </div>
 
 </impure-card-large_tab_create-after>
