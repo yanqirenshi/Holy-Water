@@ -94,3 +94,11 @@
       (caveman2:throw-code 500))
     (hw:create-request-message impure angel to-angel message)
     (hw.api.ctrl:move-impure angel impure to-maledict)))
+
+
+(defun create-after-impure (angel impure &key name description)
+  (hw:add-after-impure angel
+                       impure
+                       :name name
+                       :description description
+                       :creator angel))

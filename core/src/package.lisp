@@ -27,7 +27,8 @@
            #:get-impure
            #:save-impure
            #:find-impures
-           #:find-impures-cemetery)
+           #:find-impures-cemetery
+           #:add-after-impure)
   (:export #:find-orthodoxs)
   (:export #:find-angels
            #:get-angel

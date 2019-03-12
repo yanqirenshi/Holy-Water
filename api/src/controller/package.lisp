@@ -17,7 +17,8 @@
            #:save-impure
            #:find-impures-cemetery
            #:get-impure-purging
-           #:transfer-impure)
+           #:transfer-impure
+           #:create-after-impure)
   (:export #:find-orthodoxs)
   (:export #:find-purge-history
            #:save-purge-term)

@@ -298,6 +298,21 @@ class Actions extends Vanilla_Redux_Actions {
             type: 'TRANSFERD-IMPURE-TO-ANGEL'
         };
     }
+    createImpureAfterImpure (impure, data) {
+        let path = '/impures/' + impure.id + '/afters';
+
+        API.post(path, this.encodePostData(data), (json, success) => {
+            STORE.dispatch(this.createdImpureAfterImpure(json));
+        });
+    }
+    createdImpureAfterImpure (response) {
+        this.pushSuccessMessage('Impure の作成が完了しました');
+
+        return {
+            type: 'CREATED-IMPURE-AFTER-IMPURE',
+            data: {},
+        };
+    }
     /////
     ///// Action
     /////

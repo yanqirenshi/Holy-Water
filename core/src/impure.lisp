@@ -12,11 +12,28 @@
 
 
 (defgeneric add-impure (target impure &key creator)
+
   (:method ((maledict rs_maledict) (impure rs_impure-active) &key creator)
     (collect-impure-create maledict impure :creator creator))
+
   (:method ((angel rs_angel) (impure rs_impure-active) &key creator)
     (let ((inbox (get-inbox-maledict angel)))
       (add-impure inbox impure :creator creator))))
+
+
+(defgeneric add-after-impure (angel impure &key creator name description)
+  (:method ((angel rs_angel) (impure rs_impure) &key creator name description)
+    (let ((in-box (hw::get-inbox-maledict angel)))
+      (assert in-box)
+      (dbi:with-transaction mito:*connection*
+        (let ((after-impure (create-impure :name name
+                                           :description description
+                                           :creator creator)))
+          (add-impure in-box after-impure :creator creator)
+          (mito:create-dao 're_impure
+                           :id-from (mito:object-id impure)
+                           :id-to   (mito:object-id after-impure))
+          after-impure)))))
 
 
 (defun find-impures (&key maledict)
@@ -26,10 +43,12 @@
             (select-dao 'ev_collect-impure
               (sxql:where (:= :maledict-id (object-id maledict)))))))
 
+
 (defun find-impures-target (maledict)
   (if (= *maledict-type-done* (maledict-type-id maledict))
       '(:class rs_impure-finished :id-column :rs_impure-finished.id)
       '(:class rs_impure-active   :id-column :rs_impure-active.id)))
+
 
 (defun find-impures (&key maledict)
   (when maledict
@@ -38,6 +57,7 @@
         (sxql:inner-join :ev_collect-impure
                          :on (:= (getf target :id-column) :ev_collect-impure.impure-id))
         (sxql:where (:= :ev_collect-impure.maledict-id (object-id maledict)))))))
+
 
 (defun find-impures-cemetery-sql (maledict from to)
   (when maledict
@@ -76,8 +96,10 @@
                    :created-by  by-id
                    :updated-by  by-id)))
 
+
 (defun impure-purge-now-p (angel impure)
   (get-purge :angel angel :impure impure))
+
 
 (defun get-impure-purging (angel)
   (car (select-dao 'rs_impure-active

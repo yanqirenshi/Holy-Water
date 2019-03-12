@@ -152,6 +152,17 @@
       (unless to-angel (throw-code 404))
       (render-json (hw.api.ctrl:transfer-impure angel to-angel impure message)))))
 
+(defroute ("/impures/:impure-id/afters" :method :post) (&key impure-id |name| |description|)
+  (with-angel (angel)
+    (let ((name        (quri:url-decode (or |name| "")))
+          (description (quri:url-decode (or |description| "")))
+          (impure      (hw::get-impure  :id impure-id)))
+      (unless impure   (throw-code 404))
+      (render-json (hw.api.ctrl:create-after-impure angel
+                                                    impure
+                                                    :name name
+                                                    :description description)))))
+
 ;;;;;
 ;;;;; Purge
 ;;;;;
