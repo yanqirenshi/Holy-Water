@@ -27,9 +27,6 @@
      STORE.subscribe((action) => {
          let update_only = [
              'FETCHED-MALEDICT-IMPURES',
-             'STARTED-ACTION',
-             'STOPED-ACTION',
-             'SAVED-IMPURE',
          ]
 
          if (update_only.indexOf(action.type)>=0)
@@ -41,7 +38,10 @@
 
          if (action.type=='MOVED-IMPURE' ||
              action.type=='FINISHED-IMPURE' ||
-             action.type=='TRANSFERD-IMPURE-TO-ANGEL') {
+             action.type=='TRANSFERD-IMPURE-TO-ANGEL' ||
+             action.type=='STARTED-ACTION' ||
+             action.type=='STOPED-ACTION' ||
+             action.type=='SAVED-IMPURE') {
 
              ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
          }

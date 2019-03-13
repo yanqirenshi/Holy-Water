@@ -32,7 +32,7 @@ class Router {
 
         let self = this;
         route(function (a) {
-            self.routing(arguments);
+            self.routing(Array.prototype.slice.call(arguments));
         });
     }
     start () {
@@ -51,6 +51,29 @@ class Router {
      *  =======
      *
      * **************************************************************** */
+    findSite (site, args) {
+
+        if (!args || args.length==0)
+            return null;
+
+        let arg = args[0];
+
+        let page = site.find((d) => {
+            if (d.regex)
+                return d.regex.exec(arg);
+            else
+                return d.code == arg;
+        });
+
+        if (!page)
+            return null;
+
+        if (args.length==1)
+            return page;
+
+        // そんなに深くならないと思うので。。。。再帰で。。。
+        return this.findSite(page.sections, args.splice(1));
+    }
     /**
      * ???
      * @param {hash-table}  site サイト(ページ)の全データ
@@ -59,7 +82,12 @@ class Router {
     getPageCode (site, args) {
         let len = args.length;
 
-        return args[0] ? args[0] : site.randing_page;
+        if (!args[0])
+            return site.randing_page;
+
+        let x = this.findSite(site.pages, args);
+
+        return x ? x : null;
     }
     /**
      * ???
@@ -90,10 +118,9 @@ class Router {
         let site = this._store.state().get('site');
         let actions = this._actions;
 
-        let page_code = this.getPageCode(site, args);
-        let page = this.getPage (site, page_code);
+        let page = this.getPageCode(site, args);
 
-        site.active_page = page_code;
+        site.active_page = page.code;
         page.active_section = this.getActiveSection(page, args);
 
         actions.movePage({
@@ -128,8 +155,7 @@ class Router {
         let tags = root_tag.tags;
         let trg_show = [];
 
-        for (var i in site.pages) {
-            let page = site.pages[i];
+        for (let page of site.pages) {
             let key = page.code;
             let tag = tags[key];
 

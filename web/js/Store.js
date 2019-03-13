@@ -2,18 +2,36 @@ class Store extends Vanilla_Redux_Store {
     constructor(reducer) {
         super(reducer, Immutable.Map({}));
     }
+    initPageHome () {
+        return {
+            code: "home", menu_label: '戦場',
+            active_section: 'root',
+            home_section: 'root',
+            sections: [
+                { code: 'root', tag: 'home_page_root' },
+                {
+                    code: 'impures',
+                    sections: [
+                        {
+                            code: 'impure',
+                            regex: new RegExp('^\\d+$'),
+                            tag: 'home_impure',
+                            home_section: 'root',
+                            sections: [
+                                { code: 'root', tag: 'home_page_root' },
+                            ],
+                        }
+                    ],
+                },
+            ],
+            stye: {
+                color: { 1: '#fdeff2', 2: '#e0e0e0', 3: '#e198b4', 4: '#ffffff', 5: '#eeeeee', 5: '#333333' }
+            }
+        };
+    }
     pages() {
         return [
-            {
-                code: "home", menu_label: '戦場',
-                active_section: 'root', home_section: 'root',
-                sections: [
-                    { code: 'root', tag: 'home_page_root' },
-                ],
-                stye: {
-                    color: { 1: '#fdeff2', 2: '#e0e0e0', 3: '#e198b4', 4: '#ffffff', 5: '#eeeeee', 5: '#333333' }
-                }
-            },
+            this.initPageHome(),
             {
                 code: "purges",
                 menu_label: '浄歴',

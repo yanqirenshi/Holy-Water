@@ -337,6 +337,16 @@ riot.tag2('home_emergency-door', '<span class="move-door {dragging ? \'open\' : 
      });
 });
 
+riot.tag2('home_impure', '', '', '', function(opts) {
+     this.mixin(MIXINS.page);
+
+     this.on('mount', () => { this.draw(); });
+     this.on('update', () => { this.draw(); });
+});
+
+riot.tag2('home_impure_root', '', '', '', function(opts) {
+});
+
 riot.tag2('home_page_root-angels', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Exorcists</p> <a class="panel-block"> <orthodox-doropdown></orthodox-doropdown> </a> <a each="{obj in data()}" class="panel-block" angel-id="{obj.id}"> <span style="width: 205px;" maledict-id="{obj.id}"> {obj.name} </span> <home_emergency-door source="{obj}"></home_emergency-door> </a> </nav>', 'home_page_root-angels > .panel { width: 255px; margin-top: 22px; border-radius: 4px 4px 0 0; } home_page_root-angels > .panel > a { background: #ffffff; }', '', function(opts) {
      this.dragging = false;
 
@@ -371,9 +381,6 @@ riot.tag2('home_page_root-impures', '<div style="padding-left:22px;">Debug: male
      STORE.subscribe((action) => {
          let update_only = [
              'FETCHED-MALEDICT-IMPURES',
-             'STARTED-ACTION',
-             'STOPED-ACTION',
-             'SAVED-IMPURE',
          ]
 
          if (update_only.indexOf(action.type)>=0)
@@ -385,7 +392,10 @@ riot.tag2('home_page_root-impures', '<div style="padding-left:22px;">Debug: male
 
          if (action.type=='MOVED-IMPURE' ||
              action.type=='FINISHED-IMPURE' ||
-             action.type=='TRANSFERD-IMPURE-TO-ANGEL') {
+             action.type=='TRANSFERD-IMPURE-TO-ANGEL' ||
+             action.type=='STARTED-ACTION' ||
+             action.type=='STOPED-ACTION' ||
+             action.type=='SAVED-IMPURE') {
 
              ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
          }
