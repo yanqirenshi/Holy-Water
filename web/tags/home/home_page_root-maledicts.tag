@@ -61,7 +61,6 @@
          let target = e.target;
          let maledict = this.opts.data.ht[target.getAttribute('maledict-id')];
 
-         // this.opts.callback('select-bucket', maledict)
          ACTIONS.selectedHomeMaledict(maledict);
      };
      this.clickAddButton = (e) => {
@@ -72,6 +71,14 @@
 
          e.stopPropagation();
      };
+     this.on('mount', () => {
+         let maledicts = this.data()
+                             .sort((a,b) => {
+                                 return a.ORDER < b.ORDER;
+                             });
+
+         ACTIONS.selectedHomeMaledict(maledicts[0]);
+     });
     </script>
 
     <script>

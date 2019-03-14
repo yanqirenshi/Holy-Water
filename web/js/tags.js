@@ -431,6 +431,14 @@ riot.tag2('home_page_root-maledicts', '<nav class="panel hw-box-shadow"> <p clas
 
          e.stopPropagation();
      };
+     this.on('mount', () => {
+         let maledicts = this.data()
+                             .sort((a,b) => {
+                                 return a.ORDER < b.ORDER;
+                             });
+
+         ACTIONS.selectedHomeMaledict(maledicts[0]);
+     });
 
      this.data = () => {
          if (!this.opts.data) return [];
