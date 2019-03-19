@@ -96,13 +96,14 @@ class Store extends Vanilla_Redux_Store {
     }
     coreData() {
         return {
-            orthodoxs: { ht: {}, list: [] },
-            maledicts: { ht: {}, list: [] },
-            deamons: { ht: {}, list: [] },
-            impures: { ht: {}, list: [] },
+            orthodoxs:    { ht: {}, list: [] },
+            maledicts:    { ht: {}, list: [] },
+            deccots:      { ht: {}, list: [] },
+            deamons:      { ht: {}, list: [] },
+            impures:      { ht: {}, list: [] },
             impures_done: { ht: {}, list: [] },
-            purges: { ht: {}, list: [] },
-            angels: { ht: {}, list: [] },
+            purges:       { ht: {}, list: [] },
+            angels:       { ht: {}, list: [] },
         };
     }
     initRouteData () {

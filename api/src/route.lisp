@@ -47,7 +47,8 @@
   (with-angel (angel)
     (render-json (list :maleditds (hw.api.ctrl:find-maledicts angel)
                        :deamons   (hw.api.ctrl:find-deamons)
-                       :orthodoxs (hw.api.ctrl:find-orthodoxs)))))
+                       :orthodoxs (hw.api.ctrl:find-orthodoxs)
+                       :deccots   (hw.api.ctrl:find-deccots angel)))))
 
 
 ;;;;;
@@ -179,6 +180,13 @@
            (purge (hw::get-purge :id (parse-integer id) :status :all)))
       (unless purge (throw-code 404))
       (render-json (hw.api.ctrl:save-purge-term angel purge start end :editor angel)))))
+
+;;;;;
+;;;;; deccot
+;;;;;
+(defroute "/deccots" ()
+  (with-angel (angel)
+    (render-json (hw.api.ctrl:find-deccots angel))))
 
 
 ;;;;;

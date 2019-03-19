@@ -66,8 +66,9 @@ class Actions extends Vanilla_Redux_Actions {
             type: 'FETCHED-HOLYWATER',
             data: {
                 orthodoxs: this.mergeData(response.ORTHODOXS, state.orthodoxs),
-                maledicts: this.mergeData(response.MALEDITDS, state.orthodoxs),
-                deamons: this.mergeData(response.DEAMONS, state.orthodoxs),
+                maledicts: this.mergeData(response.MALEDITDS, state.maledicts),
+                deamons: this.mergeData(response.DEAMONS, state.deamons),
+                deccots: this.mergeData(response.DECCOTS, state.deccots)
             },
         };
     }

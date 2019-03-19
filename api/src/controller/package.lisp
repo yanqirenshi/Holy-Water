@@ -25,5 +25,6 @@
   (:export #:sing-in
            #:sing-out
            #:find-angels
-           #:get-angels))
+           #:get-angels)
+  (:export #:find-deccots))
 (in-package :holy-water.api.controller)

@@ -521,16 +521,11 @@ riot.tag2('home_page_root-modal-create-impure', '<div class="modal {opts.open ? 
      };
 });
 
-riot.tag2('home_page_root-other-services', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Services</p> <a each="{data()}" class="panel-block" angel-id="{id}"> <span style="width: 205px;" maledict-id="{id}"> {name} </span> <span class="operators"> </span> </a> </nav>', 'home_page_root-other-services > .panel { width: 255px; margin-top: 22px; border-radius: 4px 4px 0 0; } home_page_root-other-services > .panel > a { background: #ffffff; } home_page_root-other-services .move-door.close .opened-door{ display: none; } home_page_root-other-services .move-door.open .closed-door{ display: none; }', '', function(opts) {
+riot.tag2('home_page_root-other-services', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Services</p> <a each="{data()}" class="panel-block" angel-id="{id}"> <span style="width: 205px;" deccot-id="{id}"> {service} </span> <span class="operators"> </span> </a> </nav>', 'home_page_root-other-services > .panel { width: 255px; margin-top: 22px; border-radius: 4px 4px 0 0; } home_page_root-other-services > .panel > a { background: #ffffff; } home_page_root-other-services .move-door.close .opened-door{ display: none; } home_page_root-other-services .move-door.open .closed-door{ display: none; }', '', function(opts) {
      this.dragging = false;
 
      this.data = () => {
-         return [
-             { name: 'Gitlab' },
-             { name: 'Redmine' },
-             { name: 'Backlog' },
-             { name: 'Jira' },
-         ];
+         return STORE.get('deccots').list;
      };
 
      this.active_maledict = null;
@@ -817,7 +812,7 @@ riot.tag2('impure-card-large_tab_show', '<div> <p style="font-weight: bold;">{na
      };
 });
 
-riot.tag2('impure-card-small', '<div class="card hw-box-shadow"> <header class="card-header"> <p class="card-header-title"> やること </p> <a href="#" class="card-header-icon" aria-label="more options"> <span class="icon" title="このアイコンを扉へドラッグ&ドロップすると、扉の場所へ移動できます。" draggable="true" dragstart="{dragStart}" dragend="{dragEnd}"> <icon-ranning></icon-ranning> </span> </a> </header> <div class="card-content"> <div class="content"> <p>{name()}</p> </div> </div> <footer class="card-footer"> <span class="card-footer-item start" action="start-action" onclick="{clickButton}">Start</span> <span class="card-footer-item stop" action="stop-action" onclick="{clickButton}">Stop</span> <span class="card-footer-item open" action="switch-large" onclick="{clickButton}">Open</span> </footer> </div>', 'impure-card-small > .card { width: 222px; height: 222px; float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; border: 1px solid #dddddd; border-radius: 5px; } impure-card-small > .card .card-content{ height: calc(222px - 49px - 48px); padding: 11px 22px; overflow: auto; }', '', function(opts) {
+riot.tag2('impure-card-small', '<div class="card hw-box-shadow"> <header class="card-header"> <p class="card-header-title"> やること </p> <a href="#" class="card-header-icon" aria-label="more options"> <span class="icon" title="このアイコンを扉へドラッグ&ドロップすると、扉の場所へ移動できます。" draggable="true" dragstart="{dragStart}" dragend="{dragEnd}"> <icon-ranning></icon-ranning> </span> </a> </header> <div class="card-content"> <div class="content" style="font-size:14px;"> <p>{name()}</p> </div> </div> <footer class="card-footer"> <span class="card-footer-item start" action="start-action" onclick="{clickButton}">Start</span> <span class="card-footer-item stop" action="stop-action" onclick="{clickButton}">Stop</span> <span class="card-footer-item open" action="switch-large" onclick="{clickButton}">Open</span> </footer> </div>', 'impure-card-small > .card { width: 222px; height: 222px; float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; border: 1px solid #dddddd; border-radius: 5px; } impure-card-small > .card .card-content{ height: calc(222px - 49px - 48px); padding: 11px 22px; overflow: auto; }', '', function(opts) {
      this.clickButton = (e) => {
          let target = e.target;
          let action = target.getAttribute('action');

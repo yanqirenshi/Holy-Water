@@ -16,7 +16,7 @@
             </a>
         </header>
         <div class="card-content">
-            <div class="content">
+            <div class="content" style="font-size:14px;">
                 <p>{name()}</p>
             </div>
         </div>

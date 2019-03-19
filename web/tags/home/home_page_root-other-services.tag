@@ -6,8 +6,8 @@
            class="panel-block"
            angel-id={id}>
 
-            <span style="width: 205px;" maledict-id={id}>
-                {name}
+            <span style="width: 205px;" deccot-id={id}>
+                {service}
             </span>
 
             <span class="operators">
@@ -21,12 +21,7 @@
 
     <script>
      this.data = () => {
-         return [
-             { name: 'Gitlab' },
-             { name: 'Redmine' },
-             { name: 'Backlog' },
-             { name: 'Jira' },
-         ];
+         return STORE.get('deccots').list;
      };
     </script>
 
