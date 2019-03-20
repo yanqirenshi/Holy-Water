@@ -4,9 +4,14 @@
 
         <a each={data()}
            class="panel-block"
-           angel-id={id}>
+           angel-id={id}
+           deccot-id={id}
+           service={service}
+           onclick={click}>
 
-            <span style="width: 205px;" deccot-id={id}>
+            <span style="width: 205px;"
+                  deccot-id={id}
+                  service={service}>
                 {service}
             </span>
 
@@ -17,6 +22,7 @@
 
     <script>
      this.dragging = false;
+     this.active_maledict = null;
     </script>
 
     <script>
@@ -26,7 +32,14 @@
     </script>
 
     <script>
-     this.active_maledict = null;
+     this.click = (e) => {
+         let elem = e.target;
+
+         ACTIONS.fetchServiceItems(
+             elem.getAttribute('service'),
+             elem.getAttribute('deccot-id'))
+
+     };
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-ANGELS')
              this.update();

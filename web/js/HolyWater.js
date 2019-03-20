@@ -1,4 +1,7 @@
 class HolyWater {
+    /////
+    /////
+    /////
     summaryPurges (purges) {
         return purges.reduce((a,b) => {
             return a + moment(b.end).diff(b.start, 'second');

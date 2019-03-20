@@ -104,6 +104,8 @@ class Store extends Vanilla_Redux_Store {
             impures_done: { ht: {}, list: [] },
             purges:       { ht: {}, list: [] },
             angels:       { ht: {}, list: [] },
+            // これは個別にするほうが良いのだろうか。。。
+            gitlab:       { ht: {}, list: [] },
         };
     }
     initRouteData () {

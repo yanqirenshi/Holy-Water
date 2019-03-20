@@ -43,7 +43,9 @@
            #:move-impure
            #:create-request-message
            #:find-impure-request-messages)
-  (:export #:find-deccots))
+  (:export #:find-deccots
+           #:get-angel-deccot
+           #:find-deccot-items))
 (in-package :holy-water)
 
 (mito:connect-toplevel :postgres :database-name "holy_water" :username "holy_water")

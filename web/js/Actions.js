@@ -442,6 +442,23 @@ class Actions extends Vanilla_Redux_Actions {
         };
     }
     /////
+    ///// Sevices
+    /////
+    fetchServiceItems (service, deccot_id) {
+        let path_str = '/deccots/%s/%s/items';
+        let path = path_str.format(service, deccot_id);
+
+        API.get(path, (response) => {
+            STORE.dispatch(this.fetchedServiceItems(response));
+        });
+    }
+    fetchedServiceItems (response) {
+        return {
+            type: 'FETCHED-SERVICE-ITEMS',
+            data: { gitlab: this.mergeData(response, STORE.get('gitlab')) },
+        };
+    }
+    /////
     ///// Message
     /////
     pushMessage (message) {

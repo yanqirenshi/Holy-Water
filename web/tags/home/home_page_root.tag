@@ -12,7 +12,7 @@
     <div class="contetns-area">
         <div style="display:flex;">
             <home_page_squeeze-area callback={callback}></home_page_squeeze-area>
-            <home_page_root-close-impure-area style="margin-left:88px;margin-top:-5px;"></home_page_root-close-impure-area>
+            <!-- <home_page_root-close-impure-area style="margin-left:88px;margin-top:-5px;"></home_page_root-close-impure-area> -->
         </div>
 
         <home_page_root-impures maledict={maledict()}
@@ -29,10 +29,10 @@
     <modal_request-impure source={request_impure}></modal_request-impure>
 
     <script>
-     this.modal_open = false;
+     this.modal_open     = false;
      this.modal_maledict = null;
-     this.maledict = null; //選択された maledict
-     this.squeeze_word = null;
+     this.maledict       = null; //選択された maledict
+     this.squeeze_word   = null;
      this.request_impure = null;
     </script>
 
@@ -73,7 +73,6 @@
              let maledict = this.maledict();
              ACTIONS.fetchMaledictImpures(maledict.id);
          }
-
 
          if (action.type=='FETCHED-MALEDICTS')
              this.update();

@@ -26,5 +26,7 @@
            #:sing-out
            #:find-angels
            #:get-angels)
-  (:export #:find-deccots))
+  (:export #:find-deccots
+           #:get-deccot
+           #:find-deccot-items))
 (in-package :holy-water.api.controller)

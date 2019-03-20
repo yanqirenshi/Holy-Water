@@ -521,14 +521,22 @@ riot.tag2('home_page_root-modal-create-impure', '<div class="modal {opts.open ? 
      };
 });
 
-riot.tag2('home_page_root-other-services', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Services</p> <a each="{data()}" class="panel-block" angel-id="{id}"> <span style="width: 205px;" deccot-id="{id}"> {service} </span> <span class="operators"> </span> </a> </nav>', 'home_page_root-other-services > .panel { width: 255px; margin-top: 22px; border-radius: 4px 4px 0 0; } home_page_root-other-services > .panel > a { background: #ffffff; } home_page_root-other-services .move-door.close .opened-door{ display: none; } home_page_root-other-services .move-door.open .closed-door{ display: none; }', '', function(opts) {
+riot.tag2('home_page_root-other-services', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Services</p> <a each="{data()}" class="panel-block" angel-id="{id}" deccot-id="{id}" service="{service}" onclick="{click}"> <span style="width: 205px;" deccot-id="{id}" service="{service}"> {service} </span> <span class="operators"> </span> </a> </nav>', 'home_page_root-other-services > .panel { width: 255px; margin-top: 22px; border-radius: 4px 4px 0 0; } home_page_root-other-services > .panel > a { background: #ffffff; } home_page_root-other-services .move-door.close .opened-door{ display: none; } home_page_root-other-services .move-door.open .closed-door{ display: none; }', '', function(opts) {
      this.dragging = false;
+     this.active_maledict = null;
 
      this.data = () => {
          return STORE.get('deccots').list;
      };
 
-     this.active_maledict = null;
+     this.click = (e) => {
+         let elem = e.target;
+
+         ACTIONS.fetchServiceItems(
+             elem.getAttribute('service'),
+             elem.getAttribute('deccot-id'))
+
+     };
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-ANGELS')
              this.update();
@@ -587,11 +595,11 @@ riot.tag2('home_page_root-working-action', '<button class="button is-small" styl
      };
 });
 
-riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts data="{STORE.get(\'maledicts\')}" select="{maledict()}" callback="{callback}" dragging="{dragging}"></home_page_root-maledicts> <home_page_root-angels></home_page_root-angels> <home_page_root-other-services></home_page_root-other-services> </div> <div class="contetns-area"> <div style="display:flex;"> <home_page_squeeze-area callback="{callback}"></home_page_squeeze-area> <home_page_root-close-impure-area style="margin-left:88px;margin-top:-5px;"></home_page_root-close-impure-area> </div> <home_page_root-impures maledict="{maledict()}" callback="{callback}" filter="{squeeze_word}"></home_page_root-impures> </div> <home_page_root-working-action data="{impure()}"></home_page_root-working-action> <home_page_root-modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_page_root-modal-create-impure> <modal_request-impure source="{request_impure}"></modal_request-impure>', 'home_page_root { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page_root > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; }', '', function(opts) {
-     this.modal_open = false;
+riot.tag2('home_page_root', '<div class="bucket-area"> <home_page_root-maledicts data="{STORE.get(\'maledicts\')}" select="{maledict()}" callback="{callback}" dragging="{dragging}"></home_page_root-maledicts> <home_page_root-angels></home_page_root-angels> <home_page_root-other-services></home_page_root-other-services> </div> <div class="contetns-area"> <div style="display:flex;"> <home_page_squeeze-area callback="{callback}"></home_page_squeeze-area> </div> <home_page_root-impures maledict="{maledict()}" callback="{callback}" filter="{squeeze_word}"></home_page_root-impures> </div> <home_page_root-working-action data="{impure()}"></home_page_root-working-action> <home_page_root-modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_page_root-modal-create-impure> <modal_request-impure source="{request_impure}"></modal_request-impure>', 'home_page_root { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page_root > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; }', '', function(opts) {
+     this.modal_open     = false;
      this.modal_maledict = null;
-     this.maledict = null;
-     this.squeeze_word = null;
+     this.maledict       = null;
+     this.squeeze_word   = null;
      this.request_impure = null;
 
      this.impure = () => {

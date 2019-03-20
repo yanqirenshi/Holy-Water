@@ -188,6 +188,12 @@
   (with-angel (angel)
     (render-json (hw.api.ctrl:find-deccots angel))))
 
+(defroute "/deccots/:service/:deccot-id/items" (&key service deccot-id)
+  (with-angel (angel)
+    (let ((deccot (hw:get-angel-deccot angel service :id deccot-id)))
+      (unless deccot (throw-code 404))
+      (render-json (hw.api.ctrl:find-deccot-items angel deccot)))))
+
 
 ;;;;;
 ;;;;; Error pages
