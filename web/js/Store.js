@@ -120,6 +120,7 @@ class Store extends Vanilla_Redux_Store {
         return {
             home: {
                 maledict: null,
+                service: null,
             },
         };
     }

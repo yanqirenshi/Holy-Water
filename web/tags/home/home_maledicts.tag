@@ -1,4 +1,4 @@
-<home_page_root-maledicts>
+<home_maledicts>
     <nav class="panel hw-box-shadow">
         <p class="panel-heading">Maledicts</p>
 
@@ -111,36 +111,36 @@
     </script>
 
     <style>
-     home_page_root-maledicts > .panel {
+     home_maledicts > .panel {
          width: 255px;
          border-radius: 4px 4px 0 0;
      }
 
-     home_page_root-maledicts .panel-block {
+     home_maledicts .panel-block {
          background:#fff;
      }
 
-     home_page_root-maledicts .panel-block.is-active {
+     home_maledicts .panel-block.is-active {
          background:#eaf4fc;
      }
 
-     home_page_root-maledicts .move-door.close .opened-door {
+     home_maledicts .move-door.close .opened-door {
          display: none;
      }
-     home_page_root-maledicts .move-door.open .closed-door {
+     home_maledicts .move-door.open .closed-door {
          display: none;
      }
-     home_page_root-maledicts .operators {
+     home_maledicts .operators {
          width: 53px;
      }
-     home_page_root-maledicts .operators .icon {
+     home_maledicts .operators .icon {
          color: #cccccc;
      }
-     home_page_root-maledicts .operators .icon:hover {
+     home_maledicts .operators .icon:hover {
          color: #880000;
      }
-     home_page_root-maledicts .operators .move-door.open .icon {
+     home_maledicts .operators .move-door.open .icon {
          color: #880000;
      }
     </style>
-</home_page_root-maledicts>
+</home_maledicts>

@@ -1,4 +1,4 @@
-<home_page_root-angels>
+<home_angels>
     <nav class="panel hw-box-shadow">
         <p class="panel-heading">Exorcists</p>
         <a class="panel-block">
@@ -36,13 +36,13 @@
     </script>
 
     <style>
-     home_page_root-angels > .panel {
+     home_angels > .panel {
          width: 255px;
          margin-top: 22px;
          border-radius: 4px 4px 0 0;
      }
-     home_page_root-angels > .panel > a {
+     home_angels > .panel > a {
          background: #ffffff;
      }
     </style>
-</home_page_root-angels>
+</home_angels>

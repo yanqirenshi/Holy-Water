@@ -1,4 +1,4 @@
-<home_page_squeeze-area>
+<home_squeeze-area>
     <div style="width:444px; margin-bottom:22px; margin-left:22px;">
         <div class="control has-icons-left has-icons-right">
             <input class="input is-rounded"
@@ -29,21 +29,21 @@
     </script>
 
     <style>
-     home_page_squeeze-area {
+     home_squeeze-area {
          display: flex;
      }
-     home_page_squeeze-area .button{
+     home_squeeze-area .button{
          padding: 0px;
          margin-left: 8px;
          background: none;
          border: none;
          color: #ffff;
      }
-     home_page_squeeze-area .button:hover{
+     home_squeeze-area .button:hover{
          color: #880000;
      }
-     home_page_squeeze-area .button i{
+     home_squeeze-area .button i{
          font-size: 33px;
      }
     </style>
-</home_page_squeeze-area>
+</home_squeeze-area>

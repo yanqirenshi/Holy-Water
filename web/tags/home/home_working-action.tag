@@ -1,4 +1,4 @@
-<home_page_root-working-action class="hw-box-shadow {hide()}">
+<home_working-action class="hw-box-shadow {hide()}">
 
     <button class="button is-small"
             style="margin-right:11px;"
@@ -69,7 +69,7 @@
     </script>
 
     <style>
-     home_page_root-working-action {
+     home_working-action {
          display: block;
          position: fixed;
          bottom: 33px;
@@ -79,4 +79,4 @@
          border-radius: 8px;
      }
     </style>
-</home_page_root-working-action>
+</home_working-action>

@@ -1,5 +1,5 @@
-<home_page_root-impures>
-    <div style="padding-left:22px;">Debug: maledict={this.opts.maledict ? this.opts.maledict.name : ''}</div>
+<home_impures class={hide()}>
+    <!-- <div style="padding-left:22px;">Debug: maledict={this.opts.maledict ? this.opts.maledict.name : ''}</div> -->
 
     <div class="flex-parent" style="height:100%; margin-top: -8px;">
         <div class="card-container">
@@ -11,6 +11,9 @@
     </div>
 
     <script>
+     this.hide = () => {
+         return this.opts.maledict ? '' : 'hide';
+     };
      this.impures = () => {
          let out = STORE.get('impures').list.sort((a, b) => {
              return a.id > b.id ? 1 : -1;
@@ -24,6 +27,9 @@
              return d.name.toLowerCase().indexOf(filter.toLowerCase()) >= 0;
          });
      };
+    </script>
+
+    <script>
      STORE.subscribe((action) => {
          let update_only = [
              'FETCHED-MALEDICT-IMPURES',
@@ -49,12 +55,12 @@
     </script>
 
     <style>
-     home_page_root-impures .flex-parent {
+     home_impures .flex-parent {
          display: flex;
          flex-direction: column;
      }
 
-     home_page_root-impures .card-container {
+     home_impures .card-container {
          padding-right: 22px;
          display: block;
          overflow: auto;
@@ -62,4 +68,4 @@
          flex-grow: 1;
      }
     </style>
-</home_page_root-impures>
+</home_impures>

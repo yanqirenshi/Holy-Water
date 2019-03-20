@@ -1,4 +1,4 @@
-<home_page_root-other-services>
+<home_other-services>
     <nav class="panel hw-box-shadow">
         <p class="panel-heading">Services</p>
 
@@ -35,10 +35,13 @@
      this.click = (e) => {
          let elem = e.target;
 
-         ACTIONS.fetchServiceItems(
-             elem.getAttribute('service'),
-             elem.getAttribute('deccot-id'))
-
+         ACTIONS.selectServiceItem({
+             service: elem.getAttribute('service'),
+             id: elem.getAttribute('deccot-id'),
+         })
+         /* ACTIONS.fetchServiceItems(
+          *     elem.getAttribute('service'),
+          *     elem.getAttribute('deccot-id')) */
      };
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-ANGELS')
@@ -47,19 +50,19 @@
     </script>
 
     <style>
-     home_page_root-other-services > .panel {
+     home_other-services > .panel {
          width: 255px;
          margin-top: 22px;
          border-radius: 4px 4px 0 0;
      }
-     home_page_root-other-services > .panel > a {
+     home_other-services > .panel > a {
          background: #ffffff;
      }
-     home_page_root-other-services .move-door.close .opened-door{
+     home_other-services .move-door.close .opened-door{
          display: none;
      }
-     home_page_root-other-services .move-door.open .closed-door{
+     home_other-services .move-door.open .closed-door{
          display: none;
      }
     </style>
-</home_page_root-other-services>
+</home_other-services>

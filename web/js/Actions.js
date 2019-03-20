@@ -444,6 +444,22 @@ class Actions extends Vanilla_Redux_Actions {
     /////
     ///// Sevices
     /////
+    selectServiceItem (data) {
+        let new_state = STORE.get('selected');
+        let new_home_state = Object.assign({}, new_state.home);
+
+        new_home_state.maledict = null;
+        new_home_state.service  = data;
+
+        new_state.home = new_home_state;
+
+        STORE.dispatch({
+            type: 'SELECT-SERVICE-ITEM',
+            data: {
+                selected: new_state
+            },
+        });
+    }
     fetchServiceItems (service, deccot_id) {
         let path_str = '/deccots/%s/%s/items';
         let path = path_str.format(service, deccot_id);

@@ -1,4 +1,4 @@
-<home_page_root-modal-create-impure>
+<home_modal-create-impure>
     <div class="modal {opts.open ? 'is-active' : ''}">
         <div class="modal-background"></div>
         <div class="modal-card">
@@ -97,4 +97,4 @@
          this.opts.callback('close-modal-create-impure');
      };
     </script>
-</home_page_root-modal-create-impure>
+</home_modal-create-impure>

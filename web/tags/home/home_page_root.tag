@@ -1,30 +1,38 @@
 <home_page_root>
     <div class="bucket-area">
-        <home_page_root-maledicts data={STORE.get('maledicts')}
+        <home_maledicts data={STORE.get('maledicts')}
                                   select={maledict()}
                                   callback={callback}
-                                  dragging={dragging}></home_page_root-maledicts>
-        <home_page_root-angels></home_page_root-angels>
+                                  dragging={dragging}></home_maledicts>
+        <home_angels></home_angels>
 
-        <home_page_root-other-services></home_page_root-other-services>
+        <home_other-services></home_other-services>
     </div>
 
     <div class="contetns-area">
         <div style="display:flex;">
-            <home_page_squeeze-area callback={callback}></home_page_squeeze-area>
-            <!-- <home_page_root-close-impure-area style="margin-left:88px;margin-top:-5px;"></home_page_root-close-impure-area> -->
+            <home_squeeze-area callback={callback}></home_squeeze-area>
+            <!-- <home_close-impure-area style="margin-left:88px;margin-top:-5px;"></home_close-impure-area> -->
         </div>
 
-        <home_page_root-impures maledict={maledict()}
-                                callback={callback}
-                                filter={squeeze_word}></home_page_root-impures>
+        <!-- ----------------------- -->
+        <!--   Impures               -->
+        <!-- ----------------------- -->
+        <home_impures maledict={maledict()}
+                      callback={callback}
+                      filter={squeeze_word}></home_impures>
+
+        <!-- ----------------------- -->
+        <!--   Other Service Items   -->
+        <!-- ----------------------- -->
+        <home_servie-items></home_servie-items>
     </div>
 
-    <home_page_root-working-action data={impure()}></home_page_root-working-action>
+    <home_working-action data={impure()}></home_working-action>
 
-    <home_page_root-modal-create-impure open={modal_open}
+    <home_modal-create-impure open={modal_open}
                                         callback={callback}
-                                        maledict={modal_maledict}></home_page_root-modal-create-impure>
+                                        maledict={modal_maledict}></home_modal-create-impure>
 
     <modal_request-impure source={request_impure}></modal_request-impure>
 
@@ -61,7 +69,7 @@
 
          if ('squeeze-impure'==action) {
              this.squeeze_word = (data.trim().length==0 ? null : data);
-             this.tags['home_page_root-impures'].update();
+             this.tags['home_impures'].update();
          }
      };
 
@@ -81,7 +89,7 @@
              this.closeModal();
 
          if (action.type=='FETCHED-IMPURE-PURGING')
-             this.tags['home_page_root-working-action'].update();
+             this.tags['home_working-action'].update();
 
          if (action.type=='START-TRANSFERD-IMPURE-TO-ANGEL') {
              this.request_impure = action.contents;
@@ -98,6 +106,13 @@
              this.tags['modal_request-impure'].update();
          }
 
+         if (action.type=='SELECT-SERVICE-ITEM') {
+             this.tags['home_maledicts'].update();
+             this.tags['home_impures'].update();
+
+             let service = action.data.selected.home.service;
+             ACTIONS.fetchServiceItems(service.service, service.id);
+         }
      });
 
      this.on('mount', () => {
@@ -111,11 +126,11 @@
          this.modal_open = true;
          this.modal_maledict = maledict;
 
-         this.tags['home_page_root-modal-create-impure'].update();
+         this.tags['home_modal-create-impure'].update();
      };
      this.closeModal = () => {
          this.modal_open = false;
-         this.tags['home_page_root-modal-create-impure'].update();
+         this.tags['home_modal-create-impure'].update();
      };
     </script>
 
