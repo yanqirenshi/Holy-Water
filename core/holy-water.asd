@@ -39,6 +39,7 @@
                  (:file "purge")
                  (:file "request-message")
                  (:file "deamon")
+                 (:file "deccot")
                  (:module "actions"
                   :components ((:file "stop-impure")
                                (:file "start-impure")
