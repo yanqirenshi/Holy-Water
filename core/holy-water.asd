@@ -6,7 +6,7 @@
   :version "0.1.0"
   :author ""
   :license ""
-  :depends-on ("mito")
+  :depends-on ("mito" "api.gitlab")
   :components ((:module "src"
                 :components
                 ((:file "package")

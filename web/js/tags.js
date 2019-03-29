@@ -31,7 +31,7 @@ riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" 
      });
 
      if (location.hash=='')
-         location.hash=STORE.get('site.active_page');
+         location.hash = STORE.get('site.active_page');
 
      this.on('mount', () => {
          ACTIONS.movePage(STORE.get('site'));
