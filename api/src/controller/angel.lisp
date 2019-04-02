@@ -6,9 +6,9 @@
 (defun make-angel (&key name ghost-id creator)
   (assert (and name ghost-id creator))
   (dbi:with-transaction mito:*connection*
-    (let ((angel (hw::create-angel :name name :creator creator))
+    (let ((angel        (hw::create-angel :name name :creator creator))
           (ghost-shadow (hw::make-ghost-shadow ghost-id :creator creator)))
-      (hw::make-ghost-shadow_angel angel ghost-shadow :creator creator))))
+      (hw::make-ghost-shadow_angel ghost-shadow angel :creator creator))))
 
 ;;;;;
 ;;;;; auth

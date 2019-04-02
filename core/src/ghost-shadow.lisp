@@ -10,13 +10,13 @@
                   (where (:= :th_ghost_shadow_angel.angel_id (mito:object-id angel))))))))
 
 
- (defun make-ghost-shadow (ghost-id &key creator)
+(defun make-ghost-shadow (ghost-id &key creator)
   (when (get-ghost-shadow :ghost-id ghost-id)
     (error "Aledy exist. ghost-id=~S" ghost-id))
   (mito:create-dao 'rs_ghost-shadow
                    :ghost-id ghost-id
-                   :created-by (or creator (mito:object-id creator) nil)
-                   :updated-by (or creator (mito:object-id creator) nil)))
+                   :created-by (if creator (mito:object-id creator) nil)
+                   :updated-by (if creator (mito:object-id creator) nil)))
 
 
 (defgeneric make-ghost-shadow_angel (ghost-shadow angel &key creator)
@@ -24,5 +24,5 @@
     (mito:create-dao 'th_ghost-shadow_angel
                      :ghost-shadow-id (mito:object-id ghost-shadow)
                      :angel-id        (mito:object-id angel)
-                     :created-by      (or creator (mito:object-id creator) nil)
-                     :updated-by      (or creator (mito:object-id creator) nil))))
+                     :created-by      (if creator (mito:object-id creator) nil)
+                     :updated-by      (if creator (mito:object-id creator) nil))))
