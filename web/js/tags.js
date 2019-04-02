@@ -935,18 +935,16 @@ riot.tag2('modal_request-impure', '<div class="modal {opts.source ? \'is-active\
      };
 });
 
-riot.tag2('orthodox-doropdown', '<div class="dropdown {open ? \'is-active\' : \'\'}" style="width:100%;"> <div class="dropdown-trigger" style="width:100%;"> <button class="button" style="width:100%" aria-haspopup="true" aria-controls="dropdown-menu" onclick="{clickButton}"> <span>Orthodox</span> <span class="icon is-small"> <i class="fas fa-angle-down" aria-hidden="true"></i> </span> </button> </div> <div class="dropdown-menu" style="width:100%" id="dropdown-menu" role="menu"> <div class="dropdown-content"> <a each="{orthodox in orthodoxs}" href="" class="dropdown-item"> {orthodox.name} </a> </div> </div> </div>', '', 'style="width:100%;"', function(opts) {
+riot.tag2('orthodox-doropdown', '<div class="dropdown {open ? \'is-active\' : \'\'}" style="width:100%;"> <div class="dropdown-trigger" style="width:100%;"> <button class="button" style="width:100%" aria-haspopup="true" aria-controls="dropdown-menu" onclick="{clickButton}"> <span>Choose Orthodox</span> <span class="icon is-small"> <i class="fas fa-angle-down" aria-hidden="true"></i> </span> </button> </div> <div class="dropdown-menu" style="width:100%" id="dropdown-menu" role="menu"> <div class="dropdown-content"> <a each="{orthodox in orthodoxs()}" orthodox-id="{orthodox.id}" class="dropdown-item"> {orthodox.name} </a> </div> </div> </div>', '', 'style="width:100%;"', function(opts) {
      this.open = false;
      this.clickButton = () => {
          this.open = !this.open;
          this.update();
      };
 
-     this.orthodoxs = [
-         { name: 'サーバーサイド' },
-         { name: 'アプリ' },
-         { name: 'ディレクター' },
-     ];
+     this.orthodoxs = () => {
+         return STORE.get('orthodoxs.list');
+     };
 });
 
 riot.tag2('service-card-small', '<div class="card hw-box-shadow"> <header class="card-header"> <p class="card-header-title"> Gitlab &nbsp; <a href="{url()}" target="_blank">Issues</a> </p> </header> <div class="card-content"> <div class="content" style="font-size:14px;"> <p style="word-break: break-all;">{name()}</p> </div> </div> <footer class="card-footer"> <a class="card-footer-item" href="{assignee_url()}" taget="_blank"> {assignee_name()} </a> </footer> </div>', 'service-card-small > .card { width: 222px; height: 222px; float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; border: 1px solid #dddddd; border-radius: 5px; } service-card-small > .card .card-content{ height: calc(222px - 49px - 48px); padding: 11px 22px; overflow: auto; }', '', function(opts) {

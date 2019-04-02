@@ -5,7 +5,8 @@
                     aria-haspopup="true"
                     aria-controls="dropdown-menu"
                     onclick={clickButton}>
-                <span>Orthodox</span>
+                <span>Choose Orthodox</span>
+
                 <span class="icon is-small">
                     <i class="fas fa-angle-down" aria-hidden="true"></i>
                 </span>
@@ -14,8 +15,9 @@
         <div class="dropdown-menu" style="width:100%"
              id="dropdown-menu" role="menu">
             <div class="dropdown-content">
-                <a each={orthodox in orthodoxs}
-                   href="" class="dropdown-item">
+                <a each={orthodox in orthodoxs()}
+                   orthodox-id={orthodox.id}
+                   class="dropdown-item">
                     {orthodox.name}
                 </a>
             </div>
@@ -31,10 +33,8 @@
     </script>
 
     <script>
-     this.orthodoxs = [
-         { name: 'サーバーサイド' },
-         { name: 'アプリ' },
-         { name: 'ディレクター' },
-     ];
+     this.orthodoxs = () => {
+         return STORE.get('orthodoxs.list');
+     };
     </script>
 </orthodox-doropdown>

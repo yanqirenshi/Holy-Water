@@ -23,6 +23,7 @@
                                (:file "th_angel-maledict")
                                (:file "th_ghost-shadow_angel")
                                (:file "th_ghost-shadow_deccot")
+                               (:file "th_orthodox_angel")
                                (:file "ev_setting-auth")
                                (:file "ev_collect-impure")
                                (:file "ev_purge")
