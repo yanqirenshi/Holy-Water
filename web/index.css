@@ -50,8 +50,9 @@ app > div.kasumi {
     opacity: 0.3;
     z-index: -888888;
 }
-app > div[ref=page-area] {
+app > app-page-area {
     padding-left: 55px;
     width: 100vw;
     height: 100vh;
+    display: block;
 }
