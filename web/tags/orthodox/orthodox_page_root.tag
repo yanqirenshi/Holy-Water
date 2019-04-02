@@ -43,4 +43,14 @@
              this.update();
      });
     </script>
+
+    <style>
+     orthodox_page_root {
+         width: 100%;
+         height: 100%;
+         display: block;
+         overflow: auto;
+     }
+    </style>
+
 </orthodox_page_root>
