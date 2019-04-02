@@ -4,7 +4,7 @@
                                   select={maledict()}
                                   callback={callback}
                                   dragging={dragging}></home_maledicts>
-        <home_angels></home_angels>
+        <home_orthodox-angels></home_orthodox-angels>
 
         <home_other-services></home_other-services>
     </div>
@@ -12,7 +12,7 @@
     <div class="contetns-area">
         <div style="display:flex;">
             <home_squeeze-area callback={callback}></home_squeeze-area>
-            <!-- <home_close-impure-area style="margin-left:88px;margin-top:-5px;"></home_close-impure-area> -->
+            <home_requtest-area></home_requtest-area>
         </div>
 
         <!-- ----------------------- -->
@@ -133,8 +133,7 @@
      home_page {
          height: 100%;
          width: 100%;
-         padding: 22px 0px 0px 0px;
-         padding-left: calc(22px + 55px);
+         padding: 22px 0px 0px 22px;
 
          display: flex;
      }
@@ -144,6 +143,9 @@
          margin-left: 11px;
 
          flex-grow: 1;
+     }
+     home_page home_squeeze-area {
+         margin-right: 55px;
      }
     </style>
 </home_page>
