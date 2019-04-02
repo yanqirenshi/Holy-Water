@@ -5,7 +5,7 @@
                     aria-haspopup="true"
                     aria-controls="dropdown-menu"
                     onclick={clickButton}>
-                <span>Choose Orthodox</span>
+                <span>{orthodox ? orthodox.name : 'Choose Orthodox'}</span>
 
                 <span class="icon is-small">
                     <i class="fas fa-angle-down" aria-hidden="true"></i>
@@ -14,22 +14,40 @@
         </div>
         <div class="dropdown-menu" style="width:100%"
              id="dropdown-menu" role="menu">
+
             <div class="dropdown-content">
                 <a each={orthodox in orthodoxs()}
+                   class="dropdown-item"
                    orthodox-id={orthodox.id}
-                   class="dropdown-item">
+                   onclick={selectItem}>
                     {orthodox.name}
                 </a>
             </div>
+
         </div>
     </div>
 
     <script>
-     this.open = false;
+     this.open = null;
+     this.orthodox = null;
+     this.exorcists = [];
+
      this.clickButton = () => {
          this.open = !this.open;
          this.update();
      };
+     this.selectItem = (e) => {
+         let id = e.target.getAttribute('orthodox-id');
+
+         this.open = null;
+
+         this.orthodox = STORE.get('orthodoxs.ht')[id];
+
+         this.update();
+
+         ACTIONS.fetchOrthodoxExorcists(id);
+     };
+
     </script>
 
     <script>

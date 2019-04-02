@@ -19,12 +19,20 @@
 
     <script>
      this.dragging = false;
+     this.exorcists = [];
     </script>
 
     <script>
      this.data = () => {
-         return STORE.get('angels').list;
+         return this.exorcists;
      };
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-ORTHODOX-EXORCISTS') {
+             this.exorcists = action.exorcists
+
+             this.update();
+         }
+     });
     </script>
 
     <script>

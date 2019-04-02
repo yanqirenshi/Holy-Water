@@ -108,6 +108,12 @@
     (declare (ignore angel))
     (render-json (hw.api.ctrl:find-orthodox-all-exorcists))))
 
+(defroute "/orthodoxs/:orthodox-id/exorcists" (&key orthodox-id)
+  (with-angel (angel)
+    (declare (ignore angel))
+    (let ((orthodox-id (parse-integer orthodox-id)))
+      (render-json (hw.api.ctrl:find-orthodox-exorcists :orthodox-id orthodox-id)))))
+
 
 ;;;;;
 ;;;;; Impure

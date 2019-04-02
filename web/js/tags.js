@@ -323,10 +323,18 @@ riot.tag2('home', '', '', '', function(opts) {
 
 riot.tag2('home_angels', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Exorcists</p> <a class="panel-block"> <orthodox-doropdown></orthodox-doropdown> </a> <a each="{obj in data()}" class="panel-block" angel-id="{obj.id}"> <span style="width: 205px;" maledict-id="{obj.id}"> {obj.name} </span> <home_emergency-door source="{obj}"></home_emergency-door> </a> </nav>', 'home_angels > .panel { width: 255px; margin-top: 22px; border-radius: 4px 4px 0 0; } home_angels > .panel > a { background: #ffffff; }', '', function(opts) {
      this.dragging = false;
+     this.exorcists = [];
 
      this.data = () => {
-         return STORE.get('angels').list;
+         return this.exorcists;
      };
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-ORTHODOX-EXORCISTS') {
+             this.exorcists = action.exorcists
+
+             this.update();
+         }
+     });
 
      this.active_maledict = null;
      STORE.subscribe((action) => {
@@ -935,11 +943,25 @@ riot.tag2('modal_request-impure', '<div class="modal {opts.source ? \'is-active\
      };
 });
 
-riot.tag2('orthodox-doropdown', '<div class="dropdown {open ? \'is-active\' : \'\'}" style="width:100%;"> <div class="dropdown-trigger" style="width:100%;"> <button class="button" style="width:100%" aria-haspopup="true" aria-controls="dropdown-menu" onclick="{clickButton}"> <span>Choose Orthodox</span> <span class="icon is-small"> <i class="fas fa-angle-down" aria-hidden="true"></i> </span> </button> </div> <div class="dropdown-menu" style="width:100%" id="dropdown-menu" role="menu"> <div class="dropdown-content"> <a each="{orthodox in orthodoxs()}" orthodox-id="{orthodox.id}" class="dropdown-item"> {orthodox.name} </a> </div> </div> </div>', '', 'style="width:100%;"', function(opts) {
-     this.open = false;
+riot.tag2('orthodox-doropdown', '<div class="dropdown {open ? \'is-active\' : \'\'}" style="width:100%;"> <div class="dropdown-trigger" style="width:100%;"> <button class="button" style="width:100%" aria-haspopup="true" aria-controls="dropdown-menu" onclick="{clickButton}"> <span>{orthodox ? orthodox.name : \'Choose Orthodox\'}</span> <span class="icon is-small"> <i class="fas fa-angle-down" aria-hidden="true"></i> </span> </button> </div> <div class="dropdown-menu" style="width:100%" id="dropdown-menu" role="menu"> <div class="dropdown-content"> <a each="{orthodox in orthodoxs()}" class="dropdown-item" orthodox-id="{orthodox.id}" onclick="{selectItem}"> {orthodox.name} </a> </div> </div> </div>', '', 'style="width:100%;"', function(opts) {
+     this.open = null;
+     this.orthodox = null;
+     this.exorcists = [];
+
      this.clickButton = () => {
          this.open = !this.open;
          this.update();
+     };
+     this.selectItem = (e) => {
+         let id = e.target.getAttribute('orthodox-id');
+
+         this.open = null;
+
+         this.orthodox = STORE.get('orthodoxs.ht')[id];
+
+         this.update();
+
+         ACTIONS.fetchOrthodoxExorcists(id);
      };
 
      this.orthodoxs = () => {
@@ -996,14 +1018,14 @@ riot.tag2('orthodox_page_root', '<section class="section"> <div class="container
 
      this.on('mount', () => {
          ACTIONS.fetchOrthodoxs();
-         ACTIONS.fetchOrthodoxExorcists();
+         ACTIONS.fetchOrthodoxAllExorcists();
      });
 
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-ORTHODOXS')
              this.tags['orthodox-list'].update();
 
-         if (action.type=='FETCHED-ORTHODOX-EXORCISTS')
+         if (action.type=='FETCHED-ORTHODOX-ALL-EXORCISTS')
              this.update();
      });
 });

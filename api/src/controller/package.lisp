@@ -20,7 +20,8 @@
            #:transfer-impure
            #:create-after-impure)
   (:export #:find-orthodoxs
-           #:find-orthodox-all-exorcists)
+           #:find-orthodox-all-exorcists
+           #:find-orthodox-exorcists)
   (:export #:find-purge-history
            #:save-purge-term)
   (:export #:sing-in

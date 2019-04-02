@@ -29,3 +29,6 @@
 
 (defun find-orthodox-all-exorcists ()
   (find-angels nil))
+
+(defun find-orthodox-exorcists (&key orthodox-id)
+  (mapcar #'dao2angel (hw::orthodox-angels orthodox-id)))

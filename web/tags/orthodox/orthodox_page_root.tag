@@ -32,14 +32,14 @@
 
      this.on('mount', () => {
          ACTIONS.fetchOrthodoxs();
-         ACTIONS.fetchOrthodoxExorcists();
+         ACTIONS.fetchOrthodoxAllExorcists();
      });
 
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-ORTHODOXS')
              this.tags['orthodox-list'].update();
 
-         if (action.type=='FETCHED-ORTHODOX-EXORCISTS')
+         if (action.type=='FETCHED-ORTHODOX-ALL-EXORCISTS')
              this.update();
      });
     </script>

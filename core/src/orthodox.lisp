@@ -18,4 +18,15 @@
                       :orthodox-id orthodox-id
                       :angel-id    angel-id
                       :created-by  (if creator (mito:object-id creator) nil)
-                      :updated-by  (if creator (mito:object-id creator) nil)))))))
+                      :updated-by  (if creator (mito:object-id creator) nil))))))
+
+(defgeneric orthodox-angels (orthodox)
+  (:method ((orthodox rs_orthodox))
+    (select-dao 'rs_angel
+      (inner-join :th_orthodox_angel
+                  :on (:= :rs_angel.id :th_orthodox_angel.angel_id))
+      (where (:= :th_orthodox_angel.orthodox_id (mito:object-id orthodox)))))
+  (:method ((orthodox-id integer))
+    (let ((orthodox (get-orthodox :id orthodox-id)))
+      (when orthodox
+        (orthodox-angels orthodox)))))
