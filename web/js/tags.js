@@ -1,40 +1,54 @@
-riot.tag2('angel', '', '', '', function(opts) {
-     this.mixin(MIXINS.page);
-
-     this.on('mount', () => { this.draw(); });
-     this.on('update', () => { this.draw(); });
-});
-
-riot.tag2('angel_page_root', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">祓魔師</h1> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">パスワード変更</h1> <h2 class="subtitle hw-text-white">準備中</h2> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">サインアウト</h1> <h2 class="subtitle hw-text-white"></h2> <div class="contents"> <button class="button is-danger hw-box-shadow" style="margin-left:22px; margin-top:11px;" onclick="{clickSignOut}">Sign Out</button> </div> </div> </section> </div> </section>', '', '', function(opts) {
+riot.tag2('angel_page', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">祓魔師</h1> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">パスワード変更</h1> <h2 class="subtitle hw-text-white">準備中</h2> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">サインアウト</h1> <h2 class="subtitle hw-text-white"></h2> <div class="contents"> <button class="button is-danger hw-box-shadow" style="margin-left:22px; margin-top:11px;" onclick="{clickSignOut}">Sign Out</button> </div> </div> </section> </div> </section>', '', '', function(opts) {
      this.clickSignOut = () => {
          ACTIONS.signOut();
      };
 });
 
-riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" site="{site()}" moves="{[]}"></menu-bar> <div ref="page-area"></div> <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p> <message-area></message-area>', '', '', function(opts) {
+riot.tag2('app-page-area', '', '', '', function(opts) {
+     this.draw = () => {
+         if (this.opts.route)
+             ROUTER.draw(this, STORE.get('site.pages'), this.opts.route);
+     }
+     this.on('mount', () => {
+         this.draw();
+     });
+     this.on('update', () => {
+         this.draw();
+     });
+});
+
+riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" site="{site()}" moves="{[]}"></menu-bar> <app-page-area></app-page-area> <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p> <message-area></message-area> <home_working-action data="{impure()}"></home_working-action>', '', '', function(opts) {
      this.site = () => {
          return STORE.state().get('site');
      };
+     this.impure = () => {
+         return STORE.get('purging.impure');
+     }
+     this.updateMenuBar = () => {
+         if (this.tags['menu-bar'])
+             this.tags['menu-bar'].update();
+     }
 
      STORE.subscribe((action)=>{
-         if (action.type!='MOVE-PAGE')
-             return;
+         if (action.type=='MOVE-PAGE') {
+             this.updateMenuBar();
 
-         let tags= this.tags;
+             this.tags['app-page-area'].update({ opts: { route: action.route }});
+         }
 
-         tags['menu-bar'].update();
-         ROUTER.switchPage(this, this.refs['page-area'], this.site());
+         if (action.type=='FETCHED-IMPURE-PURGING')
+             this.tags['home_working-action'].update();
      })
 
      window.addEventListener('resize', (event) => {
          this.update();
      });
 
-     if (location.hash=='')
-         location.hash = STORE.get('site.active_page');
-
      this.on('mount', () => {
-         ACTIONS.movePage(STORE.get('site'));
+         let hash = location.hash.split('/');
+         hash[0] = hash[0].substring(1)
+
+         ACTIONS.movePage({ route: hash });
      });
 });
 
@@ -53,32 +67,7 @@ riot.tag2('cemetery-list', '<table class="table is-bordered is-striped is-narrow
      };
 });
 
-riot.tag2('cemetery', '', '', '', function(opts) {
-     this.mixin(MIXINS.page);
-
-     this.on('mount', () => { this.draw(); });
-     this.on('update', () => { this.draw(); });
-});
-
-riot.tag2('cemetery_page_filter', '<span class="hw-text-white" style="font-size:24px; font-weight:bold;">期間：</Span> <input class="input" type="text" placeholder="From" riot-value="{date2str(opts.from)}" readonly> <span style="font-size:24px;"> 〜 </span> <input class="input" type="text" placeholder="To" riot-value="{date2str(opts.to)}" readonly> <div class="operators"> <move-date-operator label="日" unit="d" callback="{callback}"></move-date-operator> <move-date-operator label="週" unit="w" callback="{callback}"></move-date-operator> <move-date-operator label="月" unit="M" callback="{callback}"></move-date-operator> <button class="button refresh hw-box-shadow" style="margin-top:1px; margin-left:11px;" onclick="{clickRefresh}">Refresh</button> </div>', 'cemetery_page_filter, cemetery_page_filter .operators { display: flex; } cemetery_page_filter .input { width: 111px; border: none; }', '', function(opts) {
-     this.date2str = (date) => {
-         if (!date) return '';
-         return date.format('YYYY-MM-DD');
-     };
-
-     this.clickRefresh = () => {
-         this.opts.callback('refresh');
-     };
-
-     this.callback = (action, data) => {
-         this.opts.callback('move-date', {
-             unit: data.unit,
-             amount: data.amount,
-         })
-     };
-});
-
-riot.tag2('cemetery_page_root', '<section class="section"> <div class="container"> <h2 class="subtitle" style="text-shadow: 0px 0px 11px #fff;"></h2> <div> <cemetery_page_filter style="margin-bottom:22px;" from="{from}" to="{to}" callback="{callback}"></cemetery_page_filter> </div> <div style="padding-bottom:22px;"> <cemetery-list data="{impures()}"></cemetery-list> </div> </div> </section>', 'cemetery_page_root { height: 100%; display: block; overflow: scroll; }', '', function(opts) {
+riot.tag2('cemetery_page', '<section class="section"> <div class="container"> <h2 class="subtitle" style="text-shadow: 0px 0px 11px #fff;"></h2> <div> <cemetery_page_filter style="margin-bottom:22px;" from="{from}" to="{to}" callback="{callback}"></cemetery_page_filter> </div> <div style="padding-bottom:22px;"> <cemetery-list data="{impures()}"></cemetery-list> </div> </div> </section>', 'cemetery_page { height: 100%; display: block; overflow: scroll; }', '', function(opts) {
      this.from = moment().add(-1, 'd').startOf('day');
      this.to   = moment().add(1, 'd').startOf('day');
      this.moveDate = (unit, amount) => {
@@ -113,6 +102,24 @@ riot.tag2('cemetery_page_root', '<section class="section"> <div class="container
      this.on('mount', () => {
          ACTIONS.fetchDoneImpures(this.from, this.to);
      });
+});
+
+riot.tag2('cemetery_page_filter', '<span class="hw-text-white" style="font-size:24px; font-weight:bold;">期間：</Span> <input class="input" type="text" placeholder="From" riot-value="{date2str(opts.from)}" readonly> <span style="font-size:24px;"> 〜 </span> <input class="input" type="text" placeholder="To" riot-value="{date2str(opts.to)}" readonly> <div class="operators"> <move-date-operator label="日" unit="d" callback="{callback}"></move-date-operator> <move-date-operator label="週" unit="w" callback="{callback}"></move-date-operator> <move-date-operator label="月" unit="M" callback="{callback}"></move-date-operator> <button class="button refresh hw-box-shadow" style="margin-top:1px; margin-left:11px;" onclick="{clickRefresh}">Refresh</button> </div>', 'cemetery_page_filter, cemetery_page_filter .operators { display: flex; } cemetery_page_filter .input { width: 111px; border: none; }', '', function(opts) {
+     this.date2str = (date) => {
+         if (!date) return '';
+         return date.format('YYYY-MM-DD');
+     };
+
+     this.clickRefresh = () => {
+         this.opts.callback('refresh');
+     };
+
+     this.callback = (action, data) => {
+         this.opts.callback('move-date', {
+             unit: data.unit,
+             amount: data.amount,
+         })
+     };
 });
 
 riot.tag2('menu-bar', '<aside class="menu"> <p ref="brand" class="menu-label" onclick="{clickBrand}"> {opts.brand.label} </p> <ul class="menu-list"> <li each="{opts.site.pages}"> <a class="{opts.site.active_page==code ? \'is-active\' : \'\'}" href="{\'#\' + code}"> {menu_label} </a> </li> </ul> </aside> <div class="move-page-menu hide" ref="move-panel"> <p each="{moves()}"> <a href="{href}">{label}</a> </p> </div>', 'menu-bar .move-page-menu { z-index: 666665; background: #ffffff; position: fixed; left: 55px; top: 0px; min-width: 111px; height: 100vh; box-shadow: 2px 0px 8px 0px #e0e0e0; padding: 22px 55px 22px 22px; } menu-bar .move-page-menu.hide { display: none; } menu-bar .move-page-menu > p { margin-bottom: 11px; } menu-bar > .menu { z-index: 666666; height: 100vh; width: 55px; padding: 11px 0px 11px 11px; position: fixed; left: 0px; top: 0px; background: #e198b4; } menu-bar .menu-label, menu-bar .menu-list a { padding: 0; width: 33px; height: 33px; text-align: center; margin-top: 8px; border-radius: 3px; background: none; color: #ffffff; font-weight: bold; padding-top: 7px; font-size: 14px; } menu-bar .menu-label,[data-is="menu-bar"] .menu-label{ background: #ffffff; color: #e198b4; } menu-bar .menu-label.open,[data-is="menu-bar"] .menu-label.open{ background: #ffffff; color: #e198b4; width: 44px; border-radius: 3px 0px 0px 3px; text-shadow: 0px 0px 1px #eee; padding-right: 11px; } menu-bar .menu-list a.is-active { border-radius: 3px; background: #ffffff; color: #333333; }', '', function(opts) {
@@ -274,14 +281,7 @@ riot.tag2('section-list', '<table class="table is-bordered is-striped is-narrow 
 riot.tag2('sections-list', '<table class="table"> <tbody> <tr each="{opts.data}"> <td><a href="{hash}">{name}</a></td> </tr> </tbody> </table>', '', '', function(opts) {
 });
 
-riot.tag2('deamons', '', '', '', function(opts) {
-     this.mixin(MIXINS.page);
-
-     this.on('mount', () => { this.draw(); });
-     this.on('update', () => { this.draw(); });
-});
-
-riot.tag2('deamons_page_root', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">Deamons</h1> <h2 class="subtitle hw-text-white">実績を集計するためのグループ</h2> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">List</h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Name(Short)</th> </tr> </thead> <tbody> <tr each="{deamon in deamons()}"> <td>{deamon.id}</td> <td>{deamon.name}</td> <td>{deamon.name_short}</td> </tr> </tbody> </table> </div> </div> </section> </div> </section>', '', '', function(opts) {
+riot.tag2('deamons_page', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">Deamons</h1> <h2 class="subtitle hw-text-white">実績を集計するためのグループ</h2> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">List</h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Name(Short)</th> </tr> </thead> <tbody> <tr each="{deamon in deamons()}"> <td>{deamon.id}</td> <td>{deamon.name}</td> <td>{deamon.name_short}</td> </tr> </tbody> </table> </div> </div> </section> </div> </section>', '', '', function(opts) {
      this.deamons = () => {
          return STORE.get('deamons.list');
      };
@@ -294,14 +294,7 @@ riot.tag2('deamons_page_root', '<section class="section"> <div class="container"
      });
 });
 
-riot.tag2('help', '', '', '', function(opts) {
-     this.mixin(MIXINS.page);
-
-     this.on('mount', () => { this.draw(); });
-     this.on('update', () => { this.draw(); });
-});
-
-riot.tag2('help_page_root', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">聖書</h1> <h2 class="subtitle hw-text-white">ヘルプ的ななにか</h2> <div class="contents hw-text-white"> <p>準備中</p> </div> </div> </section>', '', '', function(opts) {
+riot.tag2('help_page', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">聖書</h1> <h2 class="subtitle hw-text-white">ヘルプ的ななにか</h2> <div class="contents hw-text-white"> <p>準備中</p> </div> </div> </section>', '', '', function(opts) {
 });
 
 riot.tag2('home_impure', '', '', '', function(opts) {
@@ -312,13 +305,6 @@ riot.tag2('home_impure', '', '', '', function(opts) {
 });
 
 riot.tag2('home_impure_root', '', '', '', function(opts) {
-});
-
-riot.tag2('home', '', '', '', function(opts) {
-     this.mixin(MIXINS.page);
-
-     this.on('mount', () => { this.draw(); });
-     this.on('update', () => { this.draw(); });
 });
 
 riot.tag2('home_angels', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Exorcists</p> <a class="panel-block"> <orthodox-doropdown></orthodox-doropdown> </a> <a each="{obj in data()}" class="panel-block" angel-id="{obj.id}"> <span style="width: 205px;" maledict-id="{obj.id}"> {obj.name} </span> <home_emergency-door source="{obj}"></home_emergency-door> </a> </nav>', 'home_angels > .panel { width: 255px; margin-top: 22px; border-radius: 4px 4px 0 0; } home_angels > .panel > a { background: #ffffff; }', '', function(opts) {
@@ -556,7 +542,7 @@ riot.tag2('home_other-services', '<nav class="panel hw-box-shadow"> <p class="pa
      });
 });
 
-riot.tag2('home_page_root', '<div class="bucket-area"> <home_maledicts data="{STORE.get(\'maledicts\')}" select="{maledict()}" callback="{callback}" dragging="{dragging}"></home_maledicts> <home_angels></home_angels> <home_other-services></home_other-services> </div> <div class="contetns-area"> <div style="display:flex;"> <home_squeeze-area callback="{callback}"></home_squeeze-area> </div> <home_impures maledict="{maledict()}" callback="{callback}" filter="{squeeze_word}"></home_impures> <home_servie-items></home_servie-items> </div> <home_working-action data="{impure()}"></home_working-action> <home_modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_modal-create-impure> <modal_request-impure source="{request_impure}"></modal_request-impure>', 'home_page_root { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page_root > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; }', '', function(opts) {
+riot.tag2('home_page', '<div class="bucket-area"> <home_maledicts data="{STORE.get(\'maledicts\')}" select="{maledict()}" callback="{callback}" dragging="{dragging}"></home_maledicts> <home_angels></home_angels> <home_other-services></home_other-services> </div> <div class="contetns-area"> <div style="display:flex;"> <home_squeeze-area callback="{callback}"></home_squeeze-area> </div> <home_impures maledict="{maledict()}" callback="{callback}" filter="{squeeze_word}"></home_impures> <home_servie-items></home_servie-items> </div> <home_modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_modal-create-impure> <modal_request-impure source="{request_impure}"></modal_request-impure>', 'home_page { height: 100%; width: 100%; padding: 22px 0px 0px 0px; padding-left: calc(22px + 55px); display: flex; } home_page > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; }', '', function(opts) {
      this.modal_open     = false;
      this.modal_maledict = null;
      this.maledict       = null;
@@ -603,9 +589,6 @@ riot.tag2('home_page_root', '<div class="bucket-area"> <home_maledicts data="{ST
 
          if (action.type=='CREATED-MALEDICT-IMPURES')
              this.closeModal();
-
-         if (action.type=='FETCHED-IMPURE-PURGING')
-             this.tags['home_working-action'].update();
 
          if (action.type=='START-TRANSFERD-IMPURE-TO-ANGEL') {
              this.request_impure = action.contents;
@@ -762,6 +745,11 @@ riot.tag2('impure-card-large', '<div class="card hw-box-shadow"> <header class="
      ]);
 
      this.on('mount', () => {
+
+         let len = Object.keys(this.tags).length;
+         if (len==0)
+             return;
+
          this.page_tabs.switchTab(this.tags)
          this.update();
      });
@@ -1004,14 +992,7 @@ riot.tag2('orthodox-list', '<table class="table is-bordered is-striped is-narrow
      };
 });
 
-riot.tag2('orthodox', '', '', '', function(opts) {
-     this.mixin(MIXINS.page);
-
-     this.on('mount', () => { this.draw(); });
-     this.on('update', () => { this.draw(); });
-});
-
-riot.tag2('orthodox_page_root', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">正教会</h1> <h2 class="subtitle hw-text-white">正教会=チーム</h2> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Orthodoxs</h1> <div class="contents hw-text-white"> <orthodox-list></orthodox-list> </div> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Exorcists</h1> <div class="contents hw-text-white"> <exorcists-list></exorcists-list> </div> </div> </section> </div> </section>', 'orthodox_page_root { width: 100%; height: 100%; display: block; overflow: auto; }', '', function(opts) {
+riot.tag2('orthodox_page', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">正教会</h1> <h2 class="subtitle hw-text-white">正教会=チーム</h2> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Orthodoxs</h1> <div class="contents hw-text-white"> <orthodox-list></orthodox-list> </div> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Exorcists</h1> <div class="contents hw-text-white"> <exorcists-list></exorcists-list> </div> </div> </section> </div> </section>', 'orthodox_page { width: 100%; height: 100%; display: block; overflow: auto; }', '', function(opts) {
      this.orthodoxs = () => {
          return STORE.get('orthodoxs.list');
      };
@@ -1129,11 +1110,63 @@ riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow i
      };
 });
 
-riot.tag2('purges', '', '', '', function(opts) {
-     this.mixin(MIXINS.page);
+riot.tag2('purges_page', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 class="title hw-text-white">期間</h1> <purges_page_filter style="margin-bottom:22px; padding-left:33px; padding-right:33px;" from="{from}" to="{to}" callback="{callback}"></purges_page_filter> </div> <div> <h1 class="title hw-text-white">Summary</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <div style="margin-right: 88px;"> <purges_page_group-span data="{data()}"></purges_page_group-span> </div> <div> <purges_page_group-span-deamon data="{data()}"></purges_page_group-span-deamon> </div> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Guntt Chart</h1> <div style="padding-left:33px; padding-right:33px;"> <purges_page_guntt-chart data="{data()}"></purges_page_guntt-chart> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Purge hisotry</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <purges-list data="{data()}" callback="{callback}"></purges-list> </div> </div> </div> <purge-result-editor data="{edit_target}" callback="{callback}"></purge-result-editor>', 'purges_page { height: 100%; width: 100%; display: block; overflow: auto; } purges_page .card { border-radius: 8px; } purges_page button.refresh{ margin-top:6px; margin-right:8px; }', '', function(opts) {
+     this.from = moment().startOf('day');
+     this.to   = moment().add(1, 'd').startOf('day');
+     this.moveDate = (unit, amount) => {
+         this.from = this.from.add(amount, unit);
+         this.to   = this.to.add(amount, unit);
 
-     this.on('mount', () => { this.draw(); });
-     this.on('update', () => { this.draw(); });
+         this.tags['purges_page_filter'].update();
+     };
+
+     this.edit_target = null;
+
+     this.callback = (action, data) => {
+         if ('open-purge-result-editor'==action) {
+             this.edit_target = STORE.get('purges').ht[data.id];
+             this.tags['purge-result-editor'].update();
+             return;
+         }
+
+         if ('close-purge-result-editor'==action) {
+             this.edit_target = null;
+             this.tags['purge-result-editor'].update();
+             return;
+         }
+
+         if ('save-purge-result-editor'==action)
+             ACTIONS.saveActionResult(data);
+
+         if ('move-date'==action)
+             this.moveDate(data.unit, data.amount);
+
+         if ('refresh'==action)
+             this.refreshData();
+     };
+
+     this.refreshData = () => {
+         ACTIONS.fetchPurgeHistory(this.from, this.to);
+     };
+     this.on('mount', () => {
+         this.refreshData();
+     });
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-PURGE-HISTORY')
+             this.update();
+
+         if (action.type=='SAVED-ACTION-RESULT') {
+             this.edit_target = null;
+             ACTIONS.pushSuccessMessage('Purge の実績の変更が完了しました。');
+             ACTIONS.fetchPurgeHistory(this.from, this.to);
+         }
+     });
+
+     this.data = () => {
+         let list = STORE.get('purges');
+
+         return list;
+     };
 });
 
 riot.tag2('purges_page_filter', '<input class="input hw-box-shadow" type="text" placeholder="From" riot-value="{date2str(opts.from)}" readonly> <span style="font-size:24px; margin-left:11px; margin-right:11px;"> 〜 </span> <input class="input hw-box-shadow" type="text" placeholder="To" riot-value="{date2str(opts.to)}" readonly> <div class="operators" style="margin-top:-1px;"> <move-date-operator label="日" unit="d" callback="{callback}"></move-date-operator> <move-date-operator label="週" unit="w" callback="{callback}"></move-date-operator> <move-date-operator label="月" unit="M" callback="{callback}"></move-date-operator> <button class="button refresh hw-box-shadow" style="margin-top:1px; margin-left:11px;" onclick="{clickRefresh}">Refresh</button> </div>', 'purges_page_filter, purges_page_filter .operators { display: flex; } purges_page_filter .input { width: 111px; border: none; }', '', function(opts) {
@@ -1208,65 +1241,6 @@ riot.tag2('purges_page_guntt-chart', '<div style="overflow:auto; background:#fff
      });
 });
 
-riot.tag2('purges_page_root', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 class="title hw-text-white">期間</h1> <purges_page_filter style="margin-bottom:22px; padding-left:33px; padding-right:33px;" from="{from}" to="{to}" callback="{callback}"></purges_page_filter> </div> <div> <h1 class="title hw-text-white">Summary</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <div style="margin-right: 88px;"> <purges_page_group-span data="{data()}"></purges_page_group-span> </div> <div> <purges_page_group-span-deamon data="{data()}"></purges_page_group-span-deamon> </div> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Guntt Chart</h1> <div style="padding-left:33px; padding-right:33px;"> <purges_page_guntt-chart data="{data()}"></purges_page_guntt-chart> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Purge hisotry</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <purges-list data="{data()}" callback="{callback}"></purges-list> </div> </div> </div> <purge-result-editor data="{edit_target}" callback="{callback}"></purge-result-editor>', 'purges_page_root { height: 100%; width: 100%; display: block; overflow: auto; } purges_page_root .card { border-radius: 8px; } purges_page_root button.refresh{ margin-top:6px; margin-right:8px; }', '', function(opts) {
-     this.from = moment().startOf('day');
-     this.to   = moment().add(1, 'd').startOf('day');
-     this.moveDate = (unit, amount) => {
-         this.from = this.from.add(amount, unit);
-         this.to   = this.to.add(amount, unit);
-
-         this.tags['purges_page_filter'].update();
-     };
-
-     this.edit_target = null;
-
-     this.callback = (action, data) => {
-         if ('open-purge-result-editor'==action) {
-             this.edit_target = STORE.get('purges').ht[data.id];
-             this.tags['purge-result-editor'].update();
-             return;
-         }
-
-         if ('close-purge-result-editor'==action) {
-             this.edit_target = null;
-             this.tags['purge-result-editor'].update();
-             return;
-         }
-
-         if ('save-purge-result-editor'==action)
-             ACTIONS.saveActionResult(data);
-
-         if ('move-date'==action)
-             this.moveDate(data.unit, data.amount);
-
-         if ('refresh'==action)
-             this.refreshData();
-     };
-
-     this.refreshData = () => {
-         ACTIONS.fetchPurgeHistory(this.from, this.to);
-     };
-     this.on('mount', () => {
-         this.refreshData();
-     });
-     STORE.subscribe((action) => {
-         if (action.type=='FETCHED-PURGE-HISTORY')
-             this.update();
-
-         if (action.type=='SAVED-ACTION-RESULT') {
-             this.edit_target = null;
-             ACTIONS.pushSuccessMessage('Purge の実績の変更が完了しました。');
-             ACTIONS.fetchPurgeHistory(this.from, this.to);
-         }
-     });
-
-     this.data = () => {
-         let list = STORE.get('purges');
-
-         return list;
-     };
-});
-
 riot.tag2('randing', '', '', '', function(opts) {
      this.mixin(MIXINS.page);
 
@@ -1278,14 +1252,7 @@ riot.tag2('randing_page_root', '', '', '', function(opts) {
 });
 
 
-riot.tag2('war-history', '', '', '', function(opts) {
-     this.mixin(MIXINS.page);
-
-     this.on('mount', () => { this.draw(); });
-     this.on('update', () => { this.draw(); });
-});
-
-riot.tag2('war-history_page_root', '<section class="section"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> </section> <div> <war-history_root_tab_days class="hide"></war-history_root_tab_days> <war-history_root_tab_weeks class="hide"></war-history_root_tab_weeks> <war-history_root_tab_month class="hide"></war-history_root_tab_month> </div>', '', '', function(opts) {
+riot.tag2('war-history_page', '<section class="section"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> </section> <div> <war-history_root_tab_days class="hide"></war-history_root_tab_days> <war-history_root_tab_weeks class="hide"></war-history_root_tab_weeks> <war-history_root_tab_month class="hide"></war-history_root_tab_month> </div>', '', '', function(opts) {
      this.default_tag = 'home';
      this.active_tag = null;
      this.page_tabs = new PageTabs([

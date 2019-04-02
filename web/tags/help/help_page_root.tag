@@ -1,4 +1,4 @@
-<help_page_root>
+<help_page>
     <section class="section">
         <div class="container">
             <h1 class="title hw-text-white">聖書</h1>
@@ -9,4 +9,4 @@
             </div>
         </div>
     </section>
-</help_page_root>
+</help_page>

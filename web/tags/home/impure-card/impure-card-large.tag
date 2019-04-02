@@ -69,6 +69,11 @@
      ]);
 
      this.on('mount', () => {
+
+         let len = Object.keys(this.tags).length;
+         if (len==0) // TODO: これはどんなとき？
+             return;
+
          this.page_tabs.switchTab(this.tags)
          this.update();
      });

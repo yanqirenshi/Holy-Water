@@ -1,4 +1,4 @@
-<cemetery_page_root>
+<cemetery_page>
     <section class="section">
         <div class="container">
             <h2 class="subtitle" style="text-shadow: 0px 0px 11px #fff;"></h2>
@@ -58,10 +58,10 @@
     </script>
 
     <style>
-     cemetery_page_root {
+     cemetery_page {
          height: 100%;
          display: block;
          overflow: scroll;
      }
     </style>
-</cemetery_page_root>
+</cemetery_page>

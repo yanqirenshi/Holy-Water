@@ -1,4 +1,4 @@
-<home_page_root>
+<home_page>
     <div class="bucket-area">
         <home_maledicts data={STORE.get('maledicts')}
                                   select={maledict()}
@@ -27,8 +27,6 @@
         <!-- ----------------------- -->
         <home_servie-items></home_servie-items>
     </div>
-
-    <home_working-action data={impure()}></home_working-action>
 
     <home_modal-create-impure open={modal_open}
                                         callback={callback}
@@ -88,9 +86,6 @@
          if (action.type=='CREATED-MALEDICT-IMPURES')
              this.closeModal();
 
-         if (action.type=='FETCHED-IMPURE-PURGING')
-             this.tags['home_working-action'].update();
-
          if (action.type=='START-TRANSFERD-IMPURE-TO-ANGEL') {
              this.request_impure = action.contents;
              this.tags['modal_request-impure'].update();
@@ -135,19 +130,20 @@
     </script>
 
     <style>
-     home_page_root {
+     home_page {
          height: 100%;
          width: 100%;
-         padding: 22px 0px 0px 22px;
+         padding: 22px 0px 0px 0px;
+         padding-left: calc(22px + 55px);
 
          display: flex;
      }
 
-     home_page_root > .contetns-area {
+     home_page > .contetns-area {
          height: 100%;
          margin-left: 11px;
 
          flex-grow: 1;
      }
     </style>
-</home_page_root>
+</home_page>

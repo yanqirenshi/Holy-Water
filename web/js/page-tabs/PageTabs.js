@@ -11,6 +11,7 @@ class PageTabs {
         let next_active_tab = null;
         for (var i in this.tabs) {
             let tab = this.tabs[i];
+
             tags[tab.tag].root.classList.add('hide');
 
             if (tab.code==code)

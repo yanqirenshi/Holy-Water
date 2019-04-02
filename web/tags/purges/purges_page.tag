@@ -1,4 +1,4 @@
-<purges_page_root>
+<purges_page>
     <div style="padding: 33px 88px 88px 88px;">
         <div>
             <h1 class="title hw-text-white">期間</h1>
@@ -104,20 +104,20 @@
     </script>
 
     <style>
-     purges_page_root {
+     purges_page {
          height: 100%;
          width: 100%;
          display: block;
          overflow: auto;
      }
 
-     purges_page_root .card {
+     purges_page .card {
          border-radius: 8px;
      }
 
-     purges_page_root button.refresh{
+     purges_page button.refresh{
          margin-top:6px;
          margin-right:8px;
      }
     </style>
-</purges_page_root>
+</purges_page>

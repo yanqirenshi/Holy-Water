@@ -1,4 +1,4 @@
-<war-history_page_root>
+<war-history_page>
 
     <section class="section">
         <div class="container">
@@ -31,4 +31,4 @@
              this.update();
      };
     </script>
-</war-history_page_root>
+</war-history_page>

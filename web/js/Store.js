@@ -5,28 +5,20 @@ class Store extends Vanilla_Redux_Store {
     initPageHome () {
         return {
             code: "home", menu_label: '戦場',
-            active_section: 'root',
-            home_section: 'root',
-            sections: [
-                { code: 'root', tag: 'home_page_root' },
+            tag: 'home_page',
+            children: [
                 {
                     code: 'impures',
-                    sections: [
+                    children: [
                         {
                             code: 'impure',
                             regex: new RegExp('^\\d+$'),
                             tag: 'home_impure',
-                            home_section: 'root',
-                            sections: [
-                                { code: 'root', tag: 'home_page_root' },
-                            ],
+                            children: [],
                         }
                     ],
                 },
             ],
-            stye: {
-                color: { 1: '#fdeff2', 2: '#e0e0e0', 3: '#e198b4', 4: '#ffffff', 5: '#eeeeee', 5: '#333333' }
-            }
         };
     }
     pages() {
@@ -34,63 +26,39 @@ class Store extends Vanilla_Redux_Store {
             this.initPageHome(),
             {
                 code: "purges",
+                tag: 'purges_page',
                 menu_label: '浄歴',
-                active_section: 'root',
-                home_section: 'root',
-                sections: [
-                    { code: 'root', tag: 'purges_page_root', name: 'root' },
-                ],
-                stye: {
-                    color: { 1: '#fdeff2', 2: '#e0e0e0', 3: '#e198b4', 4: '#ffffff', 5: '#eeeeee', 5: '#333333' }
-                }
+                children: [],
             },
             {
                 code: "cemetery", menu_label: '墓地',
-                active_section: 'root', home_section: 'root',
-                sections: [{ code: 'root', tag: 'cemetery_page_root' }],
-                stye: {
-                    color: { 1: '#fdeff2', 2: '#e0e0e0', 3: '#e198b4', 4: '#ffffff', 5: '#eeeeee', 5: '#333333' }
-                }
+                tag: 'cemetery_page',
+                children: [],
             },
             {
                 code: "war-history", menu_label: '戦歴',
-                active_section: 'root', home_section: 'root',
-                sections: [{ code: 'root', tag: 'war-history_page_root' }],
-                stye: {
-                    color: { 1: '#fdeff2', 2: '#e0e0e0', 3: '#e198b4', 4: '#ffffff', 5: '#eeeeee', 5: '#333333' }
-                }
+                tag: 'war-history_page',
+                children: [],
             },
             {
                 code: "deamons", menu_label: '悪魔',
-                active_section: 'root', home_section: 'root',
-                sections: [{ code: 'root', tag: 'deamons_page_root' }],
-                stye: {
-                    color: { 1: '#fdeff2', 2: '#e0e0e0', 3: '#e198b4', 4: '#ffffff', 5: '#eeeeee', 5: '#333333' }
-                }
+                tag: 'deamons_page',
+                children: [],
             },
             {
                 code: "orthodox", menu_label: '正教',
-                active_section: 'root', home_section: 'root',
-                sections: [{ code: 'root', tag: 'orthodox_page_root', title: 'Home', description: '' }],
-                stye: {
-                    color: { 1: '#fdeff2', 2: '#e0e0e0', 3: '#e198b4', 4: '#ffffff', 5: '#eeeeee', 5: '#333333' }
-                }
+                tag: 'orthodox_page',
+                children: [],
             },
             {
                 code: "help", menu_label: '聖書',
-                active_section: 'root', home_section: 'root',
-                sections: [{ code: 'root', tag: 'help_page_root', title: 'Home', description: '' }],
-                stye: {
-                    color: { 1: '#fdeff2', 2: '#e0e0e0', 3: '#e198b4', 4: '#ffffff', 5: '#eeeeee', 5: '#333333' }
-                }
+                tag: 'help_page',
+                children: [],
             },
             {
                 code: "angel", menu_label: '祓師',
-                active_section: 'root', home_section: 'root',
-                sections: [{ code: 'root', tag: 'angel_page_root', title: 'Home', description: '' }],
-                stye: {
-                    color: { 1: '#fdeff2', 2: '#e0e0e0', 3: '#e198b4', 4: '#ffffff', 5: '#eeeeee', 5: '#333333' }
-                }
+                tag: 'angel_page',
+                children: [],
             },
         ];
     }

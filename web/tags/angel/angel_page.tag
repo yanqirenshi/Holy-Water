@@ -1,4 +1,4 @@
-<angel_page_root>
+<angel_page>
     <section class="section">
         <div class="container">
             <h1 class="title hw-text-white">祓魔師</h1>
@@ -29,4 +29,4 @@
          ACTIONS.signOut();
      };
     </script>
-</angel_page_root>
+</angel_page>

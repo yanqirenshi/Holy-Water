@@ -1,4 +1,4 @@
-<deamons_page_root>
+<deamons_page>
     <section class="section">
         <div class="container">
             <h1 class="title hw-text-white">Deamons</h1>
@@ -44,4 +44,4 @@
      });
     </script>
 
-</deamons_page_root>
+</deamons_page>

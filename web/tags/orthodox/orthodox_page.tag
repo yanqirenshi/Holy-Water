@@ -1,4 +1,4 @@
-<orthodox_page_root>
+<orthodox_page>
     <section class="section">
         <div class="container">
             <h1 class="title hw-text-white">正教会</h1>
@@ -45,7 +45,7 @@
     </script>
 
     <style>
-     orthodox_page_root {
+     orthodox_page {
          width: 100%;
          height: 100%;
          display: block;
@@ -53,4 +53,4 @@
      }
     </style>
 
-</orthodox_page_root>
+</orthodox_page>
