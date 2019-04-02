@@ -103,6 +103,11 @@
     (declare (ignore angel))
     (render-json (hw.api.ctrl:find-orthodoxs))))
 
+(defroute "/orthodoxs/exorcists" ()
+  (with-angel (angel)
+    (declare (ignore angel))
+    (render-json (hw.api.ctrl:find-orthodox-all-exorcists))))
+
 
 ;;;;;
 ;;;;; Impure

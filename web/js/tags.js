@@ -31,7 +31,7 @@ riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" 
      });
 
      if (location.hash=='')
-         location.hash=STORE.get('site.active_page');
+         location.hash = STORE.get('site.active_page');
 
      this.on('mount', () => {
          ACTIONS.movePage(STORE.get('site'));
@@ -972,6 +972,18 @@ riot.tag2('service-card-small', '<div class="card hw-box-shadow"> <header class=
      };
 });
 
+riot.tag2('exorcists-list', '<table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Ghost ID</th> </tr> </thead> <tbody> <tr each="{orthodox in orthodoxs()}"> <td>{orthodox.id}</td> <td>{orthodox.name}</td> <td>{orthodox.ghost_id}</td> </tr> </tbody> </table>', '', '', function(opts) {
+     this.orthodoxs = () => {
+         return STORE.get('angels.list');
+     };
+});
+
+riot.tag2('orthodox-list', '<table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Description</th> </tr> </thead> <tbody> <tr each="{orthodox in orthodoxs()}"> <td>{orthodox.id}</td> <td>{orthodox.name}</td> <td>{orthodox.description}</td> </tr> </tbody> </table>', '', '', function(opts) {
+     this.orthodoxs = () => {
+         return STORE.get('orthodoxs.list');
+     };
+});
+
 riot.tag2('orthodox', '', '', '', function(opts) {
      this.mixin(MIXINS.page);
 
@@ -979,16 +991,21 @@ riot.tag2('orthodox', '', '', '', function(opts) {
      this.on('update', () => { this.draw(); });
 });
 
-riot.tag2('orthodox_page_root', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">正教会</h1> <h2 class="subtitle hw-text-white">正教会=チーム</h2> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">List</h1> <div class="contents hw-text-white"> <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Description</th> </tr> </thead> <tbody> <tr each="{orthodox in orthodoxs()}"> <td>{orthodox.id}</td> <td>{orthodox.name}</td> <td>{orthodox.description}</td> </tr> </tbody> </table> </div> </div> </section> </div> </section>', '', '', function(opts) {
+riot.tag2('orthodox_page_root', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">正教会</h1> <h2 class="subtitle hw-text-white">正教会=チーム</h2> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Orthodoxs</h1> <div class="contents hw-text-white"> <orthodox-list></orthodox-list> </div> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Exorcists</h1> <div class="contents hw-text-white"> <exorcists-list></exorcists-list> </div> </div> </section> </div> </section>', '', '', function(opts) {
      this.orthodoxs = () => {
          return STORE.get('orthodoxs.list');
      };
 
      this.on('mount', () => {
          ACTIONS.fetchOrthodoxs();
+         ACTIONS.fetchOrthodoxExorcists();
      });
+
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-ORTHODOXS')
+             this.tags['orthodox-list'].update();
+
+         if (action.type=='FETCHED-ORTHODOX-EXORCISTS')
              this.update();
      });
 });

@@ -114,6 +114,17 @@ class Actions extends Vanilla_Redux_Actions {
             },
         };
     }
+    fetchOrthodoxExorcists () {
+        API.get('/orthodoxs/exorcists', function (response) {
+            STORE.dispatch(this.fetchedOrthodoxExorcists(response));
+        }.bind(this));
+    }
+    fetchedOrthodoxExorcists (response) {
+        return {
+            type: 'FETCHED-ORTHODOX-EXORCISTS',
+            data: { angels: this.mergeData(response, STORE.get('angels')) },
+        };
+    }
     /////
     ///// Maledict
     /////

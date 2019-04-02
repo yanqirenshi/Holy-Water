@@ -6,29 +6,24 @@
 
             <section class="section">
                 <div class="container">
-                    <h1 class="title is-4 hw-text-white">List</h1>
+                    <h1 class="title is-4 hw-text-white">Orthodoxs</h1>
                     <div class="contents hw-text-white">
-                        <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr each={orthodox in orthodoxs()}>
-                                    <td>{orthodox.id}</td>
-                                    <td>{orthodox.name}</td>
-                                    <td>{orthodox.description}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <orthodox-list></orthodox-list>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="container">
+                    <h1 class="title is-4 hw-text-white">Exorcists</h1>
+                    <div class="contents hw-text-white">
+                        <exorcists-list></exorcists-list>
                     </div>
                 </div>
             </section>
         </div>
     </section>
+
 
     <script>
      this.orthodoxs = () => {
@@ -37,9 +32,14 @@
 
      this.on('mount', () => {
          ACTIONS.fetchOrthodoxs();
+         ACTIONS.fetchOrthodoxExorcists();
      });
+
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-ORTHODOXS')
+             this.tags['orthodox-list'].update();
+
+         if (action.type=='FETCHED-ORTHODOX-EXORCISTS')
              this.update();
      });
     </script>

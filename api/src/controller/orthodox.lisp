@@ -26,3 +26,6 @@
 (defun get-orthodox (&key id)
   (when id
     (dao2orthodox (mito:find-dao 'hw::rs_orthodox :id id))))
+
+(defun find-orthodox-all-exorcists ()
+  (find-angels nil))

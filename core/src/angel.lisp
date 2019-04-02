@@ -10,11 +10,12 @@
 
 (defun create-angel (&key (name "????????") creator)
   (let ((by-id (creator-id creator)))
-    (ensure-initial-maledict (create-dao 'rs_angel
-                                              :name name
-                                              :created-by by-id
-                                              :updated-by by-id)
-                             :creator creator)))
+    (let ((angel (create-dao 'rs_angel
+                             :name name
+                             :created-by by-id
+                             :updated-by by-id)))
+      (ensure-initial-maledict angel :creator creator)
+      angel)))
 
 (defun find-angels (&key without-angel)
   (if without-angel

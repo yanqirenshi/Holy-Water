@@ -6,7 +6,7 @@
   :version "0.1.0"
   :author ""
   :license ""
-  :depends-on ("mito")
+  :depends-on ("mito" "api.gitlab")
   :components ((:module "src"
                 :components
                 ((:file "package")
@@ -40,6 +40,7 @@
                  (:file "request-message")
                  (:file "deamon")
                  (:file "deccot")
+                 (:file "ghost-shadow")
                  (:module "actions"
                   :components ((:file "stop-impure")
                                (:file "start-impure")

@@ -19,7 +19,8 @@
            #:get-impure-purging
            #:transfer-impure
            #:create-after-impure)
-  (:export #:find-orthodoxs)
+  (:export #:find-orthodoxs
+           #:find-orthodox-all-exorcists)
   (:export #:find-purge-history
            #:save-purge-term)
   (:export #:sing-in
