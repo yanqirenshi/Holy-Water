@@ -64,9 +64,10 @@ ROUTER.start();
 /* *********** */
 const METRONOME = new Vanilla_metronome({
     interval: 1000,
-    tick: () => {
+    tick: (a,b,c) => {
         ACTIONS.closePastedMessage();
         ACTIONS.fetchImpurePurging();
+        ACTIONS.fetchRequestMessagesUnread();
     }
 });
 METRONOME.start();

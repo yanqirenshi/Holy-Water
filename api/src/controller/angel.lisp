@@ -54,3 +54,9 @@
 
 (defun get-angels (&key id)
   (hw:get-angel :id id))
+
+;;;;;
+;;;;; request message
+;;;;;
+(defun angel-received-messages (angel)
+  (hw::angel-received-messages angel))

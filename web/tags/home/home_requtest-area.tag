@@ -1,12 +1,19 @@
 <home_requtest-area>
     <p class={isHide()}>
-        依頼メッセージ未読: <a href="#home/requests"><span class="count">999</span></a> 件
+        依頼メッセージ未読: <a href="#home/requests"><span class="count">{count()}</span></a> 件
     </p>
 
     <script>
      this.isHide = () => {
-         return 'hide';
+         return this.count()==0 ? 'hide' : '';
      };
+     this.count = () => {
+         return STORE.get('requests.messages.unread.list').length;
+     };
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-REQUEST-MESSAGES-UNREAD')
+             this.update();
+     });
     </script>
 
     <style>

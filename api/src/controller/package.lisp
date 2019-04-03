@@ -27,7 +27,8 @@
   (:export #:sing-in
            #:sing-out
            #:find-angels
-           #:get-angels)
+           #:get-angels
+           #:angel-received-messages)
   (:export #:find-deccots
            #:get-deccot
            #:find-deccot-items))

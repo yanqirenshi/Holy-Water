@@ -571,10 +571,17 @@ riot.tag2('home_page', '<div class="bucket-area"> <home_maledicts data="{STORE.g
      };
 });
 
-riot.tag2('home_requtest-area', '<p class="{isHide()}"> 依頼メッセージ未読: <a href="#home/requests"><span class="count">999</span></a> 件 </p>', 'home_requtest-area > p { color: #fff; font-weight: bold; font-size: 14px; line-height: 38px; } home_requtest-area .count { color: #f00; font-size: 21px; }', '', function(opts) {
+riot.tag2('home_requtest-area', '<p class="{isHide()}"> 依頼メッセージ未読: <a href="#home/requests"><span class="count">{count()}</span></a> 件 </p>', 'home_requtest-area > p { color: #fff; font-weight: bold; font-size: 14px; line-height: 38px; } home_requtest-area .count { color: #f00; font-size: 21px; }', '', function(opts) {
      this.isHide = () => {
-         return 'hide';
+         return this.count()==0 ? 'hide' : '';
      };
+     this.count = () => {
+         return STORE.get('requests.messages.unread.list').length;
+     };
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-REQUEST-MESSAGES-UNREAD')
+             this.update();
+     });
 });
 
 riot.tag2('home_servie-items', '<div class="items"> <div each="{obj in source()}" class="item"> <service-card-small source="{obj}"></service-card-small> </div> </div>', 'home_servie-items { overflow: auto; height: 100%; display: block; padding-top: 22px; padding-bottom: 222px; }', '', function(opts) {
@@ -1017,16 +1024,6 @@ riot.tag2('orthodox_page', '<section class="section"> <div class="container"> <h
      });
 });
 
-riot.tag2('page03', '', '', '', function(opts) {
-     this.mixin(MIXINS.page);
-
-     this.on('mount', () => { this.draw(); });
-     this.on('update', () => { this.draw(); });
-});
-
-riot.tag2('page03_page_root', '', '', '', function(opts) {
-});
-
 riot.tag2('move-date-operator', '<div class="operator hw-box-shadow"> <div class="befor"> <button class="button" onclick="{clickBefor}"><</button> </div> <div class="trg"> <span>{opts.label}</span> </div> <div class="after"> <button class="button" onclick="{clickAfter}">></button> </div> </div>', 'move-date-operator .operator { display: flex; margin-left:11px; border-radius: 8px; } move-date-operator .operator span { font-size:18px; } move-date-operator .button{ border: none; } move-date-operator .befor, move-date-operator .befor .button{ border-radius: 8px 0px 0px 8px; } move-date-operator .after, move-date-operator .after .button{ border-radius: 0px 8px 8px 0px; } move-date-operator .operator > div { border: 1px solid #dbdbdb; width: 36px; } move-date-operator .operator > div.trg{ padding-top: 5px; padding-left: 8px; border-left: none; border-right: none; background: #ffffff; }', '', function(opts) {
      this.clickBefor = () => {
          this.opts.callback('move-date', {
@@ -1255,6 +1252,53 @@ riot.tag2('randing', '', '', '', function(opts) {
 });
 
 riot.tag2('randing_page_root', '', '', '', function(opts) {
+});
+
+riot.tag2('request-messages-list', '<table class="table is-bordered is-striped is-narrow is-hoverable"> <thead> <tr> <th></th> <th>ID</th> <th>発生日時</th> <th>Impure</th> <th>From</th> <th class="message">Contents</th> </tr> </thead> <tbody> <tr each="{message in sources()}"> <td> <button class="button" message-id="{message.id}" onclick="{clickToReaded}">既読にする</button> </td> <td>{dt(message.messaged_at)}</td> <td>{message.id}</td> <td>{message.impure_id}</td> <td>{message.angel_id_from}</td> <td class="message"> <pre>{message.contents}</pre> </td> </tr> </tbody> </table>', '', '', function(opts) {
+     this.sources = () => {
+         return STORE.get('requests.messages.unread.list').sort((a, b) => {
+             if (new Date(a.messaged_at) > new Date(b.messaged_at))
+                 return -1;
+             else
+                 return 1;
+         });
+     };
+     this.dt = (v) => {
+         if (!v)
+             return '---';
+
+         return moment(v).format('YYYY-MM-DD HH:mm')
+     };
+     this.contents = (v) => {
+         let lines = v.split('\n').filter((d) => {
+             return d.trim().length > 0;
+         });
+
+         let suffix = '';
+         if (lines.length>1 || lines[0].length>33)
+             suffix = '...';
+
+         let val = lines[0];
+         if (val.length>33)
+             val = val.substring(0,33);
+
+         return val + suffix;
+     };
+     this.clickToReaded = (e) => {
+         let button = e.target;
+         button.setAttribute('disabled', true)
+
+         let id = button.getAttribute('message-id');
+
+         ACTIONS.changeToReadRequestMessage(id);
+     };
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-REQUEST-MESSAGES-UNREAD')
+             this.update();
+     });
+});
+
+riot.tag2('request-messages', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">Request</h1> <h2 class="subtitle hw-text-white">実装中です。とりあえず照会だけ。。。</h2> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Messages</h1> <div class="contents hw-text-white"> <request-messages-list></request-messages-list> </div> </div> </section> </div> </section>', 'request-messages { width: 100%; height: 100%; display: block; overflow: auto; }', '', function(opts) {
 });
 
 

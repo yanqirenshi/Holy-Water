@@ -39,6 +39,17 @@
   (with-angel (angel)
     (render-json (hw.api.ctrl:find-angels angel))))
 
+(defroute "/angels/request/messages/unread" ()
+  (with-angel (angel)
+    (render-json (hw.api.ctrl:angel-received-messages angel))))
+
+
+(defroute ("/request/messages/:message-id" :method :POST) (&key message-id)
+  (with-angel (angel)
+    (declare (ignore angel))
+    (print message-id)
+    (render-json nil)))
+
 
 ;;;;;
 ;;;;; holy-water

@@ -14,9 +14,12 @@ class Store extends Vanilla_Redux_Store {
                             code: 'impure',
                             regex: new RegExp('^\\d+$'),
                             tag: 'home_impure',
-                            children: [],
                         }
                     ],
+                },
+                {
+                    code: 'requests',
+                    tag: 'request-messages',
                 },
             ],
         };
@@ -28,37 +31,36 @@ class Store extends Vanilla_Redux_Store {
                 code: "purges",
                 tag: 'purges_page',
                 menu_label: '浄歴',
-                children: [],
             },
             {
-                code: "cemetery", menu_label: '墓地',
+                code: "cemetery",
                 tag: 'cemetery_page',
-                children: [],
+                menu_label: '墓地',
             },
             {
-                code: "war-history", menu_label: '戦歴',
+                code: "war-history",
                 tag: 'war-history_page',
-                children: [],
+                menu_label: '戦歴',
             },
             {
-                code: "deamons", menu_label: '悪魔',
+                code: "deamons",
                 tag: 'deamons_page',
-                children: [],
+                menu_label: '悪魔',
             },
             {
-                code: "orthodox", menu_label: '正教',
+                code: "orthodox",
                 tag: 'orthodox_page',
-                children: [],
+                menu_label: '正教',
             },
             {
-                code: "help", menu_label: '聖書',
+                code: "help",
                 tag: 'help_page',
-                children: [],
+                menu_label: '聖書',
             },
             {
-                code: "angel", menu_label: '祓師',
+                code: "angel",
                 tag: 'angel_page',
-                children: [],
+                menu_label: '祓師',
             },
         ];
     }
@@ -72,6 +74,12 @@ class Store extends Vanilla_Redux_Store {
             impures_done: { ht: {}, list: [] },
             purges:       { ht: {}, list: [] },
             angels:       { ht: {}, list: [] },
+            request: {
+                messages: {
+                    unread: { ht: {}, list: [] },
+                    readed: { ht: {}, list: [] },
+                }
+            },
             // これは個別にするほうが良いのだろうか。。。
             gitlab:       { ht: {}, list: [] },
         };

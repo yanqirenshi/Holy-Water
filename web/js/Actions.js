@@ -504,6 +504,37 @@ class Actions extends Vanilla_Redux_Actions {
         };
     }
     /////
+    ///// Request Message
+    /////
+    fetchRequestMessagesUnread () {
+        let path = '/angels/request/messages/unread';
+
+        API.get(path, (response) => {
+            STORE.dispatch(this.fetchedRequestMessagesUnread(response));
+        });
+    }
+    fetchedRequestMessagesUnread (response) {
+        let state = STORE.get('request');
+
+        let new_state = { messages: Object.assign({}, state.messages) };
+        state.messages.unread = this.mergeData(response, state.messages.unread);
+
+        return {
+            type: 'FETCHED-REQUEST-MESSAGES-UNREAD',
+            data: {
+                requests: new_state,
+            },
+        };
+    }
+    changeToReadRequestMessage (id) {
+        let path = '/request/messages/' + id;
+
+        this.pushWarningMessage('既読機能は実装中です。');
+        API.post(path, {}, (response) => {
+            // this.fetchRequestMessagesUnread();
+        });
+    }
+    /////
     ///// Message
     /////
     pushMessage (message) {
