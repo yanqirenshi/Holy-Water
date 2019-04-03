@@ -8,7 +8,7 @@
             </tr>
             <tr>
                 <th>ID</th>
-                <th>名称</th>
+                <th style="width:333px;">名称</th>
                 <th>完了</th>
                 <th>開始</th>
                 <th>終了</th>
@@ -17,7 +17,7 @@
         <tbody>
             <tr each={impure in opts.data}>
                 <td nowrap>{impure.id}</td>
-                <td nowrap>{impure.name}</td>
+                <td style="width:333px;" nowrap>{impure.name}</td>
                 <td nowrap>{dt(impure.finished_at)}</td>
                 <td nowrap>{dt(impure.start)}</td>
                 <td nowrap>{dt(impure.end)}</td>
@@ -30,7 +30,7 @@
      this.dt = (v) => {
          if (!v) return '---'
 
-         return moment(v).format('YYYY-MM-DD HH:mm:ss')
+         return moment(v).format('MM-DD HH:mm:ss')
      };
 
      this.description = (str) => {
