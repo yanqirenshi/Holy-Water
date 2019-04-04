@@ -27,6 +27,9 @@
 
          if ('save-impure-contents'==action)
              ACTIONS.saveImpure(data);
+
+         if ('move-2-view'==action)
+             location.hash = '#home/impures/' + this.opts.data.id;
      };
     </script>
 
@@ -48,21 +51,6 @@
      }
      impure-card.small > impure-card-large {
          display: none;
-     }
-    </style>
-
-    <style>
-     impure-card span.card-footer-item.start {
-         color: inherit;
-     }
-     impure-card[status=start] span.card-footer-item.start {
-         color: #aaaaaa;
-     }
-     impure-card span.card-footer-item.stop {
-         color: #aaaaaa;
-     }
-     impure-card[status=start] span.card-footer-item.stop {
-         color: inherit;
      }
      impure-card[status=start] div.card {
          background: rgba(254, 242, 99, 0.888);

@@ -13,7 +13,7 @@ class Store extends Vanilla_Redux_Store {
                         {
                             code: 'impure',
                             regex: new RegExp('^\\d+$'),
-                            tag: 'home_impure',
+                            tag: 'impure_page',
                         }
                     ],
                 },

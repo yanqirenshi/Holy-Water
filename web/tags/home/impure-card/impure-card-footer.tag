@@ -1,17 +1,30 @@
 <impure-card-footer>
 
     <footer class="card-footer">
-        <span class="card-footer-item start" action="start-action" onclick={clickButton}>Start</span>
-        <span class="card-footer-item stop"  action="stop-action"  onclick={clickButton}>Stop</span>
-        <span class="card-footer-item open"  action={changeSizeAction()} onclick={clickButton}>{changeSizeLabel()}</span>
+        <span class="card-footer-item action" action={startStopAction()}  onclick={clickButton}>{startStopLabel()}</span>
+        <span class="card-footer-item view"   action="move-2-view"        onclick={clickButton}>照会</span>
+        <span class="card-footer-item open"   action={changeSizeAction()} onclick={clickButton}>{changeSizeLabel()}</span>
     </footer>
 
     <script>
+
+     this.startStopLabel = () => {
+         if (!this.opts.status)
+             return '開始';
+
+         return '停止';
+     }
+     this.startStopAction = () => {
+         if (!this.opts.status)
+             return 'start-action';
+
+         return 'stop-action';
+     }
      this.changeSizeLabel = () => {
          if (this.opts.mode == 'large')
-             return 'Small'
+             return '閉じる'
 
-         return 'Large'
+         return '開く'
      }
      this.changeSizeAction = () => {
          if (this.opts.mode == 'large')
@@ -29,7 +42,7 @@
 
          if (action=='stop-action' && !this.opts.status)
              return;
-         dump(action);
+
          this.opts.callback(action);
      };
     </script>

@@ -43,7 +43,7 @@
          border-radius: 5px;
      }
      impure-card-small > .card .card-content{
-         height: calc(222px - 49px - 48px);
+         height: calc(222px - 49px - 48px - 1px);
          padding: 11px 22px;
          overflow: auto;
      }
