@@ -1,4 +1,9 @@
 class Actions extends Vanilla_Redux_Actions {
+    constructor () {
+        super();
+
+        this.last_notif_time = new Date();
+    }
     /////
     ///// util
     /////
@@ -548,6 +553,26 @@ class Actions extends Vanilla_Redux_Actions {
                 requests: new_state,
             },
         };
+    }
+    notifyNewMessages () {
+        let now = moment(new Date());
+        let befor = moment(this.last_notif_time);
+
+        let distance_sec = Math.floor(now.diff(befor) / 1000);
+
+        if (distance_sec < 5)
+            return;
+
+        let messages = STORE.get('requests.messages.unread.list').filter((d) => {
+            // TODO: ここの条件を完成させればおわり。
+            return true;
+        });
+
+        if (messages.length==0)
+            return;
+
+        this.last_notif_time = new Date();
+        this.pushWarningMessage('新規の依頼が n 件届きました。');
     }
     /////
     ///// Message

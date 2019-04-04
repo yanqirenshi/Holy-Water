@@ -11,8 +11,10 @@
          return STORE.get('requests.messages.unread.list').length;
      };
      STORE.subscribe((action) => {
-         if (action.type=='FETCHED-REQUEST-MESSAGES-UNREAD')
+         if (action.type=='FETCHED-REQUEST-MESSAGES-UNREAD') {
              this.update();
+             ACTIONS.notifyNewMessages();
+         }
      });
     </script>
 

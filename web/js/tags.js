@@ -579,8 +579,10 @@ riot.tag2('home_requtest-area', '<p class="{isHide()}"> 依頼メッセージ未
          return STORE.get('requests.messages.unread.list').length;
      };
      STORE.subscribe((action) => {
-         if (action.type=='FETCHED-REQUEST-MESSAGES-UNREAD')
+         if (action.type=='FETCHED-REQUEST-MESSAGES-UNREAD') {
              this.update();
+             ACTIONS.notifyNewMessages();
+         }
      });
 });
 
