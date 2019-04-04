@@ -1,20 +1,13 @@
 <impure-card-small>
+
     <div class="card hw-box-shadow">
+
         <header class="card-header">
-            <p class="card-header-title">
-                やること
-            </p>
-            <a href="#" class="card-header-icon" aria-label="more options">
-                <!-- https://www.html5rocks.com/ja/tutorials/dnd/basics/ -->
-                <span class="icon"
-                      title="このアイコンを扉へドラッグ&ドロップすると、扉の場所へ移動できます。"
-                      draggable="true"
-                      dragstart={dragStart}
-                      dragend={dragEnd}>
-                    <icon-ranning></icon-ranning>
-                </span>
-            </a>
+            <p class="card-header-title">Impure</p>
+            <impure-card-move-icon callback={this.opts.callback}
+                                   data={opts.data}></impure-card-move-icon>
         </header>
+
         <div class="card-content">
             <div class="content" style="font-size:14px;">
                 <p>{name()}</p>
@@ -22,21 +15,9 @@
         </div>
 
         <impure-card-footer callback={this.opts.callback}
-                            status={opts.status}></impure-card-footer>
+                            status={opts.status}
+                            mode="small"></impure-card-footer>
     </div>
-
-    <script>
-     this.dragStart = (e) => {
-         let target = e.target;
-
-         e.dataTransfer.setData('impure', JSON.stringify(this.opts.data));
-
-         this.opts.callback('start-drag');
-     };
-     this.dragEnd = (e) => {
-         this.opts.callback('end-drag');
-     };
-    </script>
 
     <script>
      this.name = () => {
@@ -67,4 +48,5 @@
          overflow: auto;
      }
     </style>
+
 </impure-card-small>

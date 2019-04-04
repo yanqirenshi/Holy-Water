@@ -1,17 +1,10 @@
 <impure-card-large>
     <div class="card hw-box-shadow">
         <header class="card-header">
-            <p class="card-header-title">
-                やること
-            </p>
-            <a href="#" class="card-header-icon" aria-label="more options">
-                <span class="icon"
-                      draggable="true"
-                      dragstart={dragStart}
-                      dragend={dragEnd}>
-                    <icon-ranning></icon-ranning>
-                </span>
-            </a>
+            <p class="card-header-title">Impure</p>
+
+            <impure-card-move-icon callback={this.opts.callback}
+                                   data={opts.data}></impure-card-move-icon>
         </header>
 
         <div class="card-content">
@@ -26,17 +19,9 @@
         </div>
 
         <impure-card-footer callback={this.opts.callback}
-                            status={opts.status}></impure-card-footer>
+                            status={opts.status}
+                            mode="large"></impure-card-footer>
     </div>
-
-    <script>
-     this.dragStart = (e) => {
-         this.opts.callback('start-drag');
-     };
-     this.dragEnd = (e) => {
-         this.opts.callback('end-drag');
-     };
-    </script>
 
     <script>
      this.name = () => {
