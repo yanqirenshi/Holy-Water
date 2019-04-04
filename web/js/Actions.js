@@ -517,7 +517,7 @@ class Actions extends Vanilla_Redux_Actions {
         let state = STORE.get('request');
 
         let new_state = { messages: Object.assign({}, state.messages) };
-        state.messages.unread = this.mergeData(response, state.messages.unread);
+        new_state.messages.unread = this.mergeData(response, { ht: {}, list: [] });
 
         return {
             type: 'FETCHED-REQUEST-MESSAGES-UNREAD',
@@ -527,12 +527,27 @@ class Actions extends Vanilla_Redux_Actions {
         };
     }
     changeToReadRequestMessage (id) {
-        let path = '/request/messages/' + id;
+        let path = '/requests/messages/' + id;
 
-        this.pushWarningMessage('既読機能は実装中です。');
-        API.post(path, {}, (response) => {
-            // this.fetchRequestMessagesUnread();
+        API.post(path, null, (response) => {
+            STORE.dispatch(this.changedToReadRequestMessage(response));
         });
+    }
+    changedToReadRequestMessage (response) {
+        let state = STORE.get('requests');
+        let new_unreads = state.messages.unread.list.filter((d) => {
+            return response.id != d.id;
+        });
+
+        let new_state = { messages: Object.assign({}, state.messages) };
+        new_state.messages.unread = this.mergeData(new_unreads, { ht: {}, list: [] });
+
+        return {
+            type: 'CHANGED-TO-READ-REQUEST-MESSAGE',
+            data: {
+                requests: new_state,
+            },
+        };
     }
     /////
     ///// Message

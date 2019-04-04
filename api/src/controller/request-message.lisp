@@ -19,6 +19,12 @@
     (write-key-value "messaged_at"   (timestamp2str (slot-value obj 'messaged-at)))
     (write-key-value "readed_at"     (timestamp2str (slot-value obj 'readed-at)))))
 
+(defgeneric dao2request-message-readed-at (dao)
+  (:method ((dao hw::ev_request-message-unread))
+    :null)
+  (:method ((dao hw::ev_request-message-read))
+    (hw::readed-at dao)))
+
 (defun dao2request-message (dao)
   (when dao
     (let ((obj (make-instance 'request-message)))
@@ -28,7 +34,7 @@
       (setf (angel-id-to obj)   (hw::angel-id-to dao))
       (setf (contents obj)      (hw::contents dao))
       (setf (messaged-at obj)   (hw::messaged-at dao))
-      ;; (setf (readed-at obj)     (hw::readed-at dao))
+      (setf (readed-at obj)     (dao2request-message-readed-at dao))
       obj)))
 
 ;;;;;
@@ -37,3 +43,8 @@
 (defun angel-received-messages (angel)
   (mapcar #'dao2request-message
           (hw::angel-received-messages angel)))
+
+(defun change-to-read-request-message (angel request-message-unread)
+  (dbi:with-transaction mito:*connection*
+    (dao2request-message
+     (hw::read-request-message angel request-message-unread))))

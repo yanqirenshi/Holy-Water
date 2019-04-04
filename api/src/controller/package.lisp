@@ -28,7 +28,8 @@
            #:sing-out
            #:find-angels
            #:get-angels
-           #:angel-received-messages)
+           #:angel-received-messages
+           #:change-to-read-request-message)
   (:export #:find-deccots
            #:get-deccot
            #:find-deccot-items))

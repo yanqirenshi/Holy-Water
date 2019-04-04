@@ -44,11 +44,14 @@
     (render-json (hw.api.ctrl:angel-received-messages angel))))
 
 
-(defroute ("/request/messages/:message-id" :method :POST) (&key message-id)
+(defroute ("/requests/messages/:message-id" :method :POST)
+    (&key message-id)
   (with-angel (angel)
-    (declare (ignore angel))
-    (print message-id)
-    (render-json nil)))
+    (let* ((message-id (parse-integer message-id))
+           (unread (hw:get-request-message :type :unread :id message-id)))
+      (unless unread
+        (throw-code 404))
+      (render-json (hw.api.ctrl:change-to-read-request-message angel unread)))))
 
 
 ;;;;;
@@ -96,6 +99,7 @@
       (unless maledict (throw-code 404))
       (unless impure   (throw-code 404))
       (render-json (hw.api.ctrl:move-impure angel impure maledict)))))
+
 
 ;;;;;
 ;;;;; Deamons

@@ -17,6 +17,13 @@
         </div>
     </section>
 
+    <script>
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-REQUEST-MESSAGES-UNREAD')
+             this.update();
+     });
+    </script>
+
     <style>
      request-messages {
          width: 100%;

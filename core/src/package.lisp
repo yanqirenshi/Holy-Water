@@ -41,6 +41,7 @@
            #:stop-action-impure
            #:finish-impure
            #:move-impure
+           #:get-request-message
            #:create-request-message
            #:find-impure-request-messages)
   (:export #:find-deccots
