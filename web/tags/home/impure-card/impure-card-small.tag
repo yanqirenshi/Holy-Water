@@ -20,26 +20,12 @@
                 <p>{name()}</p>
             </div>
         </div>
-        <footer class="card-footer">
-            <span class="card-footer-item start" action="start-action" onclick={clickButton}>Start</span>
-            <span class="card-footer-item stop"  action="stop-action"  onclick={clickButton}>Stop</span>
-            <span class="card-footer-item open"  action="switch-large" onclick={clickButton}>Open</span>
-        </footer>
+
+        <impure-card-footer callback={this.opts.callback}
+                            status={opts.status}></impure-card-footer>
     </div>
 
     <script>
-     this.clickButton = (e) => {
-         let target = e.target;
-         let action = target.getAttribute('action');
-
-         if (action=='start-action' && this.opts.status)
-             return;
-
-         if (action=='stop-action' && !this.opts.status)
-             return;
-
-         this.opts.callback(action);
-     };
      this.dragStart = (e) => {
          let target = e.target;
 
