@@ -16,6 +16,7 @@
            #:move-impure
            #:save-impure
            #:find-impures-cemetery
+           #:get-impure
            #:get-impure-purging
            #:transfer-impure
            #:create-after-impure)

@@ -228,6 +228,26 @@ class Actions extends Vanilla_Redux_Actions {
     /////
     ///// Impure
     /////
+    fetchImpure (id) {
+        let path = '/impures/' + id;
+
+        API.get(path, function (json, success) {
+            STORE.dispatch(this.fetchedImpure(json));
+        }.bind(this));
+    }
+    fetchedImpure (response) {
+        let impure = response;
+
+        let data = [];
+        if (impure._class=='RS_IMPURE-ACTIVE')
+            data.push(impure);
+
+        return {
+            type: 'FETCHED-IMPURE',
+            data: { impures: this.mergeData(data, STORE.get('impures')) },
+            impure: response,
+        };
+    }
     fetchDoneImpures (from, to) {
         let path_str = '/impures/status/done?from=%s&to=%s';
         let path = path_str.format(from.toISOString(), to.toISOString());

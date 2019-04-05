@@ -33,7 +33,8 @@
   (:export #:find-angels
            #:get-angel
            #:get-angel-at-auth
-           #:get-angel-at-ghost-shadow-id)
+           #:get-angel-at-ghost-shadow-id
+           #:angel-impure)
   (:export #:get-purge
            #:find-purge-history
            #:save-purge-term)

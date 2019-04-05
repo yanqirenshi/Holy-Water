@@ -216,35 +216,71 @@ riot.tag2('page-tabs', '<div class="tabs is-boxed"> <ul> <li each="{opts.core.ta
      };
 });
 
-riot.tag2('section-breadcrumb', '<section-container data="{path()}"> <nav class="breadcrumb" aria-label="breadcrumbs"> <ul> <li each="{opts.data}"> <a class="{active ? \'is-active\' : \'\'}" href="{href}" aria-current="page">{label}</a> </li> </ul> </nav> </section-container>', 'section-breadcrumb section-container > .section,[data-is="section-breadcrumb"] section-container > .section{ padding-top: 3px; }', '', function(opts) {
+riot.tag2('section-breadcrumb', '<nav class="breadcrumb" aria-label="breadcrumbs"> <ul> <li each="{path()}" class="{active ? \'is-active\' : \'\'}"> <a href="{href}" aria-current="page">{label}</a> </li> </ul> </nav>', 'section-breadcrumb section-container > .section,[data-is="section-breadcrumb"] section-container > .section{ padding-top: 3px; }', '', function(opts) {
+     this.label = (node, is_last, node_name) => {
+         if (node.menu_label)
+             return node.menu_label;
+
+         if (node.regex)
+             return node_name;
+
+         return is_last ? node_name : node.code;
+     };
+     this.active = (node, is_last) => {
+         if (is_last)
+             return true;
+
+         if (!node.tag)
+             return true;
+
+         return false;
+     };
+     this.makeData = (routes, href, path) => {
+         if (!path || path.length==0)
+             return null;
+
+         let node_name = path[0];
+         let node = routes.find((d) => {
+             if (d.regex) {
+                 return d.regex.exec(node_name);
+             } else {
+                 return d.code == node_name;
+             }
+         });
+
+         if (!node) {
+             console.warn(routes);
+             console.warn(path);
+             throw new Error ('なんじゃこりゃぁ!!')
+         }
+
+         let sep = href=='#' ? '' : '/';
+         let node_label = node.regex ? node_name : node.code;
+         let new_href = href + sep + node_label;
+
+         let is_last = path.length == 1;
+
+         let crumb = [{
+             label: this.label(node, is_last, node_name),
+             href: new_href,
+             active: this.active(node, is_last),
+         }]
+
+         if (is_last==1)
+             return crumb;
+
+         return crumb.concat(this.makeData(node.children, new_href, path.slice(1)))
+     };
      this.path = () => {
          let hash = location.hash;
          let path = hash.split('/');
 
+         let routes = STORE.get('site.pages');
+
          if (path[0] && path[0].substr(0,1)=='#')
              path[0] = path[0].substr(1);
 
-         let out = [];
-         let len = path.length;
-         let href = null;
-         for (var i in path) {
-             href = href ? href + '/' + path[i] : '#' + path[i];
-
-             if (i==len-1)
-                 out.push({
-                     label: path[i],
-                     href: hash,
-                     active: true
-                 });
-
-             else
-                 out.push({
-                     label: path[i],
-                     href: href,
-                     active: false
-                 });
-         }
-         return out;
+         return this.makeData(routes, '#', path);
      }
 });
 
@@ -830,9 +866,6 @@ riot.tag2('impure-card', '<impure-card-small data="{opts.data}" status="{status(
      };
 });
 
-riot.tag2('impure_page', '', '', '', function(opts) {
-});
-
 riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Maledicts</p> <a each="{data()}" class="panel-block {isActive(id)}" onclick="{clickItem}" maledict-id="{id}" style=""> <span style="width: 177px;" maledict-id="{id}"> {name} </span> <span class="operators"> <span class="icon" title="ここに「やること」を追加する。" maledict-id="{id}" maledict-name="{name}" onclick="{clickAddButton}"> <i class="far fa-plus-square" maledict-id="{id}"></i> </span> <span class="move-door {dragging ? \'open\' : \'close\'}" ref="move-door" dragover="{dragover}" drop="{drop}"> <span class="icon closed-door"> <i class="fas fa-door-closed"></i> </span> <span class="icon opened-door" maledict-id="{id}"> <i class="fas fa-door-open" maledict-id="{id}"></i> </span> </span> </span> </a> </nav>', 'home_maledicts > .panel { width: 255px; border-radius: 4px 4px 0 0; } home_maledicts .panel-block { background:#fff; } home_maledicts .panel-block.is-active { background:#eaf4fc; } home_maledicts .move-door.close .opened-door { display: none; } home_maledicts .move-door.open .closed-door { display: none; } home_maledicts .operators { width: 53px; } home_maledicts .operators .icon { color: #cccccc; } home_maledicts .operators .icon:hover { color: #880000; } home_maledicts .operators .move-door.open .icon { color: #880000; }', '', function(opts) {
      this.dragging = false;
 
@@ -1011,6 +1044,32 @@ riot.tag2('service-card-small', '<div class="card hw-box-shadow"> <header class=
 
          return this.opts.source.assignee.web_url;
      };
+});
+
+riot.tag2('impure_page-tabs', '<div class="tabs is-toggle"> <ul> <li class="is-active"> <a> <span>基本情報</span> </a> </li> <li> <a> <span>浄化履歴</span> </a> </li> <li> <a> <span>Impure の鎖</span> </a> </li> <li> <a> <span>依頼履歴</span> </a> </li> </ul> </div>', 'impure_page-tabs li > a { background: #fff; }', '', function(opts) {
+});
+
+riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">Impure</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section" style="padding-top:11px; padding-bottom:11px;"> <div class="container"> <impure_page-tabs></impure_page-tabs> </div> </section>', '', '', function(opts) {
+     this.id = () => {
+         return location.hash.split('/').reverse()[0];
+     }
+     this.name = () => {
+         if (this.impure)
+             return this.impure.name;
+
+         return '';
+     };
+
+     this.impure = null;
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-IMPURE') {
+             this.impure = action.impure;
+             this.update();
+         }
+     });
+     this.on('mount', () => {
+         ACTIONS.fetchImpure(this.id());
+     });
 });
 
 riot.tag2('exorcists-list', '<table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Ghost ID</th> </tr> </thead> <tbody> <tr each="{orthodox in orthodoxs()}"> <td>{orthodox.id}</td> <td>{orthodox.name}</td> <td>{orthodox.ghost_id}</td> </tr> </tbody> </table>', '', '', function(opts) {

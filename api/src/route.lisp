@@ -151,6 +151,13 @@
       (unless impure (throw-code 404))
       (render-json (hw.api.ctrl:finish-impure angel impure :with-stop |with-stop|)))))
 
+(defroute "/impures/:id" (&key id)
+  (with-angel (angel)
+    (let* ((id (parse-integer id))
+           (angel (hw.api.ctrl:get-impure angel :id id)))
+      (unless angel (throw-code 404))
+      (render-json angel))))
+
 (defroute ("/impures/:id" :method :POST) (&key id |name| |description|)
   (with-angel (angel)
     (let* ((name (quri:url-decode |name|))

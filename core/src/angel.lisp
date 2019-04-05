@@ -40,3 +40,19 @@
                   (= *maledict-type-inbox* (maledict-type-id maledict)))
               (find-angel-maledicts angel))
         (error "Not found InBox"))))
+
+(defun angel-impure-core (table angel id)
+  (first (select-dao table
+           (inner-join :ev_collect_impure
+                       :on (:= :rs_impure_active.id :ev_collect_impure.impure_id))
+           (inner-join :th_angel_maledict
+                       :on (:= :ev_collect_impure.maledict_id :th_angel_maledict.maledict_id))
+           (where (:and (:= :th_angel_maledict.angel_id (mito:object-id angel))
+                        (:= :ev_collect_impure.impure_id id))))))
+
+(defgeneric angel-impure (angel &key id)
+  (:method ((angel rs_angel) &key id)
+    (when id
+      (or (angel-impure-core 'rs_impure-active    angel id)
+          (angel-impure-core 'rs_impure-finished  angel id)
+          (angel-impure-core 'rs_impure-discarded angel id)))))

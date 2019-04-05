@@ -7,7 +7,8 @@
    (purge         :accessor purge         :initarg :purge       :initform :null)
    (finished-at   :accessor finished-at   :initarg :finished-at :initform :null)
    (start         :accessor start         :initarg :start       :initform :null)
-   (end           :accessor end           :initarg :end         :initform :null)))
+   (end           :accessor end           :initarg :end         :initform :null)
+   (_class        :accessor _class        :initarg :_class      :initform :null)))
 
 (defmethod %to-json ((obj impure))
   (with-object
@@ -17,7 +18,12 @@
     (write-key-value "purge"       (or (slot-value obj 'purge) :null))
     (write-key-value "finished_at" (or (slot-value obj 'finished-at) :null))
     (write-key-value "start"       (or (slot-value obj 'start) :null))
-    (write-key-value "end"         (or (slot-value obj 'end)   :null))))
+    (write-key-value "end"         (or (slot-value obj 'end)   :null))
+    (write-key-value "_class"      (or (slot-value obj '_class) :null))))
+
+(defun dao2impure_class (dao)
+  (or (symbol-name (class-name (class-of dao)))
+      :null))
 
 (defun dao2impure (dao &key angel)
   (when dao
@@ -25,6 +31,7 @@
       (setf (id impure)            (mito:object-id dao))
       (setf (name impure)          (hw::name dao))
       (setf (description impure)   (hw::description dao))
+      (setf (_class impure)        (dao2impure_class dao))
       (when angel
         (let ((purge (hw:get-purge :angel angel :impure dao :status :start)))
           (setf (purge impure)
@@ -36,6 +43,10 @@
     (mapcar #'(lambda (dao)
                 (dao2impure dao :angel angel))
             list)))
+
+(defun get-impure (angel &key id)
+  (when (and angel id)
+    (dao2impure (hw:angel-impure angel :id id))))
 
 (defun get-impure-purging (angel)
   (let ((impure (hw::get-impure-purging angel)))
