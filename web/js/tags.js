@@ -1333,7 +1333,7 @@ riot.tag2('randing', '', '', '', function(opts) {
 riot.tag2('randing_page_root', '', '', '', function(opts) {
 });
 
-riot.tag2('request-messages-list', '<table class="table is-bordered is-striped is-narrow is-hoverable"> <thead> <tr> <th></th> <th>ID</th> <th>発生日時</th> <th>Impure</th> <th>From</th> <th class="message">Contents</th> </tr> </thead> <tbody> <tr each="{message in sources()}"> <td> <button class="button" message-id="{message.id}" onclick="{clickToReaded}">既読にする</button> </td> <td>{dt(message.messaged_at)}</td> <td>{message.id}</td> <td>{message.impure_id}</td> <td>{message.angel_id_from}</td> <td class="message"> <pre>{message.contents}</pre> </td> </tr> </tbody> </table>', '', '', function(opts) {
+riot.tag2('request-messages-list', '<table class="table is-bordered is-striped is-narrow is-hoverable"> <thead> <tr> <th></th> <th>ID</th> <th>発生日時</th> <th>Impure</th> <th>From</th> <th class="message">Contents</th> </tr> </thead> <tbody> <tr each="{message in sources()}"> <td> <button class="button" message-id="{message.id}" onclick="{clickToReaded}">既読にする</button> </td> <td> <a href="#home/requests/impures/{message.id}">{message.id}</a> </td> <td>{dt(message.messaged_at)}</td> <td>{message.impure_id}</td> <td>{message.angel_id_from}</td> <td class="message"> <pre>{message.contents}</pre> </td> </tr> </tbody> </table>', '', '', function(opts) {
      this.sources = () => {
          return STORE.get('requests.messages.unread.list').sort((a, b) => {
              if (new Date(a.messaged_at) > new Date(b.messaged_at))

@@ -20,8 +20,10 @@
                             message-id="{message.id}"
                             onclick={clickToReaded}>既読にする</button>
                 </td>
+                <td>
+                    <a href="#home/requests/impures/{message.id}">{message.id}</a>
+                </td>
                 <td>{dt(message.messaged_at)}</td>
-                <td>{message.id}</td>
                 <td>{message.impure_id}</td>
                 <td>{message.angel_id_from}</td>
                 <td class="message">

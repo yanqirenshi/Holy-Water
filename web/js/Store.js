@@ -20,6 +20,18 @@ class Store extends Vanilla_Redux_Store {
                 {
                     code: 'requests',
                     tag: 'request-messages',
+                    children: [
+                        {
+                            code: 'impures',
+                            children: [
+                                {
+                                    code: 'impure',
+                                    regex: new RegExp('^\\d+$'),
+                                    tag: 'impure_page',
+                                }
+                            ],
+                        },
+                    ],
                 },
             ],
         };

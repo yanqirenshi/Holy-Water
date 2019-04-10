@@ -584,14 +584,16 @@ class Actions extends Vanilla_Redux_Actions {
             return;
 
         let messages = STORE.get('requests.messages.unread.list').filter((d) => {
-            // TODO: ここの条件を完成させればおわり。
-            return true;
+            let messaged_at = moment(d.messaged_at);
+
+            return messaged_at.diff(befor) > 0;
         });
+
+        this.last_notif_time = new Date();
 
         if (messages.length==0)
             return;
 
-        this.last_notif_time = new Date();
         this.pushWarningMessage('新規の依頼が n 件届きました。');
     }
     /////
