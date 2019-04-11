@@ -8,6 +8,8 @@
    (finished-at   :accessor finished-at   :initarg :finished-at :initform :null)
    (start         :accessor start         :initarg :start       :initform :null)
    (end           :accessor end           :initarg :end         :initform :null)
+   (purges        :accessor purges        :initarg :purges      :initform nil)
+   (requests      :accessor requests      :initarg :requests    :initform nil)
    (_class        :accessor _class        :initarg :_class      :initform :null)))
 
 (defmethod %to-json ((obj impure))
@@ -15,27 +17,44 @@
     (write-key-value "id"          (slot-value obj 'id))
     (write-key-value "name"        (slot-value obj 'name))
     (write-key-value "description" (slot-value obj 'description))
-    (write-key-value "purge"       (or (slot-value obj 'purge) :null))
+    (write-key-value "purge"       (or (slot-value obj 'purge)       :null))
     (write-key-value "finished_at" (or (slot-value obj 'finished-at) :null))
-    (write-key-value "start"       (or (slot-value obj 'start) :null))
-    (write-key-value "end"         (or (slot-value obj 'end)   :null))
-    (write-key-value "_class"      (or (slot-value obj '_class) :null))))
+    (write-key-value "start"       (or (slot-value obj 'start)       :null))
+    (write-key-value "end"         (or (slot-value obj 'end)         :null))
+    (write-key-value "purges"      (slot-value obj 'purges))
+    (write-key-value "requests"    (slot-value obj 'requests))
+    (write-key-value "_class"      (or (slot-value obj '_class)      :null))))
 
 (defun dao2impure_class (dao)
   (or (symbol-name (class-name (class-of dao)))
       :null))
 
-(defun dao2impure (dao &key angel)
+(defun dao2impure (dao &key angel with-details)
   (when dao
     (let ((impure (make-instance 'impure)))
       (setf (id impure)            (mito:object-id dao))
       (setf (name impure)          (hw::name dao))
       (setf (description impure)   (hw::description dao))
       (setf (_class impure)        (dao2impure_class dao))
+      ;; purge
       (when angel
         (let ((purge (hw:get-purge :angel angel :impure dao :status :start)))
           (setf (purge impure)
                 (if purge (dao2purge purge) :null))))
+      (when with-details
+        ;; TODO: 以下は core に実装すべきやね
+        ;; purges
+        (setf (purges impure)
+              (mapcar #'plist2purge-history
+                      (hw:find-purge-history :impure dao)))
+        ;; requests
+        (setf (requests impure)
+              (mapcar #'dao2request-message
+                      (nconc
+                       (mito:select-dao 'hw::ev_request-message-unread
+                         (sxql:where (:= :ev_request_message_unread.impure_id (mito:object-id dao))))
+                       (mito:select-dao 'hw::ev_request-message-read
+                         (sxql:where (:= :ev_request_message_read.impure_id (mito:object-id dao))))))))
       impure)))
 
 (defun find-impures (angel &key maledict)
@@ -46,7 +65,8 @@
 
 (defun get-impure (angel &key id)
   (when (and angel id)
-    (dao2impure (hw:angel-impure angel :id id))))
+    (dao2impure (hw:angel-impure angel :id id)
+                :with-details t)))
 
 (defun get-impure-purging (angel)
   (let ((impure (hw::get-impure-purging angel)))

@@ -1,5 +1,5 @@
 <page-tabs>
-    <div class="tabs is-boxed">
+    <div class="tabs is-{type()}">
         <ul>
             <li each={opts.core.tabs}
                 class="{opts.core.active_tab==code ? 'is-active' : ''}">
@@ -17,6 +17,9 @@
      this.clickTab = (e) => {
          let code = e.target.getAttribute('code');
          this.opts.callback(e, 'CLICK-TAB', { code: code });
+     };
+     this.type = () => {
+         return this.opts.type ? this.opts.type : 'boxed';
      };
     </script>
 </page-tabs>

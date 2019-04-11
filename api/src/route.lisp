@@ -140,9 +140,9 @@
 (defroute "/impures/:id" (&key id)
   (with-angel (angel)
     (let* ((id (parse-integer id))
-           (angel (hw.api.ctrl:get-impure angel :id id)))
+           (impure (hw.api.ctrl:get-impure angel :id id)))
       (unless angel (throw-code 404))
-      (render-json angel))))
+      (render-json impure))))
 
 (defroute ("/impures/:id" :method :POST) (&key id |name| |description|)
   (with-angel (angel)

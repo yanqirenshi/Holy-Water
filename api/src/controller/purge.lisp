@@ -20,13 +20,14 @@
     (write-key-value "description" (slot-value obj 'description))))
 
 (defun dao2purge (dao)
-  (let ((purge (make-instance 'purge)))
-    (setf (id purge)          (mito:object-id dao))
-    (setf (angel-id  purge)   (hw::angel-id  dao))
-    (setf (impure-id purge)   (hw::impure-id dao))
-    (setf (start purge)       (hw::start dao))
-    (setf (description purge) (hw::description dao))
-    purge))
+  (when dao
+    (let ((purge (make-instance 'purge)))
+      (setf (id purge)          (mito:object-id dao))
+      (setf (angel-id  purge)   (hw::angel-id  dao))
+      (setf (impure-id purge)   (hw::impure-id dao))
+      (setf (start purge)       (hw::start dao))
+      (setf (description purge) (hw::description dao))
+      purge)))
 
 
 ;;;;;

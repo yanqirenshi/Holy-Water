@@ -36,6 +36,9 @@
 
     <script>
      this.sources = () => {
+         if (this.opts.sources)
+             return this.opts.sources;
+
          return STORE.get('requests.messages.unread.list').sort((a, b) => {
              if (new Date(a.messaged_at) > new Date(b.messaged_at))
                  return -1;

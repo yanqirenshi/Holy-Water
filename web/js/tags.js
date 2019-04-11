@@ -209,10 +209,13 @@ riot.tag2('message-item', '<article class="message hw-box-shadow is-{opts.data.t
      };
 });
 
-riot.tag2('page-tabs', '<div class="tabs is-boxed"> <ul> <li each="{opts.core.tabs}" class="{opts.core.active_tab==code ? \'is-active\' : \'\'}"> <a code="{code}" onclick="{clickTab}">{label}</a> </li> </ul> </div>', 'page-tabs li:first-child { margin-left: 22px; }', '', function(opts) {
+riot.tag2('page-tabs', '<div class="tabs is-{type()}"> <ul> <li each="{opts.core.tabs}" class="{opts.core.active_tab==code ? \'is-active\' : \'\'}"> <a code="{code}" onclick="{clickTab}">{label}</a> </li> </ul> </div>', 'page-tabs li:first-child { margin-left: 22px; }', '', function(opts) {
      this.clickTab = (e) => {
          let code = e.target.getAttribute('code');
          this.opts.callback(e, 'CLICK-TAB', { code: code });
+     };
+     this.type = () => {
+         return this.opts.type ? this.opts.type : 'boxed';
      };
 });
 
@@ -1049,7 +1052,24 @@ riot.tag2('service-card-small', '<div class="card hw-box-shadow"> <header class=
 riot.tag2('impure_page-tabs', '<div class="tabs is-toggle"> <ul> <li class="is-active"> <a> <span>基本情報</span> </a> </li> <li> <a> <span>浄化履歴</span> </a> </li> <li> <a> <span>Impure の鎖</span> </a> </li> <li> <a> <span>依頼履歴</span> </a> </li> </ul> </div>', 'impure_page-tabs li > a { background: #fff; }', '', function(opts) {
 });
 
-riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">Impure</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section" style="padding-top:11px; padding-bottom:11px;"> <div class="container"> <impure_page-tabs></impure_page-tabs> </div> </section>', '', '', function(opts) {
+riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">Impure</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section" style="padding-top:22px; padding-bottom:22px;"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}" type="toggle"></page-tabs> </div> </section> <div class="tab-contents-area"> <impure_page_tab-basic class="hide" source="{impure}"></impure_page_tab-basic> <impure_page_tab-purges class="hide" source="{impure}"></impure_page_tab-purges> <impure_page_tab-requests class="hide" source="{impure}"></impure_page_tab-requests> <impure_page_tab-chains class="hide" source="{impure}"></impure_page_tab-chains> </div>', 'impure_page page-tabs li a{ background: #fff; }', '', function(opts) {
+     this.page_tabs = new PageTabs([
+         {code: 'basic',    label: '基本情報', tag: 'impure_page_tab-basic' },
+         {code: 'purges',   label: '浄化履歴', tag: 'impure_page_tab-purges' },
+         {code: 'requests', label: '依頼履歴', tag: 'impure_page_tab-requests' },
+         {code: 'chains',   label: '連鎖',     tag: 'impure_page_tab-chains' },
+     ]);
+
+     this.on('mount', () => {
+         this.page_tabs.switchTab(this.tags)
+         this.update();
+     });
+
+     this.clickTab = (e, action, data) => {
+         if (this.page_tabs.switchTab(this.tags, data.code))
+             this.update();
+     };
+
      this.id = () => {
          return location.hash.split('/').reverse()[0];
      }
@@ -1070,6 +1090,50 @@ riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"
      this.on('mount', () => {
          ACTIONS.fetchImpure(this.id());
      });
+});
+
+riot.tag2('impure_page_tab-basic', '<section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white is-4">Name</h1> <div class="contents hw-text-white" style="font-weight:bold;"> <p>{name()}</p> </div> </div> </section> <section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white is-4">Description</h1> <div class="contents hw-text-white" style="font-weight:bold;"> <p><pre>{description()}</pre></p> </div> </div> </section>', '', '', function(opts) {
+     this.name = () => {
+         let impure = this.opts.source;
+
+         if (!impure)
+             return '????????';
+
+         return impure.name;
+     };
+     this.description = () => {
+         let impure = this.opts.source;
+
+         if (!impure)
+             return '????????';
+
+         return impure.description;
+     };
+});
+
+riot.tag2('impure_page_tab-chains', '<section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white">準備中</h1> </div> </section>', '', '', function(opts) {
+});
+
+riot.tag2('impure_page_tab-purges', '<section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white"></h1> <div class="contents"> <purges-list data="{purges()}" callback="{callback}"></purges-list> </div> </div> </section>', '', '', function(opts) {
+     this.purges = () => {
+         if (!this.opts.source)
+             return { list: [] };
+
+         return { list: this.opts.source.purges };
+     };
+     this.callback = (action, data) => {
+     };
+});
+
+riot.tag2('impure_page_tab-requests', '<section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white"></h1> <div class="contents"> <request-messages-list sources="{requests()}"></request-messages-list> </div> </div> </section>', '', '', function(opts) {
+     this.requests = () => {
+         let impure = this.opts.source;
+
+         if (!impure)
+             return [];
+
+         return impure.requests;
+     };
 });
 
 riot.tag2('exorcists-list', '<table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Ghost ID</th> </tr> </thead> <tbody> <tr each="{orthodox in orthodoxs()}"> <td>{orthodox.id}</td> <td>{orthodox.name}</td> <td>{orthodox.ghost_id}</td> </tr> </tbody> </table>', '', '', function(opts) {
@@ -1335,6 +1399,9 @@ riot.tag2('randing_page_root', '', '', '', function(opts) {
 
 riot.tag2('request-messages-list', '<table class="table is-bordered is-striped is-narrow is-hoverable"> <thead> <tr> <th></th> <th>ID</th> <th>発生日時</th> <th>Impure</th> <th>From</th> <th class="message">Contents</th> </tr> </thead> <tbody> <tr each="{message in sources()}"> <td> <button class="button" message-id="{message.id}" onclick="{clickToReaded}">既読にする</button> </td> <td> <a href="#home/requests/impures/{message.id}">{message.id}</a> </td> <td>{dt(message.messaged_at)}</td> <td>{message.impure_id}</td> <td>{message.angel_id_from}</td> <td class="message"> <pre>{message.contents}</pre> </td> </tr> </tbody> </table>', '', '', function(opts) {
      this.sources = () => {
+         if (this.opts.sources)
+             return this.opts.sources;
+
          return STORE.get('requests.messages.unread.list').sort((a, b) => {
              if (new Date(a.messaged_at) > new Date(b.messaged_at))
                  return -1;
