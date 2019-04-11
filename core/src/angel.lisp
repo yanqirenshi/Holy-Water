@@ -37,18 +37,21 @@
 (defgeneric get-inbox-maledict (angel)
   (:method ((angel rs_angel))
     (or (find-if #'(lambda (maledict)
-                  (= *maledict-type-inbox* (maledict-type-id maledict)))
-              (find-angel-maledicts angel))
+                     (= *maledict-type-inbox* (maledict-type-id maledict)))
+                 (find-angel-maledicts angel))
         (error "Not found InBox"))))
 
 (defun angel-impure-core (table angel id)
-  (first (select-dao table
-           (inner-join :ev_collect_impure
-                       :on (:= :rs_impure_active.id :ev_collect_impure.impure_id))
-           (inner-join :th_angel_maledict
-                       :on (:= :ev_collect_impure.maledict_id :th_angel_maledict.maledict_id))
-           (where (:and (:= :th_angel_maledict.angel_id (mito:object-id angel))
-                        (:= :ev_collect_impure.impure_id id))))))
+  (let ((id-col (cond ((eq table 'rs_impure-active)    :rs_impure_active.id)
+                      ((eq table 'rs_impure-finished)  :rs_impure_finished.id)
+                      ((eq table 'rs_impure-discarded) :rs_impure_discarded.id))))
+    (first (select-dao table
+             (inner-join :ev_collect_impure
+                         :on (:= id-col :ev_collect_impure.impure_id))
+             (inner-join :th_angel_maledict
+                         :on (:= :ev_collect_impure.maledict_id :th_angel_maledict.maledict_id))
+             (where (:and (:= :th_angel_maledict.angel_id (mito:object-id angel))
+                          (:= :ev_collect_impure.impure_id id)))))))
 
 (defgeneric angel-impure (angel &key id)
   (:method ((angel rs_angel) &key id)

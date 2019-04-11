@@ -91,7 +91,7 @@
              (:as name-col :impure_name))
       (from :ev_purge_end)
       (inner-join table :on (:= :ev_purge_end.impure_id id-col))
-      (where (:and (:= :ev_purge_end.impure_id (object-id impure)))))))
+      (where (:= :ev_purge_end.impure_id (object-id impure))))))
 
 (defun find-purge-history (&key angel impure from to)
   (cond (angel
@@ -103,13 +103,14 @@
                (find-purge-history-sql angel :rs_impure_discarded :from from :to to)))
            (dbi:fetch-all (apply #'dbi:execute (dbi:prepare mito:*connection* sql) vals))))
         (impure
-         (multiple-value-bind (sql vals)
-             (sxql:yield
-              (union-all-queries
-               (find-purge-history-sql-at-impure impure :rs_impure_active)
-               (find-purge-history-sql-at-impure impure :rs_impure_finished)
-               (find-purge-history-sql-at-impure impure :rs_impure_discarded)))
-           (dbi:fetch-all (apply #'dbi:execute (dbi:prepare mito:*connection* sql) vals))))))
+         (progn
+           (multiple-value-bind (sql vals)
+               (sxql:yield
+                (union-all-queries
+                 (find-purge-history-sql-at-impure impure :rs_impure_active)
+                 (find-purge-history-sql-at-impure impure :rs_impure_finished)
+                 (find-purge-history-sql-at-impure impure :rs_impure_discarded)))
+             (dbi:fetch-all (apply #'dbi:execute (dbi:prepare mito:*connection* sql) vals)))))))
 
 (defun save-purge-term (angel purge start end &key editor)
   (declare (ignore angel))

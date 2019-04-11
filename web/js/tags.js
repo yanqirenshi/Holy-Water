@@ -1117,9 +1117,9 @@ riot.tag2('impure_page_tab-chains', '<section class="section" style="padding-top
 riot.tag2('impure_page_tab-purges', '<section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white"></h1> <div class="contents"> <purges-list data="{purges()}" callback="{callback}"></purges-list> </div> </div> </section>', '', '', function(opts) {
      this.purges = () => {
          if (!this.opts.source)
-             return { list: [] };
+             return { list: [], ht: {} };
 
-         return { list: this.opts.source.purges };
+         return { list: this.opts.source.purges, ht: {} };
      };
      this.callback = (action, data) => {
      };

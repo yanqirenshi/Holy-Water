@@ -65,8 +65,8 @@
 
 (defun get-impure (angel &key id)
   (when (and angel id)
-    (dao2impure (hw:angel-impure angel :id id)
-                :with-details t)))
+    (let ((impure (hw:angel-impure angel :id id)))
+      (dao2impure impure :with-details t))))
 
 (defun get-impure-purging (angel)
   (let ((impure (hw::get-impure-purging angel)))

@@ -14,9 +14,9 @@
     <script>
      this.purges = () => {
          if (!this.opts.source)
-             return { list: [] };
+             return { list: [], ht: {} };
 
-         return { list: this.opts.source.purges };
+         return { list: this.opts.source.purges, ht: {} };
      };
      this.callback = (action, data) => {
      };
