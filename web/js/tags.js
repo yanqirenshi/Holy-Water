@@ -1052,7 +1052,7 @@ riot.tag2('service-card-small', '<div class="card hw-box-shadow"> <header class=
 riot.tag2('impure_page-tabs', '<div class="tabs is-toggle"> <ul> <li class="is-active"> <a> <span>基本情報</span> </a> </li> <li> <a> <span>浄化履歴</span> </a> </li> <li> <a> <span>Impure の鎖</span> </a> </li> <li> <a> <span>依頼履歴</span> </a> </li> </ul> </div>', 'impure_page-tabs li > a { background: #fff; }', '', function(opts) {
 });
 
-riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">Impure</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section" style="padding-top:22px; padding-bottom:22px;"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}" type="toggle"></page-tabs> </div> </section> <div class="tab-contents-area"> <impure_page_tab-basic class="hide" source="{impure}"></impure_page_tab-basic> <impure_page_tab-purges class="hide" source="{impure}"></impure_page_tab-purges> <impure_page_tab-requests class="hide" source="{impure}"></impure_page_tab-requests> <impure_page_tab-chains class="hide" source="{impure}"></impure_page_tab-chains> </div>', 'impure_page page-tabs li a{ background: #fff; }', '', function(opts) {
+riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">Impure</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section" style="padding-top:22px; padding-bottom:22px;"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}" type="toggle"></page-tabs> </div> </section> <div class="tab-contents-area"> <impure_page_tab-basic class="hide" source="{impure}"></impure_page_tab-basic> <impure_page_tab-purges class="hide" source="{impure}"></impure_page_tab-purges> <impure_page_tab-requests class="hide" source="{impure}"></impure_page_tab-requests> <impure_page_tab-chains class="hide" source="{impure}"></impure_page_tab-chains> </div>', 'impure_page page-tabs li a{ background: #fff; } impure_page { width: 100%; height: 100%; display: block; overflow: auto; }', '', function(opts) {
      this.page_tabs = new PageTabs([
          {code: 'basic',    label: '基本情報', tag: 'impure_page_tab-basic' },
          {code: 'purges',   label: '浄化履歴', tag: 'impure_page_tab-purges' },
@@ -1397,7 +1397,7 @@ riot.tag2('randing', '', '', '', function(opts) {
 riot.tag2('randing_page_root', '', '', '', function(opts) {
 });
 
-riot.tag2('request-messages-list', '<table class="table is-bordered is-striped is-narrow is-hoverable"> <thead> <tr> <th></th> <th>ID</th> <th>発生日時</th> <th>Impure</th> <th>From</th> <th class="message">Contents</th> </tr> </thead> <tbody> <tr each="{message in sources()}"> <td> <button class="button" message-id="{message.id}" onclick="{clickToReaded}">既読にする</button> </td> <td> <a href="#home/requests/impures/{message.id}">{message.id}</a> </td> <td>{dt(message.messaged_at)}</td> <td>{message.impure_id}</td> <td>{message.angel_id_from}</td> <td class="message"> <pre>{message.contents}</pre> </td> </tr> </tbody> </table>', '', '', function(opts) {
+riot.tag2('request-messages-list', '<table class="table is-bordered is-striped is-narrow is-hoverable"> <thead> <tr> <th></th> <th>ID</th> <th>発生日時</th> <th>Impure</th> <th>From</th> <th class="message">Contents</th> </tr> </thead> <tbody> <tr each="{message in sources()}"> <td> <button class="button" message-id="{message.id}" onclick="{clickToReaded}">既読にする</button> </td> <td> {message.id} </td> <td>{dt(message.messaged_at)}</td> <td> <a href="#home/requests/impures/{message.impure_id}"> {message.impure_id} </a> </td> <td>{message.angel_id_from} </td> <td class="message"> <pre>{message.contents}</pre> </td> </tr> </tbody> </table>', '', '', function(opts) {
      this.sources = () => {
          if (this.opts.sources)
              return this.opts.sources;
@@ -1444,7 +1444,7 @@ riot.tag2('request-messages-list', '<table class="table is-bordered is-striped i
      });
 });
 
-riot.tag2('request-messages', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">Request</h1> <h2 class="subtitle hw-text-white">実装中です。とりあえず照会だけ。。。</h2> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Messages</h1> <div class="contents hw-text-white"> <request-messages-list></request-messages-list> </div> </div> </section> </div> </section>', 'request-messages { width: 100%; height: 100%; display: block; overflow: auto; }', '', function(opts) {
+riot.tag2('request-messages', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">Request</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Messages</h1> <div class="contents hw-text-white"> <request-messages-list></request-messages-list> </div> </div> </section> </div> </section>', 'request-messages { width: 100%; height: 100%; display: block; overflow: auto; }', '', function(opts) {
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-REQUEST-MESSAGES-UNREAD')
              this.update();

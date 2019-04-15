@@ -47,6 +47,7 @@
                 :created-by by-id
                 :updated-by by-id)))
 
+
 ;;;;;
 ;;;;; purge-stop
 ;;;;;
@@ -83,6 +84,7 @@
                         (:and (:>= :ev_purge_end.start from)
                               (:<  :ev_purge_end.start to))))))))
 
+
 (defun find-purge-history-sql-at-impure (impure table)
   (let* ((table-name (symbol-name table))
          (id-col   (alexandria:make-keyword (concatenate 'string table-name ".ID")))
@@ -92,6 +94,7 @@
       (from :ev_purge_end)
       (inner-join table :on (:= :ev_purge_end.impure_id id-col))
       (where (:= :ev_purge_end.impure_id (object-id impure))))))
+
 
 (defun find-purge-history (&key angel impure from to)
   (cond (angel
@@ -111,6 +114,7 @@
                  (find-purge-history-sql-at-impure impure :rs_impure_finished)
                  (find-purge-history-sql-at-impure impure :rs_impure_discarded)))
              (dbi:fetch-all (apply #'dbi:execute (dbi:prepare mito:*connection* sql) vals)))))))
+
 
 (defun save-purge-term (angel purge start end &key editor)
   (declare (ignore angel))

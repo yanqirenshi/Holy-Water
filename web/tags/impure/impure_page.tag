@@ -74,4 +74,14 @@
          background: #fff;
      }
     </style>
+
+    <style>
+     impure_page {
+         width: 100%;
+         height: 100%;
+         display: block;
+         overflow: auto;
+     }
+    </style>
+
 </impure_page>

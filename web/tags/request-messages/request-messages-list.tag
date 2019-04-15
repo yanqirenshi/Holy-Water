@@ -21,11 +21,16 @@
                             onclick={clickToReaded}>既読にする</button>
                 </td>
                 <td>
-                    <a href="#home/requests/impures/{message.id}">{message.id}</a>
+                    {message.id}
                 </td>
                 <td>{dt(message.messaged_at)}</td>
-                <td>{message.impure_id}</td>
-                <td>{message.angel_id_from}</td>
+                <td>
+                    <a href="#home/requests/impures/{message.impure_id}">
+                        {message.impure_id}
+                    </a>
+                </td>
+                <td>{message.angel_id_from}
+                </td>
                 <td class="message">
                     <pre>{message.contents}</pre>
                 </td>

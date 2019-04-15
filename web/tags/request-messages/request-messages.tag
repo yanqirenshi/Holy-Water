@@ -3,7 +3,9 @@
     <section class="section">
         <div class="container">
             <h1 class="title hw-text-white">Request</h1>
-            <h2 class="subtitle hw-text-white">実装中です。とりあえず照会だけ。。。</h2>
+            <h2 class="subtitle hw-text-white">
+                <section-breadcrumb></section-breadcrumb>
+            </h2>
 
             <section class="section">
                 <div class="container">
