@@ -17,8 +17,8 @@ MAINTAINER Renshi <yanqirenshi@gmail.com>
 USER cl-user
 WORKDIR /home/cl-user/prj
 
-# RUN git clone https://github.com/yanqirenshi/api.Gitlab.git
-# RUN git clone https://github.com/yanqirenshi/Holy-Water.git
+RUN git clone https://github.com/yanqirenshi/api.Gitlab.git
+RUN git clone https://github.com/yanqirenshi/Holy-Water.git
 
 ###
 ### Create symbolic link of *.asd
