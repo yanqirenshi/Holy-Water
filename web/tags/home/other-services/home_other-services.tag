@@ -7,9 +7,10 @@
            angel-id={id}
            deccot-id={id}
            service={service}
-           onclick={click}>
+           onclick={click}
+           style="font-size:11px;">
 
-            <span style="width: 205px;"
+            <span style="width:100%;"
                   deccot-id={id}
                   service={service}>
                 {service}
@@ -51,12 +52,16 @@
 
     <style>
      home_other-services > .panel {
-         width: 255px;
+         width: 188px;
          margin-top: 22px;
          border-radius: 4px 4px 0 0;
      }
      home_other-services > .panel > a {
          background: #ffffff;
+     }
+     home_other-services > .panel > .panel-heading {
+         font-size:12px;
+         font-weight: bold;
      }
      home_other-services .move-door.close .opened-door{
          display: none;

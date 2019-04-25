@@ -1,13 +1,13 @@
 <orthodox-doropdown style="width:100%;">
     <div class="dropdown {open ? 'is-active' : ''}" style="width:100%;">
         <div class="dropdown-trigger" style="width:100%;">
-            <button class="button" style="width:100%"
+            <button class="button" style="width:100%;height: 33px;"
                     aria-haspopup="true"
                     aria-controls="dropdown-menu"
                     onclick={clickButton}>
-                <span>{orthodox ? orthodox.name : 'Choose Orthodox'}</span>
+                <span style="font-size:11px;">{orthodox ? orthodox.name : 'Choose Orthodox'}</span>
 
-                <span class="icon is-small">
+                <span class="icon is-small" style="font-size:11px;">
                     <i class="fas fa-angle-down" aria-hidden="true"></i>
                 </span>
             </button>
@@ -19,7 +19,8 @@
                 <a each={orthodox in orthodoxs()}
                    class="dropdown-item"
                    orthodox-id={orthodox.id}
-                   onclick={selectItem}>
+                   onclick={selectItem}
+                   style="font-size:11px;">
                     {orthodox.name}
                 </a>
             </div>

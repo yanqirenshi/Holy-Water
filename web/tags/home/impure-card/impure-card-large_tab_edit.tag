@@ -1,13 +1,22 @@
 <impure-card-large_tab_edit>
-    <div>
-        <input class="input" type="text" placeholder="Text input" value={name()} ref="name">
-        <textarea class="textarea description"
-                  placeholder="10 lines of textarea"
-                  rows="10"
-                  style="height: 411px;"
-        ref="description">{description()}</textarea>
-        <div>
-            <button class="button" onclick={clickSave}>Save</button>
+    <div style="display:flex; height:100%; width:100%;">
+        <div style="flex-grow:1; display:flex; flex-direction:column;">
+            <input class="input is-small"
+                   type="text"
+                   placeholder="Text input"
+                   value={name()}
+                   ref="name"
+                   style="margin-bottom:8px;">
+
+            <textarea class="textarea description is-small"
+                      placeholder="10 lines of textarea"
+                      rows="10"
+                      style="flex-grow: 1;"
+                      ref="description">{description()}</textarea>
+        </div>
+
+        <div style="padding-left:8px;">
+            <button class="button is-small is-danger" onclick={clickSave}>Save</button>
         </div>
     </div>
 
@@ -33,22 +42,5 @@
     </script>
 
     <style>
-     impure-card-large_tab_edit > div {
-         height:295px;
-         overflow:auto;
-
-         display:flex;
-         flex-direction:column;
-     }
-     impure-card-large_tab_edit > description {
-         margin-top:11px;
-         flex-grow:1;
-     }
-     impure-card-large_tab_edit > div > * {
-         margin-top: 11px;
-     }
-     impure-card-large_tab_edit > div > *:first-child {
-         margin-top: 0px;
-     }
     </style>
 </impure-card-large_tab_edit>

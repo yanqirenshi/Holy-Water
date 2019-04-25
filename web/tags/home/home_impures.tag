@@ -35,8 +35,9 @@
              'FETCHED-MALEDICT-IMPURES',
          ]
 
-         if (update_only.indexOf(action.type)>=0)
+         if (update_only.indexOf(action.type)>=0) {
              this.update();
+         }
 
          if (action.type=='CREATED-MALEDICT-IMPURES')
              if (this.opts.maledict.id == action.maledict.id)

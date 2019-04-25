@@ -2,14 +2,11 @@
 
     <div class="card hw-box-shadow">
 
-        <header class="card-header">
-            <p class="card-header-title">Impure</p>
-            <impure-card-move-icon callback={this.opts.callback}
-                                   data={opts.data}></impure-card-move-icon>
-        </header>
+        <impure-card-header callback={opts.callback}
+                            data={opts.data}></impure-card-header>
 
         <div class="card-content">
-            <div class="content" style="font-size:14px;">
+            <div class="content" style="font-size:12px;">
                 <p>{name()}</p>
             </div>
         </div>
@@ -32,8 +29,8 @@
 
     <style>
      impure-card-small > .card {
-         width: 222px;
-         height: 222px;
+         width: 188px;
+         height: 188px;
          float: left;
          margin-left: 22px;
          margin-top: 1px;
@@ -43,9 +40,10 @@
          border-radius: 5px;
      }
      impure-card-small > .card .card-content{
-         height: calc(222px - 49px - 48px - 1px);
+         height: calc(188px - 33px - 33px - 1px);
          padding: 11px 22px;
          overflow: auto;
+         word-break: break-all;
      }
     </style>
 

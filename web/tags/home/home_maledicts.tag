@@ -6,13 +6,13 @@
            class="panel-block {isActive(id)}"
            onclick={clickItem}
            maledict-id={id}
-           style="">
+           style="padding: 5px 8px;">
 
-            <span style="width: 177px;" maledict-id={id}>
+            <span style="width:120px; font-size:11px;" maledict-id={id}>
                 {name}
             </span>
 
-            <span class="operators">
+            <span class="operators" style="font-size:14px;">
                 <span class="icon" title="ここに「やること」を追加する。"
                       maledict-id={id}
                       maledict-name={name}
@@ -112,10 +112,13 @@
 
     <style>
      home_maledicts > .panel {
-         width: 255px;
+         width: 188px;
          border-radius: 4px 4px 0 0;
      }
-
+     home_maledicts > .panel > .panel-heading{
+         font-size:12px;
+         font-weight:bold;
+     }
      home_maledicts .panel-block {
          background:#fff;
      }

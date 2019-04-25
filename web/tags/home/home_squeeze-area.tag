@@ -1,7 +1,7 @@
 <home_squeeze-area>
     <div style="width:444px; margin-bottom:22px; margin-left:22px;">
         <div class="control has-icons-left has-icons-right">
-            <input class="input is-rounded"
+            <input class="input is-small is-rounded"
                    type="text"
                    placeholder="Squeeze Impure※ まだ表示のみで機能しません。"
                    onKeyUp="{onKeyUp}"
@@ -13,7 +13,7 @@
 
     </div>
 
-    <button class="button" onclick={clickClearButton}>
+    <button class="button" onclick={clickClearButton} style="margin-top:3px; height:22px;">
         <i class="fas fa-times-circle"></i>
     </button>
 
@@ -43,7 +43,7 @@
          color: #880000;
      }
      home_squeeze-area .button i{
-         font-size: 33px;
+         font-size: 22px;
      }
     </style>
 </home_squeeze-area>

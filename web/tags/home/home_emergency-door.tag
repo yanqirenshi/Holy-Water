@@ -43,6 +43,9 @@
     </script>
 
     <style>
+     home_emergency-door .move-door {
+         font-size: 14px;
+     }
      home_emergency-door .move-door.close .opened-door{
          display: none;
      }

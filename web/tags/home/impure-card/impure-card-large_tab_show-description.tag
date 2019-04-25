@@ -52,6 +52,9 @@
          list-style-type: square;
          margin-left: 22px;
      }
+     impure-card-large_tab_show-description pre {
+         white-space: pre-wrap;
+     }
     </style>
 
     <script>

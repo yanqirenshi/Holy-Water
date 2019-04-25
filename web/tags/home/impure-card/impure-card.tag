@@ -52,7 +52,7 @@
      impure-card.small > impure-card-large {
          display: none;
      }
-     impure-card[status=start] div.card {
+     impure-card[status=start] div.card impure-card-header > .card-header{
          background: rgba(254, 242, 99, 0.888);
      }
     </style>

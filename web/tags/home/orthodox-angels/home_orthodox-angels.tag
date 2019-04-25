@@ -7,9 +7,10 @@
 
         <a each={obj in data()}
            class="panel-block"
-           angel-id={obj.id}>
+           angel-id={obj.id}
+           style="padding:5px 8px;">
 
-            <span style="width: 205px;" maledict-id={obj.id}>
+            <span style="width:100%;font-size:11px;;" maledict-id={obj.id}>
                 {obj.name}
             </span>
 
@@ -45,12 +46,16 @@
 
     <style>
      home_orthodox-angels > .panel {
-         width: 255px;
+         width: 188px;
          margin-top: 22px;
          border-radius: 4px 4px 0 0;
      }
      home_orthodox-angels > .panel > a {
          background: #ffffff;
+     }
+     home_orthodox-angels > .panel > .panel-heading {
+         font-size:12px;
+         font-weight: bold;
      }
     </style>
 </home_orthodox-angels>

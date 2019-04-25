@@ -1,6 +1,9 @@
 <impure-card-move-icon>
 
-    <a href="#" class="card-header-icon" aria-label="more options">
+    <a href="#"
+       class="card-header-icon"
+       aria-label="more options">
+
         <span class="icon"
               title="このアイコンを扉へドラッグ&ドロップすると、扉の場所へ移動できます。"
               draggable="true"
@@ -22,5 +25,11 @@
          this.opts.callback('end-drag');
      };
     </script>
+
+    <style>
+     impure-card-move-icon a.card-header-icon {
+         padding: 5px 8px;
+     }
+    </style>
 
 </impure-card-move-icon>

@@ -1,16 +1,14 @@
 <impure-card-large>
     <div class="card hw-box-shadow">
-        <header class="card-header">
-            <p class="card-header-title">Impure</p>
+        <impure-card-header callback={opts.callback}
+                            data={opts.data}></impure-card-header>
 
-            <impure-card-move-icon callback={this.opts.callback}
-                                   data={opts.data}></impure-card-move-icon>
-        </header>
+        <div class="card-content" style="display:flex;flex-direction:column;">
+            <div>
+                <page-tabs core={page_tabs} callback={clickTab}></page-tabs>
+            </div>
 
-        <div class="card-content">
-            <page-tabs core={page_tabs} callback={clickTab}></page-tabs>
-
-            <div style="margin-top: 11px;">
+            <div style="margin-top:11px; flex-grow:1;">
                 <impure-card-large_tab_show         class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_show>
                 <impure-card-large_tab_edit         class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_edit>
                 <impure-card-large_tab_finish       class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_finish>
@@ -67,7 +65,7 @@
          border-radius: 5px;
      }
      impure-card-large > .card .card-content{
-         height: calc(222px + 222px + 22px - 49px - 48px - 1px);
+         height: calc(222px + 222px + 22px - 33px - 33px - 1px);
          padding: 11px 22px;
          overflow: auto;
      }
