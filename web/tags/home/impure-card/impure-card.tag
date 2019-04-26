@@ -55,8 +55,14 @@
      impure-card.small > impure-card-large {
          display: none;
      }
-     impure-card[status=start] div.card impure-card-header > .card-header{
+     impure-card[status=start] div.card impure-card-header > .card-header {
          background: rgba(254, 242, 99, 0.888);
+     }
+     impure-card[status=start] impure-card-small > .card .card-content p {
+         font-weight: bold;
+     }
+     impure-card[status=start] .card {
+         box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666);
      }
     </style>
 </impure-card>

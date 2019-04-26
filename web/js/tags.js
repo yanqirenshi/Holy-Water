@@ -317,7 +317,7 @@ riot.tag2('section-list', '<table class="table is-bordered is-striped is-narrow 
      };
 });
 
-riot.tag2('home_working-action', '<button class="button is-small" style="margin-right:11px;" onclick="{clickStop}">Stop</button> <span>{name()}</span> <div style="margin-top: 8px;"> <p style="display:inline; font-size:12px; margin-right:22px;"> <span style="width:88px;display:inline-block;">経過: {distance()}</span> <span>開始: </span> <span>{start()}</span> </p> <button class="button is-small" onclick="{clickStopAndClose}">Stop & Close</button> </div>', 'home_working-action { display: block; position: fixed; bottom: 33px; right: 33px; background: #fff; padding: 11px 22px; border-radius: 8px; }', 'class="hw-box-shadow {hide()}"', function(opts) {
+riot.tag2('home_working-action', '<button class="button is-small" style="margin-right:11px;" onclick="{clickStop}">Stop</button> <span>{name()}</span> <div style="margin-top: 8px;"> <p style="display:inline; font-size:12px; margin-right:22px;"> <span style="width:88px;display:inline-block;">経過: {distance()}</span> <span>開始: </span> <span>{start()}</span> </p> <button class="button is-small" onclick="{clickStopAndClose}">Stop & Close</button> </div>', 'home_working-action { display: block; position: fixed; bottom: 33px; right: 33px; background: #fff; padding: 11px 22px; border-radius: 8px; }', 'class="hw-box-shadow {hide()}" style="box-shadow:0px 0px 22px rgba(254, 242, 99, 0.666)"', function(opts) {
 
      this.clickStop = () => {
          let impure = this.opts.data;
@@ -934,7 +934,7 @@ riot.tag2('impure-card-small', '<div class="card hw-box-shadow"> <impure-card-he
      };
 });
 
-riot.tag2('impure-card', '<impure-card-small data="{opts.data}" status="{status()}" callback="{callback}"></impure-card-small> <impure-card-large data="{opts.data}" status="{status()}" callback="{callback}"></impure-card-large>', 'impure-card.large > impure-card-small { display: none; } impure-card.small > impure-card-large { display: none; } impure-card[status=start] div.card impure-card-header > .card-header{ background: rgba(254, 242, 99, 0.888); }', 'class="{cardSize()}" status="{status()}"', function(opts) {
+riot.tag2('impure-card', '<impure-card-small data="{opts.data}" status="{status()}" callback="{callback}"></impure-card-small> <impure-card-large data="{opts.data}" status="{status()}" callback="{callback}"></impure-card-large>', 'impure-card.large > impure-card-small { display: none; } impure-card.small > impure-card-large { display: none; } impure-card[status=start] div.card impure-card-header > .card-header { background: rgba(254, 242, 99, 0.888); } impure-card[status=start] impure-card-small > .card .card-content p { font-weight: bold; } impure-card[status=start] .card { box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666); }', 'class="{cardSize()}" status="{status()}"', function(opts) {
      this.callback = (action, data) => {
          if ('switch-large'==action)
              return this.opts.callbacks.switchSize('large', opts.data);
