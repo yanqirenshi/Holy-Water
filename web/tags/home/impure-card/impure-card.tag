@@ -1,14 +1,14 @@
-<impure-card class="small" status={status()}>
+<impure-card class="{cardSize()}" status={status()}>
     <impure-card-small data={opts.data} status={status()} callback={callback}></impure-card-small>
     <impure-card-large data={opts.data} status={status()} callback={callback}></impure-card-large>
 
     <script>
      this.callback = (action, data) => {
          if ('switch-large'==action)
-             this.root.setAttribute('class', 'large');
+             return this.opts.callbacks.switchSize('large', opts.data);
 
          if ('switch-small'==action)
-             this.root.setAttribute('class', 'small');
+             return this.opts.callbacks.switchSize('small', opts.data);
 
          if ('start-drag'==action)
              ACTIONS.startDragImpureIcon();
@@ -34,6 +34,9 @@
     </script>
 
     <script>
+     this.cardSize = () => {
+         return this.opts.open ? 'large' : 'small';
+     };
      this.isStart = () => {
          if (!this.opts.data) return false;
          if (!this.opts.data.purge) return false;

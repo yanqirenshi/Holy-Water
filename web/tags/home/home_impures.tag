@@ -5,10 +5,26 @@
         <div class="card-container">
             <div style="overflow: hidden; padding-bottom: 222px; padding-top: 22px;">
                 <impure-card each={impure in impures()}
-                             data={impure}></impure-card>
+                             data={impure}
+                             open={open_cards[impure.id]}
+                             callbacks={callbacks}></impure-card>
             </div>
         </div>
     </div>
+
+    <script>
+     this.open_cards = {};
+     this.callbacks = {
+         switchSize: (size, data) => {
+             if (size=='small')
+                 delete this.open_cards[data.id]
+             else if (size=='large')
+                 this.open_cards[data.id] = true;
+
+             this.update();
+         }
+     };
+    </script>
 
     <script>
      this.hide = () => {

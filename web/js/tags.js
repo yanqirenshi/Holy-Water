@@ -424,7 +424,19 @@ riot.tag2('home_emergency-door', '<span class="move-door {dragging ? \'open\' : 
      });
 });
 
-riot.tag2('home_impures', '<div class="flex-parent" style="height:100%; margin-top: -8px;"> <div class="card-container"> <div style="overflow: hidden; padding-bottom: 222px; padding-top: 22px;"> <impure-card each="{impure in impures()}" data="{impure}"></impure-card> </div> </div> </div>', 'home_impures .flex-parent { display: flex; flex-direction: column; } home_impures .card-container { padding-right: 22px; display: block; overflow: auto; overflow-x: hidden; flex-grow: 1; }', 'class="{hide()}"', function(opts) {
+riot.tag2('home_impures', '<div class="flex-parent" style="height:100%; margin-top: -8px;"> <div class="card-container"> <div style="overflow: hidden; padding-bottom: 222px; padding-top: 22px;"> <impure-card each="{impure in impures()}" data="{impure}" open="{open_cards[impure.id]}" callbacks="{callbacks}"></impure-card> </div> </div> </div>', 'home_impures .flex-parent { display: flex; flex-direction: column; } home_impures .card-container { padding-right: 22px; display: block; overflow: auto; overflow-x: hidden; flex-grow: 1; }', 'class="{hide()}"', function(opts) {
+     this.open_cards = {};
+     this.callbacks = {
+         switchSize: (size, data) => {
+             if (size=='small')
+                 delete this.open_cards[data.id]
+             else if (size=='large')
+                 this.open_cards[data.id] = true;
+
+             this.update();
+         }
+     };
+
      this.hide = () => {
          return this.opts.maledict ? '' : 'hide';
      };
@@ -766,7 +778,12 @@ riot.tag2('impure-card-footer', '<footer class="card-footer" style="font-size:14
 riot.tag2('impure-card-header', '<header class="card-header" style="height:33px;"> <p class="card-header-title">Impure</p> <impure-card-move-icon callback="{opts.callback}" data="{opts.data}"></impure-card-move-icon> </header>', '', '', function(opts) {
 });
 
-riot.tag2('impure-card-large', '<div class="card hw-box-shadow"> <impure-card-header callback="{opts.callback}" data="{opts.data}"></impure-card-header> <div class="card-content" style="display:flex;flex-direction:column;"> <div> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> <div style="margin-top:11px; flex-grow:1;"> <impure-card-large_tab_show class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_show> <impure-card-large_tab_edit class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_edit> <impure-card-large_tab_finish class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_finish> <impure-card-large_tab_create-after class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_create-after> </div> </div> <impure-card-footer callback="{this.opts.callback}" status="{opts.status}" mode="large"></impure-card-footer> </div>', 'impure-card-large > .card { width: calc(222px + 222px + 222px + 22px + 22px); height: calc(222px + 222px + 22px); float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; border: 1px solid #dddddd; border-radius: 5px; } impure-card-large > .card .card-content{ height: calc(222px + 222px + 22px - 33px - 33px - 1px); padding: 11px 22px; overflow: auto; }', '', function(opts) {
+riot.tag2('impure-card-large', '<div class="card hw-box-shadow"> <impure-card-header callback="{opts.callback}" data="{opts.data}"></impure-card-header> <div class="card-content" style="display:flex;flex-direction:column;"> <div> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> <div style="margin-top:11px; flex-grow:1;"> <impure-card-large_tab_show class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_show> <impure-card-large_tab_edit class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_edit> <impure-card-large_tab_finish class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_finish> <impure-card-large_tab_create-after class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_create-after> </div> </div> <impure-card-footer callback="{this.opts.callback}" status="{opts.status}" mode="large"></impure-card-footer> </div>', 'impure-card-large > .card { width: calc(222px + 222px + 222px + 22px + 22px); height: calc(222px + 222px + 22px); float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; border: 1px solid #dddddd; border-radius: 5px; } impure-card-large > .card .card-content{ height: calc(222px + 222px + 22px - 33px - 33px - 1px); padding: 11px 22px; overflow: auto; } impure-card-large .tabs { font-size:12px; }', '', function(opts) {
+     STORE.subscribe((action) => {
+         if (action.type=='SAVED-IMPURE') {
+         }
+     });
+
      this.name = () => {
          if (!this.opts.data) return '????????'
          return this.opts.data.name;
@@ -795,16 +812,35 @@ riot.tag2('impure-card-large', '<div class="card hw-box-shadow"> <impure-card-he
      };
 });
 
-riot.tag2('impure-card-large_tab_create-after', '<div style="display:flex; width:100%; height:100%; flex-direction:row;"> <div style="flex-grow:1; display:flex; flex-direction:column;"> <input class="input is-small" type="text" placeholder="Title" ref="name"> <textarea class="textarea is-small" placeholder="Description" rows="6" style="margin-top:11px; flex-grow:1;" ref="description"></textarea> </div> <div class="operators" style="display: flex; flex-direction:column; padding-left:8px;"> <button class="button is-small" onclick="{clickReset}">Reset</button> <button class="button is-small" onclick="{clickClear}">Clear</button> <button class="button is-small is-success" onclick="{clickCreate}">Create!</button> </div> </div>', 'impure-card-large_tab_create-after .operators > * { margin-bottom: 8px; }', '', function(opts) {
+riot.tag2('impure-card-large_tab_create-after', '<div class="form-contents"> <div class="left"> <input class="input is-small" type="text" placeholder="Title" ref="name" onkeyup="{keyUpTitle}"> <textarea class="textarea is-small" placeholder="Description" rows="6" style="margin-top:11px; flex-grow:1;" ref="description"></textarea> </div> <div class="right"> <button class="button is-small" onclick="{clickReset}">Reset</button> <button class="button is-small" onclick="{clickClear}">Clear</button> <span style="flex-grow:1;"></span> <button class="button is-small is-success" onclick="{clickCreate}" disabled="{isDisable()}">Create!</button> </div> </div>', 'impure-card-large_tab_create-after .form-contents { display:flex; width:100%; height:100%; } impure-card-large_tab_create-after .form-contents > .left { flex-grow:1; display:flex; flex-direction:column; } impure-card-large_tab_create-after .form-contents > .right{ padding-left:8px; display:flex; flex-direction: column; } impure-card-large_tab_create-after .form-contents > .right > * { margin-bottom: 8px; }', '', function(opts) {
+     this.isDisable = () => {
+         return this.refs.name.value.trim().length==0;
+     };
+     this.keyUpTitle = () => {
+         this.update();
+     };
+
+     this.name = '';
+     this.description = '';
+     STORE.subscribe((action) => {
+         if (action.type=='CREATED-IMPURE-AFTER-IMPURE')
+             if (action.from.id == this.opts.data.id) {
+                 this.clickClear();
+             }
+     });
      this.clickReset = () => {
          let from = this.opts.data;
 
          this.refs.name.value = from.name;
          this.refs.description.value = from.description;
+
+         this.update();
      };
      this.clickClear = () => {
          this.refs.name.value = '';
          this.refs.description.value = '';
+
+         this.update();
      };
      this.clickCreate = () => {
          ACTIONS.createImpureAfterImpure(this.opts.data, {
@@ -814,7 +850,7 @@ riot.tag2('impure-card-large_tab_create-after', '<div style="display:flex; width
      };
 });
 
-riot.tag2('impure-card-large_tab_edit', '<div style="display:flex; height:100%; width:100%;"> <div style="flex-grow:1; display:flex; flex-direction:column;"> <input class="input is-small" type="text" placeholder="Text input" riot-value="{name()}" ref="name" style="margin-bottom:8px;"> <textarea class="textarea description is-small" placeholder="10 lines of textarea" rows="10" style="flex-grow: 1;" ref="description">{description()}</textarea> </div> <div style="padding-left:8px;"> <button class="button is-small is-danger" onclick="{clickSave}">Save</button> </div> </div>', '', '', function(opts) {
+riot.tag2('impure-card-large_tab_edit', '<div class="form-contents"> <div class="left"> <input class="input is-small" type="text" placeholder="Text input" riot-value="{name()}" ref="name" style="margin-bottom:8px;"> <textarea class="textarea description is-small" placeholder="10 lines of textarea" rows="10" style="flex-grow: 1;" ref="description">{description()}</textarea> </div> <div class="right"> <span style="flex-grow:1;"></span> <button class="button is-small is-danger" onclick="{clickSave}">Save</button> </div> </div>', 'impure-card-large_tab_edit .form-contents { display:flex; width:100%; height:100%; } impure-card-large_tab_edit .form-contents > .left { flex-grow:1; display:flex; flex-direction:column; } impure-card-large_tab_edit .form-contents > .right{ padding-left:8px; display:flex; flex-direction: column; }', '', function(opts) {
      this.clickSave = () => {
          this.opts.callback('save-impure-contents', {
              id: this.opts.data.id,
@@ -833,7 +869,12 @@ riot.tag2('impure-card-large_tab_edit', '<div style="display:flex; height:100%; 
      };
 });
 
-riot.tag2('impure-card-large_tab_finish', '<a class="button is-danger" action="finishe-impure">完了</a>', '', '', function(opts) {
+riot.tag2('impure-card-large_tab_finish', '<div class="form-contents"> <div class="left"> <textarea class="textarea is-large" is-smal placeholder="完了メッセージ (準備中)" style="width:100%; height:100%;" disabled></textarea> </div> <div class="right"> <a class="button is-small" action="finishe-impure" disabled>Clear</a> <span style="flex-grow:1;"></span> <a class="button is-small is-danger" action="finishe-impure" onclick="{clickButton}">完了</a> </div> </div>', 'impure-card-large_tab_finish .form-contents { display:flex; width:100%; height:100%; } impure-card-large_tab_finish .form-contents > .left { flex-grow:1; width:100%; height:100%; } impure-card-large_tab_finish .form-contents > .right{ padding-left:8px; display:flex; flex-direction: column; }', '', function(opts) {
+     this.clickButton = (e) => {
+         let target = e.target;
+
+         this.opts.callback(target.getAttribute('action'));
+     };
 });
 
 riot.tag2('impure-card-large_tab_show-description', '', 'impure-card-large_tab_show-description h1 { font-weight: bold; font-size: 20px; margin-top: 11px; text-decoration: underline; } impure-card-large_tab_show-description h1:first-child { margin-top: 0px; } impure-card-large_tab_show-description h2 { font-weight: bold; font-size: 18px; margin-top: 11px; text-decoration: underline; } impure-card-large_tab_show-description h3 { font-weight: bold; font-size: 16px; text-decoration: underline; } impure-card-large_tab_show-description h4 { font-weight: bold; font-size: 14px; } impure-card-large_tab_show-description h5 { font-weight: bold; font-size: 12px; } impure-card-large_tab_show-description * { font-size: 12px; } impure-card-large_tab_show-description table { border-collapse: collapse; } impure-card-large_tab_show-description td { border: solid 1px; padding: 2px 5px; } impure-card-large_tab_show-description th { border: solid 1px; padding: 2px 5px; background: #eeeeee; } impure-card-large_tab_show-description li { list-style-type: square; margin-left: 22px; } impure-card-large_tab_show-description pre { white-space: pre-wrap; }', 'class="hw-markdown"', function(opts) {
@@ -845,13 +886,7 @@ riot.tag2('impure-card-large_tab_show-description', '', 'impure-card-large_tab_s
 
 });
 
-riot.tag2('impure-card-large_tab_show', '<div style="width:100%; height:100%; display:flex;"> <div style="flex-grow:1; display:flex; flex-direction:column;"> <p style="font-weight: bold;">{name()}</p> <div class="description" style="padding:11px; overflow:auto;"> <impure-card-large_tab_show-description contents="{this.description()}"></impure-card-large_tab_show-description> </div> </div> <div> <a class="button is-small is-danger" action="finishe-impure" onclick="{clickButton}">完了</a> </div> </div>', '', '', function(opts) {
-     this.clickButton = (e) => {
-         let target = e.target;
-
-         this.opts.callback(target.getAttribute('action'));
-     };
-
+riot.tag2('impure-card-large_tab_show', '<div style="width:100%; height:100%;"> <div style="flex-grow:1; display:flex; flex-direction:column;"> <p style="font-weight: bold;">{name()}</p> <div class="description" style="padding:11px; overflow:auto;"> <impure-card-large_tab_show-description contents="{this.description()}"></impure-card-large_tab_show-description> </div> </div> </div>', '', '', function(opts) {
      this.name = () => {
          if (!this.opts.data) return '????????'
 
@@ -899,13 +934,13 @@ riot.tag2('impure-card-small', '<div class="card hw-box-shadow"> <impure-card-he
      };
 });
 
-riot.tag2('impure-card', '<impure-card-small data="{opts.data}" status="{status()}" callback="{callback}"></impure-card-small> <impure-card-large data="{opts.data}" status="{status()}" callback="{callback}"></impure-card-large>', 'impure-card.large > impure-card-small { display: none; } impure-card.small > impure-card-large { display: none; } impure-card[status=start] div.card impure-card-header > .card-header{ background: rgba(254, 242, 99, 0.888); }', 'class="small" status="{status()}"', function(opts) {
+riot.tag2('impure-card', '<impure-card-small data="{opts.data}" status="{status()}" callback="{callback}"></impure-card-small> <impure-card-large data="{opts.data}" status="{status()}" callback="{callback}"></impure-card-large>', 'impure-card.large > impure-card-small { display: none; } impure-card.small > impure-card-large { display: none; } impure-card[status=start] div.card impure-card-header > .card-header{ background: rgba(254, 242, 99, 0.888); }', 'class="{cardSize()}" status="{status()}"', function(opts) {
      this.callback = (action, data) => {
          if ('switch-large'==action)
-             this.root.setAttribute('class', 'large');
+             return this.opts.callbacks.switchSize('large', opts.data);
 
          if ('switch-small'==action)
-             this.root.setAttribute('class', 'small');
+             return this.opts.callbacks.switchSize('small', opts.data);
 
          if ('start-drag'==action)
              ACTIONS.startDragImpureIcon();
@@ -929,6 +964,9 @@ riot.tag2('impure-card', '<impure-card-small data="{opts.data}" status="{status(
              location.hash = '#home/impures/' + this.opts.data.id;
      };
 
+     this.cardSize = () => {
+         return this.opts.open ? 'large' : 'small';
+     };
      this.isStart = () => {
          if (!this.opts.data) return false;
          if (!this.opts.data.purge) return false;

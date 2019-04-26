@@ -128,8 +128,9 @@
 
 
 (defun create-after-impure (angel impure &key name description)
-  (hw:add-after-impure angel
-                       impure
-                       :name name
-                       :description description
-                       :creator angel))
+  (dao2impure
+   (hw:add-after-impure angel
+                        impure
+                        :name name
+                        :description description
+                        :creator angel)))

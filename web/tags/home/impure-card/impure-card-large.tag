@@ -22,6 +22,13 @@
     </div>
 
     <script>
+     STORE.subscribe((action) => {
+         if (action.type=='SAVED-IMPURE') {
+         }
+     });
+    </script>
+
+    <script>
      this.name = () => {
          if (!this.opts.data) return '????????'
          return this.opts.data.name;
@@ -68,6 +75,9 @@
          height: calc(222px + 222px + 22px - 33px - 33px - 1px);
          padding: 11px 22px;
          overflow: auto;
+     }
+     impure-card-large .tabs {
+         font-size:12px;
      }
     </style>
 </impure-card-large>

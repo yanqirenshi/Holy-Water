@@ -1,6 +1,7 @@
 <impure-card-large_tab_edit>
-    <div style="display:flex; height:100%; width:100%;">
-        <div style="flex-grow:1; display:flex; flex-direction:column;">
+
+    <div class="form-contents">
+        <div class="left">
             <input class="input is-small"
                    type="text"
                    placeholder="Text input"
@@ -15,7 +16,8 @@
                       ref="description">{description()}</textarea>
         </div>
 
-        <div style="padding-left:8px;">
+        <div class="right">
+            <span style="flex-grow:1;"></span>
             <button class="button is-small is-danger" onclick={clickSave}>Save</button>
         </div>
     </div>
@@ -30,7 +32,7 @@
      };
     </script>
 
-     <script>
+    <script>
      this.name = () => {
          if (!this.opts.data) return '????????'
          return this.opts.data.name;
@@ -42,5 +44,22 @@
     </script>
 
     <style>
+     impure-card-large_tab_edit .form-contents {
+         display:flex;
+         width:100%;
+         height:100%;
+     }
+     impure-card-large_tab_edit .form-contents > .left {
+         flex-grow:1;
+
+         display:flex;
+         flex-direction:column;
+     }
+     impure-card-large_tab_edit .form-contents > .right{
+         padding-left:8px;
+         display:flex;
+         flex-direction: column;
+     }
     </style>
+
 </impure-card-large_tab_edit>
