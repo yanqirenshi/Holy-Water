@@ -18,18 +18,20 @@
     </section>
 
     <div class="tab-contents-area">
-        <impure_page_tab-basic    class="hide" source={impure}></impure_page_tab-basic>
-        <impure_page_tab-purges   class="hide" source={impure}></impure_page_tab-purges>
-        <impure_page_tab-requests class="hide" source={impure}></impure_page_tab-requests>
-        <impure_page_tab-chains   class="hide" source={impure}></impure_page_tab-chains>
+        <impure_page_tab-basic       class="hide" source={impure}></impure_page_tab-basic>
+        <impure_page_tab-purges      class="hide" source={impure}></impure_page_tab-purges>
+        <impure_page_tab-incantation class="hide" source={impure}></impure_page_tab-incantation>
+        <impure_page_tab-requests    class="hide" source={impure}></impure_page_tab-requests>
+        <impure_page_tab-chains      class="hide" source={impure}></impure_page_tab-chains>
     </div>
 
     <script>
      this.page_tabs = new PageTabs([
-         {code: 'basic',    label: '基本情報', tag: 'impure_page_tab-basic' },
-         {code: 'purges',   label: '浄化履歴', tag: 'impure_page_tab-purges' },
-         {code: 'requests', label: '依頼履歴', tag: 'impure_page_tab-requests' },
-         {code: 'chains',   label: '連鎖',     tag: 'impure_page_tab-chains' },
+         {code: 'basic',       label: '基本情報', tag: 'impure_page_tab-basic' },
+         {code: 'purges',      label: '浄化履歴', tag: 'impure_page_tab-purges' },
+         {code: 'incantation', label: '詠唱履歴', tag: 'impure_page_tab-incantation' },
+         {code: 'requests',    label: '依頼履歴', tag: 'impure_page_tab-requests' },
+         {code: 'chains',      label: '連鎖',     tag: 'impure_page_tab-chains' },
      ]);
 
      this.on('mount', () => {

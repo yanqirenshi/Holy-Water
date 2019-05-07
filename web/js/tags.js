@@ -778,7 +778,7 @@ riot.tag2('impure-card-footer', '<footer class="card-footer" style="font-size:14
 riot.tag2('impure-card-header', '<header class="card-header" style="height:33px;"> <p class="card-header-title">Impure</p> <impure-card-move-icon callback="{opts.callback}" data="{opts.data}"></impure-card-move-icon> </header>', '', '', function(opts) {
 });
 
-riot.tag2('impure-card-large', '<div class="card hw-box-shadow"> <impure-card-header callback="{opts.callback}" data="{opts.data}"></impure-card-header> <div class="card-content" style="display:flex;flex-direction:column;"> <div> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> <div style="margin-top:11px; flex-grow:1;"> <impure-card-large_tab_show class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_show> <impure-card-large_tab_edit class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_edit> <impure-card-large_tab_finish class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_finish> <impure-card-large_tab_create-after class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_create-after> </div> </div> <impure-card-footer callback="{this.opts.callback}" status="{opts.status}" mode="large"></impure-card-footer> </div>', 'impure-card-large > .card { width: calc(222px + 222px + 222px + 22px + 22px); height: calc(222px + 222px + 22px); float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; border: 1px solid #dddddd; border-radius: 5px; } impure-card-large > .card .card-content{ height: calc(222px + 222px + 22px - 33px - 33px - 1px); padding: 11px 22px; overflow: auto; } impure-card-large .tabs { font-size:12px; }', '', function(opts) {
+riot.tag2('impure-card-large', '<div class="card hw-box-shadow"> <impure-card-header callback="{opts.callback}" data="{opts.data}"></impure-card-header> <div class="card-content" style="display:flex;flex-direction:column;"> <div> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> <div style="margin-top:11px; flex-grow:1;"> <impure-card-large_tab_show class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_show> <impure-card-large_tab_edit class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_edit> <impure-card-large_tab_incantation class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_incantation> <impure-card-large_tab_create-after class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_create-after> <impure-card-large_tab_finish class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_finish> </div> </div> <impure-card-footer callback="{this.opts.callback}" status="{opts.status}" mode="large"></impure-card-footer> </div>', 'impure-card-large > .card { width: calc(222px + 222px + 222px + 22px + 22px); height: calc(222px + 222px + 22px); float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; border: 1px solid #dddddd; border-radius: 5px; } impure-card-large > .card .card-content{ height: calc(222px + 222px + 22px - 33px - 33px - 1px); padding: 11px 22px; overflow: auto; } impure-card-large .tabs { font-size:12px; }', '', function(opts) {
      STORE.subscribe((action) => {
          if (action.type=='SAVED-IMPURE') {
          }
@@ -792,8 +792,9 @@ riot.tag2('impure-card-large', '<div class="card hw-box-shadow"> <impure-card-he
      this.page_tabs = new PageTabs([
          {code: 'show',         label: '照会',           tag: 'impure-card-large_tab_show' },
          {code: 'edit',         label: '編集',           tag: 'impure-card-large_tab_edit' },
-         {code: 'finish',       label: '完了',           tag: 'impure-card-large_tab_finish' },
+         {code: 'incantation',  label: '詠唱',           tag: 'impure-card-large_tab_incantation' },
          {code: 'create-after', label: '後続作業の作成', tag: 'impure-card-large_tab_create-after' },
+         {code: 'finish',       label: '完了',           tag: 'impure-card-large_tab_finish' },
      ]);
 
      this.on('mount', () => {
@@ -870,6 +871,18 @@ riot.tag2('impure-card-large_tab_edit', '<div class="form-contents"> <div class=
 });
 
 riot.tag2('impure-card-large_tab_finish', '<div class="form-contents"> <div class="left"> <textarea class="textarea is-small" placeholder="完了時のメモなどがあれば入力してください。(任意項目)" style="width:100%; height:100%;" ref="spell"></textarea> </div> <div class="right"> <a class="button is-small" action="finishe-impure" onclick="{clickClearButton}">Clear</a> <span style="flex-grow:1;"></span> <a class="button is-small is-danger" action="finishe-impure" onclick="{clickFinishButton}">完了</a> </div> </div>', 'impure-card-large_tab_finish .form-contents { display:flex; width:100%; height:100%; } impure-card-large_tab_finish .form-contents > .left { flex-grow:1; width:100%; height:100%; } impure-card-large_tab_finish .form-contents > .right{ padding-left:8px; display:flex; flex-direction: column; }', '', function(opts) {
+     this.clickClearButton = (e) => {
+         this.refs.spell.value = '';
+     }
+     this.clickFinishButton = (e) => {
+         let target = e.target;
+         let spell = this.refs.spell.value.trim();
+
+         this.opts.callback(target.getAttribute('action'), { spell: spell });
+     };
+});
+
+riot.tag2('impure-card-large_tab_incantation', '<div class="form-contents"> <div class="left"> <textarea class="textarea is-small" placeholder="作業中のメモなどを入力してください。 ※準備中" style="width:100%; height:100%;" ref="spell" disabled></textarea> </div> <div class="right"> <a class="button is-small" action="finishe-impure" onclick="{clickClearButton}" disabled>Clear</a> <span style="flex-grow:1;"></span> <a class="button is-small is-danger" action="finishe-impure" onclick="{clickFinishButton}" disabled>完了</a> </div> </div>', 'impure-card-large_tab_incantation .form-contents { display:flex; width:100%; height:100%; } impure-card-large_tab_incantation .form-contents > .left { flex-grow:1; width:100%; height:100%; } impure-card-large_tab_incantation .form-contents > .right{ padding-left:8px; display:flex; flex-direction: column; }', '', function(opts) {
      this.clickClearButton = (e) => {
          this.refs.spell.value = '';
      }
@@ -1101,12 +1114,13 @@ riot.tag2('service-card-small', '<div class="card hw-box-shadow"> <header class=
 riot.tag2('impure_page-tabs', '<div class="tabs is-toggle"> <ul> <li class="is-active"> <a> <span>基本情報</span> </a> </li> <li> <a> <span>浄化履歴</span> </a> </li> <li> <a> <span>Impure の鎖</span> </a> </li> <li> <a> <span>依頼履歴</span> </a> </li> </ul> </div>', 'impure_page-tabs li > a { background: #fff; }', '', function(opts) {
 });
 
-riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">Impure</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section" style="padding-top:22px; padding-bottom:22px;"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}" type="toggle"></page-tabs> </div> </section> <div class="tab-contents-area"> <impure_page_tab-basic class="hide" source="{impure}"></impure_page_tab-basic> <impure_page_tab-purges class="hide" source="{impure}"></impure_page_tab-purges> <impure_page_tab-requests class="hide" source="{impure}"></impure_page_tab-requests> <impure_page_tab-chains class="hide" source="{impure}"></impure_page_tab-chains> </div>', 'impure_page page-tabs li a{ background: #fff; } impure_page { width: 100%; height: 100%; display: block; overflow: auto; }', '', function(opts) {
+riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">Impure</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section" style="padding-top:22px; padding-bottom:22px;"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}" type="toggle"></page-tabs> </div> </section> <div class="tab-contents-area"> <impure_page_tab-basic class="hide" source="{impure}"></impure_page_tab-basic> <impure_page_tab-purges class="hide" source="{impure}"></impure_page_tab-purges> <impure_page_tab-incantation class="hide" source="{impure}"></impure_page_tab-incantation> <impure_page_tab-requests class="hide" source="{impure}"></impure_page_tab-requests> <impure_page_tab-chains class="hide" source="{impure}"></impure_page_tab-chains> </div>', 'impure_page page-tabs li a{ background: #fff; } impure_page { width: 100%; height: 100%; display: block; overflow: auto; }', '', function(opts) {
      this.page_tabs = new PageTabs([
-         {code: 'basic',    label: '基本情報', tag: 'impure_page_tab-basic' },
-         {code: 'purges',   label: '浄化履歴', tag: 'impure_page_tab-purges' },
-         {code: 'requests', label: '依頼履歴', tag: 'impure_page_tab-requests' },
-         {code: 'chains',   label: '連鎖',     tag: 'impure_page_tab-chains' },
+         {code: 'basic',       label: '基本情報', tag: 'impure_page_tab-basic' },
+         {code: 'purges',      label: '浄化履歴', tag: 'impure_page_tab-purges' },
+         {code: 'incantation', label: '詠唱履歴', tag: 'impure_page_tab-incantation' },
+         {code: 'requests',    label: '依頼履歴', tag: 'impure_page_tab-requests' },
+         {code: 'chains',      label: '連鎖',     tag: 'impure_page_tab-chains' },
      ]);
 
      this.on('mount', () => {
@@ -1161,6 +1175,17 @@ riot.tag2('impure_page_tab-basic', '<section class="section" style="padding-top:
 });
 
 riot.tag2('impure_page_tab-chains', '<section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white">準備中</h1> </div> </section>', '', '', function(opts) {
+});
+
+riot.tag2('impure_page_tab-incantation', '<section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white"></h1> <div class="contents"> <request-messages-list sources="{sources()}"></request-messages-list> </div> </div> </section>', '', '', function(opts) {
+     this.sources = () => {
+         let impure = this.opts.source;
+
+         if (!impure)
+             return [];
+
+         return impure.sources;
+     };
 });
 
 riot.tag2('impure_page_tab-purges', '<section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white"></h1> <div class="contents"> <purges-list data="{purges()}" callback="{callback}"></purges-list> </div> </div> </section>', '', '', function(opts) {
