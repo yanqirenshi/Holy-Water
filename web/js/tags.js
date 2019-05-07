@@ -209,7 +209,7 @@ riot.tag2('message-item', '<article class="message hw-box-shadow is-{opts.data.t
      };
 });
 
-riot.tag2('page-tabs', '<div class="tabs is-{type()}"> <ul> <li each="{opts.core.tabs}" class="{opts.core.active_tab==code ? \'is-active\' : \'\'}"> <a code="{code}" onclick="{clickTab}">{label}</a> </li> </ul> </div>', 'page-tabs li:first-child { margin-left: 22px; }', '', function(opts) {
+riot.tag2('page-tabs', '<div class="tabs is-{type()}"> <ul> <li each="{opts.core.tabs}" class="{opts.core.active_tab==code ? \'is-active\' : \'\'}"> <a code="{code}" onclick="{clickTab}">{label}</a> </li> </ul> </div>', 'page-tabs .is-boxed li:first-child { margin-left: 22px; } page-tabs .is-toggle li a { background: #ffffff; } page-tabs .tabs.is-toggle li.is-active a { background-color: #E198B4; border-color: #E198B4; font-weight: bold; }', '', function(opts) {
      this.clickTab = (e) => {
          let code = e.target.getAttribute('code');
          this.opts.callback(e, 'CLICK-TAB', { code: code });
@@ -380,6 +380,9 @@ riot.tag2('deamons_page', '<section class="section"> <div class="container"> <h1
          if (action.type=='FETCHED-DEAMONS')
              this.update();
      });
+});
+
+riot.tag2('exorcist-page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">祓魔師</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section>', '', '', function(opts) {
 });
 
 riot.tag2('help_page', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">聖書</h1> <h2 class="subtitle hw-text-white">ヘルプ的ななにか</h2> <div class="contents hw-text-white"> <p>準備中</p> </div> </div> </section>', '', '', function(opts) {
@@ -1270,34 +1273,64 @@ riot.tag2('impure_page_tab-requests', '<section class="section" style="padding-t
      };
 });
 
-riot.tag2('exorcists-list', '<table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Ghost ID</th> </tr> </thead> <tbody> <tr each="{orthodox in orthodoxs()}"> <td>{orthodox.id}</td> <td>{orthodox.name}</td> <td>{orthodox.ghost_id}</td> </tr> </tbody> </table>', '', '', function(opts) {
-     this.orthodoxs = () => {
+riot.tag2('orthodox-page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">正教会</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section>', '', '', function(opts) {
+});
+
+riot.tag2('exorcists-list', '<table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Ghost ID</th> </tr> </thead> <tbody> <tr each="{exorcist in exorcists()}"> <td><a href="{idLink(exorcist)}">{exorcist.id}</a></td> <td>{exorcist.name}</td> <td>{exorcist.ghost_id}</td> </tr> </tbody> </table>', '', '', function(opts) {
+     this.idLink = (exorcist) => {
+         return '#orthodoxs/exorcists/' + exorcist.id;
+     };
+     this.exorcists = () => {
          return STORE.get('angels.list');
      };
 });
 
-riot.tag2('orthodox-list', '<table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Description</th> </tr> </thead> <tbody> <tr each="{orthodox in orthodoxs()}"> <td>{orthodox.id}</td> <td>{orthodox.name}</td> <td>{orthodox.description}</td> </tr> </tbody> </table>', '', '', function(opts) {
+riot.tag2('orthodox-list', '<table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Description</th> </tr> </thead> <tbody> <tr each="{orthodox in orthodoxs()}"> <td><a href="{idLink(orthodox)}">{orthodox.id}</a></td> <td>{orthodox.name}</td> <td>{orthodox.description}</td> </tr> </tbody> </table>', '', '', function(opts) {
+     this.idLink = (orthodox) => {
+         return '#orthodoxs/' + orthodox.id;
+     };
      this.orthodoxs = () => {
          return STORE.get('orthodoxs.list');
      };
 });
 
-riot.tag2('orthodox_page', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">正教会</h1> <h2 class="subtitle hw-text-white">正教会=チーム</h2> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Orthodoxs</h1> <div class="contents hw-text-white"> <orthodox-list></orthodox-list> </div> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Exorcists</h1> <div class="contents hw-text-white"> <exorcists-list></exorcists-list> </div> </div> </section> </div> </section>', 'orthodox_page { width: 100%; height: 100%; display: block; overflow: auto; }', '', function(opts) {
-     this.orthodoxs = () => {
-         return STORE.get('orthodoxs.list');
-     };
+riot.tag2('orthodoxs-page', '<section class="section" style="padding-bottom: 11px;"> <div class="container"> <h1 class="title hw-text-white">正教会</h1> <h2 class="subtitle hw-text-white">正教会=チーム</h2> </div> </section> <section class="section" style="padding-top: 11px; padding-bottom: 11px;"> <div class="container"> <page-tabs core="{page_tabs}" type="toggle" callback="{clickTab}"></page-tabs> </div> </section> <div> <orthodoxs-page_tab-orthdoxs class="hide"></orthodoxs-page_tab-orthdoxs> <orthodoxs-page_tab-exorcists class="hide"></orthodoxs-page_tab-exorcists> </div>', 'orthodoxs-page { width: 100%; height: 100%; display: block; overflow: auto; }', '', function(opts) {
+     this.default_tag = 'home';
+     this.active_tag = null;
+     this.page_tabs = new PageTabs([
+         {code: 'orthdoxs',  label: '正教会', tag: 'orthodoxs-page_tab-orthdoxs' },
+         {code: 'exorcists', label: '祓魔師', tag: 'orthodoxs-page_tab-exorcists' },
+     ]);
+     this.on('mount', () => {
+         this.page_tabs.switchTab(this.tags)
+         this.update();
+     });
 
+     this.clickTab = (e, action, data) => {
+         if (this.page_tabs.switchTab(this.tags, data.code))
+             this.update();
+     };
+});
+
+riot.tag2('orthodoxs-page_tab-exorcists', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white"></h1> <div class="contents hw-text-white"> <exorcists-list></exorcists-list> </div> </div> </section>', '', '', function(opts) {
+     this.on('mount', () => {
+         ACTIONS.fetchOrthodoxAllExorcists();
+     });
+
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-ORTHODOX-ALL-EXORCISTS')
+             this.update();
+     });
+});
+
+riot.tag2('orthodoxs-page_tab-orthdoxs', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white"></h1> <div class="contents hw-text-white"> <orthodox-list></orthodox-list> </div> </div> </section>', '', '', function(opts) {
      this.on('mount', () => {
          ACTIONS.fetchOrthodoxs();
-         ACTIONS.fetchOrthodoxAllExorcists();
      });
 
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-ORTHODOXS')
              this.tags['orthodox-list'].update();
-
-         if (action.type=='FETCHED-ORTHODOX-ALL-EXORCISTS')
-             this.update();
      });
 });
 

@@ -9,10 +9,6 @@
         </ul>
     </div>
 
-    <style>
-     page-tabs li:first-child { margin-left: 22px; }
-    </style>
-
     <script>
      this.clickTab = (e) => {
          let code = e.target.getAttribute('code');
@@ -22,4 +18,21 @@
          return this.opts.type ? this.opts.type : 'boxed';
      };
     </script>
+
+    <style>
+     page-tabs .is-boxed li:first-child { margin-left: 22px; }
+
+     page-tabs .is-toggle li a {
+         background: #ffffff;
+     }
+
+     page-tabs .tabs.is-toggle li.is-active a {
+         background-color: #E198B4;
+         border-color: #E198B4;
+         font-weight: bold;
+     }
+
+    </style>
+
+
 </page-tabs>

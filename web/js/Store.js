@@ -36,6 +36,30 @@ class Store extends Vanilla_Redux_Store {
             ],
         };
     }
+    pageOrthodoxs () {
+        return {
+            code: "orthodoxs",
+            tag: 'orthodoxs-page',
+            menu_label: '正教',
+            children: [
+                {
+                    code: "orthodox",
+                    regex: /^\d+$/,
+                    tag: 'orthodox-page',
+                },
+                {
+                    code: "exorcists",
+                    children: [
+                        {
+                            code: "exorcist",
+                            regex: /^\d+$/,
+                            tag: 'exorcist-page',
+                        },
+                    ]
+                },
+            ]
+        };
+    }
     pages() {
         return [
             this.initPageHome(),
@@ -59,11 +83,7 @@ class Store extends Vanilla_Redux_Store {
                 tag: 'deamons_page',
                 menu_label: '悪魔',
             },
-            {
-                code: "orthodox",
-                tag: 'orthodox_page',
-                menu_label: '正教',
-            },
+            this.pageOrthodoxs(),
             {
                 code: "help",
                 tag: 'help_page',

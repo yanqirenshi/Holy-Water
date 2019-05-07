@@ -10,7 +10,7 @@
         </thead>
         <tbody>
             <tr each={orthodox in orthodoxs()}>
-                <td>{orthodox.id}</td>
+                <td><a href={idLink(orthodox)}>{orthodox.id}</a></td>
                 <td>{orthodox.name}</td>
                 <td>{orthodox.description}</td>
             </tr>
@@ -18,6 +18,9 @@
     </table>
 
     <script>
+     this.idLink = (orthodox) => {
+         return '#orthodoxs/' + orthodox.id;
+     };
      this.orthodoxs = () => {
          return STORE.get('orthodoxs.list');
      };

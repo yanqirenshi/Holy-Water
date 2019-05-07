@@ -9,16 +9,19 @@
             </tr>
         </thead>
         <tbody>
-            <tr each={orthodox in orthodoxs()}>
-                <td>{orthodox.id}</td>
-                <td>{orthodox.name}</td>
-                <td>{orthodox.ghost_id}</td>
+            <tr each={exorcist in exorcists()}>
+                <td><a href={idLink(exorcist)}>{exorcist.id}</a></td>
+                <td>{exorcist.name}</td>
+                <td>{exorcist.ghost_id}</td>
             </tr>
         </tbody>
     </table>
 
     <script>
-     this.orthodoxs = () => {
+     this.idLink = (exorcist) => {
+         return '#orthodoxs/exorcists/' + exorcist.id;
+     };
+     this.exorcists = () => {
          return STORE.get('angels.list');
      };
     </script>
