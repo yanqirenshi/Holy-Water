@@ -62,7 +62,8 @@
     (render-json (list :maleditds (hw.api.ctrl:find-maledicts angel)
                        :deamons   (hw.api.ctrl:find-deamons)
                        :orthodoxs (hw.api.ctrl:find-orthodoxs)
-                       :deccots   (hw.api.ctrl:find-deccots angel)))))
+                       :deccots   (hw.api.ctrl:find-deccots angel)
+                       :profiles  (list :|orthodox| (hw.api.ctrl:angel-orthodox angel))))))
 
 
 ;;;;;

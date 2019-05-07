@@ -78,6 +78,7 @@ class Store extends Vanilla_Redux_Store {
     }
     coreData() {
         return {
+            profiles:     { orthodox: null },
             orthodoxs:    { ht: {}, list: [] },
             maledicts:    { ht: {}, list: [] },
             deccots:      { ht: {}, list: [] },

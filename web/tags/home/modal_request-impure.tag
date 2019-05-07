@@ -19,33 +19,23 @@
                         <div class="field">
                             <label class="label">依頼内容</label>
 
-                            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-                                <thead>
-                                    <tr> <th>Type</th> <th>ID</th> <th>Name</th></tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th>Impure</th>
-                                        <td>{val('impure', 'id')}</td>
-                                        <td>{val('impure', 'name')}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Angel</th>
-                                        <td>{val('angel', 'id')}</td>
-                                        <td>{val('angel', 'name')}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <modal_request-impure-detail source={opts.source}></modal_request-impure-detail>
                         </div>
 
                         <div class="field">
                                 <label class="label">お願い文章を書いてください。(必須ではありません)</label>
                                 <textarea ref="message"
-                                          class="textarea"
+                                          class="textarea is-small"
                                           placeholder="一言あるだけで気分が大分変りますので。"></textarea>
                         </div>
 
                     </div>
+
+                    <div class="field" style="margin-top: -14px; padding-left: 22px;">
+                        <p class="label is-small">お願い文章 の定型文。</p>
+                        <modal_request-impure-default-msgs callback={callback}></modal_request-impure-default-msgs>
+                    </div>
+
 
                     <div style="overflow: hidden;">
                         <a class="button is-danger"
@@ -75,6 +65,27 @@
          let obj = opts.source[name];
 
          return obj[key];
+     };
+     this.callback = (action, data) => {
+         if (action=='add-template-to-msg') {
+             let message_area = this.refs.message;
+             let pos = message_area.selectionStart;
+
+             let message = message_area.value;
+             var befor = message.substr(0, pos);
+             var after = message.substr(pos);
+
+             let message_add = data.message;
+             message_area.value = befor + message_add + after;
+
+             let new_post = (befor + message_add).length;
+
+             message_area.selectionStart = new_post;
+             message_area.selectionEnd   = new_post;
+             message_area.focus();
+
+             return;
+         }
      };
     </script>
 

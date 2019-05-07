@@ -1,5 +1,7 @@
 <orthodox-doropdown style="width:100%;">
+
     <div class="dropdown {open ? 'is-active' : ''}" style="width:100%;">
+
         <div class="dropdown-trigger" style="width:100%;">
             <button class="button" style="width:100%;height: 33px;"
                     aria-haspopup="true"
@@ -12,6 +14,7 @@
                 </span>
             </button>
         </div>
+
         <div class="dropdown-menu" style="width:100%"
              id="dropdown-menu" role="menu">
 
@@ -29,9 +32,23 @@
     </div>
 
     <script>
+     this.changeOrthodox = (id) => {
+         this.open = null;
+
+         this.orthodox = STORE.get('orthodoxs.ht')[id];
+
+         this.update();
+
+         ACTIONS.fetchOrthodoxExorcists(id);
+     };
+    </script>
+
+    <script>
      this.open = null;
      this.orthodox = null;
      this.exorcists = [];
+
+     this.changeOrthodox(STORE.get('profiles.orthodox.id'));
 
      this.clickButton = () => {
          this.open = !this.open;

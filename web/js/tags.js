@@ -995,7 +995,23 @@ riot.tag2('impure-card', '<impure-card-small data="{opts.data}" status="{status(
      };
 });
 
-riot.tag2('modal_request-impure', '<div class="modal {opts.source ? \'is-active\' : \'\'}"> <div class="modal-background" onclick="{clickClose}"></div> <div class="modal-content"> <div class="card"> <header class="card-header"> <p class="card-header-title"> Request Impure </p> </header> <div class="card-content"> <div class="content"> <div class="field"> <label class="label">依頼内容</label> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"> <thead> <tr> <th>Type</th> <th>ID</th> <th>Name</th></tr> </thead> <tbody> <tr> <th>Impure</th> <td>{val(\'impure\', \'id\')}</td> <td>{val(\'impure\', \'name\')}</td> </tr> <tr> <th>Angel</th> <td>{val(\'angel\', \'id\')}</td> <td>{val(\'angel\', \'name\')}</td> </tr> </tbody> </table> </div> <div class="field"> <label class="label">お願い文章を書いてください。(必須ではありません)</label> <textarea ref="message" class="textarea" placeholder="一言あるだけで気分が大分変りますので。"></textarea> </div> </div> <div style="overflow: hidden;"> <a class="button is-danger" style="float:left;" onclick="{clickClose}">Cancel</a> <a class="button is-primary" style="float:right;" onclick="{clickCommit}">Request</a> </div> </div> </div> <button class="modal-close is-large" aria-label="close" onclick="{clickClose}"></button> </div> </div>', '', '', function(opts) {
+riot.tag2('modal_request-impure-default-msgs', '<button each="{obj in templates}" class="button is-small" val="{obj.value}" onclick="{clickButton}">{obj.label}</button>', 'modal_request-impure-default-msgs > .button { margin-right: 8px; margin-bottom: 8px; }', '', function(opts) {
+     this.templates = [
+         { label: '改行',                         value: '\n'},
+         { label: 'ご確認よろしくお願いします。(改行付き)', value: 'ご確認よろしくお願いします。\n' },
+         { label: 'MRレビューをお願いします。(改行付き)',   value: 'MRレビューをお願いします。\n'  },
+         { label: 'ご対応よろしくお願いします。(改行付き)', value: 'ご対応よろしくお願いします。\n'  },
+     ];
+
+     this.clickButton = (e) => {
+         let target = e.target;
+         let msg = target.getAttribute('val') || target.textContent;
+
+         this.opts.callback('add-template-to-msg', { message: msg });
+     };
+});
+
+riot.tag2('modal_request-impure-detail', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"> <thead> <tr> <th>Type</th> <th>ID</th> <th>Name</th></tr> </thead> <tbody> <tr> <th>Impure</th> <td>{val(\'impure\', \'id\')}</td> <td>{val(\'impure\', \'name\')}</td> </tr> <tr> <th>Angel</th> <td>{val(\'angel\', \'id\')}</td> <td>{val(\'angel\', \'name\')}</td> </tr> </tbody> </table>', '', '', function(opts) {
      this.val = (name, key) => {
          if (!opts.source || !opts.source[name])
              return null;
@@ -1003,6 +1019,38 @@ riot.tag2('modal_request-impure', '<div class="modal {opts.source ? \'is-active\
          let obj = opts.source[name];
 
          return obj[key];
+     };
+});
+
+riot.tag2('modal_request-impure', '<div class="modal {opts.source ? \'is-active\' : \'\'}"> <div class="modal-background" onclick="{clickClose}"></div> <div class="modal-content"> <div class="card"> <header class="card-header"> <p class="card-header-title"> Request Impure </p> </header> <div class="card-content"> <div class="content"> <div class="field"> <label class="label">依頼内容</label> <modal_request-impure-detail source="{opts.source}"></modal_request-impure-detail> </div> <div class="field"> <label class="label">お願い文章を書いてください。(必須ではありません)</label> <textarea ref="message" class="textarea is-small" placeholder="一言あるだけで気分が大分変りますので。"></textarea> </div> </div> <div class="field" style="margin-top: -14px; padding-left: 22px;"> <p class="label is-small">お願い文章 の定型文。</p> <modal_request-impure-default-msgs callback="{callback}"></modal_request-impure-default-msgs> </div> <div style="overflow: hidden;"> <a class="button is-danger" style="float:left;" onclick="{clickClose}">Cancel</a> <a class="button is-primary" style="float:right;" onclick="{clickCommit}">Request</a> </div> </div> </div> <button class="modal-close is-large" aria-label="close" onclick="{clickClose}"></button> </div> </div>', '', '', function(opts) {
+     this.val = (name, key) => {
+         if (!opts.source || !opts.source[name])
+             return null;
+
+         let obj = opts.source[name];
+
+         return obj[key];
+     };
+     this.callback = (action, data) => {
+         if (action=='add-template-to-msg') {
+             let message_area = this.refs.message;
+             let pos = message_area.selectionStart;
+
+             let message = message_area.value;
+             var befor = message.substr(0, pos);
+             var after = message.substr(pos);
+
+             let message_add = data.message;
+             message_area.value = befor + message_add + after;
+
+             let new_post = (befor + message_add).length;
+
+             message_area.selectionStart = new_post;
+             message_area.selectionEnd   = new_post;
+             message_area.focus();
+
+             return;
+         }
      };
 
      this.clickCommit = () => {
@@ -1040,9 +1088,21 @@ riot.tag2('home_orthodox-angels', '<nav class="panel hw-box-shadow"> <p class="p
 });
 
 riot.tag2('orthodox-doropdown', '<div class="dropdown {open ? \'is-active\' : \'\'}" style="width:100%;"> <div class="dropdown-trigger" style="width:100%;"> <button class="button" style="width:100%;height: 33px;" aria-haspopup="true" aria-controls="dropdown-menu" onclick="{clickButton}"> <span style="font-size:11px;">{orthodox ? orthodox.name : \'Choose Orthodox\'}</span> <span class="icon is-small" style="font-size:11px;"> <i class="fas fa-angle-down" aria-hidden="true"></i> </span> </button> </div> <div class="dropdown-menu" style="width:100%" id="dropdown-menu" role="menu"> <div class="dropdown-content"> <a each="{orthodox in orthodoxs()}" class="dropdown-item" orthodox-id="{orthodox.id}" onclick="{selectItem}" style="font-size:11px;"> {orthodox.name} </a> </div> </div> </div>', '', 'style="width:100%;"', function(opts) {
+     this.changeOrthodox = (id) => {
+         this.open = null;
+
+         this.orthodox = STORE.get('orthodoxs.ht')[id];
+
+         this.update();
+
+         ACTIONS.fetchOrthodoxExorcists(id);
+     };
+
      this.open = null;
      this.orthodox = null;
      this.exorcists = [];
+
+     this.changeOrthodox(STORE.get('profiles.orthodox.id'));
 
      this.clickButton = () => {
          this.open = !this.open;

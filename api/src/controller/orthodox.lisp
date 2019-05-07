@@ -32,3 +32,7 @@
 
 (defun find-orthodox-exorcists (&key orthodox-id)
   (mapcar #'dao2angel (hw::orthodox-angels orthodox-id)))
+
+(defun angel-orthodox (angel)
+  (dao2orthodox
+   (hw:get-orthodox :angel angel)))

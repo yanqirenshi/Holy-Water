@@ -78,8 +78,9 @@ class Actions extends Vanilla_Redux_Actions {
             data: {
                 orthodoxs: this.mergeData(response.ORTHODOXS, state.orthodoxs),
                 maledicts: this.mergeData(response.MALEDITDS, state.maledicts),
-                deamons: this.mergeData(response.DEAMONS, state.deamons),
-                deccots: this.mergeData(response.DECCOTS, state.deccots)
+                deamons:   this.mergeData(response.DEAMONS, state.deamons),
+                deccots:   this.mergeData(response.DECCOTS, state.deccots),
+                profiles:  response.PROFILES,
             },
         };
     }

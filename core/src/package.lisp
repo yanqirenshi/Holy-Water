@@ -29,7 +29,8 @@
            #:find-impures
            #:find-impures-cemetery
            #:add-after-impure)
-  (:export #:find-orthodoxs)
+  (:export #:find-orthodoxs
+           #:get-orthodox)
   (:export #:find-angels
            #:get-angel
            #:get-angel-at-auth

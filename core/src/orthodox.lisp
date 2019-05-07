@@ -1,8 +1,11 @@
 (in-package :holy-water)
 
-(defun get-orthodox (&key id)
-  (when id
-    (find-dao 'rs_orthodox :id id)))
+(defun get-orthodox (&key id angel)
+  (cond (id (find-dao 'rs_orthodox :id id))
+        (angel (car (mito:select-dao 'rs_orthodox
+                      (inner-join :th_orthodox_angel
+                                  :on (:= :rs_orthodox.id :th_orthodox_angel.orthodox_id))
+                      (where (:= :th_orthodox_angel.angel_id (mito:object-id angel))))))))
 
 (defun find-orthodoxs ()
   (select-dao 'rs_orthodox))

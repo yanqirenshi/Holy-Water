@@ -30,7 +30,8 @@
            #:find-angels
            #:get-angels
            #:angel-received-messages
-           #:change-to-read-request-message)
+           #:change-to-read-request-message
+           #:angel-orthodox)
   (:export #:find-deccots
            #:get-deccot
            #:find-deccot-items))
