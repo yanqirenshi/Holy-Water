@@ -219,7 +219,7 @@ riot.tag2('page-tabs', '<div class="tabs is-{type()}"> <ul> <li each="{opts.core
      };
 });
 
-riot.tag2('section-breadcrumb', '<nav class="breadcrumb" aria-label="breadcrumbs"> <ul> <li each="{path()}" class="{active ? \'is-active\' : \'\'}"> <a href="{href}" aria-current="page">{label}</a> </li> </ul> </nav>', 'section-breadcrumb section-container > .section,[data-is="section-breadcrumb"] section-container > .section{ padding-top: 3px; }', '', function(opts) {
+riot.tag2('section-breadcrumb', '<nav class="breadcrumb" aria-label="breadcrumbs"> <ul> <li each="{path()}" class="{active ? \'is-active\' : \'\'}"> <a href="{href}" aria-current="page">{label}</a> </li> </ul> </nav>', 'section-breadcrumb .breadcrumb a { font-weight: bold; text-shadow: 0px 0px 22px rgba(254, 242, 99); color: #d05d89; } section-breadcrumb .breadcrumb a:hover { text-shadow: 0px 0px 22px #333; color: #ffffff; }', '', function(opts) {
      this.label = (node, is_last, node_name) => {
          if (node.menu_label)
              return node.menu_label;
@@ -369,7 +369,13 @@ riot.tag2('home_working-action', '<button class="button is-small" style="margin-
 riot.tag2('sections-list', '<table class="table"> <tbody> <tr each="{opts.data}"> <td><a href="{hash}">{name}</a></td> </tr> </tbody> </table>', '', '', function(opts) {
 });
 
-riot.tag2('deamons_page', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">Deamons</h1> <h2 class="subtitle hw-text-white">実績を集計するためのグループ</h2> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">List</h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Name(Short)</th> </tr> </thead> <tbody> <tr each="{deamon in deamons()}"> <td>{deamon.id}</td> <td>{deamon.name}</td> <td>{deamon.name_short}</td> </tr> </tbody> </table> </div> </div> </section> </div> </section>', '', '', function(opts) {
+riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">悪魔</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section>', '', '', function(opts) {
+});
+
+riot.tag2('deamons-page', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">Deamons</h1> <h2 class="subtitle hw-text-white">実績を集計するためのグループ</h2> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white"></h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Name(Short)</th> </tr> </thead> <tbody> <tr each="{deamon in deamons()}"> <td><a href="{idLink(deamon)}">{deamon.id}</a></td> <td>{deamon.name}</td> <td>{deamon.name_short}</td> </tr> </tbody> </table> </div> </div> </section> </div> </section>', '', '', function(opts) {
+     this.idLink = (deamon) => {
+         return '#deamons/' + deamon.id;
+     };
      this.deamons = () => {
          return STORE.get('deamons.list');
      };

@@ -60,6 +60,20 @@ class Store extends Vanilla_Redux_Store {
             ]
         };
     }
+    pageDeamons () {
+        return {
+            code: "deamons",
+            tag: 'deamons-page',
+            menu_label: '悪魔',
+            children: [
+                {
+                    code: "deamon",
+                    regex: /^\d+$/,
+                    tag: 'deamon-page',
+                },
+            ]
+        };
+    }
     pages() {
         return [
             this.initPageHome(),
@@ -78,11 +92,7 @@ class Store extends Vanilla_Redux_Store {
                 tag: 'war-history_page',
                 menu_label: '戦歴',
             },
-            {
-                code: "deamons",
-                tag: 'deamons_page',
-                menu_label: '悪魔',
-            },
+            this.pageDeamons(),
             this.pageOrthodoxs(),
             {
                 code: "help",

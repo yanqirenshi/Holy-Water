@@ -9,8 +9,14 @@
     </nav>
 
     <style>
-     section-container > .section {
-         padding-top: 3px;
+     section-breadcrumb .breadcrumb a {
+         font-weight: bold;
+         text-shadow: 0px 0px 22px rgba(254, 242, 99);
+         color: #d05d89;
+     }
+     section-breadcrumb .breadcrumb a:hover {
+         text-shadow: 0px 0px 22px #333;
+         color: #ffffff;
      }
     </style>
 
