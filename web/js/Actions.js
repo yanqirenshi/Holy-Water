@@ -307,7 +307,7 @@ class Actions extends Vanilla_Redux_Actions {
             spell: spell,
         };
 
-        API.post(path, this.encodePostData(post_data, function (json, success) {
+        API.post(path, this.encodePostData(post_data), function (json, success) {
             if (success)
                 STORE.dispatch(this.finishedImpure(json));
             else
