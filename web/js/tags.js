@@ -869,11 +869,15 @@ riot.tag2('impure-card-large_tab_edit', '<div class="form-contents"> <div class=
      };
 });
 
-riot.tag2('impure-card-large_tab_finish', '<div class="form-contents"> <div class="left"> <textarea class="textarea is-large" is-smal placeholder="完了メッセージ (準備中)" style="width:100%; height:100%;" disabled></textarea> </div> <div class="right"> <a class="button is-small" action="finishe-impure" disabled>Clear</a> <span style="flex-grow:1;"></span> <a class="button is-small is-danger" action="finishe-impure" onclick="{clickButton}">完了</a> </div> </div>', 'impure-card-large_tab_finish .form-contents { display:flex; width:100%; height:100%; } impure-card-large_tab_finish .form-contents > .left { flex-grow:1; width:100%; height:100%; } impure-card-large_tab_finish .form-contents > .right{ padding-left:8px; display:flex; flex-direction: column; }', '', function(opts) {
-     this.clickButton = (e) => {
+riot.tag2('impure-card-large_tab_finish', '<div class="form-contents"> <div class="left"> <textarea class="textarea is-small" placeholder="完了時のメモなどがあれば入力してください。(任意項目)" style="width:100%; height:100%;" ref="spell"></textarea> </div> <div class="right"> <a class="button is-small" action="finishe-impure" onclick="{clickClearButton}">Clear</a> <span style="flex-grow:1;"></span> <a class="button is-small is-danger" action="finishe-impure" onclick="{clickFinishButton}">完了</a> </div> </div>', 'impure-card-large_tab_finish .form-contents { display:flex; width:100%; height:100%; } impure-card-large_tab_finish .form-contents > .left { flex-grow:1; width:100%; height:100%; } impure-card-large_tab_finish .form-contents > .right{ padding-left:8px; display:flex; flex-direction: column; }', '', function(opts) {
+     this.clickClearButton = (e) => {
+         this.refs.spell.value = '';
+     }
+     this.clickFinishButton = (e) => {
          let target = e.target;
+         let spell = this.refs.spell.value.trim();
 
-         this.opts.callback(target.getAttribute('action'));
+         this.opts.callback(target.getAttribute('action'), { spell: spell });
      };
 });
 
@@ -955,7 +959,7 @@ riot.tag2('impure-card', '<impure-card-small data="{opts.data}" status="{status(
              ACTIONS.stopImpure(this.opts.data);
 
          if ('finishe-impure'==action)
-             ACTIONS.finishImpure(this.opts.data);
+             ACTIONS.finishImpure(this.opts.data, true, data.spell);
 
          if ('save-impure-contents'==action)
              ACTIONS.saveImpure(data);

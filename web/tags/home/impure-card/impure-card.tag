@@ -23,7 +23,7 @@
              ACTIONS.stopImpure(this.opts.data);
 
          if ('finishe-impure'==action)
-             ACTIONS.finishImpure(this.opts.data);
+             ACTIONS.finishImpure(this.opts.data, true, data.spell);
 
          if ('save-impure-contents'==action)
              ACTIONS.saveImpure(data);

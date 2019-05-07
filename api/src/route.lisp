@@ -164,11 +164,14 @@
       (unless impure (throw-code 404))
       (render-json (hw.api.ctrl:stop-action-4-impure angel impure)))))
 
-(defroute ("/impures/:id/finish" :method :POST) (&key id |with-stop|)
+(defroute ("/impures/:id/finish" :method :POST) (&key id |with-stop| |spell|)
   (with-angel (angel)
-    (let ((impure (hw::get-impure :id id)))
+    (let ((impure (hw::get-impure :id id))
+          (spell (when |spell| (quri:url-decode |spell|))))
       (unless impure (throw-code 404))
-      (render-json (hw.api.ctrl:finish-impure angel impure :with-stop |with-stop|)))))
+      (render-json (hw.api.ctrl:finish-impure angel impure
+                                              :with-stop |with-stop|
+                                              :spell spell)))))
 
 (defroute "/impures/status/done" (&key |from| |to|)
   (with-angel (angel)

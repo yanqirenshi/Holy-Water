@@ -90,11 +90,17 @@
   (dao2impure (hw:stop-action-impure angel impure :editor angel)
               :angel angel))
 
-(defun finish-impure (angel impure &key with-stop)
-  (dao2impure (hw::finish-impure angel impure
-                                 :editor angel
-                                 :with-stop with-stop)
-              :angel angel))
+(defun empty-string-p (str)
+  (and str (string/= "" (string-trim '(#\Space #\Tab #\Newline #\IDEOGRAPHIC_SPACE) str))))
+
+(defun finish-impure (angel impure &key with-stop spell)
+  ;; TODO: dbi:with-transaction mito:*connection*
+  (let ((impure-finished (hw::finish-impure angel impure
+                                            :editor angel
+                                            :with-stop with-stop)))
+    (when (empty-string-p spell)
+      (hw:create-incantation-solo impure angel spell :creator angel))
+    (dao2impure impure-finished :angel angel)))
 
 (defun move-impure (angel impure maledict)
   (dao2impure (hw:move-impure angel impure maledict :editor angel)

@@ -28,6 +28,7 @@
                                (:file "ev_collect-impure")
                                (:file "ev_purge")
                                (:file "ev_request-message")
+                               (:file "ev_incantation")
                                (:file "re_impure")))
                  (:file "auth")
                  (:file "creator")
@@ -42,6 +43,7 @@
                  (:file "deamon")
                  (:file "deccot")
                  (:file "ghost-shadow")
+                 (:file "incantation")
                  (:module "actions"
                   :components ((:file "stop-impure")
                                (:file "start-impure")

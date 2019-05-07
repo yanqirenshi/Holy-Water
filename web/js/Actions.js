@@ -300,13 +300,14 @@ class Actions extends Vanilla_Redux_Actions {
             data: { purging: state },
         };
     }
-    finishImpure (impure, with_stop) {
+    finishImpure (impure, with_stop, spell) {
         let path = '/impures/' + impure.id + '/finish';
         let post_data = {
             'with-stop': (with_stop==true ? true : false),
+            spell: spell,
         };
 
-        API.post(path, post_data, function (json, success) {
+        API.post(path, this.encodePostData(post_data, function (json, success) {
             if (success)
                 STORE.dispatch(this.finishedImpure(json));
             else

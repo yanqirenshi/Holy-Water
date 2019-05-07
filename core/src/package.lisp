@@ -47,7 +47,9 @@
            #:find-impure-request-messages)
   (:export #:find-deccots
            #:get-angel-deccot
-           #:find-deccot-items))
+           #:find-deccot-items)
+  (:export #:create-incantation-solo
+           #:create-incantation-duet))
 (in-package :holy-water)
 
 (mito:connect-toplevel :postgres :database-name "holy_water" :username "holy_water")
