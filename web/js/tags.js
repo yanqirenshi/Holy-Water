@@ -819,7 +819,7 @@ riot.tag2('impure-card-large', '<div class="card hw-box-shadow"> <impure-card-he
      this.page_tabs = new PageTabs([
          {code: 'show',         label: '照会',           tag: 'impure-card-large_tab_show' },
          {code: 'edit',         label: '編集',           tag: 'impure-card-large_tab_edit' },
-         {code: 'incantation',  label: '詠唱',           tag: 'impure-card-large_tab_incantation' },
+         {code: 'incantation',  label: '呪文',           tag: 'impure-card-large_tab_incantation' },
          {code: 'create-after', label: '後続作業の作成', tag: 'impure-card-large_tab_create-after' },
          {code: 'finish',       label: '完了',           tag: 'impure-card-large_tab_finish' },
      ]);
@@ -909,16 +909,21 @@ riot.tag2('impure-card-large_tab_finish', '<div class="form-contents"> <div clas
      };
 });
 
-riot.tag2('impure-card-large_tab_incantation', '<div class="form-contents"> <div class="left"> <textarea class="textarea is-small" placeholder="作業中のメモなどを入力してください。 ※準備中" style="width:100%; height:100%;" ref="spell" disabled></textarea> </div> <div class="right"> <a class="button is-small" action="finishe-impure" onclick="{clickClearButton}" disabled>Clear</a> <span style="flex-grow:1;"></span> <a class="button is-small is-danger" action="finishe-impure" onclick="{clickFinishButton}" disabled>完了</a> </div> </div>', 'impure-card-large_tab_incantation .form-contents { display:flex; width:100%; height:100%; } impure-card-large_tab_incantation .form-contents > .left { flex-grow:1; width:100%; height:100%; } impure-card-large_tab_incantation .form-contents > .right{ padding-left:8px; display:flex; flex-direction: column; }', '', function(opts) {
+riot.tag2('impure-card-large_tab_incantation', '<div class="form-contents"> <div class="left"> <textarea class="textarea is-small" placeholder="作業中のメモなどを入力してください。 ※準備中" style="width:100%; height:100%;" ref="spell"></textarea> </div> <div class="right"> <a class="button is-small" action="finishe-impure" onclick="{clickClearButton}">Clear</a> <span style="flex-grow:1;"></span> <a class="button is-small is-danger" action="incantation" onclick="{clickIncantationButton}">詠唱</a> </div> </div>', 'impure-card-large_tab_incantation .form-contents { display:flex; width:100%; height:100%; } impure-card-large_tab_incantation .form-contents > .left { flex-grow:1; width:100%; height:100%; } impure-card-large_tab_incantation .form-contents > .right{ padding-left:8px; display:flex; flex-direction: column; }', '', function(opts) {
      this.clickClearButton = (e) => {
          this.refs.spell.value = '';
      }
-     this.clickFinishButton = (e) => {
+     this.clickIncantationButton = (e) => {
          let target = e.target;
          let spell = this.refs.spell.value.trim();
 
          this.opts.callback(target.getAttribute('action'), { spell: spell });
      };
+     STORE.subscribe((action) => {
+         if (action.type=='SAVED-IMPURE-INCANTATION-SOLO')
+             if (this.opts.data.id==action.impure.id)
+                 this.clickClearButton();
+     });
 });
 
 riot.tag2('impure-card-large_tab_show-description', '', 'impure-card-large_tab_show-description h1 { font-weight: bold; font-size: 20px; margin-top: 11px; text-decoration: underline; } impure-card-large_tab_show-description h1:first-child { margin-top: 0px; } impure-card-large_tab_show-description h2 { font-weight: bold; font-size: 18px; margin-top: 11px; text-decoration: underline; } impure-card-large_tab_show-description h3 { font-weight: bold; font-size: 16px; text-decoration: underline; } impure-card-large_tab_show-description h4 { font-weight: bold; font-size: 14px; } impure-card-large_tab_show-description h5 { font-weight: bold; font-size: 12px; } impure-card-large_tab_show-description * { font-size: 12px; } impure-card-large_tab_show-description table { border-collapse: collapse; } impure-card-large_tab_show-description td { border: solid 1px; padding: 2px 5px; } impure-card-large_tab_show-description th { border: solid 1px; padding: 2px 5px; background: #eeeeee; } impure-card-large_tab_show-description li { list-style-type: square; margin-left: 22px; } impure-card-large_tab_show-description pre { white-space: pre-wrap; }', 'class="hw-markdown"', function(opts) {
@@ -1006,6 +1011,9 @@ riot.tag2('impure-card', '<impure-card-small data="{opts.data}" status="{status(
 
          if ('move-2-view'==action)
              location.hash = '#home/impures/' + this.opts.data.id;
+
+         if ('incantation'==action)
+             ACTIONS.saveImpureIncantationSolo(this.opts.data, data.spell);
      };
 
      this.cardSize = () => {

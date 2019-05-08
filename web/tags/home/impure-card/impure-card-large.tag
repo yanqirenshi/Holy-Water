@@ -40,7 +40,7 @@
      this.page_tabs = new PageTabs([
          {code: 'show',         label: '照会',           tag: 'impure-card-large_tab_show' },
          {code: 'edit',         label: '編集',           tag: 'impure-card-large_tab_edit' },
-         {code: 'incantation',  label: '詠唱',           tag: 'impure-card-large_tab_incantation' },
+         {code: 'incantation',  label: '呪文',           tag: 'impure-card-large_tab_incantation' },
          {code: 'create-after', label: '後続作業の作成', tag: 'impure-card-large_tab_create-after' },
          {code: 'finish',       label: '完了',           tag: 'impure-card-large_tab_finish' },
      ]);

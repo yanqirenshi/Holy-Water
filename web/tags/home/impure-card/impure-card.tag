@@ -1,4 +1,5 @@
 <impure-card class="{cardSize()}" status={status()}>
+
     <impure-card-small data={opts.data} status={status()} callback={callback}></impure-card-small>
     <impure-card-large data={opts.data} status={status()} callback={callback}></impure-card-large>
 
@@ -30,6 +31,9 @@
 
          if ('move-2-view'==action)
              location.hash = '#home/impures/' + this.opts.data.id;
+
+         if ('incantation'==action)
+             ACTIONS.saveImpureIncantationSolo(this.opts.data, data.spell);
      };
     </script>
 
@@ -65,4 +69,5 @@
          box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666);
      }
     </style>
+
 </impure-card>

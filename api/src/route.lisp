@@ -200,6 +200,14 @@
                                                     :name name
                                                     :description description)))))
 
+(defroute ("/impures/:id/incantation" :method :POST) (&key id |spell|)
+  (with-angel (angel)
+    (let ((impure (hw::get-impure :id id))
+          (spell (when |spell| (quri:url-decode |spell|))))
+      (unless impure (throw-code 404))
+      (render-json (hw.api.ctrl:impure-incantation angel impure spell)))))
+
+
 ;;;;;
 ;;;;; Purge
 ;;;;;

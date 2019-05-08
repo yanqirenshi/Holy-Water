@@ -35,5 +35,6 @@
   (:export #:find-deccots
            #:get-deccot
            #:find-deccot-items)
+  (:export #:impure-incantation)
   (:export #:pages-orthodox))
 (in-package :holy-water.api.controller)

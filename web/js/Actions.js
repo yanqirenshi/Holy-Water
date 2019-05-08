@@ -677,6 +677,30 @@ class Actions extends Vanilla_Redux_Actions {
         });
     }
     /////
+    ///// impure Incantation
+    /////
+    saveImpureIncantationSolo (impure, spell) {
+        let path = '/impures/%s/incantation'.format(impure.id);
+        let data = {
+            spell: spell
+        };
+
+        API.post(path, this.encodePostData(data), function (response, success) {
+            if (success) {
+                this.pushSuccessMessage('呪文の詠唱が完了しました。');
+                STORE.dispatch(this.savedImpureIncantationSolo(response, impure));
+            } else {
+                this.pushFetchErrorMessage(response);
+            }
+        }.bind(this));
+    }
+    savedImpureIncantationSolo (response, impure) {
+        return {
+            type: 'SAVED-IMPURE-INCANTATION-SOLO',
+            impure: impure,
+        };
+    }
+    /////
     ///// Page
     /////
     fetchPagesOrthodox (orthodox) {
