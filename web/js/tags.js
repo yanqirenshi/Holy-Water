@@ -378,6 +378,9 @@ riot.tag2('hw-page-header', '<section class="section" style="padding-bottom: 22p
      };
 });
 
+riot.tag2('hw-section-subtitle', '<h2 class="subtitle hw-text-white">{opts.contents}</h2>', '', '', function(opts) {
+});
+
 riot.tag2('hw-section-title', '<h1 class="title hw-text-white">{opts.title}</h1>', '', '', function(opts) {
 });
 
@@ -1675,7 +1678,7 @@ riot.tag2('request-messages', '<section class="section"> <div class="container">
 });
 
 
-riot.tag2('war-history_page', '<section class="section"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> </section> <div> <war-history_root_tab_days class="hide"></war-history_root_tab_days> <war-history_root_tab_weeks class="hide"></war-history_root_tab_weeks> <war-history_root_tab_month class="hide"></war-history_root_tab_month> </div>', '', '', function(opts) {
+riot.tag2('war-history_page', '<hw-page-header title="戦いの歴史"></hw-page-header> <section class="section" style="padding-top:0px; padding-bottom:11px;"> <div class="container"> <page-tabs core="{page_tabs}" type="toggle" callback="{clickTab}"></page-tabs> </div> </section> <div> <war-history_root_tab_days class="hide"></war-history_root_tab_days> <war-history_root_tab_weeks class="hide"></war-history_root_tab_weeks> <war-history_root_tab_month class="hide"></war-history_root_tab_month> </div>', '', '', function(opts) {
      this.default_tag = 'home';
      this.active_tag = null;
      this.page_tabs = new PageTabs([
@@ -1694,12 +1697,11 @@ riot.tag2('war-history_page', '<section class="section"> <div class="container">
      };
 });
 
-riot.tag2('war-history_root_tab_days', '<section class="section"> <div class="container"> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">悪魔別</h1> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">日別</h1> </div> </section> </div> </section> <section class="section"> <div class="container"> <h1 class="title hw-text-white">作業時間統計</h1> <h2 class="subtitle hw-text-white"> Purge の統計情報。どれくらいの作業時間か。とか。 </h2> </div> </section>', '', '', function(opts) {
+riot.tag2('war-history_root_tab_days', '<section class="section"> <div class="container"> <hw-section-title title="悪魔別"></hw-section-title> <hw-section-subtitle contents="悪魔毎のグラフ"></hw-section-subtitle> </div> </section> <section class="section"> <div class="container"> <hw-section-title title="日"></hw-section-title> <hw-section-subtitle contents="日別のグラフを表示する。悪魔毎の積層グラフ"></hw-section-subtitle> </div> </section> <section class="section"> <div class="container"> <hw-section-title title="作業時間統計"></hw-section-title> <hw-section-subtitle contents="Purge の統計情報。どれくらいの作業時間か。とか。"></hw-section-subtitle> </div> </section> <section class="section"> <div class="container"> <hw-section-title title="浄化明細"></hw-section-title> </div> </section>', '', '', function(opts) {
 });
 
-riot.tag2('war-history_root_tab_month', '<section class="section"> <div class="container"> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">悪魔別</h1> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">日別</h1> </div> </section> </div> </section> <section class="section"> <div class="container"> <h1 class="title hw-text-white">作業時間統計</h1> <h2 class="subtitle hw-text-white"> Purge の統計情報。どれくらいの作業時間か。とか。 </h2> </div> </section>', '', '', function(opts) {
+riot.tag2('war-history_root_tab_month', '<section class="section"> <div class="container"> <hw-section-title title="準備中。。。"></hw-section-title> <h2 class="subtitle hw-text-white"> 期間指定できるようにすれば、このタブは不要なのかも。。。 </h2> </div> </section>', '', '', function(opts) {
 });
 
-
-riot.tag2('war-history_root_tab_weeks', '<section class="section"> <div class="container"> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">悪魔別</h1> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">日別</h1> </div> </section> </div> </section> <section class="section"> <div class="container"> <h1 class="title hw-text-white">作業時間統計</h1> <h2 class="subtitle hw-text-white"> Purge の統計情報。どれくらいの作業時間か。とか。 </h2> </div> </section>', '', '', function(opts) {
+riot.tag2('war-history_root_tab_weeks', '<section class="section"> <div class="container"> <hw-section-title title="準備中。。。"></hw-section-title> <h2 class="subtitle hw-text-white"> 期間指定できるようにすれば、このタブは不要なのかも。。。 </h2> </div> </section>', '', '', function(opts) {
 });

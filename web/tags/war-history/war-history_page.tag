@@ -1,14 +1,16 @@
 <war-history_page>
+    <hw-page-header title="戦いの歴史"></hw-page-header>
 
-    <section class="section">
+    <section class="section" style="padding-top:0px; padding-bottom:11px;">
         <div class="container">
             <page-tabs core={page_tabs}
+                       type="toggle"
                        callback={clickTab}></page-tabs>
         </div>
     </section>
 
     <div>
-        <war-history_root_tab_days class="hide"></war-history_root_tab_days>
+        <war-history_root_tab_days  class="hide"></war-history_root_tab_days>
         <war-history_root_tab_weeks class="hide"></war-history_root_tab_weeks>
         <war-history_root_tab_month class="hide"></war-history_root_tab_month>
     </div>
