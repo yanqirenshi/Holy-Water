@@ -1,11 +1,5 @@
 <orthodoxs-page>
-    <section class="section" style="padding-bottom: 11px;">
-        <div class="container">
-            <h1 class="title hw-text-white">正教会</h1>
-            <h2 class="subtitle hw-text-white">正教会=チーム</h2>
-
-        </div>
-    </section>
+    <hw-page-header title="正教会" subtitle="正教会=チーム"></hw-page-header>
 
     <section class="section" style="padding-top: 11px; padding-bottom: 11px;">
         <div class="container">

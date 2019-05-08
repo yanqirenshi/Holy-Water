@@ -676,4 +676,23 @@ class Actions extends Vanilla_Redux_Actions {
             data: { messages: new_messages },
         });
     }
+    /////
+    ///// Page
+    /////
+    fetchPagesOrthodox (orthodox) {
+        let path = '/panges/orthodoxs/%s'.format(orthodox.id);
+
+        API.get(path, function (json, success) {
+            if (success)
+                STORE.dispatch(this.fetchedPagesOrthodox(json));
+        }.bind(this));
+    }
+    fetchedPagesOrthodox (response) {
+        let state = STORE.state().toJS();
+
+        return {
+            type: 'FETCHED-PAGES-ORTHODOX',
+            data: {},
+        };
+    }
 }

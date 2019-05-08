@@ -232,6 +232,16 @@
 
 
 ;;;;;
+;;;;; Page
+;;;;;
+(defroute "/panges/orthodoxs/:orthodox-id" (&key orthodox-id)
+  (with-angel (angel)
+    (let ((orthodox (hw:get-orthodox :id (parse-integer orthodox-id))))
+      (unless orthodox (throw-code 404))
+      (render-json (hw.api.ctrl:pages-orthodox orthodox :angel angel)))))
+
+
+;;;;;
 ;;;;; Error pages
 ;;;;;
 (defmethod on-exception ((app <router>) (code (eql 404)))

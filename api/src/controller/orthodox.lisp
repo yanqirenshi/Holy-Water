@@ -36,3 +36,10 @@
 (defun angel-orthodox (angel)
   (dao2orthodox
    (hw:get-orthodox :angel angel)))
+
+(defun pages-orthodox (orthodox &key angel)
+  (declare (ignore angel))
+  (list :|orthodox| (dao2orthodox orthodox)
+        :|primate|  :null ;; 首座主教。 オーナー
+        :|paladin|  nil   ;; かんりしゃけんげんをもつ。
+        :|angels|   nil))

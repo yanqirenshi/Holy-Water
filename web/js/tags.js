@@ -366,6 +366,21 @@ riot.tag2('home_working-action', '<button class="button is-small" style="margin-
      };
 });
 
+riot.tag2('hw-page-header', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">{opts.title}</h1> <h2 class="subtitle hw-text-white"> <p>{opts.subtitle}</p> <section-breadcrumb class="{isHide()}"></section-breadcrumb> </h2> </div> </section>', '', '', function(opts) {
+     this.isHide = () => {
+         if (!this.opts || !this.opts.type)
+             return 'hide';
+         dump(this.opts.type);
+         if (this.opts.type=='child')
+             return '';
+
+         return 'hide';
+     };
+});
+
+riot.tag2('hw-section-title', '<h1 class="title hw-text-white">{opts.title}</h1>', '', '', function(opts) {
+});
+
 riot.tag2('sections-list', '<table class="table"> <tbody> <tr each="{opts.data}"> <td><a href="{hash}">{name}</a></td> </tr> </tbody> </table>', '', '', function(opts) {
 });
 
@@ -1279,7 +1294,42 @@ riot.tag2('impure_page_tab-requests', '<section class="section" style="padding-t
      };
 });
 
-riot.tag2('orthodox-page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">正教会</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section>', '', '', function(opts) {
+riot.tag2('orthodox-page', '<hw-page-header title="正教会" type="child"></hw-page-header> <section class="section" style="padding-top: 11px; padding-bottom: 11px;"> <div class="container"> <page-tabs core="{page_tabs}" type="toggle" callback="{clickTab}"></page-tabs> </div> </section> <div> <orthodox-page_tab-basic class="hide"></orthodox-page_tab-basic> <orthodox-page_tab-members class="hide"></orthodox-page_tab-members> <orthodox-page_tab-paladin class="hide"></orthodox-page_tab-paladin> <orthodox-page_tab-primate class="hide"></orthodox-page_tab-primate> </div>', '', '', function(opts) {
+     this.page_tabs = new PageTabs([
+         {code: 'basic',   label: '基本情報', tag: 'orthodox-page_tab-basic' },
+         {code: 'members', label: '祓魔師',   tag: 'orthodox-page_tab-members' },
+         {code: 'paladin', label: '聖騎士',   tag: 'orthodox-page_tab-paladin' },
+         {code: 'primate', label: '首座主教', tag: 'orthodox-page_tab-primate' },
+     ]);
+     this.on('mount', () => {
+         this.page_tabs.switchTab(this.tags)
+         this.update();
+     });
+
+     this.clickTab = (e, action, data) => {
+         if (this.page_tabs.switchTab(this.tags, data.code))
+             this.update();
+     };
+
+     this.orthodox = () => {
+         let id = location.hash.split('/').reverse()[0];
+
+         return STORE.get('orthodoxs.ht.' + id);
+     };
+
+     ACTIONS.fetchPagesOrthodox(this.orthodox());
+});
+
+riot.tag2('orthodox-page_tab-basic', '<section class="section"> <div class="container"> <hw-section-title title="概要"></hw-section-title> <h2 class="subtitle"></h2> </div> </section> <section class="section"> <div class="container"> <hw-section-title title="組織"></hw-section-title> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable"> <thead> <tr> <th>役職</th> <th>概要</th> </tr> </thead> <tbody> <tr> <th>首座主教</th> <td>XXX, YYY, ZZZ</td> </tr> <tr> <th>聖騎士</th> <td>PPP</td> </tr> <tr> <th>祓魔師</th> <td> 9999 名</td> </tr> </tbody> </table> </div> </div> </section>', '', '', function(opts) {
+});
+
+riot.tag2('orthodox-page_tab-members', '<section class="section"> <div class="container"> <hw-section-title title="準備中。。。"></hw-section-title> <div class="contents"> <p>表示したり、追加したり。</p> </div> </div> </section>', '', '', function(opts) {
+});
+
+riot.tag2('orthodox-page_tab-paladin', '<section class="section"> <div class="container"> <hw-section-title title="準備中。。。"></hw-section-title> <div class="contents"> <p>表示したり、選出したり。</p> </div> </div> </section>', '', '', function(opts) {
+});
+
+riot.tag2('orthodox-page_tab-primate', '<section class="section"> <div class="container"> <hw-section-title title="準備中。。。"></hw-section-title> <div class="contents"> <p>表示したり、選出したり。</p> </div> </div> </section>', '', '', function(opts) {
 });
 
 riot.tag2('exorcists-list', '<table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Ghost ID</th> </tr> </thead> <tbody> <tr each="{exorcist in exorcists()}"> <td><a href="{idLink(exorcist)}">{exorcist.id}</a></td> <td>{exorcist.name}</td> <td>{exorcist.ghost_id}</td> </tr> </tbody> </table>', '', '', function(opts) {
@@ -1300,7 +1350,7 @@ riot.tag2('orthodox-list', '<table class="table is-bordered is-striped is-narrow
      };
 });
 
-riot.tag2('orthodoxs-page', '<section class="section" style="padding-bottom: 11px;"> <div class="container"> <h1 class="title hw-text-white">正教会</h1> <h2 class="subtitle hw-text-white">正教会=チーム</h2> </div> </section> <section class="section" style="padding-top: 11px; padding-bottom: 11px;"> <div class="container"> <page-tabs core="{page_tabs}" type="toggle" callback="{clickTab}"></page-tabs> </div> </section> <div> <orthodoxs-page_tab-orthdoxs class="hide"></orthodoxs-page_tab-orthdoxs> <orthodoxs-page_tab-exorcists class="hide"></orthodoxs-page_tab-exorcists> </div>', 'orthodoxs-page { width: 100%; height: 100%; display: block; overflow: auto; }', '', function(opts) {
+riot.tag2('orthodoxs-page', '<hw-page-header title="正教会" subtitle="正教会=チーム"></hw-page-header> <section class="section" style="padding-top: 11px; padding-bottom: 11px;"> <div class="container"> <page-tabs core="{page_tabs}" type="toggle" callback="{clickTab}"></page-tabs> </div> </section> <div> <orthodoxs-page_tab-orthdoxs class="hide"></orthodoxs-page_tab-orthdoxs> <orthodoxs-page_tab-exorcists class="hide"></orthodoxs-page_tab-exorcists> </div>', 'orthodoxs-page { width: 100%; height: 100%; display: block; overflow: auto; }', '', function(opts) {
      this.default_tag = 'home';
      this.active_tag = null;
      this.page_tabs = new PageTabs([

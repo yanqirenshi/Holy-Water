@@ -34,5 +34,6 @@
            #:angel-orthodox)
   (:export #:find-deccots
            #:get-deccot
-           #:find-deccot-items))
+           #:find-deccot-items)
+  (:export #:pages-orthodox))
 (in-package :holy-water.api.controller)
