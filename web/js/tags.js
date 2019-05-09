@@ -52,7 +52,7 @@ riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" 
      });
 });
 
-riot.tag2('cemetery-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"> <thead> <tr> <th colspan="3">Impure</th> <th colspan="2">Purge</th> <th rowspan="2">備考</th> </tr> <tr> <th>ID</th> <th style="width:333px;">名称</th> <th>完了</th> <th>開始</th> <th>終了</th> </tr> </thead> <tbody> <tr each="{impure in opts.data}"> <td nowrap>{impure.id}</td> <td style="width:333px;" nowrap>{impure.name}</td> <td nowrap>{dt(impure.finished_at)}</td> <td nowrap>{dt(impure.start)}</td> <td nowrap>{dt(impure.end)}</td> <td style="word-break: break-word;">{description(impure.description)}</td> </tr> </tbody> </table>', '', '', function(opts) {
+riot.tag2('cemetery-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size:12px;"> <thead> <tr> <th colspan="3">Impure</th> <th colspan="2">Purge</th> <th rowspan="2">備考</th> </tr> <tr> <th>ID</th> <th style="width:333px;">名称</th> <th>完了</th> <th>開始</th> <th>終了</th> </tr> </thead> <tbody> <tr each="{impure in opts.data}"> <td nowrap>{impure.id}</td> <td style="width:333px;" nowrap>{impure.name}</td> <td nowrap>{dt(impure.finished_at)}</td> <td nowrap>{dt(impure.start)}</td> <td nowrap>{dt(impure.end)}</td> <td style="word-break: break-word;">{description(impure.description)}</td> </tr> </tbody> </table>', '', '', function(opts) {
      this.dt = (v) => {
          if (!v) return '---'
 
@@ -197,7 +197,7 @@ riot.tag2('message-area', '<message-item each="{msg in messages()}" data="{msg}"
      };
 });
 
-riot.tag2('message-item', '<article class="message hw-box-shadow is-{opts.data.type}"> <div class="message-header"> <p>{opts.data.title}</p> <button class="delete" aria-label="delete" onclick="{clickCloseButton}"></button> </div> <div class="message-body" style="padding: 11px 22px;"> <div class="contents" style="overflow: auto;"> <p each="{txt in contents()}">{txt}</p> </div> </div> </article>', 'message-item > .message{ min-height: calc(46px + 44px); min-width: 111px; max-height: 222px; max-width: 333px; } message-item { display: block; }', '', function(opts) {
+riot.tag2('message-item', '<article class="message hw-box-shadow is-{opts.data.type}"> <div class="message-header"> <p class="is-small">{opts.data.title}</p> <button class="delete" aria-label="delete" onclick="{clickCloseButton}"></button> </div> <div class="message-body" style="padding: 11px 22px;"> <div class="contents" style="overflow: auto;"> <p each="{txt in contents()}" class="is-small">{txt}</p> </div> </div> </article>', 'message-item > .message{ min-height: calc(46px + 44px); min-width: 111px; max-height: 222px; max-width: 333px; } message-item { display: block; }', '', function(opts) {
      this.contents = () => {
          if (!opts.data || !opts.data.contents)
              return [];
@@ -381,7 +381,7 @@ riot.tag2('hw-page-header', '<section class="section" style="padding-bottom: 22p
 riot.tag2('hw-section-subtitle', '<h2 class="subtitle hw-text-white">{opts.contents}</h2>', '', '', function(opts) {
 });
 
-riot.tag2('hw-section-title', '<h1 class="title hw-text-white">{opts.title}</h1>', '', '', function(opts) {
+riot.tag2('hw-section-title', '<h1 class="title hw-text-white is-{opts.lev ? opts.lev : 3}">{opts.title}</h1>', '', '', function(opts) {
 });
 
 riot.tag2('sections-list', '<table class="table"> <tbody> <tr each="{opts.data}"> <td><a href="{hash}">{name}</a></td> </tr> </tbody> </table>', '', '', function(opts) {
@@ -1452,7 +1452,7 @@ riot.tag2('purge-result-editor', '<div class="modal {opts.data ? \'is-active\' :
      };
 });
 
-riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth hw-box-shadow"> <thead> <tr> <th rowspan="2">Impure</th> <th colspan="5">Purge</th> </tr> <tr> <th>開始</th> <th>終了</th> <th>時間</th> <th>間隔</th> <th>操作</th> </tr> </thead> <tbody> <tr each="{data()}"> <td>{impure_name}</td> <td>{fdt(start)}</td> <td>{fdt(end)}</td> <td style="text-align: right;">{elapsedTime(start, end)}</td> <td>{span(this)}</td> <td><button class="button" data-id="{id}" onclick="{clickEditButton}">変更</button></td> </tr> </tbody> </table>', '', '', function(opts) {
+riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth hw-box-shadow" style="font-size:12px;"> <thead> <tr> <th rowspan="2">Impure</th> <th colspan="5">Purge</th> </tr> <tr> <th>開始</th> <th>終了</th> <th>時間</th> <th>間隔</th> <th>操作</th> </tr> </thead> <tbody> <tr each="{data()}"> <td>{impure_name}</td> <td>{fdt(start)}</td> <td>{fdt(end)}</td> <td style="text-align: right;">{elapsedTime(start, end)}</td> <td>{span(this)}</td> <td><button class="button is-small" data-id="{id}" onclick="{clickEditButton}">変更</button></td> </tr> </tbody> </table>', '', '', function(opts) {
      this.befor_data = null;
      this.span = (d) => {
          if (!this.befor_data) {
@@ -1685,14 +1685,82 @@ riot.tag2('request-messages', '<section class="section"> <div class="container">
      });
 });
 
+riot.tag2('war-history-page-controller', '<section class="section"> <div class="container"> <div class="contents"> <div class="condition"> <p class="text is-small" style="margin-right:8px;">期間: </p> <input class="input is-small" type="text" placeholder="From" riot-value="{this.from}" ref="from"> <p class="text">〜</p> <input class="input is-small" type="text" placeholder="To" riot-value="{this.to}" ref="to"> </div> <div class="condition"> <p class="text is-small" style="margin-left: 22px; margin-right:8px;">集計単位:</p> <div class="select is-small"> <select> <option>Daily</option> </select> </div> </div> <div class="operator"> <button class="button is-small" onclick="{clickRefresh}">Refresh</button> </div> </div> </div> </section>', 'war-history-page-controller > .section { padding-top:0px; padding-bottom:11px; } war-history-page-controller > .section > .container > .contents{ display: flex; width: 577px; background: rgba(225,152,180,0.55); padding: 11px 22px; border-radius: 8px; } war-history-page-controller .condition { display: flex; } war-history-page-controller .operator { margin-left: 22px; } war-history-page-controller .condition > .input { width: 111px; } war-history-page-controller .condition > p { margin-top: 1px; margin-top: 1px; text-shadow: 0px 0px 8px #333; color: #fff; font-weight: bold; word-break:keep-all; }', '', function(opts) {
+     this.from = this.opts.term.from.format('YYYY-MM-DD');
+     this.to   = this.opts.term.to.format('YYYY-MM-DD');
 
-riot.tag2('war-history_page', '<hw-page-header title="戦いの歴史"></hw-page-header> <section class="section" style="padding-top:0px; padding-bottom:11px;"> <div class="container"> <page-tabs core="{page_tabs}" type="toggle" callback="{clickTab}"></page-tabs> </div> </section> <div> <war-history_root_tab_days class="hide"></war-history_root_tab_days> <war-history_root_tab_weeks class="hide"></war-history_root_tab_weeks> <war-history_root_tab_month class="hide"></war-history_root_tab_month> </div>', '', '', function(opts) {
+     this.clickRefresh = () => {
+         let from = moment(this.refs.from.value);
+         let to   = moment(this.refs.to.value);
+
+         this.opts.callback('refresh', { from: from, to: to });
+     };
+});
+
+riot.tag2('war-history-page_tab_days', '<section class="section" style="padding-top:22px;"> <div class="container"> <hw-section-title title="日別/悪魔別" lev="4"></hw-section-title> <hw-section-subtitle contents="悪魔毎の棒グラフ"></hw-section-subtitle> </div> </section> <section class="section" style="padding-top:22px;"> <div class="container"> <hw-section-title title="悪魔別" lev="4"></hw-section-title> <hw-section-subtitle contents="悪魔別の円グラフ"></hw-section-subtitle> </div> </section> <section class="section" style="padding-top:22px;"> <div class="container"> <hw-section-title title="日別/悪魔別 明細" lev="4"></hw-section-title> <div class="contents" style="margin-top: 22px; padding-left: 22px;"> <table class="table is-bordered is-striped is-narrow is-hoverable" style="font-size: 12px;"> <thead> <tr> <th>Date</th> <th>ID</th> <th>Name</th> <th>Elapsed Time [sec]</th> </tr> </thead> <tbody> <tr each="{rec in opts.source.summary.deamons}"> <td>{dateVal(rec)}</td> <td>{rec.deamon_id}</td> <td>{rec.deamon_name}</td> <td style="text-align: right;">{elapseTimeVal(rec)}</td> </tr> </tbody> </table> </div> </div> </section>', '', '', function(opts) {
+     this.dateVal = (rec) => {
+         return moment(rec.date).format('YYYY-MM-DD ddd');
+     }
+     this.elapseTimeVal = (rec) => {
+         let t = rec.elapsed_time;
+
+         let sec = t % 60;
+         t = t - sec;
+
+         let min = (t % (60 * 60)) / 60;
+         t = t - min * 60;
+
+         let hour = t / (60 * 60);
+
+         let twoChar = (v) => {
+             if (v<10)
+                 return '0' + v;
+
+             return '' + v;
+         };
+
+         return [hour, min, sec].map(twoChar).join(':');
+     }
+});
+
+riot.tag2('war-history-page_tab_month', '<section class="section"> <div class="container"> <hw-section-title title="準備中。。。"></hw-section-title> <h2 class="subtitle hw-text-white"> </h2> </div> </section>', '', '', function(opts) {
+});
+
+riot.tag2('war-history-page_tab_weeks', '<section class="section"> <div class="container"> <hw-section-title title="準備中。。。"></hw-section-title> <h2 class="subtitle hw-text-white"> </h2> </div> </section>', '', '', function(opts) {
+});
+
+
+riot.tag2('war-history-page', '<hw-page-header title="戦いの歴史" subtitle="悪魔との戦いの歴史です。"></hw-page-header> <war-history-page-controller term="{term}" callback="{controllerCallbak}"></war-history-page-controller> <section class="section" style="padding-top:11px; padding-bottom:11px;"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> </section> <div> <war-history-page_tab_days class="hide" source="{page_data}"></war-history-page_tab_days> <war-history-page_tab_weeks class="hide"></war-history-page_tab_weeks> <war-history-page_tab_month class="hide"></war-history-page_tab_month> </div>', 'war-history-page .tabs ul { border-bottom-color: #E198B4; border-bottom-width: 2px; } war-history-page .tabs.is-boxed li.is-active a { background-color: rgba(225,152,180,0.55);; border-color: #E198B4; text-shadow: 0px 0px 8px #333; color: #fff; font-weight: bold; } war-history-page .tabs.is-boxed a { text-shadow: 0px 0px 8px #fff; font-weight: bold; }', '', function(opts) {
+     this.page_data = { summary: { deamons: [] } };
+
+     let end = moment().startOf();
+     let start = moment(end).add(-7, 'd');
+     this.term = { from: start, to: end };
+
+     this.on('mount', () => {
+         ACTIONS.fetchPagesWarHistory(this.term.from, this.term.to);
+     });
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-PAGES-WAR-HISTORY') {
+             this.page_data = action.response;
+             this.update();
+             return;
+         }
+     });
+
+     this.controllerCallbak = (action, data) => {
+         this.term.from = data.from;
+         this.term.to   = data.to;
+
+         ACTIONS.fetchPagesWarHistory(this.term.from, this.term.to);
+     };
+
      this.default_tag = 'home';
      this.active_tag = null;
      this.page_tabs = new PageTabs([
-         {code: 'days',  label: '日', tag: 'war-history_root_tab_days' },
-         {code: 'weeks', label: '週', tag: 'war-history_root_tab_weeks' },
-         {code: 'month', label: '月', tag: 'war-history_root_tab_month' },
+         {code: 'days',  label: 'Overview',     tag: 'war-history-page_tab_days' },
+         {code: 'weeks', label: '作業時間統計', tag: 'war-history-page_tab_weeks' },
+         {code: 'month', label: '浄化明細',     tag: 'war-history-page_tab_month' },
      ]);
      this.on('mount', () => {
          this.page_tabs.switchTab(this.tags)
@@ -1703,13 +1771,4 @@ riot.tag2('war-history_page', '<hw-page-header title="戦いの歴史"></hw-page
          if (this.page_tabs.switchTab(this.tags, data.code))
              this.update();
      };
-});
-
-riot.tag2('war-history_root_tab_days', '<section class="section"> <div class="container"> <hw-section-title title="悪魔別"></hw-section-title> <hw-section-subtitle contents="悪魔毎のグラフ"></hw-section-subtitle> </div> </section> <section class="section"> <div class="container"> <hw-section-title title="日"></hw-section-title> <hw-section-subtitle contents="日別のグラフを表示する。悪魔毎の積層グラフ"></hw-section-subtitle> </div> </section> <section class="section"> <div class="container"> <hw-section-title title="作業時間統計"></hw-section-title> <hw-section-subtitle contents="Purge の統計情報。どれくらいの作業時間か。とか。"></hw-section-subtitle> </div> </section> <section class="section"> <div class="container"> <hw-section-title title="浄化明細"></hw-section-title> </div> </section>', '', '', function(opts) {
-});
-
-riot.tag2('war-history_root_tab_month', '<section class="section"> <div class="container"> <hw-section-title title="準備中。。。"></hw-section-title> <h2 class="subtitle hw-text-white"> 期間指定できるようにすれば、このタブは不要なのかも。。。 </h2> </div> </section>', '', '', function(opts) {
-});
-
-riot.tag2('war-history_root_tab_weeks', '<section class="section"> <div class="container"> <hw-section-title title="準備中。。。"></hw-section-title> <h2 class="subtitle hw-text-white"> 期間指定できるようにすれば、このタブは不要なのかも。。。 </h2> </div> </section>', '', '', function(opts) {
 });

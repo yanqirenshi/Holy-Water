@@ -89,7 +89,7 @@ class Store extends Vanilla_Redux_Store {
             },
             {
                 code: "war-history",
-                tag: 'war-history_page',
+                tag: 'war-history-page',
                 menu_label: '戦歴',
             },
             this.pageDeamons(),

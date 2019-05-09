@@ -1,5 +1,6 @@
 <cemetery-list>
-    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+           style="font-size:12px;">
         <thead>
             <tr>
                 <th colspan="3">Impure</th>

@@ -1,5 +1,6 @@
 <purges-list>
-    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth hw-box-shadow">
+    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth hw-box-shadow"
+           style="font-size:12px;">
         <thead>
             <tr>
                 <th rowspan="2">Impure</th>
@@ -20,7 +21,7 @@
                 <td>{fdt(end)}</td>
                 <td style="text-align: right;">{elapsedTime(start, end)}</td>
                 <td>{span(this)}</td>
-                <td><button class="button"
+                <td><button class="button is-small"
                             data-id={id}
                             onclick={clickEditButton}>変更</button></td>
             </tr>

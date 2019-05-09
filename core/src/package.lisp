@@ -16,6 +16,8 @@
                 #:from
                 #:where
                 #:inner-join
+                #:left-join
+                #:group-by
                 #:union-all-queries)
   (:export #:find-deamons)
   (:export #:find-maledicts
@@ -50,7 +52,8 @@
            #:get-angel-deccot
            #:find-deccot-items)
   (:export #:create-incantation-solo
-           #:create-incantation-duet))
+           #:create-incantation-duet)
+  (:export #:list-summay-purge-time-by-date-damon))
 (in-package :holy-water)
 
 (mito:connect-toplevel :postgres :database-name "holy_water" :username "holy_water")

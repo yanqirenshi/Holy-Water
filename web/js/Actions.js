@@ -719,4 +719,25 @@ class Actions extends Vanilla_Redux_Actions {
             data: {},
         };
     }
+    fetchPagesWarHistory (start, end) {
+        let path = '/panges/war-history?';
+
+        path += 'start=' + start.format('YYYY-MM-DD');
+        path += '&';
+        path += 'end='   + end.format('YYYY-MM-DD');
+
+        API.get(path, function (json, success) {
+            if (success)
+                STORE.dispatch(this.fetchedPagesWarHistory(json));
+        }.bind(this));
+    }
+    fetchedPagesWarHistory (response) {
+        let state = STORE.state().toJS();
+
+        return {
+            type: 'FETCHED-PAGES-WAR-HISTORY',
+            data: {},
+            response: response
+        };
+    }
 }

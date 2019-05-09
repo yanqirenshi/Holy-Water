@@ -49,7 +49,8 @@
                                (:file "start-impure")
                                (:file "move-impure")
                                (:file "finish-impure")
-                               (:file "save-impure"))))))
+                               (:file "save-impure")))
+                 (:file "fetch-list"))))
   :description ""
   :long-description
   #.(read-file-string

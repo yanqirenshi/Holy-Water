@@ -43,3 +43,10 @@
         :|primate|  :null ;; 首座主教。 オーナー
         :|paladin|  nil   ;; かんりしゃけんげんをもつ。
         :|angels|   nil))
+
+(defun pages-wor-history (angel start end)
+  (when (and angel start end)
+    (list :|summary|
+          (list :|deamons| (hw:list-summay-purge-time-by-date-damon :angel angel
+                                                                    :start start
+                                                                    :end   end)))))

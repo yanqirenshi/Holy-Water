@@ -248,6 +248,10 @@
       (unless orthodox (throw-code 404))
       (render-json (hw.api.ctrl:pages-orthodox orthodox :angel angel)))))
 
+(defroute "/panges/war-history" (&key |start| |end|)
+  (with-angel (angel)
+    (render-json (hw.api.ctrl:pages-wor-history angel |start| |end|))))
+
 
 ;;;;;
 ;;;;; Error pages
