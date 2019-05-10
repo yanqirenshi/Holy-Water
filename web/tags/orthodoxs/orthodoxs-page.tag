@@ -1,4 +1,4 @@
-<orthodoxs-page>
+<orthodoxs-page class="page-contents">
     <hw-page-header title="正教会" subtitle="正教会=チーム"></hw-page-header>
 
     <section class="section" style="padding-top: 11px; padding-bottom: 11px;">

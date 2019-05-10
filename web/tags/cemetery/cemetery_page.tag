@@ -1,4 +1,4 @@
-<cemetery_page>
+<cemetery_page class="page-contents">
     <section class="section">
         <div class="container">
             <h2 class="subtitle" style="text-shadow: 0px 0px 11px #fff;"></h2>

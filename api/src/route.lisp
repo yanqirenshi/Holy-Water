@@ -252,6 +252,10 @@
   (with-angel (angel)
     (render-json (hw.api.ctrl:pages-wor-history angel |start| |end|))))
 
+(defroute "/panges/purges" (&key |from| |to|)
+  (with-angel (angel)
+    (render-json (hw.api.ctrl:pages-purges angel |from| |to|))))
+
 
 ;;;;;
 ;;;;; Error pages

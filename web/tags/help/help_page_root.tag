@@ -1,4 +1,4 @@
-<help_page>
+<help_page class="page-contents">
     <section class="section">
         <div class="container">
             <h1 class="title hw-text-white">聖書</h1>

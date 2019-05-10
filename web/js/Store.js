@@ -74,14 +74,39 @@ class Store extends Vanilla_Redux_Store {
             ]
         };
     }
+    pagePurges () {
+        return {
+            code: "purges",
+            tag: 'purges_page',
+            menu_label: '浄歴',
+            children: [
+                {
+                    code: 'impures',
+                    children: [
+                        {
+                            code: 'impure',
+                            regex: new RegExp('^\\d+$'),
+                            tag: 'impure_page',
+                        }
+                    ],
+                },
+                {
+                    code: "deamons",
+                    children: [
+                        {
+                            code: "deamon",
+                            regex: /^\d+$/,
+                            tag: 'deamon-page',
+                        },
+                    ]
+                }
+            ],
+        };
+    }
     pages() {
         return [
             this.initPageHome(),
-            {
-                code: "purges",
-                tag: 'purges_page',
-                menu_label: '浄歴',
-            },
+            this.pagePurges(),
             {
                 code: "cemetery",
                 tag: 'cemetery_page',

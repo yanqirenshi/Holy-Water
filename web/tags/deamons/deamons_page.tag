@@ -1,4 +1,4 @@
-<deamons-page>
+<deamons-page class="page-contents">
 
     <section class="section">
         <div class="container">

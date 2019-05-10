@@ -1,4 +1,4 @@
-<home_working-action class="hw-box-shadow {hide()}" style="box-shadow:0px 0px 22px rgba(254, 242, 99, 0.666)">
+<home_working-action class="{hide()}">
 
     <button class="button is-small"
             style="margin-right:11px;"
@@ -76,7 +76,10 @@
          right: 33px;
          background: #fff;
          padding: 11px 22px;
+
+         border: 1px solid #ededed;
          border-radius: 8px;
+         box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666);
      }
     </style>
 </home_working-action>

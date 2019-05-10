@@ -49,7 +49,7 @@
      war-history-page-controller > .section > .container > .contents{
          display: flex;
          width: 577px;
-         background: rgba(225,152,180,0.55);
+         background: rgb(254, 242, 99, 0.55);
          padding: 11px 22px;
          border-radius: 8px;
      }
@@ -65,8 +65,8 @@
      war-history-page-controller .condition > p {
          margin-top: 1px;
          margin-top: 1px;
-         text-shadow: 0px 0px 8px #333;
-         color: #fff;
+         text-shadow: 0px 0px 8px #fff;
+         color: #333;
          font-weight: bold;
          word-break:keep-all;
      }

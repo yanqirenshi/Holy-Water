@@ -1,4 +1,4 @@
-<war-history-page>
+<war-history-page class="page-contents">
     <hw-page-header title="戦いの歴史" subtitle="悪魔との戦いの歴史です。"></hw-page-header>
 
     <war-history-page-controller term={term}
@@ -66,15 +66,15 @@
 
     <style>
      war-history-page .tabs ul {
-         border-bottom-color: #E198B4;
+         border-bottom-color: rgb(254, 242, 99);
          border-bottom-width: 2px;
      }
      war-history-page .tabs.is-boxed li.is-active a {
-         background-color: rgba(225,152,180,0.55);;
-         border-color: #E198B4;
+         background-color: rgba(254, 242, 99, 0.55);
+         border-color: rgb(254, 242, 99);
 
-         text-shadow: 0px 0px 8px #333;
-         color: #fff;
+         text-shadow: 0px 0px 11px #fff;
+         color: #333;
          font-weight: bold;
      }
      war-history-page .tabs.is-boxed a {

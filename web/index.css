@@ -13,8 +13,9 @@
 }
 
 .table > thead > tr > th {
-    color: #fff;
-    background: #E198B4;
+    color: #333;
+    background: #FEF263;
+    text-shadow: 0px 0px 22px #fff;
 }
 
 
@@ -27,6 +28,14 @@ app > .page {
     overflow: hidden;
     display: block;
 }
+
+app .page-contents {
+    display:block;
+    width:100%;
+    height:100%;
+    overflow:auto;
+}
+
 .hide { display: none; }
 
 app > .image-ref {

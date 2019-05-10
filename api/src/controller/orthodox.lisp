@@ -50,3 +50,7 @@
           (list :|deamons| (hw:list-summay-purge-time-by-date-damon :angel angel
                                                                     :start start
                                                                     :end   end)))))
+
+(defun pages-purges (angel from to)
+  (when (and angel from to)
+    (list :|purges| (hw:list-purge-by-angel angel :from from :to to))))

@@ -1,10 +1,12 @@
 <menu-bar>
     <aside class="menu">
+
         <p ref="brand"
            class="menu-label"
            onclick={clickBrand}>
             {opts.brand.label}
         </p>
+
         <ul class="menu-list">
             <li each={opts.site.pages}>
                 <a class="{opts.site.active_page==code ? 'is-active' : ''}"
@@ -13,6 +15,7 @@
                 </a>
             </li>
         </ul>
+
     </aside>
 
     <div class="move-page-menu hide" ref="move-panel">
@@ -31,6 +34,7 @@
          min-width: 111px;
          height: 100vh;
          box-shadow: 2px 0px 8px 0px #e0e0e0;
+         text-shadow: 0px 0px 11px rgb(254, 242, 99);
          padding: 22px 55px 22px 22px;
      }
      menu-bar .move-page-menu.hide {
@@ -47,40 +51,52 @@
          position: fixed;
          left: 0px;
          top: 0px;
-         background: #e198b4;
+         background: rgb(254, 242, 99);
      }
 
      menu-bar .menu-label, menu-bar .menu-list a {
          padding: 0;
          width: 33px;
          height: 33px;
-         text-align: center;
+
          margin-top: 8px;
-         border-radius: 3px;
-         background: none;
-         color: #ffffff;
-         font-weight: bold;
-
          padding-top: 7px;
-         font-size: 14px;
 
+         border-radius: 3px;
+
+         background: none;
+         color: #333333;
+
+         text-align: center;
+         text-shadow: 0px 0px 11px #ffffff;
+
+         font-size: 14px;
+         font-weight: bold;
      }
      .menu-label {
          background: #ffffff;
-         color: #e198b4;
+         color: #333333;
      }
      .menu-label.open {
          background: #ffffff;
-         color: #e198b4;
+         color: rgb(254, 242, 99);
          width: 44px;
          border-radius: 3px 0px 0px 3px;
          text-shadow: 0px 0px 1px #eee;
          padding-right: 11px;
      }
+     menu-bar .menu-list a:hover {
+         width: 44px;
+         border-radius: 5px 0px 0px 5px;
+         background: #ffffff;
+     }
      menu-bar .menu-list a.is-active {
-         border-radius: 3px;
+         width: 55px;
+
+         border-radius: 5px 0px 0px 5px;
          background: #ffffff;
          color: #333333;
+         text-shadow: 0px 0px 22px rgb(254, 242, 99);
      }
     </style>
 

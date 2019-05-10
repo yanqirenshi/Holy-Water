@@ -1,4 +1,4 @@
-<purges_page>
+<purges_page class="page-contents">
     <div style="padding: 33px 88px 88px 88px;">
         <div>
             <h1 class="title hw-text-white">期間</h1>
@@ -31,12 +31,18 @@
         <div style="margin-top:33px;">
             <h1 class="title hw-text-white">Purge hisotry</h1>
             <div style="display:flex; padding-left:33px; padding-right:33px;">
-                <purges-list data={data()} callback={callback}></purges-list>
+                <purges-list source={purges} callback={callback}></purges-list>
             </div>
         </div>
     </div>
 
     <purge-result-editor data={edit_target} callback={callback}></purge-result-editor>
+
+    <div style="height:111px;"></div>
+
+    <script>
+     this.purges = [];
+    </script>
 
     <script>
      this.from = moment().startOf('day');
@@ -79,18 +85,34 @@
     <script>
      this.refreshData = () => {
          ACTIONS.fetchPurgeHistory(this.from, this.to);
+         ACTIONS.fetchPagesPurges(this.from, this.to);
      };
      this.on('mount', () => {
          this.refreshData();
      });
      STORE.subscribe((action) => {
-         if (action.type=='FETCHED-PURGE-HISTORY')
+         if (action.type=='FETCHED-PAGES-PURGES') {
+             this.purges = action.response.purges.map((d) => {
+                 d.purge_start = moment(d.purge_start);
+                 d.purge_end   = moment(d.purge_end);
+                 return d;
+             });
+
              this.update();
+
+             return;
+         }
+
+         if (action.type=='FETCHED-PURGE-HISTORY') {
+             this.update();
+             return;
+         }
 
          if (action.type=='SAVED-ACTION-RESULT') {
              this.edit_target = null;
              ACTIONS.pushSuccessMessage('Purge の実績の変更が完了しました。');
              ACTIONS.fetchPurgeHistory(this.from, this.to);
+             return;
          }
      });
     </script>

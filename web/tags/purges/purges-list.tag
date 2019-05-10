@@ -4,50 +4,93 @@
         <thead>
             <tr>
                 <th rowspan="2">Impure</th>
-                <th colspan="5">Purge</th>
+                <th colspan="4">Purge</th>
+                <th colspan="3">作業間隔</th>
+                <th colspan="2">Deamon</th>
             </tr>
             <tr>
                 <th>開始</th>
                 <th>終了</th>
                 <th>時間</th>
-                <th>間隔</th>
+                <th>操作</th>
+                <th>後作業</th>
+                <th>前作業</th>
+                <th>操作</th>
+                <th>Name</th>
                 <th>操作</th>
             </tr>
         </thead>
         <tbody>
-            <tr each={data()}>
-                <td>{impure_name}</td>
-                <td>{fdt(start)}</td>
-                <td>{fdt(end)}</td>
-                <td style="text-align: right;">{elapsedTime(start, end)}</td>
-                <td>{span(this)}</td>
-                <td><button class="button is-small"
+            <tr each={rec in data()}>
+                <td>
+                    <a href="#purges/impures/{rec.impure_id}">
+                        {rec.impure_name}
+                    </a>
+                </td>
+                <td>{fdt(rec.purge_start)}</td>
+                <td>{fdt(rec.purge_end)}</td>
+                <td style="text-align: right;">{elapsedTime(rec.purge_start, rec.purge_end)}</td>
+                <td>
+                    <button class="button is-small"
                             data-id={id}
-                            onclick={clickEditButton}>変更</button></td>
+                            onclick={clickEditButton}>変</button>
+                    <!-- <button class="button is-small" disabled>削</button> -->
+                </td>
+                <td style="text-align:right;">{fmtSpan(rec.distance.after)}</td>
+                <td style="text-align:right;">{fmtSpan(rec.distance.befor)}</td>
+                <td>
+                    <button class="button is-small" disabled>変</button>
+                </td>
+                <td>
+                    <a href="#purges/deamons/{rec.deamon_id}">
+                        {rec.deamon_name_short}
+                    </a>
+                </td>
+                <td>
+                    <button class="button is-small" disabled>変</button>
+                    <!-- <button class="button is-small" disabled>削</button> -->
+                </td>
             </tr>
         </tbody>
     </table>
 
     <script>
+     this.ts = new TimeStripper();
      this.befor_data = null;
-     this.span = (d) => {
-         if (!this.befor_data) {
-             this.befor_data = d;
-             return '---';
-         }
+     this.fmtSpan = (v) => {
+         if (!v && v!=0)
+             return '';
 
-         let x = new TimeStripper().format_elapsedTime (d.end, this.befor_data.start);
+         let ms = v % 1000;
+         let sec = (v - ms) / 1000
 
-         this.befor_data = d;
-
-         return x;
+         return this.ts.format_sec(Math.floor(sec));
      };
      this.data = () => {
-         this.befor_data = null;
+         if (!this.opts.source)
+             return [];
 
-         return opts.data.list.sort((a, b) => {
-             return a.start < b.start ? 1 : -1;
+         let out = this.opts.source.sort((a, b) => {
+             // 降順にソート
+             return a.purge_start < b.purge_start ? 1 : -1;
          });
+
+         let befor = null;
+         let after = null;
+         for (let rec of out) {
+             rec.distance = { befor: null, after: null };
+
+             if (after) {
+                 let distance = after.purge_start.diff(rec.purge_end);
+                 rec.distance.after = distance;
+                 after.distance.befor = distance;
+             }
+
+             after = rec;
+         }
+
+
+         return out;
      };
     </script>
 
@@ -63,7 +106,7 @@
 
     <script>
      this.fdt = (dt) => {
-         return new TimeStripper().format(dt);
+         return dt.format('MM-DD HH:mm:ss')
      }
      this.elapsedTime = (start, end) => {
          return new TimeStripper().format_elapsedTime(start, end);

@@ -27,8 +27,8 @@
      }
 
      page-tabs .tabs.is-toggle li.is-active a {
-         background-color: #E198B4;
-         border-color: #E198B4;
+         background-color: RGB(254, 242, 99);
+         border-color: RGB(254, 242, 99);
          font-weight: bold;
      }
 

@@ -37,5 +37,6 @@
            #:find-deccot-items)
   (:export #:impure-incantation)
   (:export #:pages-orthodox
-           #:pages-wor-history))
+           #:pages-wor-history
+           #:pages-purges))
 (in-package :holy-water.api.controller)

@@ -1,4 +1,4 @@
-<exorcist-page>
+<exorcist-page class="page-contents">
 
     <section class="section" style="padding-bottom: 22px;">
         <div class="container">
