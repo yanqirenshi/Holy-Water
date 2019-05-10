@@ -21,7 +21,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr each={rec in data()}>
+            <tr each={rec in data()}
+                purge_id={rec.purge_id}
+                impure_id={rec.impure_id}
+                deamon_id={rec.deamon_id}>
                 <td>
                     <a href="#purges/impures/{rec.impure_id}">
                         {rec.impure_name}
@@ -47,7 +50,8 @@
                     </a>
                 </td>
                 <td>
-                    <button class="button is-small" disabled>変</button>
+                    <button class="button is-small"
+                            onclick={clickChangeDemon}>変</button>
                     <!-- <button class="button is-small" disabled>削</button> -->
                 </td>
             </tr>
@@ -102,6 +106,15 @@
              id: target.getAttribute('data-id')
          })
      };
+     this.clickChangeDemon = (e) => {
+         let tr = e.target.parentNode.parentNode;
+
+         this.opts.callback('open-modal-change-deamon', {
+             purge_id: tr.getAttribute('purge_id'),
+             impure_id: tr.getAttribute('impure_id'),
+             deamon_id: tr.getAttribute('deamon_id'),
+         })
+     };
     </script>
 
     <script>
@@ -112,4 +125,10 @@
          return new TimeStripper().format_elapsedTime(start, end);
      };
     </script>
+
+    <style>
+     purges-list .table tbody td {
+         vertical-align: middle;
+     }
+    </style>
 </purges-list>

@@ -1402,6 +1402,15 @@ riot.tag2('orthodoxs-page_tab-orthdoxs', '<section class="section"> <div class="
      });
 });
 
+riot.tag2('modal-change-deamon', '<div class="modal {opts.open ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-content" style="width:888px;"> <div class="card"> <header class="card-header"> <p class="card-header-title"> Change Deamon <span style="margin-left: 22px; color: #f00; font-weight:bold;">注意: 実装中</span> </p> </header> <div class="card-content"> <div class="content"> <div class="flex-contener"> <div class="choose-demaon-area"> <h1 class="title is-4">Deamons</h1> <p class="control has-icons-left has-icons-right"> <input class="input is-small" type="text" placeholder="Search"> <span class="icon is-small is-left"> <i class="fas fa-search"></i> </span> </p> <div> <button each="{deamon in deamons()}" class="button is-small deamon-item" deamon_id="{deamon.id}"> {deamon.name} ({deamon.name_short}) </button> </div> </div> <div class="view-impure-area"> <h1 class="title is-4">Impure</h1> <div style="padding-left:11px; flex-grow: 1;"> <p>Title (ID: 999)</p> <p> markdown; </p> </div> <div style="height:99px;"> <h1 class="title is-6" style="margin-bottom: 8px;">Deamon</h1> <div style="padding-left:11px;"> <p>XXXX (YYY)</p> <button class="button is-small deamon-item"> 削除 </button> </div> </div> </div> </div> <div style="display: flex; justify-content: space-between; margin-top: 11px;"> <button class="button is-small" onclick="{clickCancel}">Cancel</button> <button class="button is-small is-danger">Save</button> </div> </div> </div> </div> </div> <button class="modal-close is-large" aria-label="close"></button> </div>', 'modal-change-deamon .flex-contener { display:flex; height:555px; } modal-change-deamon .choose-demaon-area { flex-grow: 1; padding: 11px; width: 211px; } modal-change-deamon .choose-demaon-area .deamon-item { margin-left: 11px; margin-bottom: 11px; } modal-change-deamon .view-impure-area { flex-grow: 1; padding: 11px; background: rgba(254, 242, 100, 0.08); border-radius: 8px; box-shadow: 0px 0px 22px rgba(254, 242, 100, 0.08); display: flex; flex-direction: column; }', '', function(opts) {
+     this.deamons = () => {
+         return STORE.get('deamons.list');
+     };
+     this.clickCancel = () => {
+         this.opts.callback('close-modal-change-deamon');
+     };
+});
+
 riot.tag2('move-date-operator', '<div class="operator hw-box-shadow"> <div class="befor"> <button class="button" onclick="{clickBefor}"><</button> </div> <div class="trg"> <span>{opts.label}</span> </div> <div class="after"> <button class="button" onclick="{clickAfter}">></button> </div> </div>', 'move-date-operator .operator { display: flex; margin-left:11px; border-radius: 8px; } move-date-operator .operator span { font-size:18px; } move-date-operator .button{ border: none; } move-date-operator .befor, move-date-operator .befor .button{ border-radius: 8px 0px 0px 8px; } move-date-operator .after, move-date-operator .after .button{ border-radius: 0px 8px 8px 0px; } move-date-operator .operator > div { border: 1px solid #dbdbdb; width: 36px; } move-date-operator .operator > div.trg{ padding-top: 5px; padding-left: 8px; border-left: none; border-right: none; background: #ffffff; }', '', function(opts) {
      this.clickBefor = () => {
          this.opts.callback('move-date', {
@@ -1453,7 +1462,7 @@ riot.tag2('purge-result-editor', '<div class="modal {opts.data ? \'is-active\' :
      };
 });
 
-riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth hw-box-shadow" style="font-size:12px;"> <thead> <tr> <th rowspan="2">Impure</th> <th colspan="4">Purge</th> <th colspan="3">作業間隔</th> <th colspan="2">Deamon</th> </tr> <tr> <th>開始</th> <th>終了</th> <th>時間</th> <th>操作</th> <th>後作業</th> <th>前作業</th> <th>操作</th> <th>Name</th> <th>操作</th> </tr> </thead> <tbody> <tr each="{rec in data()}"> <td> <a href="#purges/impures/{rec.impure_id}"> {rec.impure_name} </a> </td> <td>{fdt(rec.purge_start)}</td> <td>{fdt(rec.purge_end)}</td> <td style="text-align: right;">{elapsedTime(rec.purge_start, rec.purge_end)}</td> <td> <button class="button is-small" data-id="{id}" onclick="{clickEditButton}">変</button> </td> <td style="text-align:right;">{fmtSpan(rec.distance.after)}</td> <td style="text-align:right;">{fmtSpan(rec.distance.befor)}</td> <td> <button class="button is-small" disabled>変</button> </td> <td> <a href="#purges/deamons/{rec.deamon_id}"> {rec.deamon_name_short} </a> </td> <td> <button class="button is-small" disabled>変</button> </td> </tr> </tbody> </table>', '', '', function(opts) {
+riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth hw-box-shadow" style="font-size:12px;"> <thead> <tr> <th rowspan="2">Impure</th> <th colspan="4">Purge</th> <th colspan="3">作業間隔</th> <th colspan="2">Deamon</th> </tr> <tr> <th>開始</th> <th>終了</th> <th>時間</th> <th>操作</th> <th>後作業</th> <th>前作業</th> <th>操作</th> <th>Name</th> <th>操作</th> </tr> </thead> <tbody> <tr each="{rec in data()}" purge_id="{rec.purge_id}" impure_id="{rec.impure_id}" deamon_id="{rec.deamon_id}"> <td> <a href="#purges/impures/{rec.impure_id}"> {rec.impure_name} </a> </td> <td>{fdt(rec.purge_start)}</td> <td>{fdt(rec.purge_end)}</td> <td style="text-align: right;">{elapsedTime(rec.purge_start, rec.purge_end)}</td> <td> <button class="button is-small" data-id="{id}" onclick="{clickEditButton}">変</button> </td> <td style="text-align:right;">{fmtSpan(rec.distance.after)}</td> <td style="text-align:right;">{fmtSpan(rec.distance.befor)}</td> <td> <button class="button is-small" disabled>変</button> </td> <td> <a href="#purges/deamons/{rec.deamon_id}"> {rec.deamon_name_short} </a> </td> <td> <button class="button is-small" onclick="{clickChangeDemon}">変</button> </td> </tr> </tbody> </table>', 'purges-list .table tbody td { vertical-align: middle; }', '', function(opts) {
      this.ts = new TimeStripper();
      this.befor_data = null;
      this.fmtSpan = (v) => {
@@ -1498,6 +1507,15 @@ riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow i
              id: target.getAttribute('data-id')
          })
      };
+     this.clickChangeDemon = (e) => {
+         let tr = e.target.parentNode.parentNode;
+
+         this.opts.callback('open-modal-change-deamon', {
+             purge_id: tr.getAttribute('purge_id'),
+             impure_id: tr.getAttribute('impure_id'),
+             deamon_id: tr.getAttribute('deamon_id'),
+         })
+     };
 
      this.fdt = (dt) => {
          return dt.format('MM-DD HH:mm:ss')
@@ -1507,8 +1525,9 @@ riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow i
      };
 });
 
-riot.tag2('purges_page', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 class="title hw-text-white">期間</h1> <purges_page_filter style="margin-bottom:22px; padding-left:33px; padding-right:33px;" from="{from}" to="{to}" callback="{callback}"></purges_page_filter> </div> <div> <h1 class="title hw-text-white">Summary</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <div style="margin-right: 88px;"> <purges_page_group-span data="{data()}"></purges_page_group-span> </div> <div> <purges_page_group-span-deamon data="{data()}"></purges_page_group-span-deamon> </div> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Guntt Chart</h1> <div style="padding-left:33px; padding-right:33px;"> <purges_page_guntt-chart data="{data()}"></purges_page_guntt-chart> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Purge hisotry</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <purges-list source="{purges}" callback="{callback}"></purges-list> </div> </div> </div> <purge-result-editor data="{edit_target}" callback="{callback}"></purge-result-editor> <div style="height:111px;"></div>', 'purges_page { height: 100%; width: 100%; display: block; overflow: auto; } purges_page .card { border-radius: 8px; } purges_page button.refresh{ margin-top:6px; margin-right:8px; }', 'class="page-contents"', function(opts) {
+riot.tag2('purges_page', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 class="title hw-text-white">期間</h1> <purges_page_filter style="margin-bottom:22px; padding-left:33px; padding-right:33px;" from="{from}" to="{to}" callback="{callback}"></purges_page_filter> </div> <div> <h1 class="title hw-text-white">Summary</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <div style="margin-right: 88px;"> <purges_page_group-span data="{data()}"></purges_page_group-span> </div> <div> <purges_page_group-span-deamon data="{data()}"></purges_page_group-span-deamon> </div> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Guntt Chart</h1> <div style="padding-left:33px; padding-right:33px;"> <purges_page_guntt-chart data="{data()}"></purges_page_guntt-chart> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Purge hisotry</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <purges-list source="{purges}" callback="{callback}"></purges-list> </div> </div> </div> <purge-result-editor data="{edit_target}" callback="{callback}"></purge-result-editor> <modal-change-deamon open="{modal_change_deamon_open}" callback="{callback}"></modal-change-deamon> <div style="height:111px;"></div>', 'purges_page { height: 100%; width: 100%; display: block; overflow: auto; } purges_page .card { border-radius: 8px; } purges_page button.refresh{ margin-top:6px; margin-right:8px; }', 'class="page-contents"', function(opts) {
      this.purges = [];
+     this.modal_change_deamon_open = false;
 
      this.from = moment().startOf('day');
      this.to   = moment().add(1, 'd').startOf('day');
@@ -1522,6 +1541,19 @@ riot.tag2('purges_page', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 
      this.edit_target = null;
 
      this.callback = (action, data) => {
+         if ('open-modal-change-deamon'==action) {
+             this.modal_change_deamon_open = true;
+             this.update();
+
+             return;
+         }
+         if ('close-modal-change-deamon'==action) {
+             this.modal_change_deamon_open = false;
+             this.update();
+
+             return;
+         }
+
          if ('open-purge-result-editor'==action) {
              this.edit_target = STORE.get('purges').ht[data.id];
              this.tags['purge-result-editor'].update();
