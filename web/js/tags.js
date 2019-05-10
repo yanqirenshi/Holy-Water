@@ -710,7 +710,8 @@ riot.tag2('home_page', '<div class="bucket-area"> <home_maledicts data="{STORE.g
      };
      this.closeModal = () => {
          this.modal_open = false;
-         this.tags['home_modal-create-impure'].update();
+
+         this.update();
      };
 });
 

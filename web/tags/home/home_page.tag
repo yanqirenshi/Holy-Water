@@ -125,7 +125,8 @@
      };
      this.closeModal = () => {
          this.modal_open = false;
-         this.tags['home_modal-create-impure'].update();
+
+         this.update();
      };
     </script>
 
