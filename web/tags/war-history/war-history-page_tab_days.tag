@@ -2,37 +2,35 @@
 
     <section class="section" style="padding-top:22px;">
         <div class="container">
-            <hw-section-title title="日別/悪魔別" lev="4"></hw-section-title>
-            <hw-section-subtitle contents="悪魔毎の棒グラフ"></hw-section-subtitle>
+            <hw-section-title title="グラフ" lev="4"></hw-section-title>
+            <hw-section-subtitle contents="準備中：悪魔毎の棒グラフ"></hw-section-subtitle>
         </div>
     </section>
 
     <section class="section" style="padding-top:22px;">
         <div class="container">
-            <hw-section-title title="悪魔別" lev="4"></hw-section-title>
-            <hw-section-subtitle contents="悪魔別の円グラフ"></hw-section-subtitle>
-        </div>
-    </section>
-
-    <section class="section" style="padding-top:22px;">
-        <div class="container">
-            <hw-section-title title="日別/悪魔別 明細" lev="4"></hw-section-title>
+            <hw-section-title title="明細" lev="4"></hw-section-title>
 
             <div class="contents" style="margin-top: 22px; padding-left: 22px;">
                 <table class="table is-bordered is-striped is-narrow is-hoverable"
                        style="font-size: 12px;">
                     <thead>
                         <tr>
-                            <th>Date</th>
+                            <th rowspan="2">Date</th>
+                            <th colspan="2">Deamon</th>
+                            <th rowspan="2">Elapsed Time [sec]</th>
+                        </tr>
+                        <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>Elapsed Time [sec]</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr each={rec in opts.source.summary.deamons}>
                             <td>{dateVal(rec)}</td>
-                            <td>{rec.deamon_id}</td>
+                            <td>
+                                <a href="#war-history/deamons/{rec.deamon_id}">{rec.deamon_id}</a>
+                            </td>
                             <td>{rec.deamon_name}</td>
                             <td style="text-align: right;">{elapseTimeVal(rec)}</td>
                         </tr>

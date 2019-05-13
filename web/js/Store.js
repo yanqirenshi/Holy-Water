@@ -103,6 +103,25 @@ class Store extends Vanilla_Redux_Store {
             ],
         };
     }
+    pageWarHistory () {
+        return {
+            code: "war-history",
+            tag: 'war-history-page',
+            menu_label: '戦歴',
+            children: [
+                {
+                    code: "deamons",
+                    children: [
+                        {
+                            code: "deamon",
+                            regex: /^\d+$/,
+                            tag: 'deamon-page',
+                        },
+                    ]
+                }
+            ],
+        };
+    }
     pages() {
         return [
             this.initPageHome(),
@@ -112,11 +131,7 @@ class Store extends Vanilla_Redux_Store {
                 tag: 'cemetery_page',
                 menu_label: '墓地',
             },
-            {
-                code: "war-history",
-                tag: 'war-history-page',
-                menu_label: '戦歴',
-            },
+            this.pageWarHistory(),
             this.pageDeamons(),
             this.pageOrthodoxs(),
             {
