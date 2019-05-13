@@ -1,5 +1,6 @@
-<home_modal-create-impure>
-    <div class="modal {opts.open ? 'is-active' : ''}">
+<modal-create-impure>
+
+    <div class="modal {maledict ? 'is-active' : ''}">
         <div class="modal-background"></div>
         <div class="modal-card">
             <header class="modal-card-head">
@@ -37,6 +38,33 @@
             </footer>
         </div>
     </div>
+
+    <script>
+     this.maledict = null;
+     STORE.subscribe((action) => {
+         if (action.type=='OPEN-MODAL-CREATE-IMPURE') {
+             this.maledict = action.maledict;
+             this.update();
+
+             return;
+         }
+
+         if (action.type=='CLOSE-MODAL-CREATE-IMPURE') {
+             this.maledict = null;
+             this.update();
+
+             return;
+         }
+
+         if (action.type=='CREATED-MALEDICT-IMPURE') {
+             this.maledict = null;
+             this.update();
+
+             return;
+         }
+     });
+    </script>
+
 
     <script>
      this.prefixes = [
@@ -81,20 +109,20 @@
 
     <script>
      this.maledictName = () => {
-         return this.opts.maledict ? this.opts.maledict.name : '';
+         return this.maledict ? this.maledict.name : '';
      }
     </script>
 
     <script>
      this.clickCreateButton = (e) => {
-         this.opts.callback('create-impure', {
+         ACTIONS.createMaledictImpure (this.maledict, {
              name: this.refs['name'].value,
              description: this.refs['description'].value,
              maledict: this.opts.maledict
          });
      };
      this.clickCloseButton = (e) => {
-         this.opts.callback('close-modal-create-impure');
+         ACTIONS.closeModalCreateImpure();
      };
     </script>
-</home_modal-create-impure>
+</modal-create-impure>

@@ -65,3 +65,21 @@ app > app-page-area {
     height: 100vh;
     display: block;
 }
+
+
+app .hw-button {
+    color: #333333;
+
+    border: 1px solid #ededed;
+    background: #ffffff;
+    box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.8);
+}
+
+app .hw-button:hover {
+    color: #ffffff;
+
+    border: 1px solid #ededed;
+    background: rgba(254, 242, 99, 0.8);
+    box-shadow: 0px 0px 22px #ffffff;
+    font-shadow: 0px 0px 3px #333333;
+}

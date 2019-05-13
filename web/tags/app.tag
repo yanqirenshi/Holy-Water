@@ -9,9 +9,12 @@
 
     <message-area></message-area>
 
-    <home_working-action data={impure()}></home_working-action>
+    <popup-working-action data={impure()}></popup-working-action>
 
-    <!-- <add-impure-menu></add-impure-menu> -->
+    <menu-add-impure></menu-add-impure>
+
+    <modal-create-impure open={modal_open}
+                         maledict={modal_maledict}></modal-create-impure>
 
     <script>
      this.site = () => {
@@ -36,7 +39,7 @@
          }
 
          if (action.type=='FETCHED-IMPURE-PURGING')
-             this.tags['home_working-action'].update();
+             this.tags['popup-working-action'].update();
      })
 
      window.addEventListener('resize', (event) => {

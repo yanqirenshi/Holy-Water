@@ -12,7 +12,7 @@
     <div class="contetns-area">
         <div style="display:flex;">
             <home_squeeze-area callback={callback}></home_squeeze-area>
-            <home_requtest-area></home_requtest-area>
+            <home_request-area></home_request-area>
         </div>
 
         <!-- ----------------------- -->
@@ -53,17 +53,11 @@
 
     <script>
      this.callback = (action, data) => {
-         if ('open-modal-create-impure'==action)
-             this.openModal(data);
+         if ('open-modal-create-impure'==action) {
+             let maledict = data;
 
-         if ('close-modal-create-impure'==action)
-             this.closeModal();
-
-         if ('create-impure'==action)
-             ACTIONS.createMaledictImpures(data.maledict, {
-                 name: data.name,
-                 description: data.description,
-             });
+             ACTIONS.openModalCreateImpure(maledict);
+         }
 
          if ('squeeze-impure'==action) {
              this.squeeze_word = (data.trim().length==0 ? null : data);
@@ -80,11 +74,15 @@
              ACTIONS.fetchMaledictImpures(maledict.id);
          }
 
+         if (action.type=='CREATED-MALEDICT-IMPURE') {
+             let maledict_selected = this.maledict();
+
+             if (action.maledict.id == maledict_selected.id)
+                 ACTIONS.fetchMaledictImpures(maledict_selected.id);
+         }
+
          if (action.type=='FETCHED-MALEDICTS')
              this.update();
-
-         if (action.type=='CREATED-MALEDICT-IMPURES')
-             this.closeModal();
 
          if (action.type=='START-TRANSFERD-IMPURE-TO-ANGEL') {
              this.request_impure = action.contents;

@@ -4,10 +4,12 @@
     <div class="flex-parent" style="height:100%; margin-top: -8px;">
         <div class="card-container">
             <div style="overflow: hidden; padding-bottom: 222px; padding-top: 22px;">
+
                 <impure-card each={impure in impures()}
                              data={impure}
                              open={open_cards[impure.id]}
                              callbacks={callbacks}></impure-card>
+
             </div>
         </div>
     </div>
@@ -47,17 +49,11 @@
 
     <script>
      STORE.subscribe((action) => {
-         let update_only = [
-             'FETCHED-MALEDICT-IMPURES',
-         ]
-
-         if (update_only.indexOf(action.type)>=0) {
+         if (action.type=='FETCHED-MALEDICT-IMPURES') {
              this.update();
-         }
 
-         if (action.type=='CREATED-MALEDICT-IMPURES')
-             if (this.opts.maledict.id == action.maledict.id)
-                 ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
+             return;
+         }
 
          if (action.type=='MOVED-IMPURE' ||
              action.type=='FINISHED-IMPURE' ||

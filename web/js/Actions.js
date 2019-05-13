@@ -178,25 +178,6 @@ class Actions extends Vanilla_Redux_Actions {
             data: { impures: this.mergeData(response) },
         };
     }
-    createMaledictImpures (maledict, data) {
-        let path = '/maledicts/' + maledict.id + '/impures';
-
-        API.post(path, this.encodePostData(data), function (json, success) {
-            if (success)
-                STORE.dispatch(this.createdMaledictImpures(json, maledict));
-            else
-                this.pushFetchErrorMessage(json);
-        }.bind(this));
-    }
-    createdMaledictImpures (response, maledict) {
-        this.pushSuccessMessage('Impure の作成が完了しました');
-
-        return {
-            type: 'CREATED-MALEDICT-IMPURES',
-            data: {},
-            maledict: maledict
-        };
-    }
     selectedHomeMaledict (maledict) {
         let state = STORE.get('selected');
 
@@ -780,6 +761,39 @@ class Actions extends Vanilla_Redux_Actions {
             type: 'FETCHED-PAGES-CEMETERIES',
             data: {},
             response: response
+        };
+    }
+    /////
+    ///// Page
+    /////
+    openModalCreateImpure (maledict) {
+        STORE.dispatch({
+            type: 'OPEN-MODAL-CREATE-IMPURE',
+            maledict: maledict,
+        });
+    }
+    closeModalCreateImpure () {
+        STORE.dispatch({
+            type: 'CLOSE-MODAL-CREATE-IMPURE',
+        });
+    }
+    createMaledictImpure (maledict, data) {
+        let path = '/maledicts/' + maledict.id + '/impures';
+
+        API.post(path, this.encodePostData(data), function (json, success) {
+            if (success)
+                STORE.dispatch(this.createdMaledictImpure(json, maledict));
+            else
+                this.pushFetchErrorMessage(json);
+        }.bind(this));
+    }
+    createdMaledictImpure (response, maledict) {
+        this.pushSuccessMessage('Impure の作成が完了しました');
+
+        return {
+            type: 'CREATED-MALEDICT-IMPURE',
+            data: {},
+            maledict: maledict
         };
     }
 }

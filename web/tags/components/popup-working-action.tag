@@ -1,18 +1,18 @@
-<home_working-action class="{hide()}">
+<popup-working-action class="{hide()}">
 
-    <button class="button is-small"
+    <button class="button is-small hw-button"
             style="margin-right:11px;"
             onclick={clickStop}>Stop</button>
-    <span>{name()}</span>
+    <span style="font-size:12px;">{name()}</span>
 
     <div style="margin-top: 8px;">
         <p style="display:inline; font-size:12px; margin-right:22px;">
-            <span style="width:88px;display:inline-block;">経過: {distance()}</span>
-            <span>開始: </span>
-            <span>{start()}</span>
+            <span style="font-size:12px;width:88px;display:inline-block;">経過: {distance()}</span>
+            <span style="font-size:12px;">開始: </span>
+            <span style="font-size:12px;">{start()}</span>
         </p>
 
-        <button class="button is-small"
+        <button class="button is-small hw-button"
                 onclick={clickStopAndClose}>Stop & Close</button>
     </div>
 
@@ -69,7 +69,7 @@
     </script>
 
     <style>
-     home_working-action {
+     popup-working-action {
          display: block;
          position: fixed;
          bottom: 33px;
@@ -82,4 +82,4 @@
          box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666);
      }
     </style>
-</home_working-action>
+</popup-working-action>

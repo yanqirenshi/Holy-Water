@@ -17,7 +17,7 @@ riot.tag2('app-page-area', '', '', '', function(opts) {
      });
 });
 
-riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" site="{site()}" moves="{[]}"></menu-bar> <app-page-area></app-page-area> <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p> <message-area></message-area> <home_working-action data="{impure()}"></home_working-action>', '', '', function(opts) {
+riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" site="{site()}" moves="{[]}"></menu-bar> <app-page-area></app-page-area> <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p> <message-area></message-area> <popup-working-action data="{impure()}"></popup-working-action> <menu-add-impure></menu-add-impure> <modal-create-impure open="{modal_open}" maledict="{modal_maledict}"></modal-create-impure>', '', '', function(opts) {
      this.site = () => {
          return STORE.state().get('site');
      };
@@ -37,7 +37,7 @@ riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" 
          }
 
          if (action.type=='FETCHED-IMPURE-PURGING')
-             this.tags['home_working-action'].update();
+             this.tags['popup-working-action'].update();
      })
 
      window.addEventListener('resize', (event) => {
@@ -341,9 +341,6 @@ riot.tag2('section-list', '<table class="table is-bordered is-striped is-narrow 
      };
 });
 
-riot.tag2('add-impure-menu', '<div style="position:fixed; right: 33px; top: 22px; "> <button class="button add-impure is-small">add Impure</button> </div>', 'add-impure-menu .add-impure { border: 1px solid #ededed; box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.8); }', '', function(opts) {
-});
-
 riot.tag2('description-markdown', '<p> <pre ref="markdown-html" style=" background: none;"></pre> </p>', '', '', function(opts) {
      this.on('update', () => {
          this.refs['markdown-html'].innerHTML = '';
@@ -358,7 +355,117 @@ riot.tag2('description-markdown', '<p> <pre ref="markdown-html" style=" backgrou
      });
 });
 
-riot.tag2('home_working-action', '<button class="button is-small" style="margin-right:11px;" onclick="{clickStop}">Stop</button> <span>{name()}</span> <div style="margin-top: 8px;"> <p style="display:inline; font-size:12px; margin-right:22px;"> <span style="width:88px;display:inline-block;">経過: {distance()}</span> <span>開始: </span> <span>{start()}</span> </p> <button class="button is-small" onclick="{clickStopAndClose}">Stop & Close</button> </div>', 'home_working-action { display: block; position: fixed; bottom: 33px; right: 33px; background: #fff; padding: 11px 22px; border: 1px solid #ededed; border-radius: 8px; box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666); }', 'class="{hide()}"', function(opts) {
+riot.tag2('hw-page-header', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">{opts.title}</h1> <h2 class="subtitle hw-text-white"> <p>{opts.subtitle}</p> <section-breadcrumb class="{isHide()}"></section-breadcrumb> </h2> </div> </section>', '', '', function(opts) {
+     this.isHide = () => {
+         if (!this.opts || !this.opts.type)
+             return 'hide';
+         dump(this.opts.type);
+         if (this.opts.type=='child')
+             return '';
+
+         return 'hide';
+     };
+});
+
+riot.tag2('hw-section-subtitle', '<h2 class="subtitle hw-text-white">{opts.contents}</h2>', '', '', function(opts) {
+});
+
+riot.tag2('hw-section-title', '<h1 class="title hw-text-white is-{opts.lev ? opts.lev : 3}">{opts.title}</h1>', '', '', function(opts) {
+});
+
+riot.tag2('menu-add-impure', '<div style="position:fixed; right: 33px; top: 22px; "> <button class="button add-impure is-small hw-button" onclick="{clickButton}">add Impure</button> </div>', '', '', function(opts) {
+     this.maledict = () => {
+         let maledict = STORE.get('maledicts.list').find((d) => {
+             return d['maledict-type'].NAME == 'In Box';
+         });
+
+         return maledict
+     };
+     this.clickButton = () => {
+         ACTIONS.openModalCreateImpure(this.maledict());
+     };
+});
+
+riot.tag2('modal-create-impure', '<div class="modal {maledict ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head"> <p class="modal-card-title">やる事を追加</p> <button class="delete" aria-label="close" onclick="{clickCloseButton}"></button> </header> <section class="modal-card-body"> <h4 class="title is-6">場所: {maledictName()}</h4> <div> <span>接頭文字:</span> <button each="{prefixes}" class="button is-small" style="margin-left: 8px;" onclick="{clickTitlePrefix}" riot-value="{label}">{label}</button> </div> <input class="input" type="text" placeholder="Title" ref="name" style="margin-top:11px;"> <textarea class="textarea" placeholder="Description" rows="6" style="margin-top:11px;" ref="description"></textarea> </section> <footer class="modal-card-foot"> <button class="button" onclick="{clickCloseButton}">Cancel</button> <button class="button is-success" onclick="{clickCreateButton}">Create!</button> </footer> </div> </div>', '', '', function(opts) {
+     this.maledict = null;
+     STORE.subscribe((action) => {
+         if (action.type=='OPEN-MODAL-CREATE-IMPURE') {
+             this.maledict = action.maledict;
+             this.update();
+
+             return;
+         }
+
+         if (action.type=='CLOSE-MODAL-CREATE-IMPURE') {
+             this.maledict = null;
+             this.update();
+
+             return;
+         }
+
+         if (action.type=='CREATED-MALEDICT-IMPURE') {
+             this.maledict = null;
+             this.update();
+
+             return;
+         }
+     });
+
+     this.prefixes = [
+         { label: 'RBP：' },
+         { label: 'RBR：' },
+         { label: 'GLPGSH：' },
+         { label: 'HW：' },
+         { label: 'WBS：' },
+         { label: 'TER：' },
+         { label: '人事：' },
+         { label: 'Ill：' },
+     ];
+     this.clickTitlePrefix = (e) => {
+         let prefix = e.target.getAttribute('value');
+
+         let elem = this.refs.name
+         let name = elem.value;
+
+         let pos = name.indexOf('：');
+         if (pos==-1) {
+             elem.value = prefix + name;
+             return;
+         }
+
+         for (let item of this.prefixes) {
+             let l = item.label;
+             let label_length = l.length;
+
+             if (label_length > name.length)
+                 continue;
+
+             if (name.substring(0, label_length)==l) {
+                 elem.value = prefix + name.substring(label_length);
+                 return;
+             }
+         }
+
+         elem.value = prefix + name;
+     };
+
+     this.maledictName = () => {
+         return this.maledict ? this.maledict.name : '';
+     }
+
+     this.clickCreateButton = (e) => {
+         ACTIONS.createMaledictImpure (this.maledict, {
+             name: this.refs['name'].value,
+             description: this.refs['description'].value,
+             maledict: this.opts.maledict
+         });
+     };
+     this.clickCloseButton = (e) => {
+         ACTIONS.closeModalCreateImpure();
+     };
+});
+
+riot.tag2('popup-working-action', '<button class="button is-small hw-button" style="margin-right:11px;" onclick="{clickStop}">Stop</button> <span style="font-size:12px;">{name()}</span> <div style="margin-top: 8px;"> <p style="display:inline; font-size:12px; margin-right:22px;"> <span style="font-size:12px;width:88px;display:inline-block;">経過: {distance()}</span> <span style="font-size:12px;">開始: </span> <span style="font-size:12px;">{start()}</span> </p> <button class="button is-small hw-button" onclick="{clickStopAndClose}">Stop & Close</button> </div>', 'popup-working-action { display: block; position: fixed; bottom: 33px; right: 33px; background: #fff; padding: 11px 22px; border: 1px solid #ededed; border-radius: 8px; box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666); }', 'class="{hide()}"', function(opts) {
 
      this.clickStop = () => {
          let impure = this.opts.data;
@@ -405,24 +512,6 @@ riot.tag2('home_working-action', '<button class="button is-small" style="margin-
 
          return moment(start).format('YYYY-MM-DD HH:mm:ss');
      };
-});
-
-riot.tag2('hw-page-header', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">{opts.title}</h1> <h2 class="subtitle hw-text-white"> <p>{opts.subtitle}</p> <section-breadcrumb class="{isHide()}"></section-breadcrumb> </h2> </div> </section>', '', '', function(opts) {
-     this.isHide = () => {
-         if (!this.opts || !this.opts.type)
-             return 'hide';
-         dump(this.opts.type);
-         if (this.opts.type=='child')
-             return '';
-
-         return 'hide';
-     };
-});
-
-riot.tag2('hw-section-subtitle', '<h2 class="subtitle hw-text-white">{opts.contents}</h2>', '', '', function(opts) {
-});
-
-riot.tag2('hw-section-title', '<h1 class="title hw-text-white is-{opts.lev ? opts.lev : 3}">{opts.title}</h1>', '', '', function(opts) {
 });
 
 riot.tag2('sections-list', '<table class="table"> <tbody> <tr each="{opts.data}"> <td><a href="{hash}">{name}</a></td> </tr> </tbody> </table>', '', '', function(opts) {
@@ -523,17 +612,11 @@ riot.tag2('home_impures', '<div class="flex-parent" style="height:100%; margin-t
      };
 
      STORE.subscribe((action) => {
-         let update_only = [
-             'FETCHED-MALEDICT-IMPURES',
-         ]
-
-         if (update_only.indexOf(action.type)>=0) {
+         if (action.type=='FETCHED-MALEDICT-IMPURES') {
              this.update();
-         }
 
-         if (action.type=='CREATED-MALEDICT-IMPURES')
-             if (this.opts.maledict.id == action.maledict.id)
-                 ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
+             return;
+         }
 
          if (action.type=='MOVED-IMPURE' ||
              action.type=='FINISHED-IMPURE' ||
@@ -611,62 +694,7 @@ riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-h
      });
 });
 
-riot.tag2('home_modal-create-impure', '<div class="modal {opts.open ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head"> <p class="modal-card-title">やる事を追加</p> <button class="delete" aria-label="close" onclick="{clickCloseButton}"></button> </header> <section class="modal-card-body"> <h4 class="title is-6">場所: {maledictName()}</h4> <div> <span>接頭文字:</span> <button each="{prefixes}" class="button is-small" style="margin-left: 8px;" onclick="{clickTitlePrefix}" riot-value="{label}">{label}</button> </div> <input class="input" type="text" placeholder="Title" ref="name" style="margin-top:11px;"> <textarea class="textarea" placeholder="Description" rows="6" style="margin-top:11px;" ref="description"></textarea> </section> <footer class="modal-card-foot"> <button class="button" onclick="{clickCloseButton}">Cancel</button> <button class="button is-success" onclick="{clickCreateButton}">Create!</button> </footer> </div> </div>', '', '', function(opts) {
-     this.prefixes = [
-         { label: 'RBP：' },
-         { label: 'RBR：' },
-         { label: 'GLPGSH：' },
-         { label: 'HW：' },
-         { label: 'WBS：' },
-         { label: 'TER：' },
-         { label: '人事：' },
-         { label: 'Ill：' },
-     ];
-     this.clickTitlePrefix = (e) => {
-         let prefix = e.target.getAttribute('value');
-
-         let elem = this.refs.name
-         let name = elem.value;
-
-         let pos = name.indexOf('：');
-         if (pos==-1) {
-             elem.value = prefix + name;
-             return;
-         }
-
-         for (let item of this.prefixes) {
-             let l = item.label;
-             let label_length = l.length;
-
-             if (label_length > name.length)
-                 continue;
-
-             if (name.substring(0, label_length)==l) {
-                 elem.value = prefix + name.substring(label_length);
-                 return;
-             }
-         }
-
-         elem.value = prefix + name;
-     };
-
-     this.maledictName = () => {
-         return this.opts.maledict ? this.opts.maledict.name : '';
-     }
-
-     this.clickCreateButton = (e) => {
-         this.opts.callback('create-impure', {
-             name: this.refs['name'].value,
-             description: this.refs['description'].value,
-             maledict: this.opts.maledict
-         });
-     };
-     this.clickCloseButton = (e) => {
-         this.opts.callback('close-modal-create-impure');
-     };
-});
-
-riot.tag2('home_page', '<div class="bucket-area"> <home_maledicts data="{STORE.get(\'maledicts\')}" select="{maledict()}" callback="{callback}" dragging="{dragging}"></home_maledicts> <home_orthodox-angels></home_orthodox-angels> <home_other-services></home_other-services> </div> <div class="contetns-area"> <div style="display:flex;"> <home_squeeze-area callback="{callback}"></home_squeeze-area> <home_requtest-area></home_requtest-area> </div> <home_impures maledict="{maledict()}" callback="{callback}" filter="{squeeze_word}"></home_impures> <home_servie-items></home_servie-items> </div> <home_modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_modal-create-impure> <modal_request-impure source="{request_impure}"></modal_request-impure>', 'home_page { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; } home_page home_squeeze-area { margin-right: 55px; }', '', function(opts) {
+riot.tag2('home_page', '<div class="bucket-area"> <home_maledicts data="{STORE.get(\'maledicts\')}" select="{maledict()}" callback="{callback}" dragging="{dragging}"></home_maledicts> <home_orthodox-angels></home_orthodox-angels> <home_other-services></home_other-services> </div> <div class="contetns-area"> <div style="display:flex;"> <home_squeeze-area callback="{callback}"></home_squeeze-area> <home_request-area></home_request-area> </div> <home_impures maledict="{maledict()}" callback="{callback}" filter="{squeeze_word}"></home_impures> <home_servie-items></home_servie-items> </div> <home_modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_modal-create-impure> <modal_request-impure source="{request_impure}"></modal_request-impure>', 'home_page { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; } home_page home_squeeze-area { margin-right: 55px; }', '', function(opts) {
      this.modal_open     = false;
      this.modal_maledict = null;
      this.maledict       = null;
@@ -681,17 +709,11 @@ riot.tag2('home_page', '<div class="bucket-area"> <home_maledicts data="{STORE.g
      };
 
      this.callback = (action, data) => {
-         if ('open-modal-create-impure'==action)
-             this.openModal(data);
+         if ('open-modal-create-impure'==action) {
+             let maledict = data;
 
-         if ('close-modal-create-impure'==action)
-             this.closeModal();
-
-         if ('create-impure'==action)
-             ACTIONS.createMaledictImpures(data.maledict, {
-                 name: data.name,
-                 description: data.description,
-             });
+             ACTIONS.openModalCreateImpure(maledict);
+         }
 
          if ('squeeze-impure'==action) {
              this.squeeze_word = (data.trim().length==0 ? null : data);
@@ -708,11 +730,15 @@ riot.tag2('home_page', '<div class="bucket-area"> <home_maledicts data="{STORE.g
              ACTIONS.fetchMaledictImpures(maledict.id);
          }
 
+         if (action.type=='CREATED-MALEDICT-IMPURE') {
+             let maledict_selected = this.maledict();
+
+             if (action.maledict.id == maledict_selected.id)
+                 ACTIONS.fetchMaledictImpures(maledict_selected.id);
+         }
+
          if (action.type=='FETCHED-MALEDICTS')
              this.update();
-
-         if (action.type=='CREATED-MALEDICT-IMPURES')
-             this.closeModal();
 
          if (action.type=='START-TRANSFERD-IMPURE-TO-ANGEL') {
              this.request_impure = action.contents;
@@ -756,12 +782,17 @@ riot.tag2('home_page', '<div class="bucket-area"> <home_maledicts data="{STORE.g
      };
 });
 
-riot.tag2('home_requtest-area', '<p class="{isHide()}"> 依頼メッセージ未読: <a href="#home/requests"><span class="count">{count()}</span></a> 件 </p>', 'home_requtest-area > p { color: #fff; font-weight: bold; font-size: 14px; line-height: 38px; } home_requtest-area .count { color: #f00; font-size: 21px; }', '', function(opts) {
+riot.tag2('home_request-area', '<p class="{isHide()}"> 依頼メッセージ未読: <a href="#home/requests"><span class="count">{count()}</span></a> 件 </p>', 'home_request-area > p { color: #fff; font-weight: bold; font-size: 14px; line-height: 38px; } home_request-area .count { color: #f00; font-size: 21px; }', '', function(opts) {
      this.isHide = () => {
          return this.count()==0 ? 'hide' : '';
      };
      this.count = () => {
-         return STORE.get('requests.messages.unread.list').length;
+         let list = STORE.get('requests.messages.unread.list');
+
+         if (!list)
+             return 0;
+
+         return list.length;
      };
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-REQUEST-MESSAGES-UNREAD') {
