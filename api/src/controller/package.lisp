@@ -38,5 +38,6 @@
   (:export #:impure-incantation)
   (:export #:pages-orthodox
            #:pages-wor-history
-           #:pages-purges))
+           #:pages-purges
+           #:pages-cemetery))
 (in-package :holy-water.api.controller)

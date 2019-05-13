@@ -54,3 +54,8 @@
 (defun pages-purges (angel from to)
   (when (and angel from to)
     (list :|purges| (hw:list-purge-by-angel angel :from from :to to))))
+
+(defun pages-cemetery (angel from to)
+  (when (and angel from to)
+    (list :|cemeteries| (hw:list-cemeteries angel :from from :to to)
+          :|daily| (hw:list-summay-impure-cemeteries-by-date-damon angel :from from :to to))))

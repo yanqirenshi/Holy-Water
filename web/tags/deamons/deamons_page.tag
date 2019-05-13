@@ -1,9 +1,7 @@
 <deamons-page class="page-contents">
 
-    <section class="section">
+    <section class="section" style="padding-top: 22px;">
         <div class="container">
-            <h1 class="title hw-text-white">Deamons</h1>
-            <h2 class="subtitle hw-text-white">実績を集計するためのグループ</h2>
 
             <section class="section">
                 <div class="container">
@@ -29,6 +27,7 @@
                     </div>
                 </div>
             </section>
+
         </div>
     </section>
 

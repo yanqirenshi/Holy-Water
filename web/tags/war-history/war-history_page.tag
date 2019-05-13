@@ -1,10 +1,10 @@
 <war-history-page class="page-contents">
-    <hw-page-header title="戦いの歴史" subtitle="悪魔との戦いの歴史です。"></hw-page-header>
+    <div style="margin-top:22px;"></div>
 
     <war-history-page-controller term={term}
                                  callback={controllerCallbak}></war-history-page-controller>
 
-    <section class="section" style="padding-top:11px; padding-bottom:11px;">
+    <section class="section" style="padding-top:33px; padding-bottom:11px;">
         <div class="container">
             <page-tabs core={page_tabs}
                        callback={clickTab}></page-tabs>

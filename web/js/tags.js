@@ -1,4 +1,4 @@
-riot.tag2('angel_page', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">祓魔師</h1> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">パスワード変更</h1> <h2 class="subtitle hw-text-white">準備中</h2> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">サインアウト</h1> <h2 class="subtitle hw-text-white"></h2> <div class="contents"> <button class="button is-danger hw-box-shadow" style="margin-left:22px; margin-top:11px;" onclick="{clickSignOut}">Sign Out</button> </div> </div> </section> </div> </section>', '', 'class="page-contents"', function(opts) {
+riot.tag2('angel_page', '<section class="section"> <div class="container"> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">パスワード変更</h1> <h2 class="subtitle hw-text-white">準備中</h2> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">サインアウト</h1> <h2 class="subtitle hw-text-white"></h2> <div class="contents"> <button class="button is-danger hw-box-shadow" style="margin-left:22px; margin-top:11px;" onclick="{clickSignOut}">Sign Out</button> </div> </div> </section> </div> </section>', '', 'class="page-contents"', function(opts) {
      this.clickSignOut = () => {
          ACTIONS.signOut();
      };
@@ -52,7 +52,21 @@ riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" 
      });
 });
 
-riot.tag2('cemetery-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size:12px;"> <thead> <tr> <th colspan="3">Impure</th> <th colspan="2">Purge</th> <th rowspan="2">備考</th> </tr> <tr> <th>ID</th> <th style="width:333px;">名称</th> <th>完了</th> <th>開始</th> <th>終了</th> </tr> </thead> <tbody> <tr each="{impure in opts.data}"> <td nowrap>{impure.id}</td> <td style="width:333px;" nowrap>{impure.name}</td> <td nowrap>{dt(impure.finished_at)}</td> <td nowrap>{dt(impure.start)}</td> <td nowrap>{dt(impure.end)}</td> <td style="word-break: break-word;">{description(impure.description)}</td> </tr> </tbody> </table>', '', '', function(opts) {
+riot.tag2('cemetery-daily-list', '<table class="table is-bordered is-striped is-narrow is-hoverable" style="font-size:12px;"> <thead> <tr> <th>Date</th> <th>Deamon</th> <th>Action Count</th> </tr> </thead> <tbody> <tr each="{cemetry in daily()}"> <td>{cemetry.finished_at}</td> <td>{cemetry.deamon_name_short}</td> <td>{cemetry.purge_count}</td> </tr> </tbody> </table>', '', '', function(opts) {
+     this.daily = () => {
+         return this.opts.source.sort((a, b) => {
+             return (a.finished_at < b.finished_at) ? 1 : -1;
+         });
+     };
+
+});
+
+riot.tag2('cemetery-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size:12px;"> <thead> <tr> <th colspan="1" rowspan="2">Deamon</th> <th colspan="5">Impure</th> </tr> <tr> <th>ID</th> <th>Name</th> <th>Finish Purge</th> <th>Action Count</th> <th>Total Time</th> </tr> </thead> <tbody> <tr each="{cemetry in cemeteries()}"> <td> <a href="#cemeteries/deamons/{cemetry.deamon_id}">{cemetry.deamon_name_short}</a> </td> <td nowrap> <a href="#cemeteries/impures/{cemetry.impure_id}"> {cemetry.impure_id} </a> </td> <td>{cemetry.impure_name}</td> <td>{dt(cemetry.impure_finished_at)}</td> <td style="text-align: right;">{cemetry.purge_count}</td> <td style="text-align: right;">{cemetry.elapsed_time}</td> </tr> </tbody> </table>', '', '', function(opts) {
+     this.cemeteries = () => {
+         return opts.data.sort((a, b) => {
+             return (a.impure_finished_at < b.impure_finished_at) ? 1 : -1;
+         });
+     };
      this.dt = (v) => {
          if (!v) return '---'
 
@@ -67,9 +81,9 @@ riot.tag2('cemetery-list', '<table class="table is-bordered is-striped is-narrow
      };
 });
 
-riot.tag2('cemetery_page', '<section class="section"> <div class="container"> <h2 class="subtitle" style="text-shadow: 0px 0px 11px #fff;"></h2> <div> <cemetery_page_filter style="margin-bottom:22px;" from="{from}" to="{to}" callback="{callback}"></cemetery_page_filter> </div> <div style="padding-bottom:22px;"> <cemetery-list data="{impures()}"></cemetery-list> </div> </div> </section>', 'cemetery_page { height: 100%; display: block; overflow: scroll; }', 'class="page-contents"', function(opts) {
-     this.from = moment().add(-1, 'd').startOf('day');
-     this.to   = moment().add(1, 'd').startOf('day');
+riot.tag2('cemetery_page', '<section class="section"> <div class="container"> <div> <cemetery_page_filter style="margin-bottom:22px;" from="{from}" to="{to}" callback="{callback}"></cemetery_page_filter> </div> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">日別推移</h1> <div style="padding-bottom:22px;"> <cemetery-daily-list source="{daily}"></cemetery-daily-list> </div> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">明細</h1> <div style="padding-bottom:22px;"> <cemetery-list data="{cemeteries}"></cemetery-list> </div> </div> </section>', 'cemetery_page { height: 100%; display: block; overflow: scroll; }', 'class="page-contents"', function(opts) {
+     this.from = moment().add(-7, 'd').startOf('day');
+     this.to   = moment().add(1,  'd').startOf('day');
      this.moveDate = (unit, amount) => {
          this.from = this.from.add(amount, unit);
          this.to   = this.to.add(amount, unit);
@@ -94,13 +108,23 @@ riot.tag2('cemetery_page', '<section class="section"> <div class="container"> <h
          });
      };
 
+     this.cemeteries = [];
+     this.daily      = [];
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-DONE-IMPURES')
              this.update();
+
+         if (action.type=='FETCHED-PAGES-CEMETERIES') {
+             this.cemeteries = action.response.cemeteries;
+             this.daily      = action.response.daily;
+
+             this.update();
+         }
      });
 
      this.on('mount', () => {
          ACTIONS.fetchDoneImpures(this.from, this.to);
+         ACTIONS.fetchPagesCemeteries(this.from, this.to);
      });
 });
 
@@ -407,7 +431,7 @@ riot.tag2('sections-list', '<table class="table"> <tbody> <tr each="{opts.data}"
 riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">悪魔</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section>', '', '', function(opts) {
 });
 
-riot.tag2('deamons-page', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">Deamons</h1> <h2 class="subtitle hw-text-white">実績を集計するためのグループ</h2> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white"></h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Name(Short)</th> </tr> </thead> <tbody> <tr each="{deamon in deamons()}"> <td><a href="{idLink(deamon)}">{deamon.id}</a></td> <td>{deamon.name}</td> <td>{deamon.name_short}</td> </tr> </tbody> </table> </div> </div> </section> </div> </section>', '', 'class="page-contents"', function(opts) {
+riot.tag2('deamons-page', '<section class="section" style="padding-top: 22px;"> <div class="container"> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white"></h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Name(Short)</th> </tr> </thead> <tbody> <tr each="{deamon in deamons()}"> <td><a href="{idLink(deamon)}">{deamon.id}</a></td> <td>{deamon.name}</td> <td>{deamon.name_short}</td> </tr> </tbody> </table> </div> </div> </section> </div> </section>', '', 'class="page-contents"', function(opts) {
      this.idLink = (deamon) => {
          return '#deamons/' + deamon.id;
      };
@@ -426,7 +450,7 @@ riot.tag2('deamons-page', '<section class="section"> <div class="container"> <h1
 riot.tag2('exorcist-page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">祓魔師</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section>', '', 'class="page-contents"', function(opts) {
 });
 
-riot.tag2('help_page', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">聖書</h1> <h2 class="subtitle hw-text-white">ヘルプ的ななにか</h2> <div class="contents hw-text-white"> <p>準備中</p> </div> </div> </section>', '', 'class="page-contents"', function(opts) {
+riot.tag2('help_page', '<section class="section"> <div class="container"> <h2 class="subtitle hw-text-white">ヘルプ的ななにか</h2> <div class="contents hw-text-white"> <p>準備中</p> </div> </div> </section>', '', 'class="page-contents"', function(opts) {
 });
 
 riot.tag2('home_impure', '', '', '', function(opts) {
@@ -1384,7 +1408,7 @@ riot.tag2('orthodox-list', '<table class="table is-bordered is-striped is-narrow
      };
 });
 
-riot.tag2('orthodoxs-page', '<hw-page-header title="正教会" subtitle="正教会=チーム"></hw-page-header> <section class="section" style="padding-top: 11px; padding-bottom: 11px;"> <div class="container"> <page-tabs core="{page_tabs}" type="toggle" callback="{clickTab}"></page-tabs> </div> </section> <div> <orthodoxs-page_tab-orthdoxs class="hide"></orthodoxs-page_tab-orthdoxs> <orthodoxs-page_tab-exorcists class="hide"></orthodoxs-page_tab-exorcists> </div>', 'orthodoxs-page { width: 100%; height: 100%; display: block; overflow: auto; }', 'class="page-contents"', function(opts) {
+riot.tag2('orthodoxs-page', '<section class="section" style="padding-top: 55px; padding-bottom: 11px;"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> </section> <div> <orthodoxs-page_tab-orthdoxs class="hide"></orthodoxs-page_tab-orthdoxs> <orthodoxs-page_tab-exorcists class="hide"></orthodoxs-page_tab-exorcists> </div>', 'orthodoxs-page { width: 100%; height: 100%; display: block; overflow: auto; } orthodoxs-page .tabs ul { border-bottom-color: rgb(254, 242, 99); border-bottom-width: 2px; } orthodoxs-page .tabs.is-boxed li.is-active a { background-color: rgba(254, 242, 99, 0.55); border-color: rgb(254, 242, 99); text-shadow: 0px 0px 11px #fff; color: #333; font-weight: bold; } orthodoxs-page .tabs.is-boxed a { text-shadow: 0px 0px 8px #fff; font-weight: bold; }', 'class="page-contents"', function(opts) {
      this.default_tag = 'home';
      this.active_tag = null;
      this.page_tabs = new PageTabs([
@@ -1947,7 +1971,7 @@ riot.tag2('war-history-page_tab_weeks', '<section class="section"> <div class="c
 });
 
 
-riot.tag2('war-history-page', '<hw-page-header title="戦いの歴史" subtitle="悪魔との戦いの歴史です。"></hw-page-header> <war-history-page-controller term="{term}" callback="{controllerCallbak}"></war-history-page-controller> <section class="section" style="padding-top:11px; padding-bottom:11px;"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> </section> <div> <war-history-page_tab_days class="hide" source="{page_data}"></war-history-page_tab_days> <war-history-page_tab_weeks class="hide"></war-history-page_tab_weeks> <war-history-page_tab_month class="hide"></war-history-page_tab_month> </div>', 'war-history-page .tabs ul { border-bottom-color: rgb(254, 242, 99); border-bottom-width: 2px; } war-history-page .tabs.is-boxed li.is-active a { background-color: rgba(254, 242, 99, 0.55); border-color: rgb(254, 242, 99); text-shadow: 0px 0px 11px #fff; color: #333; font-weight: bold; } war-history-page .tabs.is-boxed a { text-shadow: 0px 0px 8px #fff; font-weight: bold; }', 'class="page-contents"', function(opts) {
+riot.tag2('war-history-page', '<div style="margin-top:22px;"></div> <war-history-page-controller term="{term}" callback="{controllerCallbak}"></war-history-page-controller> <section class="section" style="padding-top:33px; padding-bottom:11px;"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> </section> <div> <war-history-page_tab_days class="hide" source="{page_data}"></war-history-page_tab_days> <war-history-page_tab_weeks class="hide"></war-history-page_tab_weeks> <war-history-page_tab_month class="hide"></war-history-page_tab_month> </div>', 'war-history-page .tabs ul { border-bottom-color: rgb(254, 242, 99); border-bottom-width: 2px; } war-history-page .tabs.is-boxed li.is-active a { background-color: rgba(254, 242, 99, 0.55); border-color: rgb(254, 242, 99); text-shadow: 0px 0px 11px #fff; color: #333; font-weight: bold; } war-history-page .tabs.is-boxed a { text-shadow: 0px 0px 8px #fff; font-weight: bold; }', 'class="page-contents"', function(opts) {
      this.page_data = { summary: { deamons: [] } };
 
      let end = moment().startOf();

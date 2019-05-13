@@ -1,8 +1,7 @@
 <cemetery_page class="page-contents">
+
     <section class="section">
         <div class="container">
-            <h2 class="subtitle" style="text-shadow: 0px 0px 11px #fff;"></h2>
-
             <div>
                 <cemetery_page_filter style="margin-bottom:22px;"
                                       from={from}
@@ -10,15 +9,32 @@
                                       callback={callback}></cemetery_page_filter>
             </div>
 
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h1 class="title is-4 hw-text-white">日別推移</h1>
+
             <div style="padding-bottom:22px;">
-                <cemetery-list data={impures()}></cemetery-list>
+                <cemetery-daily-list source={daily}></cemetery-daily-list>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h1 class="title is-4 hw-text-white">明細</h1>
+
+            <div style="padding-bottom:22px;">
+                <cemetery-list data={cemeteries}></cemetery-list>
             </div>
         </div>
     </section>
 
     <script>
-     this.from = moment().add(-1, 'd').startOf('day');
-     this.to   = moment().add(1, 'd').startOf('day');
+     this.from = moment().add(-7, 'd').startOf('day');
+     this.to   = moment().add(1,  'd').startOf('day');
      this.moveDate = (unit, amount) => {
          this.from = this.from.add(amount, unit);
          this.to   = this.to.add(amount, unit);
@@ -47,13 +63,23 @@
     </script>
 
     <script>
+     this.cemeteries = [];
+     this.daily      = [];
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-DONE-IMPURES')
              this.update();
+
+         if (action.type=='FETCHED-PAGES-CEMETERIES') {
+             this.cemeteries = action.response.cemeteries;
+             this.daily      = action.response.daily;
+
+             this.update();
+         }
      });
 
      this.on('mount', () => {
          ACTIONS.fetchDoneImpures(this.from, this.to);
+         ACTIONS.fetchPagesCemeteries(this.from, this.to);
      });
     </script>
 

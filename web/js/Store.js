@@ -36,6 +36,30 @@ class Store extends Vanilla_Redux_Store {
             ],
         };
     }
+    childPageImpures () {
+        return {
+            code: 'impures',
+            children: [
+                {
+                    code: 'impure',
+                    regex: new RegExp('^\\d+$'),
+                    tag: 'impure_page',
+                }
+            ],
+        };
+    }
+    childPageDeamons () {
+        return {
+            code: "deamons",
+            children: [
+                {
+                    code: "deamon",
+                    regex: /^\d+$/,
+                    tag: 'deamon-page',
+                },
+            ]
+        };
+    }
     pageOrthodoxs () {
         return {
             code: "orthodoxs",
@@ -80,26 +104,8 @@ class Store extends Vanilla_Redux_Store {
             tag: 'purges_page',
             menu_label: '浄歴',
             children: [
-                {
-                    code: 'impures',
-                    children: [
-                        {
-                            code: 'impure',
-                            regex: new RegExp('^\\d+$'),
-                            tag: 'impure_page',
-                        }
-                    ],
-                },
-                {
-                    code: "deamons",
-                    children: [
-                        {
-                            code: "deamon",
-                            regex: /^\d+$/,
-                            tag: 'deamon-page',
-                        },
-                    ]
-                }
+                this.childPageImpures(),
+                this.childPageDeamons(),
             ],
         };
     }
@@ -122,15 +128,21 @@ class Store extends Vanilla_Redux_Store {
             ],
         };
     }
+    pageCemeteries () {
+        return {
+            code: "cemeteries",
+            tag: 'cemetery_page',
+            menu_label: '墓地',
+            children: [
+                this.childPageImpures(),
+            ],
+        };
+    }
     pages() {
         return [
             this.initPageHome(),
             this.pagePurges(),
-            {
-                code: "cemetery",
-                tag: 'cemetery_page',
-                menu_label: '墓地',
-            },
+            this.pageCemeteries(),
             this.pageWarHistory(),
             this.pageDeamons(),
             this.pageOrthodoxs(),

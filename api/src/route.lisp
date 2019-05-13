@@ -256,6 +256,9 @@
   (with-angel (angel)
     (render-json (hw.api.ctrl:pages-purges angel |from| |to|))))
 
+(defroute "/panges/cemeteries" (&key |from| |to|)
+  (with-angel (angel)
+    (render-json (hw.api.ctrl:pages-cemetery angel |from| |to|))))
 
 ;;;;;
 ;;;;; Error pages

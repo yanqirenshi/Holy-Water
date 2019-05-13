@@ -1,10 +1,8 @@
 <orthodoxs-page class="page-contents">
-    <hw-page-header title="正教会" subtitle="正教会=チーム"></hw-page-header>
 
-    <section class="section" style="padding-top: 11px; padding-bottom: 11px;">
+    <section class="section" style="padding-top: 55px; padding-bottom: 11px;">
         <div class="container">
             <page-tabs core={page_tabs}
-                       type="toggle"
                        callback={clickTab}></page-tabs>
         </div>
     </section>
@@ -41,4 +39,22 @@
      }
     </style>
 
+    <style>
+     orthodoxs-page .tabs ul {
+         border-bottom-color: rgb(254, 242, 99);
+         border-bottom-width: 2px;
+     }
+     orthodoxs-page .tabs.is-boxed li.is-active a {
+         background-color: rgba(254, 242, 99, 0.55);
+         border-color: rgb(254, 242, 99);
+
+         text-shadow: 0px 0px 11px #fff;
+         color: #333;
+         font-weight: bold;
+     }
+     orthodoxs-page .tabs.is-boxed a {
+         text-shadow: 0px 0px 8px #fff;
+         font-weight: bold;
+     }
+    </style>
 </orthodoxs-page>

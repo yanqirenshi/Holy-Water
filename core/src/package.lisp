@@ -55,6 +55,7 @@
            #:create-incantation-duet)
   (:export #:list-summay-purge-time-by-date-damon
            #:list-purge-by-angel
+           #:list-cemeteries
            #:list-summay-impure-cemeteries-by-date-damon))
 (in-package :holy-water)
 

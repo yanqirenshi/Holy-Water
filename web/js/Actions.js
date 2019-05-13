@@ -761,4 +761,25 @@ class Actions extends Vanilla_Redux_Actions {
             response: response
         };
     }
+    fetchPagesCemeteries (start, end) {
+        let path = '/panges/cemeteries?';
+
+        path += 'from=' + moment(start).format('YYYY-MM-DD');
+        path += '&';
+        path += 'to='   + moment(end).format('YYYY-MM-DD');
+
+        API.get(path, function (json, success) {
+            if (success)
+                STORE.dispatch(this.fetchedPagesCemeteries(json));
+        }.bind(this));
+    }
+    fetchedPagesCemeteries (response) {
+        let state = STORE.state().toJS();
+
+        return {
+            type: 'FETCHED-PAGES-CEMETERIES',
+            data: {},
+            response: response
+        };
+    }
 }

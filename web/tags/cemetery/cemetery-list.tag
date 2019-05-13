@@ -3,31 +3,41 @@
            style="font-size:12px;">
         <thead>
             <tr>
-                <th colspan="3">Impure</th>
-                <th colspan="2">Purge</th>
-                <th rowspan="2">備考</th>
+                <th colspan="1" rowspan="2">Deamon</th>
+                <th colspan="5">Impure</th>
             </tr>
             <tr>
                 <th>ID</th>
-                <th style="width:333px;">名称</th>
-                <th>完了</th>
-                <th>開始</th>
-                <th>終了</th>
+                <th>Name</th>
+                <th>Finish Purge</th>
+                <th>Action Count</th>
+                <th>Total Time</th>
             </tr>
         </thead>
         <tbody>
-            <tr each={impure in opts.data}>
-                <td nowrap>{impure.id}</td>
-                <td style="width:333px;" nowrap>{impure.name}</td>
-                <td nowrap>{dt(impure.finished_at)}</td>
-                <td nowrap>{dt(impure.start)}</td>
-                <td nowrap>{dt(impure.end)}</td>
-                <td style="word-break: break-word;">{description(impure.description)}</td>
+            <tr each={cemetry in cemeteries()}>
+                <td>
+                    <a href="#cemeteries/deamons/{cemetry.deamon_id}">{cemetry.deamon_name_short}</a>
+                </td>
+                <td nowrap>
+                    <a href="#cemeteries/impures/{cemetry.impure_id}">
+                        {cemetry.impure_id}
+                    </a>
+                </td>
+                <td>{cemetry.impure_name}</td>
+                <td>{dt(cemetry.impure_finished_at)}</td>
+                <td style="text-align: right;">{cemetry.purge_count}</td>
+                <td style="text-align: right;">{cemetry.elapsed_time}</td>
             </tr>
         </tbody>
     </table>
 
     <script>
+     this.cemeteries = () => {
+         return opts.data.sort((a, b) => {
+             return (a.impure_finished_at < b.impure_finished_at) ? 1 : -1;
+         });
+     };
      this.dt = (v) => {
          if (!v) return '---'
 
