@@ -19,6 +19,7 @@
   ((name        :col-type (:varchar 255) :accessor name)
    (description :col-type :text          :accessor description)
    (finished-at :col-type :timestamptz   :accessor finished-at)
+   (finished-by :col-type :bigserial     :accessor finished-by)
    ;;
    (created-by  :col-type :bigserial     :accessor created-by)
    (updated-by  :col-type :bigserial     :accessor updated-by))

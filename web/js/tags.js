@@ -317,6 +317,23 @@ riot.tag2('section-list', '<table class="table is-bordered is-striped is-narrow 
      };
 });
 
+riot.tag2('add-impure-menu', '<div style="position:fixed; right: 33px; top: 22px; "> <button class="button add-impure is-small">add Impure</button> </div>', 'add-impure-menu .add-impure { border: 1px solid #ededed; box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.8); }', '', function(opts) {
+});
+
+riot.tag2('description-markdown', '<p> <pre ref="markdown-html" style=" background: none;"></pre> </p>', '', '', function(opts) {
+     this.on('update', () => {
+         this.refs['markdown-html'].innerHTML = '';
+     });
+     this.on('updated', () => {
+         if (!this.opts.source)
+             return;
+
+         let html = marked(this.opts.source);
+
+         this.refs['markdown-html'].innerHTML = html;
+     });
+});
+
 riot.tag2('home_working-action', '<button class="button is-small" style="margin-right:11px;" onclick="{clickStop}">Stop</button> <span>{name()}</span> <div style="margin-top: 8px;"> <p style="display:inline; font-size:12px; margin-right:22px;"> <span style="width:88px;display:inline-block;">経過: {distance()}</span> <span>開始: </span> <span>{start()}</span> </p> <button class="button is-small" onclick="{clickStopAndClose}">Stop & Close</button> </div>', 'home_working-action { display: block; position: fixed; bottom: 33px; right: 33px; background: #fff; padding: 11px 22px; border: 1px solid #ededed; border-radius: 8px; box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666); }', 'class="{hide()}"', function(opts) {
 
      this.clickStop = () => {
@@ -866,8 +883,13 @@ riot.tag2('impure-card-large_tab_create-after', '<div class="form-contents"> <di
          this.update();
      };
      this.clickClear = () => {
-         this.refs.name.value = '';
-         this.refs.description.value = '';
+         if (!this.refs.name || !this.refs.description) {
+             console.wan('TODO: なんで refs がないん？');
+             console.wan(this.refs);
+         } else {
+             this.refs.name.value = '';
+             this.refs.description.value = '';
+         }
 
          this.update();
      };
@@ -1402,9 +1424,128 @@ riot.tag2('orthodoxs-page_tab-orthdoxs', '<section class="section"> <div class="
      });
 });
 
-riot.tag2('modal-change-deamon', '<div class="modal {opts.open ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-content" style="width:888px;"> <div class="card"> <header class="card-header"> <p class="card-header-title"> Change Deamon <span style="margin-left: 22px; color: #f00; font-weight:bold;">注意: 実装中</span> </p> </header> <div class="card-content"> <div class="content"> <div class="flex-contener"> <div class="choose-demaon-area"> <h1 class="title is-4">Deamons</h1> <p class="control has-icons-left has-icons-right"> <input class="input is-small" type="text" placeholder="Search"> <span class="icon is-small is-left"> <i class="fas fa-search"></i> </span> </p> <div> <button each="{deamon in deamons()}" class="button is-small deamon-item" deamon_id="{deamon.id}"> {deamon.name} ({deamon.name_short}) </button> </div> </div> <div class="view-impure-area"> <h1 class="title is-4">Impure</h1> <div style="padding-left:11px; flex-grow: 1;"> <p>Title (ID: 999)</p> <p> markdown; </p> </div> <div style="height:99px;"> <h1 class="title is-6" style="margin-bottom: 8px;">Deamon</h1> <div style="padding-left:11px;"> <p>XXXX (YYY)</p> <button class="button is-small deamon-item"> 削除 </button> </div> </div> </div> </div> <div style="display: flex; justify-content: space-between; margin-top: 11px;"> <button class="button is-small" onclick="{clickCancel}">Cancel</button> <button class="button is-small is-danger">Save</button> </div> </div> </div> </div> </div> <button class="modal-close is-large" aria-label="close"></button> </div>', 'modal-change-deamon .flex-contener { display:flex; height:555px; } modal-change-deamon .choose-demaon-area { flex-grow: 1; padding: 11px; width: 211px; } modal-change-deamon .choose-demaon-area .deamon-item { margin-left: 11px; margin-bottom: 11px; } modal-change-deamon .view-impure-area { flex-grow: 1; padding: 11px; background: rgba(254, 242, 100, 0.08); border-radius: 8px; box-shadow: 0px 0px 22px rgba(254, 242, 100, 0.08); display: flex; flex-direction: column; }', '', function(opts) {
+riot.tag2('modal-change-deamon-area', '<h1 class="title is-4">Deamons</h1> <p class="control has-icons-left has-icons-right"> <input class="input is-small" type="text" placeholder="Search" onkeyup="{keyUp}"> <span class="icon is-small is-left"> <i class="fas fa-search"></i> </span> </p> <div> <button each="{deamon in deamons()}" class="button is-small deamon-item" deamon-id="{deamon.id}" onclick="{clickDeamon}"> {deamon.name} ({deamon.name_short}) </button> </div>', '', '', function(opts) {
+     this.clickDeamon = (e) => {
+         let deamon_id = e.target.getAttribute('deamon-id');
+
+         this.opts.callback('choose-deamon', { id: deamon_id });
+     };
+
+     this.filter = null;
+
+     this.keyUp = (e) => {
+         let str = e.target.value;
+
+         if (str.length==0)
+             this.filter = null;
+         else
+             this.filter = str
+
+         this.update();
+     };
+
+     this.deamons = () => {
+         let filter = this.filter;
+         let deamons = STORE.get('deamons.list');
+
+         if (!this.filter)
+             return deamons
+
+         filter = filter.toLowerCase();
+
+         let out = deamons.filter((d) => {
+
+             return (d.id + '').toLowerCase().indexOf(filter) >= 0
+                 || d.name.toLowerCase().indexOf(filter) >= 0
+                 || d.name_short.toLowerCase().indexOf(filter) >= 0
+         });
+
+         return out;
+     };
+});
+
+riot.tag2('modal-change-deamon-impure-area', '<div class="root-container"> <h1 class="title is-4">Impure</h1> <div class="basic-info-area" style="font-size:12px;"> <p>{val(\'impure_name\')} (ID: {val(\'impure_id\')})</p> <p style="background:#fff; flex-grow: 1; overflow: auto;"> <description-markdown source="{val(\'impure_description\')}"></description-markdown> </p> </div> <div class="deamon-area"> <h1 class="title is-6" style="margin-bottom: 8px;">Deamon</h1> <div style="padding-left:11px;"> <p>{val(\'impure_deamon\')}</p> <button class="button is-small deamon-item {impureDeamon() ? \'\' : \'hide\'}" onclick="{clickRemove}"> 削除 </button> </div> </div> </div>', 'modal-change-deamon-impure-area .root-container { height: 100%; display: flex; flex-direction: column; } modal-change-deamon-impure-area .basic-info-area { padding-left:11px; flex-grow: 1; display: flex; flex-direction: column; } modal-change-deamon-impure-area .deamon-area { height:99px; margin-top:11px; }', '', function(opts) {
+     this.clickRemove = (e) => {
+         this.opts.callback('remove-deamon');
+     }
+
+     this.val = (name) => {
+         if (!this.opts.source)
+             return '';
+
+         if ('impure_deamon'!=name)
+             return this.opts.source[name];
+
+         let deamon = this.opts.choosed_deamon;
+
+         if (!deamon || deamon.id===null)
+             return 'なし';
+
+         return deamon.name + ' (ID:' + deamon.id + ')';
+     };
+     this.impureDeamon = () => {
+         if (!this.opts.source)
+             return null;
+
+         let deamon = this.opts.choosed_deamon;
+
+         if (!deamon || deamon.id===null)
+             return null;
+
+         return deamon;
+     };
      this.deamons = () => {
          return STORE.get('deamons.list');
+     };
+});
+
+riot.tag2('modal-change-deamon', '<div class="modal {opts.open ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-content" style="width:888px;"> <div class="card"> <header class="card-header"> <p class="card-header-title"> Change Deamon <span style="margin-left: 22px; color: #f00; font-weight:bold;">注意: 実装中</span> </p> </header> <div class="card-content"> <div class="content"> <div class="flex-contener"> <div class="choose-demaon-area"> <modal-change-deamon-area source="{opts.source}" callback="{callback}"></modal-change-deamon-area> </div> <div class="view-impure-area"> <modal-change-deamon-impure-area source="{opts.source}" choosed_deamon="{choosed_deamon}" callback="{callback}"></modal-change-deamon-impure-area> </div> </div> <div class="control-area"> <button class="button is-small" onclick="{clickCancel}">Cancel</button> <button class="button is-small is-danger" disabled="{isDisabled()}">Save</button> </div> </div> </div> </div> </div> <button class="modal-close is-large" aria-label="close" onclick="{clickCancel}"></button> </div>', 'modal-change-deamon .flex-contener { display:flex; height:555px; } modal-change-deamon .choose-demaon-area { flex-grow: 1; padding: 11px; width: 211px; } modal-change-deamon .choose-demaon-area .deamon-item { margin-left: 11px; margin-bottom: 11px; } modal-change-deamon .view-impure-area { flex-grow: 1; padding: 11px; background: rgba(254, 242, 100, 0.08); border-radius: 8px; box-shadow: 0px 0px 22px rgba(254, 242, 100, 0.08); width: 222px; display: flex; flex-direction: column; } modal-change-deamon modal-change-deamon-impure-area { height: 100%; } modal-change-deamon .control-area { display: flex; justify-content: space-between; margin-top: 11px; }', '', function(opts) {
+     this.isDisabled = () => {
+         if (!this.opts.source)
+             return 'disabled';
+
+         if (this.choosed_deamon.id == this.opts.source.deamon_id)
+             return 'disabled';
+
+         return '';
+     };
+
+     this.choosed_deamon = null;
+
+     this.on('update', () => {
+         if (!this.opts.source)
+             return;
+
+         if (!this.choosed_deamon) {
+             let id = this.opts.source.deamon_id;
+
+             if (!id)
+                 this.choosed_deamon = { id: null };
+             else
+                 this.choosed_deamon = STORE.get('deamons.ht')[id];
+         }
+     });
+
+     this.callback = (action, data) => {
+         if (action=='choose-deamon') {
+             let deamons = STORE.get('deamons.ht');
+
+             this.choosed_deamon = deamons[data.id];
+
+             if (!this.choosed_deamon)
+                 this.choosed_deamon = { id: null };
+
+             this.update();
+
+             return;
+         }
+         if (action=='remove-deamon') {
+             this.choosed_deamon = { id: null };
+
+             this.update();
+
+             return;
+         }
      };
      this.clickCancel = () => {
          this.opts.callback('close-modal-change-deamon');
@@ -1462,7 +1603,7 @@ riot.tag2('purge-result-editor', '<div class="modal {opts.data ? \'is-active\' :
      };
 });
 
-riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth hw-box-shadow" style="font-size:12px;"> <thead> <tr> <th rowspan="2">Impure</th> <th colspan="4">Purge</th> <th colspan="3">作業間隔</th> <th colspan="2">Deamon</th> </tr> <tr> <th>開始</th> <th>終了</th> <th>時間</th> <th>操作</th> <th>後作業</th> <th>前作業</th> <th>操作</th> <th>Name</th> <th>操作</th> </tr> </thead> <tbody> <tr each="{rec in data()}" purge_id="{rec.purge_id}" impure_id="{rec.impure_id}" deamon_id="{rec.deamon_id}"> <td> <a href="#purges/impures/{rec.impure_id}"> {rec.impure_name} </a> </td> <td>{fdt(rec.purge_start)}</td> <td>{fdt(rec.purge_end)}</td> <td style="text-align: right;">{elapsedTime(rec.purge_start, rec.purge_end)}</td> <td> <button class="button is-small" data-id="{id}" onclick="{clickEditButton}">変</button> </td> <td style="text-align:right;">{fmtSpan(rec.distance.after)}</td> <td style="text-align:right;">{fmtSpan(rec.distance.befor)}</td> <td> <button class="button is-small" disabled>変</button> </td> <td> <a href="#purges/deamons/{rec.deamon_id}"> {rec.deamon_name_short} </a> </td> <td> <button class="button is-small" onclick="{clickChangeDemon}">変</button> </td> </tr> </tbody> </table>', 'purges-list .table tbody td { vertical-align: middle; }', '', function(opts) {
+riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth hw-box-shadow" style="font-size:12px;"> <thead> <tr> <th rowspan="2">Impure</th> <th colspan="4">Purge</th> <th colspan="3">作業間隔</th> <th colspan="2">Deamon</th> </tr> <tr> <th>開始</th> <th>終了</th> <th>時間</th> <th>操作</th> <th>後作業</th> <th>前作業</th> <th>操作</th> <th>Name</th> <th>操作</th> </tr> </thead> <tbody> <tr each="{rec in data()}" purge_id="{rec.purge_id}" impure_id="{rec.impure_id}" deamon_id="{rec.deamon_id}"> <td> <a href="#purges/impures/{rec.impure_id}"> {rec.impure_name} </a> </td> <td>{fdt(rec.purge_start)}</td> <td>{fdt(rec.purge_end)}</td> <td style="text-align: right;">{elapsedTime(rec.purge_start, rec.purge_end)}</td> <td> <button class="button is-small" data-id="{rec.purge_id}" onclick="{clickEditButton}">変</button> </td> <td style="text-align:right;">{fmtSpan(rec.distance.after)}</td> <td style="text-align:right;">{fmtSpan(rec.distance.befor)}</td> <td> <button class="button is-small" disabled>変</button> </td> <td> <a href="#purges/deamons/{rec.deamon_id}"> {rec.deamon_name_short} </a> </td> <td> <button class="button is-small" onclick="{clickChangeDemon}">変</button> </td> </tr> </tbody> </table>', 'purges-list .table tbody td { vertical-align: middle; }', '', function(opts) {
      this.ts = new TimeStripper();
      this.befor_data = null;
      this.fmtSpan = (v) => {
@@ -1525,7 +1666,7 @@ riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow i
      };
 });
 
-riot.tag2('purges_page', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 class="title hw-text-white">期間</h1> <purges_page_filter style="margin-bottom:22px; padding-left:33px; padding-right:33px;" from="{from}" to="{to}" callback="{callback}"></purges_page_filter> </div> <div> <h1 class="title hw-text-white">Summary</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <div style="margin-right: 88px;"> <purges_page_group-span data="{data()}"></purges_page_group-span> </div> <div> <purges_page_group-span-deamon data="{data()}"></purges_page_group-span-deamon> </div> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Guntt Chart</h1> <div style="padding-left:33px; padding-right:33px;"> <purges_page_guntt-chart data="{data()}"></purges_page_guntt-chart> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Purge hisotry</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <purges-list source="{purges}" callback="{callback}"></purges-list> </div> </div> </div> <purge-result-editor data="{edit_target}" callback="{callback}"></purge-result-editor> <modal-change-deamon open="{modal_change_deamon_open}" callback="{callback}"></modal-change-deamon> <div style="height:111px;"></div>', 'purges_page { height: 100%; width: 100%; display: block; overflow: auto; } purges_page .card { border-radius: 8px; } purges_page button.refresh{ margin-top:6px; margin-right:8px; }', 'class="page-contents"', function(opts) {
+riot.tag2('purges_page', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 class="title hw-text-white">期間</h1> <purges_page_filter style="margin-bottom:22px; padding-left:33px; padding-right:33px;" from="{from}" to="{to}" callback="{callback}"></purges_page_filter> </div> <div> <h1 class="title hw-text-white">Summary</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <div style="margin-right: 88px;"> <purges_page_group-span data="{data()}"></purges_page_group-span> </div> <div> <purges_page_group-span-deamon data="{data()}"></purges_page_group-span-deamon> </div> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Guntt Chart</h1> <div style="padding-left:33px; padding-right:33px;"> <purges_page_guntt-chart data="{data()}"></purges_page_guntt-chart> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Purge hisotry</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <purges-list source="{purges}" callback="{callback}"></purges-list> </div> </div> </div> <purge-result-editor data="{edit_target}" callback="{callback}"></purge-result-editor> <modal-change-deamon open="{modal_change_deamon_open}" source="{modal_data}" callback="{callback}"></modal-change-deamon> <div style="height:111px;"></div>', 'purges_page { height: 100%; width: 100%; display: block; overflow: auto; } purges_page .card { border-radius: 8px; } purges_page button.refresh{ margin-top:6px; margin-right:8px; }', 'class="page-contents"', function(opts) {
      this.purges = [];
      this.modal_change_deamon_open = false;
 
@@ -1539,10 +1680,18 @@ riot.tag2('purges_page', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 
      };
 
      this.edit_target = null;
-
+     this.modal_data = null;
      this.callback = (action, data) => {
          if ('open-modal-change-deamon'==action) {
              this.modal_change_deamon_open = true;
+
+             this.modal_data = this.purges.find((d) => {
+                 return d.purge_id == data.purge_id;
+             });
+
+             if (this.modal_data==null)
+                 return;
+
              this.update();
 
              return;
@@ -1557,6 +1706,7 @@ riot.tag2('purges_page', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 
          if ('open-purge-result-editor'==action) {
              this.edit_target = STORE.get('purges').ht[data.id];
              this.tags['purge-result-editor'].update();
+
              return;
          }
 

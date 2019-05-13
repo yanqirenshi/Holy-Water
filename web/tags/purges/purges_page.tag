@@ -36,8 +36,12 @@
         </div>
     </div>
 
-    <purge-result-editor data={edit_target}              callback={callback}></purge-result-editor>
-    <modal-change-deamon open={modal_change_deamon_open} callback={callback}></modal-change-deamon>
+    <purge-result-editor data={edit_target}
+                         callback={callback}></purge-result-editor>
+
+    <modal-change-deamon open={modal_change_deamon_open}
+                         source={modal_data}
+                         callback={callback}></modal-change-deamon>
 
     <div style="height:111px;"></div>
 
@@ -59,10 +63,18 @@
 
     <script>
      this.edit_target = null;
-
+     this.modal_data = null;
      this.callback = (action, data) => {
          if ('open-modal-change-deamon'==action) {
              this.modal_change_deamon_open = true;
+
+             this.modal_data = this.purges.find((d) => {
+                 return d.purge_id == data.purge_id;
+             });
+
+             if (this.modal_data==null)
+                 return;
+
              this.update();
 
              return;
@@ -77,6 +89,7 @@
          if ('open-purge-result-editor'==action) {
              this.edit_target = STORE.get('purges').ht[data.id];
              this.tags['purge-result-editor'].update();
+
              return;
          }
 

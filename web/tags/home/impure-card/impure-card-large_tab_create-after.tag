@@ -52,8 +52,13 @@
          this.update();
      };
      this.clickClear = () => {
-         this.refs.name.value = '';
-         this.refs.description.value = '';
+         if (!this.refs.name || !this.refs.description) {
+             console.wan('TODO: なんで refs がないん？');
+             console.wan(this.refs);
+         } else {
+             this.refs.name.value = '';
+             this.refs.description.value = '';
+         }
 
          this.update();
      };

@@ -17,51 +17,22 @@
 
                         <div class="flex-contener">
                             <div class="choose-demaon-area">
-                                <h1 class="title is-4">Deamons</h1>
-
-                                <p class="control has-icons-left has-icons-right">
-                                    <input class="input is-small" type="text" placeholder="Search">
-                                    <span class="icon is-small is-left">
-                                        <i class="fas fa-search"></i>
-                                    </span>
-                                </p>
-
-                                <div>
-                                    <button each={deamon in deamons()}
-                                            class="button is-small deamon-item"
-                                            deamon_id={deamon.id}>
-                                        {deamon.name} ({deamon.name_short})
-                                    </button>
-                                </div>
+                                <modal-change-deamon-area source={opts.source}
+                                                          callback={callback}></modal-change-deamon-area>
                             </div>
 
                             <div class="view-impure-area">
-                                <h1 class="title is-4">Impure</h1>
-
-                                <div style="padding-left:11px;     flex-grow: 1;">
-                                    <p>Title (ID: 999)</p>
-                                    <p>
-                                        markdown;
-                                    </p>
-                                </div>
-
-                                <div style="height:99px;">
-                                    <h1 class="title is-6" style="margin-bottom: 8px;">Deamon</h1>
-                                    <div style="padding-left:11px;">
-                                        <p>XXXX (YYY)</p>
-                                        <button class="button is-small deamon-item">
-                                            削除
-                                        </button>
-                                    </div>
-                                </div>
+                                <modal-change-deamon-impure-area source={opts.source}
+                                                                 choosed_deamon={choosed_deamon}
+                                                                 callback={callback}></modal-change-deamon-impure-area>
                             </div>
                         </div>
 
-                        <div style="display: flex; justify-content: space-between; margin-top: 11px;">
+                        <div class="control-area">
                             <button class="button is-small"
                                     onclick={clickCancel}>Cancel</button>
 
-                            <button class="button is-small is-danger">Save</button>
+                            <button class="button is-small is-danger" disabled={isDisabled()}>Save</button>
                         </div>
                     </div>
                 </div>
@@ -69,12 +40,60 @@
 
         </div>
 
-        <button class="modal-close is-large" aria-label="close"></button>
+        <button class="modal-close is-large"
+                aria-label="close"
+                onclick={clickCancel}></button>
     </div>
 
     <script>
-     this.deamons = () => {
-         return STORE.get('deamons.list');
+     this.isDisabled = () => {
+         if (!this.opts.source)
+             return 'disabled';
+
+         if (this.choosed_deamon.id == this.opts.source.deamon_id)
+             return 'disabled';
+
+         return '';
+     };
+    </script>
+
+    <script>
+     this.choosed_deamon = null;
+
+     this.on('update', () => {
+         if (!this.opts.source)
+             return;
+
+         if (!this.choosed_deamon) {
+             let id = this.opts.source.deamon_id;
+
+             if (!id)
+                 this.choosed_deamon = { id: null };
+             else
+                 this.choosed_deamon = STORE.get('deamons.ht')[id];
+         }
+     });
+
+     this.callback = (action, data) => {
+         if (action=='choose-deamon') {
+             let deamons = STORE.get('deamons.ht');
+
+             this.choosed_deamon = deamons[data.id];
+
+             if (!this.choosed_deamon)
+                 this.choosed_deamon = { id: null };
+
+             this.update();
+
+             return;
+         }
+         if (action=='remove-deamon') {
+             this.choosed_deamon = { id: null };
+
+             this.update();
+
+             return;
+         }
      };
      this.clickCancel = () => {
          this.opts.callback('close-modal-change-deamon');
@@ -92,8 +111,18 @@
          border-radius: 8px;
          box-shadow: 0px 0px 22px rgba(254, 242, 100, 0.08);
 
+         width: 222px;
+
          display: flex;
          flex-direction: column;
+     }
+     modal-change-deamon modal-change-deamon-impure-area {
+         height: 100%;
+     }
+     modal-change-deamon .control-area {
+         display: flex;
+         justify-content: space-between;
+         margin-top: 11px;
      }
     </style>
 </modal-change-deamon>

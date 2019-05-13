@@ -35,7 +35,7 @@
                 <td style="text-align: right;">{elapsedTime(rec.purge_start, rec.purge_end)}</td>
                 <td>
                     <button class="button is-small"
-                            data-id={id}
+                            data-id={rec.purge_id}
                             onclick={clickEditButton}>変</button>
                     <!-- <button class="button is-small" disabled>削</button> -->
                 </td>

@@ -11,6 +11,8 @@
 
     <home_working-action data={impure()}></home_working-action>
 
+    <!-- <add-impure-menu></add-impure-menu> -->
+
     <script>
      this.site = () => {
          return STORE.state().get('site');

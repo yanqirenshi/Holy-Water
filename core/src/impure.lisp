@@ -93,7 +93,9 @@
                    :name        (name impure)
                    :description (description impure)
                    :finished-at (local-time:now)
-                   :created-by  by-id
+                   :finished-by by-id
+                   :created-at  (mito:object-created-at impure)
+                   :created-by  (created-by impure)
                    :updated-by  by-id)))
 
 

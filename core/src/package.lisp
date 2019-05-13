@@ -54,7 +54,8 @@
   (:export #:create-incantation-solo
            #:create-incantation-duet)
   (:export #:list-summay-purge-time-by-date-damon
-           #:list-purge-by-angel))
+           #:list-purge-by-angel
+           #:list-summay-impure-cemeteries-by-date-damon))
 (in-package :holy-water)
 
 (mito:connect-toplevel :postgres :database-name "holy_water" :username "holy_water")
