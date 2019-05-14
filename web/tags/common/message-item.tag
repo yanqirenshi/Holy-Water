@@ -1,16 +1,19 @@
 <message-item>
     <article class="message hw-box-shadow is-{opts.data.type}">
-        <div class="message-header">
-            <p class="is-small">{opts.data.title}</p>
+
+        <div class="message-header" style="padding:8px;">
+            <p class="is-small" style="font-size:12px;">{opts.data.title}</p>
             <button class="delete"
                     aria-label="delete"
                     onclick={clickCloseButton}></button>
         </div>
-        <div class="message-body" style="padding: 11px 22px;">
+
+        <div class="message-body" style="padding: 8px;">
             <div class="contents" style="overflow: auto;">
-                <p each={txt in contents()} class="is-small">{txt}</p>
+                <p each={txt in contents()} class="is-small" style="font-size:12px;">{txt}</p>
             </div>
         </div>
+
     </article>
 
     <script>

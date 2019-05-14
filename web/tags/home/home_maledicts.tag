@@ -123,10 +123,16 @@
          background:#fff;
      }
 
-     home_maledicts .panel-block.is-active {
-         background:#eaf4fc;
+     home_maledicts .panel-block:hover {
+         background:rgb(255, 255, 236);
      }
 
+     home_maledicts .panel-block.is-active {
+         background:rgb(254, 242, 99);
+     }
+     home_maledicts .panel-block.is-active {
+         border-left-color: rgb(254, 224, 0);
+     }
      home_maledicts .move-door.close .opened-door {
          display: none;
      }

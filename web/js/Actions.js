@@ -599,7 +599,7 @@ class Actions extends Vanilla_Redux_Actions {
         if (messages.length==0)
             return;
 
-        this.pushWarningMessage('新規の依頼が n 件届きました。');
+        this.pushWarningMessage('新規の依頼が ' + messages.length + ' 件届きました。');
     }
     /////
     ///// Message

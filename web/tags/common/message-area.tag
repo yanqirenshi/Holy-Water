@@ -26,7 +26,7 @@
      message-area {
          position: fixed;
          right: 22px;
-         top: 22px;
+         top: calc(22px + 49px - 11px);
          z-index: 666666;
      }
      message-area > message-item {

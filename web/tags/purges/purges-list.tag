@@ -36,7 +36,9 @@
                 <td>
                     <button class="button is-small"
                             data-id={rec.purge_id}
-                            onclick={clickEditButton}>変</button>
+                            before-end={beforEnd(rec)}
+                            after-start={afterStart(rec)}
+                            onclick={clickEditTermButton}>変</button>
                     <!-- <button class="button is-small" disabled>削</button> -->
                 </td>
                 <td style="text-align:right;">{fmtSpan(rec.distance.after)}</td>
@@ -86,6 +88,9 @@
 
              if (after) {
                  let distance = after.purge_start.diff(rec.purge_end);
+                 rec.after = after;
+                 after.before = rec;
+
                  rec.distance.after = distance;
                  after.distance.befor = distance;
              }
@@ -99,11 +104,13 @@
     </script>
 
     <script>
-     this.clickEditButton = (e) => {
+     this.clickEditTermButton = (e) => {
          let target = e.target;
 
          this.opts.callback('open-purge-result-editor', {
-             id: target.getAttribute('data-id')
+             id: target.getAttribute('data-id'),
+             before_end: target.getAttribute('before-end'),
+             after_start: target.getAttribute('after-start'),
          })
      };
      this.clickChangeDemon = (e) => {
@@ -118,6 +125,18 @@
     </script>
 
     <script>
+     this.beforEnd = (rec) => {
+         if (!rec.before || !rec.before.purge_end)
+             return null;
+
+         return rec.before.purge_end.format('YYYY-MM-DD HH:mm:ss');
+     };
+     this.afterStart = (rec) => {
+         if (!rec.after || !rec.after.purge_start)
+             return null;
+
+         return rec.after.purge_start.format('YYYY-MM-DD HH:mm:ss');
+     };
      this.fdt = (dt) => {
          return dt.format('MM-DD HH:mm:ss')
      }

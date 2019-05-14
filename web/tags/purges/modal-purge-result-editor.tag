@@ -1,4 +1,4 @@
-<purge-result-editor>
+<modal-purge-result-editor>
     <div class="modal {opts.data ? 'is-active' : ''}">
         <div class="modal-background"></div>
         <div class="modal-card">
@@ -40,25 +40,35 @@
 
                 <div class="field is-horizontal">
                     <div class="field-label is-normal">
-                        <label class="label">Start</label>
+                        <label class="label">開始</label>
                     </div>
                     <div class="field-body">
                         <div class="field">
                             <p class="control">
                                 <input class="input" type="datetime" value={date2str(getVal('start'))} ref="start">
                             </p>
+                            <div style="padding-top: 5px;">
+                                <button class="button is-small" action="now"           onclick={clickSetDate}>今</button>
+                                <button class="button is-small {isHide('before-end')}" action="before-end"    onclick={clickSetDate}>前の作業の終了</button>
+                                <button class="button is-small" action="revert-start"  onclick={clickSetDate}>元に戻す</button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="field is-horizontal">
                     <div class="field-label is-normal">
-                        <label class="label">End</label>
+                        <label class="label">終了</label>
                     </div>
                     <div class="field-body">
                         <div class="field">
                             <p class="control">
                                 <input class="input" type="datetime" value={date2str(getVal('end'))} ref="end">
+                                <div style="padding-top: 5px;">
+                                    <button class="button is-small" action="now"            onclick={clickSetDate}>今</button>
+                                    <button class="button is-small {isHide('after-start')}" action="after-start" onclick={clickSetDate}>後の作業の開始</button>
+                                    <button class="button is-small" action="revert-end"     onclick={clickSetDate}>元に戻す</button>
+                                </div>
                             </p>
                         </div>
                     </div>
@@ -66,9 +76,9 @@
 
             </section>
 
-            <footer class="modal-card-foot">
-                <button class="button is-success" action="save-purge-result-editor" onclick={clickButton}>Save changes</button>
-                <button class="button" action="close-purge-result-editor" onclick={clickButton}>Cancel</button>
+            <footer class="modal-card-foot" style="padding: 11px 22px;">
+                <button class="button is-small is-success" action="save-purge-result-editor" onclick={clickButton}>Save changes</button>
+                <button class="button is-small" action="close-purge-result-editor" onclick={clickButton}>Cancel</button>
             </footer>
         </div>
     </div>
@@ -90,9 +100,43 @@
              end: stripper.str2date(this.refs.end.value)
          })
      };
+     this.clickSetDate = (e) => {
+         let target = e.target;
+         // TODO: 手抜きです。汎用性はないっす。あ
+         let input = target.parentNode.parentNode.firstElementChild.firstElementChild;
+         let action = target.getAttribute('action');
+
+         let value = (action) => {
+             if (action=='now')
+                 return moment();
+
+             if (action=='after-start')
+                 return this.opts.source.after_start;
+
+             if (action=='before-end')
+                 return this.opts.source.before_end;
+
+             if (action=='revert-start')
+                 return this.opts.data.start;
+
+             if (action=='revert-end')
+                 return this.opts.data.end;
+
+             throw Error('Not Supported yet. action=' + action) ;
+         };
+
+         input.value = moment(value(action)).format('YYYY-MM-DD HH:mm:ss');
+     };
     </script>
 
     <script>
+     this.isHide = (code) => {
+         if (code=='after-start')
+             return this.opts.source.after_start ? '' : 'hide';
+
+         if (code=='before-end')
+             return this.opts.source.before_end ? '' : 'hide';
+     };
      this.getVal = (key) => {
          let data = this.opts.data;
 
@@ -110,4 +154,4 @@
          return moment(date).format("YYYY-MM-DD HH:mm:ss");
      };
     </script>
-</purge-result-editor>
+</modal-purge-result-editor>

@@ -41,8 +41,9 @@
         </div>
     </div>
 
-    <purge-result-editor data={edit_target}
-                         callback={callback}></purge-result-editor>
+    <modal-purge-result-editor data={edit_target}
+                               source={edit_data}
+                               callback={callback}></modal-purge-result-editor>
 
     <modal-change-deamon source={modal_data}
                          callback={callback}></modal-change-deamon>
@@ -67,6 +68,7 @@
 
     <script>
      this.edit_target = null;
+     this.edit_data   = { before_end: null, after_start: null };
      this.modal_data = null;
      this.callback = (action, data) => {
          if ('open-modal-change-deamon'==action) {
@@ -91,14 +93,18 @@
 
          if ('open-purge-result-editor'==action) {
              this.edit_target = STORE.get('purges').ht[data.id];
-             this.tags['purge-result-editor'].update();
+             this.edit_data = {
+                 before_end: data.before_end,
+                 after_start: data.after_start,
+             }
+             this.tags['modal-purge-result-editor'].update();
 
              return;
          }
 
          if ('close-purge-result-editor'==action) {
              this.edit_target = null;
-             this.tags['purge-result-editor'].update();
+             this.tags['modal-purge-result-editor'].update();
              return;
          }
 

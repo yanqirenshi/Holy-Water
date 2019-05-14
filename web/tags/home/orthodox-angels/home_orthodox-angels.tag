@@ -57,5 +57,13 @@
          font-size:12px;
          font-weight: bold;
      }
+
+     home_orthodox-angels .panel-block:hover {
+         background:rgb(255, 255, 236);
+     }
+
+     home_orthodox-angels .panel-block.is-active {
+         border-left-color: rgb(254, 224, 0);
+     }
     </style>
 </home_orthodox-angels>

@@ -17,7 +17,7 @@
         </div>
 
         <div class="right">
-            <button class="button is-small" onclick={clickReset}>Reset</button>
+            <button class="button is-small" onclick={clickReset}>Set Contents</button>
             <button class="button is-small" onclick={clickClear}>Clear</button>
             <span style="flex-grow:1;"></span>
             <button class="button is-small is-success" onclick={clickCreate} disabled={isDisable()}>Create!</button>

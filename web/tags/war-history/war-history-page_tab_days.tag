@@ -3,7 +3,10 @@
     <section class="section" style="padding-top:22px;">
         <div class="container">
             <hw-section-title title="グラフ" lev="4"></hw-section-title>
-            <hw-section-subtitle contents="準備中：悪魔毎の棒グラフ"></hw-section-subtitle>
+
+            <div class="contents">
+                <p class="hw-text-white is-4" style="margin-left:22px;">準備中</p>
+            </div>
         </div>
     </section>
 

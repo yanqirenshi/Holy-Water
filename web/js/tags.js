@@ -1,7 +1,13 @@
-riot.tag2('angel_page', '<section class="section"> <div class="container"> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">パスワード変更</h1> <h2 class="subtitle hw-text-white">準備中</h2> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">サインアウト</h1> <h2 class="subtitle hw-text-white"></h2> <div class="contents"> <button class="button is-danger hw-box-shadow" style="margin-left:22px; margin-top:11px;" onclick="{clickSignOut}">Sign Out</button> </div> </div> </section> </div> </section>', '', 'class="page-contents"', function(opts) {
+riot.tag2('angel-page-change-password', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">パスワード変更</h1> <h2 class="subtitle hw-text-white">準備中</h2> </div> </section>', '', '', function(opts) {
+});
+
+riot.tag2('angel-page-sign-out', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">サインアウト</h1> <h2 class="subtitle hw-text-white"></h2> <div class="contents"> <button class="button is-danger hw-box-shadow" style="margin-left:22px; margin-top:11px;" onclick="{clickSignOut}">Sign Out</button> </div> </div> </section>', '', '', function(opts) {
      this.clickSignOut = () => {
          ACTIONS.signOut();
      };
+});
+
+riot.tag2('angel_page', '<section class="section"> <div class="container"> <h1 class="title is-1 hw-text-white">準備中。。。</h1> </div> </section>', '', 'class="page-contents"', function(opts) {
 });
 
 riot.tag2('app-page-area', '', '', '', function(opts) {
@@ -146,7 +152,7 @@ riot.tag2('cemetery_page_filter', '<span class="hw-text-white" style="font-size:
      };
 });
 
-riot.tag2('menu-bar', '<aside class="menu"> <p ref="brand" class="menu-label" onclick="{clickBrand}"> {opts.brand.label} </p> <ul class="menu-list"> <li each="{opts.site.pages}"> <a class="{opts.site.active_page==code ? \'is-active\' : \'\'}" href="{\'#\' + code}"> {menu_label} </a> </li> </ul> </aside> <div class="move-page-menu hide" ref="move-panel"> <p each="{moves()}"> <a href="{href}">{label}</a> </p> </div>', 'menu-bar .move-page-menu { z-index: 666665; background: #ffffff; position: fixed; left: 55px; top: 0px; min-width: 111px; height: 100vh; box-shadow: 2px 0px 8px 0px #e0e0e0; text-shadow: 0px 0px 11px rgb(254, 242, 99); padding: 22px 55px 22px 22px; } menu-bar .move-page-menu.hide { display: none; } menu-bar .move-page-menu > p { margin-bottom: 11px; } menu-bar > .menu { z-index: 666666; height: 100vh; width: 55px; padding: 11px 0px 11px 11px; position: fixed; left: 0px; top: 0px; background: rgb(254, 242, 99); } menu-bar .menu-label, menu-bar .menu-list a { padding: 0; width: 33px; height: 33px; margin-top: 8px; padding-top: 7px; border-radius: 3px; background: none; color: #333333; text-align: center; text-shadow: 0px 0px 11px #ffffff; font-size: 14px; font-weight: bold; } menu-bar .menu-label,[data-is="menu-bar"] .menu-label{ background: #ffffff; color: #333333; } menu-bar .menu-label.open,[data-is="menu-bar"] .menu-label.open{ background: #ffffff; color: rgb(254, 242, 99); width: 44px; border-radius: 3px 0px 0px 3px; text-shadow: 0px 0px 1px #eee; padding-right: 11px; } menu-bar .menu-list a:hover { width: 44px; border-radius: 5px 0px 0px 5px; background: #ffffff; } menu-bar .menu-list a.is-active { width: 55px; border-radius: 5px 0px 0px 5px; background: #ffffff; color: #333333; text-shadow: 0px 0px 22px rgb(254, 242, 99); }', '', function(opts) {
+riot.tag2('menu-bar', '<aside class="menu"> <p ref="brand" class="menu-label" onclick="{clickBrand}"> {opts.brand.label} </p> <ul class="menu-list"> <li each="{opts.site.pages}"> <a class="{opts.site.active_page==code ? \'is-active\' : \'\'}" href="{\'#\' + code}"> {menu_label} </a> </li> </ul> </aside> <div class="move-page-menu hide" ref="move-panel"> <p each="{moves()}"> <a href="{href}">{label}</a> </p> </div>', 'menu-bar .move-page-menu { z-index: 666665; background: #ffffff; position: fixed; left: 55px; top: 0px; min-width: 111px; height: 100vh; box-shadow: 2px 0px 8px 0px #e0e0e0; text-shadow: 0px 0px 11px rgb(254, 242, 99); padding: 22px 55px 22px 22px; } menu-bar .move-page-menu.hide { display: none; } menu-bar .move-page-menu > p { margin-bottom: 11px; } menu-bar > .menu { z-index: 666666; height: 100vh; width: 55px; padding: 11px 0px 11px 11px; position: fixed; left: 0px; top: 0px; background: rgb(254, 242, 99); } menu-bar .menu-label, menu-bar .menu-list a { padding: 0; width: 33px; height: 33px; margin-top: 8px; padding-top: 7px; border-radius: 3px; background: none; color: #333333; text-align: center; text-shadow: 0px 0px 11px #ffffff; font-size: 14px; font-weight: bold; } menu-bar .menu-label,[data-is="menu-bar"] .menu-label{ background: #ffffff; color: #333333; } menu-bar .menu-label.open,[data-is="menu-bar"] .menu-label.open{ background: #ffffff; color: rgb(254, 242, 99); width: 44px; border-radius: 3px 0px 0px 3px; text-shadow: 0px 0px 1px #eee; padding-right: 11px; } menu-bar .menu-list a:hover { width: 44px; border-radius: 5px 0px 0px 5px; background: #ffffff; } menu-bar .menu-list a.is-active { width: 55px; border-radius: 5px 0px 0px 5px; background: #ffffff; color: #333333; }', '', function(opts) {
      this.moves = () => {
          let moves = [
              {
@@ -204,7 +210,7 @@ riot.tag2('menu-bar', '<aside class="menu"> <p ref="brand" class="menu-label" on
      };
 });
 
-riot.tag2('message-area', '<message-item each="{msg in messages()}" data="{msg}" callback="{callback}"></message-item>', 'message-area { position: fixed; right: 22px; top: 22px; z-index: 666666; } message-area > message-item { margin-bottom: 11px; } message-area > message-item:last-child { margin-bottom: 0px; }', '', function(opts) {
+riot.tag2('message-area', '<message-item each="{msg in messages()}" data="{msg}" callback="{callback}"></message-item>', 'message-area { position: fixed; right: 22px; top: calc(22px + 49px - 11px); z-index: 666666; } message-area > message-item { margin-bottom: 11px; } message-area > message-item:last-child { margin-bottom: 0px; }', '', function(opts) {
      this.callback = (action, data) => {
          if ('close-message'==action)
              ACTIONS.closeMessage(data);
@@ -221,7 +227,7 @@ riot.tag2('message-area', '<message-item each="{msg in messages()}" data="{msg}"
      };
 });
 
-riot.tag2('message-item', '<article class="message hw-box-shadow is-{opts.data.type}"> <div class="message-header"> <p class="is-small">{opts.data.title}</p> <button class="delete" aria-label="delete" onclick="{clickCloseButton}"></button> </div> <div class="message-body" style="padding: 11px 22px;"> <div class="contents" style="overflow: auto;"> <p each="{txt in contents()}" class="is-small">{txt}</p> </div> </div> </article>', 'message-item > .message{ min-height: calc(46px + 44px); min-width: 111px; max-height: 222px; max-width: 333px; } message-item { display: block; }', '', function(opts) {
+riot.tag2('message-item', '<article class="message hw-box-shadow is-{opts.data.type}"> <div class="message-header" style="padding:8px;"> <p class="is-small" style="font-size:12px;">{opts.data.title}</p> <button class="delete" aria-label="delete" onclick="{clickCloseButton}"></button> </div> <div class="message-body" style="padding: 8px;"> <div class="contents" style="overflow: auto;"> <p each="{txt in contents()}" class="is-small" style="font-size:12px;">{txt}</p> </div> </div> </article>', 'message-item > .message{ min-height: calc(46px + 44px); min-width: 111px; max-height: 222px; max-width: 333px; } message-item { display: block; }', '', function(opts) {
      this.contents = () => {
          if (!opts.data || !opts.data.contents)
              return [];
@@ -630,7 +636,7 @@ riot.tag2('home_impures', '<div class="flex-parent" style="height:100%; margin-t
      });
 });
 
-riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Maledicts</p> <a each="{data()}" class="panel-block {isActive(id)}" onclick="{clickItem}" maledict-id="{id}" style="padding: 5px 8px;"> <span style="width:120px; font-size:11px;" maledict-id="{id}"> {name} </span> <span class="operators" style="font-size:14px;"> <span class="icon" title="ここに「やること」を追加する。" maledict-id="{id}" maledict-name="{name}" onclick="{clickAddButton}"> <i class="far fa-plus-square" maledict-id="{id}"></i> </span> <span class="move-door {dragging ? \'open\' : \'close\'}" ref="move-door" dragover="{dragover}" drop="{drop}"> <span class="icon closed-door"> <i class="fas fa-door-closed"></i> </span> <span class="icon opened-door" maledict-id="{id}"> <i class="fas fa-door-open" maledict-id="{id}"></i> </span> </span> </span> </a> </nav>', 'home_maledicts > .panel { width: 188px; border-radius: 4px 4px 0 0; } home_maledicts > .panel > .panel-heading{ font-size:12px; font-weight:bold; } home_maledicts .panel-block { background:#fff; } home_maledicts .panel-block.is-active { background:#eaf4fc; } home_maledicts .move-door.close .opened-door { display: none; } home_maledicts .move-door.open .closed-door { display: none; } home_maledicts .operators { width: 53px; } home_maledicts .operators .icon { color: #cccccc; } home_maledicts .operators .icon:hover { color: #880000; } home_maledicts .operators .move-door.open .icon { color: #880000; }', '', function(opts) {
+riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Maledicts</p> <a each="{data()}" class="panel-block {isActive(id)}" onclick="{clickItem}" maledict-id="{id}" style="padding: 5px 8px;"> <span style="width:120px; font-size:11px;" maledict-id="{id}"> {name} </span> <span class="operators" style="font-size:14px;"> <span class="icon" title="ここに「やること」を追加する。" maledict-id="{id}" maledict-name="{name}" onclick="{clickAddButton}"> <i class="far fa-plus-square" maledict-id="{id}"></i> </span> <span class="move-door {dragging ? \'open\' : \'close\'}" ref="move-door" dragover="{dragover}" drop="{drop}"> <span class="icon closed-door"> <i class="fas fa-door-closed"></i> </span> <span class="icon opened-door" maledict-id="{id}"> <i class="fas fa-door-open" maledict-id="{id}"></i> </span> </span> </span> </a> </nav>', 'home_maledicts > .panel { width: 188px; border-radius: 4px 4px 0 0; } home_maledicts > .panel > .panel-heading{ font-size:12px; font-weight:bold; } home_maledicts .panel-block { background:#fff; } home_maledicts .panel-block:hover { background:rgb(255, 255, 236); } home_maledicts .panel-block.is-active { background:rgb(254, 242, 99); } home_maledicts .panel-block.is-active { border-left-color: rgb(254, 224, 0); } home_maledicts .move-door.close .opened-door { display: none; } home_maledicts .move-door.open .closed-door { display: none; } home_maledicts .operators { width: 53px; } home_maledicts .operators .icon { color: #cccccc; } home_maledicts .operators .icon:hover { color: #880000; } home_maledicts .operators .move-door.open .icon { color: #880000; }', '', function(opts) {
      this.dragging = false;
 
      this.dragover = (e) => {
@@ -752,7 +758,11 @@ riot.tag2('home_page', '<div class="bucket-area"> <home_maledicts data="{STORE.g
 
          if (action.type=='TRANSFERD-IMPURE-TO-ANGEL') {
              this.request_impure = null;
-             this.tags['modal_request-impure'].update();
+
+             if (this.tags['modal_request-impure'])
+                 this.tags['modal_request-impure'].update();
+             else
+                 this.update();
          }
 
          if (action.type=='SELECT-SERVICE-ITEM') {
@@ -913,7 +923,7 @@ riot.tag2('impure-card-large', '<div class="card hw-box-shadow"> <impure-card-he
      };
 });
 
-riot.tag2('impure-card-large_tab_create-after', '<div class="form-contents"> <div class="left"> <input class="input is-small" type="text" placeholder="Title" ref="name" onkeyup="{keyUpTitle}"> <textarea class="textarea is-small" placeholder="Description" rows="6" style="margin-top:11px; flex-grow:1;" ref="description"></textarea> </div> <div class="right"> <button class="button is-small" onclick="{clickReset}">Reset</button> <button class="button is-small" onclick="{clickClear}">Clear</button> <span style="flex-grow:1;"></span> <button class="button is-small is-success" onclick="{clickCreate}" disabled="{isDisable()}">Create!</button> </div> </div>', 'impure-card-large_tab_create-after .form-contents { display:flex; width:100%; height:100%; } impure-card-large_tab_create-after .form-contents > .left { flex-grow:1; display:flex; flex-direction:column; } impure-card-large_tab_create-after .form-contents > .right{ padding-left:8px; display:flex; flex-direction: column; } impure-card-large_tab_create-after .form-contents > .right > * { margin-bottom: 8px; }', '', function(opts) {
+riot.tag2('impure-card-large_tab_create-after', '<div class="form-contents"> <div class="left"> <input class="input is-small" type="text" placeholder="Title" ref="name" onkeyup="{keyUpTitle}"> <textarea class="textarea is-small" placeholder="Description" rows="6" style="margin-top:11px; flex-grow:1;" ref="description"></textarea> </div> <div class="right"> <button class="button is-small" onclick="{clickReset}">Set Contents</button> <button class="button is-small" onclick="{clickClear}">Clear</button> <span style="flex-grow:1;"></span> <button class="button is-small is-success" onclick="{clickCreate}" disabled="{isDisable()}">Create!</button> </div> </div>', 'impure-card-large_tab_create-after .form-contents { display:flex; width:100%; height:100%; } impure-card-large_tab_create-after .form-contents > .left { flex-grow:1; display:flex; flex-direction:column; } impure-card-large_tab_create-after .form-contents > .right{ padding-left:8px; display:flex; flex-direction: column; } impure-card-large_tab_create-after .form-contents > .right > * { margin-bottom: 8px; }', '', function(opts) {
      this.isDisable = () => {
          return this.refs.name.value.trim().length==0;
      };
@@ -1178,7 +1188,7 @@ riot.tag2('modal_request-impure', '<div class="modal {opts.source ? \'is-active\
      };
 });
 
-riot.tag2('home_orthodox-angels', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Exorcists</p> <a class="panel-block"> <orthodox-doropdown></orthodox-doropdown> </a> <a each="{obj in data()}" class="panel-block" angel-id="{obj.id}" style="padding:5px 8px;"> <span style="width:100%;font-size:11px;;" maledict-id="{obj.id}"> {obj.name} </span> <home_emergency-door source="{obj}"></home_emergency-door> </a> </nav>', 'home_orthodox-angels > .panel { width: 188px; margin-top: 22px; border-radius: 4px 4px 0 0; } home_orthodox-angels > .panel > a { background: #ffffff; } home_orthodox-angels > .panel > .panel-heading { font-size:12px; font-weight: bold; }', '', function(opts) {
+riot.tag2('home_orthodox-angels', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Exorcists</p> <a class="panel-block"> <orthodox-doropdown></orthodox-doropdown> </a> <a each="{obj in data()}" class="panel-block" angel-id="{obj.id}" style="padding:5px 8px;"> <span style="width:100%;font-size:11px;;" maledict-id="{obj.id}"> {obj.name} </span> <home_emergency-door source="{obj}"></home_emergency-door> </a> </nav>', 'home_orthodox-angels > .panel { width: 188px; margin-top: 22px; border-radius: 4px 4px 0 0; } home_orthodox-angels > .panel > a { background: #ffffff; } home_orthodox-angels > .panel > .panel-heading { font-size:12px; font-weight: bold; } home_orthodox-angels .panel-block:hover { background:rgb(255, 255, 236); } home_orthodox-angels .panel-block.is-active { border-left-color: rgb(254, 224, 0); }', '', function(opts) {
      this.dragging = false;
      this.exorcists = [];
 
@@ -1261,7 +1271,7 @@ riot.tag2('home_other-services', '<nav class="panel hw-box-shadow"> <p class="pa
      });
 });
 
-riot.tag2('service-card-small', '<div class="card hw-box-shadow"> <header class="card-header"> <p class="card-header-title"> Gitlab &nbsp; <a href="{url()}" target="_blank">Issues</a> </p> </header> <div class="card-content"> <div class="content" style="font-size:14px;"> <p style="word-break: break-all;">{name()}</p> </div> </div> <footer class="card-footer"> <a class="card-footer-item" href="{assignee_url()}" taget="_blank"> {assignee_name()} </a> </footer> </div>', 'service-card-small > .card { width: 222px; height: 222px; float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; border: 1px solid #dddddd; border-radius: 5px; } service-card-small > .card .card-content{ height: calc(222px - 49px - 48px); padding: 11px 22px; overflow: auto; }', '', function(opts) {
+riot.tag2('service-card-small', '<div class="card hw-box-shadow"> <header class="card-header"> <p class="card-header-title"> Gitlab &nbsp; <a href="{url()}" target="_blank">Issues</a> </p> </header> <div class="card-content"> <div class="content" style="font-size:14px;"> <p style="word-break: break-all;">{name()}</p> </div> </div> <footer class="card-footer"> <a class="card-footer-item" href="{assignee_url()}" taget="_blank"> {assignee_name()} </a> </footer> </div>', 'service-card-small > .card { width: 222px; height: 222px; float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; border: 1px solid #dddddd; border-radius: 5px; } service-card-small > .card .card-content{ height: calc(222px - 49px - 48px); padding: 11px 22px; overflow: auto; } service-card-small .panel-block:hover { background:rgb(255, 255, 236); } service-card-small .panel-block.is-active { background:rgb(254, 242, 99); } service-card-small .panel-block.is-active { border-left-color: rgb(254, 224, 0); }', '', function(opts) {
      this.name = () => {
          if (!this.opts.source) return '????????'
 
@@ -1615,22 +1625,7 @@ riot.tag2('modal-change-deamon', '<div class="modal {isOpen()}"> <div class="mod
      };
 });
 
-riot.tag2('move-date-operator', '<div class="operator hw-box-shadow"> <div class="befor"> <button class="button" onclick="{clickBefor}"><</button> </div> <div class="trg"> <span>{opts.label}</span> </div> <div class="after"> <button class="button" onclick="{clickAfter}">></button> </div> </div>', 'move-date-operator .operator { display: flex; margin-left:11px; border-radius: 8px; } move-date-operator .operator span { font-size:18px; } move-date-operator .button{ border: none; } move-date-operator .befor, move-date-operator .befor .button{ border-radius: 8px 0px 0px 8px; } move-date-operator .after, move-date-operator .after .button{ border-radius: 0px 8px 8px 0px; } move-date-operator .operator > div { border: 1px solid #dbdbdb; width: 36px; } move-date-operator .operator > div.trg{ padding-top: 5px; padding-left: 8px; border-left: none; border-right: none; background: #ffffff; }', '', function(opts) {
-     this.clickBefor = () => {
-         this.opts.callback('move-date', {
-             unit: this.opts.unit,
-             amount: -1,
-         });
-     }
-     this.clickAfter = () => {
-         this.opts.callback('move-date', {
-             unit: this.opts.unit,
-             amount: 1,
-         });
-     }
-});
-
-riot.tag2('purge-result-editor', '<div class="modal {opts.data ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head"> <p class="modal-card-title">作業時間の変更</p> <button class="delete" aria-label="close" action="close-purge-result-editor" onclick="{clickButton}"></button> </header> <section class="modal-card-body"> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">Impure</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'impure_name\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">作業時間</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'elapsed-time\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">Start</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'start\'))}" ref="start" type="{\'datetime\'}"> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">End</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'end\'))}" ref="end" type="{\'datetime\'}"> </p> </div> </div> </div> </section> <footer class="modal-card-foot"> <button class="button is-success" action="save-purge-result-editor" onclick="{clickButton}">Save changes</button> <button class="button" action="close-purge-result-editor" onclick="{clickButton}">Cancel</button> </footer> </div> </div>', '', '', function(opts) {
+riot.tag2('modal-purge-result-editor', '<div class="modal {opts.data ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head"> <p class="modal-card-title">作業時間の変更</p> <button class="delete" aria-label="close" action="close-purge-result-editor" onclick="{clickButton}"></button> </header> <section class="modal-card-body"> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">Impure</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'impure_name\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">作業時間</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'elapsed-time\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">開始</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'start\'))}" ref="start" type="{\'datetime\'}"> </p> <div style="padding-top: 5px;"> <button class="button is-small" action="now" onclick="{clickSetDate}">今</button> <button class="button is-small {isHide(\'before-end\')}" action="before-end" onclick="{clickSetDate}">前の作業の終了</button> <button class="button is-small" action="revert-start" onclick="{clickSetDate}">元に戻す</button> </div> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">終了</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'end\'))}" ref="end" type="{\'datetime\'}"> <div style="padding-top: 5px;"> <button class="button is-small" action="now" onclick="{clickSetDate}">今</button> <button class="button is-small {isHide(\'after-start\')}" action="after-start" onclick="{clickSetDate}">後の作業の開始</button> <button class="button is-small" action="revert-end" onclick="{clickSetDate}">元に戻す</button> </div> </p> </div> </div> </div> </section> <footer class="modal-card-foot" style="padding: 11px 22px;"> <button class="button is-small is-success" action="save-purge-result-editor" onclick="{clickButton}">Save changes</button> <button class="button is-small" action="close-purge-result-editor" onclick="{clickButton}">Cancel</button> </footer> </div> </div>', '', '', function(opts) {
      this.clickButton = (e) => {
          let action = e.target.getAttribute('action');
 
@@ -1647,7 +1642,41 @@ riot.tag2('purge-result-editor', '<div class="modal {opts.data ? \'is-active\' :
              end: stripper.str2date(this.refs.end.value)
          })
      };
+     this.clickSetDate = (e) => {
+         let target = e.target;
 
+         let input = target.parentNode.parentNode.firstElementChild.firstElementChild;
+         let action = target.getAttribute('action');
+
+         let value = (action) => {
+             if (action=='now')
+                 return moment();
+
+             if (action=='after-start')
+                 return this.opts.source.after_start;
+
+             if (action=='before-end')
+                 return this.opts.source.before_end;
+
+             if (action=='revert-start')
+                 return this.opts.data.start;
+
+             if (action=='revert-end')
+                 return this.opts.data.end;
+
+             throw Error('Not Supported yet. action=' + action) ;
+         };
+
+         input.value = moment(value(action)).format('YYYY-MM-DD HH:mm:ss');
+     };
+
+     this.isHide = (code) => {
+         if (code=='after-start')
+             return this.opts.source.after_start ? '' : 'hide';
+
+         if (code=='before-end')
+             return this.opts.source.before_end ? '' : 'hide';
+     };
      this.getVal = (key) => {
          let data = this.opts.data;
 
@@ -1666,7 +1695,22 @@ riot.tag2('purge-result-editor', '<div class="modal {opts.data ? \'is-active\' :
      };
 });
 
-riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth hw-box-shadow" style="font-size:12px;"> <thead> <tr> <th rowspan="2">Impure</th> <th colspan="4">Purge</th> <th colspan="3">作業間隔</th> <th colspan="2">Deamon</th> </tr> <tr> <th>開始</th> <th>終了</th> <th>時間</th> <th>操作</th> <th>後作業</th> <th>前作業</th> <th>操作</th> <th>Name</th> <th>操作</th> </tr> </thead> <tbody> <tr each="{rec in data()}" purge_id="{rec.purge_id}" impure_id="{rec.impure_id}" deamon_id="{rec.deamon_id}"> <td> <a href="#purges/impures/{rec.impure_id}"> {rec.impure_name} </a> </td> <td>{fdt(rec.purge_start)}</td> <td>{fdt(rec.purge_end)}</td> <td style="text-align: right;">{elapsedTime(rec.purge_start, rec.purge_end)}</td> <td> <button class="button is-small" data-id="{rec.purge_id}" onclick="{clickEditButton}">変</button> </td> <td style="text-align:right;">{fmtSpan(rec.distance.after)}</td> <td style="text-align:right;">{fmtSpan(rec.distance.befor)}</td> <td> <button class="button is-small" disabled>変</button> </td> <td> <a href="#purges/deamons/{rec.deamon_id}"> {rec.deamon_name_short} </a> </td> <td> <button class="button is-small" onclick="{clickChangeDemon}">変</button> </td> </tr> </tbody> </table>', 'purges-list .table tbody td { vertical-align: middle; }', '', function(opts) {
+riot.tag2('move-date-operator', '<div class="operator hw-box-shadow"> <div class="befor"> <button class="button" onclick="{clickBefor}"><</button> </div> <div class="trg"> <span>{opts.label}</span> </div> <div class="after"> <button class="button" onclick="{clickAfter}">></button> </div> </div>', 'move-date-operator .operator { display: flex; margin-left:11px; border-radius: 8px; } move-date-operator .operator span { font-size:18px; } move-date-operator .button{ border: none; } move-date-operator .befor, move-date-operator .befor .button{ border-radius: 8px 0px 0px 8px; } move-date-operator .after, move-date-operator .after .button{ border-radius: 0px 8px 8px 0px; } move-date-operator .operator > div { border: 1px solid #dbdbdb; width: 36px; } move-date-operator .operator > div.trg{ padding-top: 5px; padding-left: 8px; border-left: none; border-right: none; background: #ffffff; }', '', function(opts) {
+     this.clickBefor = () => {
+         this.opts.callback('move-date', {
+             unit: this.opts.unit,
+             amount: -1,
+         });
+     }
+     this.clickAfter = () => {
+         this.opts.callback('move-date', {
+             unit: this.opts.unit,
+             amount: 1,
+         });
+     }
+});
+
+riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth hw-box-shadow" style="font-size:12px;"> <thead> <tr> <th rowspan="2">Impure</th> <th colspan="4">Purge</th> <th colspan="3">作業間隔</th> <th colspan="2">Deamon</th> </tr> <tr> <th>開始</th> <th>終了</th> <th>時間</th> <th>操作</th> <th>後作業</th> <th>前作業</th> <th>操作</th> <th>Name</th> <th>操作</th> </tr> </thead> <tbody> <tr each="{rec in data()}" purge_id="{rec.purge_id}" impure_id="{rec.impure_id}" deamon_id="{rec.deamon_id}"> <td> <a href="#purges/impures/{rec.impure_id}"> {rec.impure_name} </a> </td> <td>{fdt(rec.purge_start)}</td> <td>{fdt(rec.purge_end)}</td> <td style="text-align: right;">{elapsedTime(rec.purge_start, rec.purge_end)}</td> <td> <button class="button is-small" data-id="{rec.purge_id}" before-end="{beforEnd(rec)}" after-start="{afterStart(rec)}" onclick="{clickEditTermButton}">変</button> </td> <td style="text-align:right;">{fmtSpan(rec.distance.after)}</td> <td style="text-align:right;">{fmtSpan(rec.distance.befor)}</td> <td> <button class="button is-small" disabled>変</button> </td> <td> <a href="#purges/deamons/{rec.deamon_id}"> {rec.deamon_name_short} </a> </td> <td> <button class="button is-small" onclick="{clickChangeDemon}">変</button> </td> </tr> </tbody> </table>', 'purges-list .table tbody td { vertical-align: middle; }', '', function(opts) {
      this.ts = new TimeStripper();
      this.befor_data = null;
      this.fmtSpan = (v) => {
@@ -1694,6 +1738,9 @@ riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow i
 
              if (after) {
                  let distance = after.purge_start.diff(rec.purge_end);
+                 rec.after = after;
+                 after.before = rec;
+
                  rec.distance.after = distance;
                  after.distance.befor = distance;
              }
@@ -1704,11 +1751,13 @@ riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow i
          return out;
      };
 
-     this.clickEditButton = (e) => {
+     this.clickEditTermButton = (e) => {
          let target = e.target;
 
          this.opts.callback('open-purge-result-editor', {
-             id: target.getAttribute('data-id')
+             id: target.getAttribute('data-id'),
+             before_end: target.getAttribute('before-end'),
+             after_start: target.getAttribute('after-start'),
          })
      };
      this.clickChangeDemon = (e) => {
@@ -1721,6 +1770,18 @@ riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow i
          })
      };
 
+     this.beforEnd = (rec) => {
+         if (!rec.before || !rec.before.purge_end)
+             return null;
+
+         return rec.before.purge_end.format('YYYY-MM-DD HH:mm:ss');
+     };
+     this.afterStart = (rec) => {
+         if (!rec.after || !rec.after.purge_start)
+             return null;
+
+         return rec.after.purge_start.format('YYYY-MM-DD HH:mm:ss');
+     };
      this.fdt = (dt) => {
          return dt.format('MM-DD HH:mm:ss')
      }
@@ -1729,7 +1790,7 @@ riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow i
      };
 });
 
-riot.tag2('purges_page', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 class="title hw-text-white">期間</h1> <purges_page_filter style="margin-bottom:22px; padding-left:33px; padding-right:33px;" from="{from}" to="{to}" callback="{callback}"></purges_page_filter> </div> <div> <h1 class="title hw-text-white">Summary</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <div style="margin-right: 88px;"> <purges_page_group-span source="{this.summary.deamons}"></purges_page_group-span> </div> <div> <purges_page_group-span-deamon source="{this.summary.deamons}"></purges_page_group-span-deamon> </div> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Guntt Chart</h1> <div style="padding-left:33px; padding-right:33px;"> <purges_page_guntt-chart source="{purges}" from="{from}" to="{to}"></purges_page_guntt-chart> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Purge hisotry</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <purges-list source="{purges}" callback="{callback}"></purges-list> </div> </div> </div> <purge-result-editor data="{edit_target}" callback="{callback}"></purge-result-editor> <modal-change-deamon source="{modal_data}" callback="{callback}"></modal-change-deamon> <div style="height:111px;"></div>', 'purges_page { height: 100%; width: 100%; display: block; overflow: auto; } purges_page .card { border-radius: 8px; } purges_page button.refresh{ margin-top:6px; margin-right:8px; }', 'class="page-contents"', function(opts) {
+riot.tag2('purges_page', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 class="title hw-text-white">期間</h1> <purges_page_filter style="margin-bottom:22px; padding-left:33px; padding-right:33px;" from="{from}" to="{to}" callback="{callback}"></purges_page_filter> </div> <div> <h1 class="title hw-text-white">Summary</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <div style="margin-right: 88px;"> <purges_page_group-span source="{this.summary.deamons}"></purges_page_group-span> </div> <div> <purges_page_group-span-deamon source="{this.summary.deamons}"></purges_page_group-span-deamon> </div> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Guntt Chart</h1> <div style="padding-left:33px; padding-right:33px;"> <purges_page_guntt-chart source="{purges}" from="{from}" to="{to}"></purges_page_guntt-chart> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Purge hisotry</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <purges-list source="{purges}" callback="{callback}"></purges-list> </div> </div> </div> <modal-purge-result-editor data="{edit_target}" source="{edit_data}" callback="{callback}"></modal-purge-result-editor> <modal-change-deamon source="{modal_data}" callback="{callback}"></modal-change-deamon> <div style="height:111px;"></div>', 'purges_page { height: 100%; width: 100%; display: block; overflow: auto; } purges_page .card { border-radius: 8px; } purges_page button.refresh{ margin-top:6px; margin-right:8px; }', 'class="page-contents"', function(opts) {
      this.purges = [];
      this.summary = { deamons: [] };
 
@@ -1743,6 +1804,7 @@ riot.tag2('purges_page', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 
      };
 
      this.edit_target = null;
+     this.edit_data   = { before_end: null, after_start: null };
      this.modal_data = null;
      this.callback = (action, data) => {
          if ('open-modal-change-deamon'==action) {
@@ -1767,14 +1829,18 @@ riot.tag2('purges_page', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 
 
          if ('open-purge-result-editor'==action) {
              this.edit_target = STORE.get('purges').ht[data.id];
-             this.tags['purge-result-editor'].update();
+             this.edit_data = {
+                 before_end: data.before_end,
+                 after_start: data.after_start,
+             }
+             this.tags['modal-purge-result-editor'].update();
 
              return;
          }
 
          if ('close-purge-result-editor'==action) {
              this.edit_target = null;
-             this.tags['purge-result-editor'].update();
+             this.tags['modal-purge-result-editor'].update();
              return;
          }
 
@@ -1984,7 +2050,7 @@ riot.tag2('war-history-page-controller', '<section class="section"> <div class="
      };
 });
 
-riot.tag2('war-history-page_tab_days', '<section class="section" style="padding-top:22px;"> <div class="container"> <hw-section-title title="グラフ" lev="4"></hw-section-title> <hw-section-subtitle contents="準備中：悪魔毎の棒グラフ"></hw-section-subtitle> </div> </section> <section class="section" style="padding-top:22px;"> <div class="container"> <hw-section-title title="明細" lev="4"></hw-section-title> <div class="contents" style="margin-top: 22px; padding-left: 22px;"> <table class="table is-bordered is-striped is-narrow is-hoverable" style="font-size: 12px;"> <thead> <tr> <th rowspan="2">Date</th> <th colspan="2">Deamon</th> <th rowspan="2">Elapsed Time [sec]</th> </tr> <tr> <th>ID</th> <th>Name</th> </tr> </thead> <tbody> <tr each="{rec in opts.source.summary.deamons}"> <td>{dateVal(rec)}</td> <td> <a href="#war-history/deamons/{rec.deamon_id}">{rec.deamon_id}</a> </td> <td>{rec.deamon_name}</td> <td style="text-align: right;">{elapseTimeVal(rec)}</td> </tr> </tbody> </table> </div> </div> </section>', '', '', function(opts) {
+riot.tag2('war-history-page_tab_days', '<section class="section" style="padding-top:22px;"> <div class="container"> <hw-section-title title="グラフ" lev="4"></hw-section-title> <div class="contents"> <p class="hw-text-white is-4" style="margin-left:22px;">準備中</p> </div> </div> </section> <section class="section" style="padding-top:22px;"> <div class="container"> <hw-section-title title="明細" lev="4"></hw-section-title> <div class="contents" style="margin-top: 22px; padding-left: 22px;"> <table class="table is-bordered is-striped is-narrow is-hoverable" style="font-size: 12px;"> <thead> <tr> <th rowspan="2">Date</th> <th colspan="2">Deamon</th> <th rowspan="2">Elapsed Time [sec]</th> </tr> <tr> <th>ID</th> <th>Name</th> </tr> </thead> <tbody> <tr each="{rec in opts.source.summary.deamons}"> <td>{dateVal(rec)}</td> <td> <a href="#war-history/deamons/{rec.deamon_id}">{rec.deamon_id}</a> </td> <td>{rec.deamon_name}</td> <td style="text-align: right;">{elapseTimeVal(rec)}</td> </tr> </tbody> </table> </div> </div> </section>', '', '', function(opts) {
      this.dateVal = (rec) => {
          return moment(rec.date).format('YYYY-MM-DD ddd');
      }
@@ -2017,7 +2083,7 @@ riot.tag2('war-history-page_tab_weeks', '<section class="section"> <div class="c
 });
 
 
-riot.tag2('war-history-page', '<div style="margin-top:22px;"></div> <war-history-page-controller term="{term}" callback="{controllerCallbak}"></war-history-page-controller> <section class="section" style="padding-top:33px; padding-bottom:11px;"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> </section> <div> <war-history-page_tab_days class="hide" source="{page_data}"></war-history-page_tab_days> <war-history-page_tab_weeks class="hide"></war-history-page_tab_weeks> <war-history-page_tab_month class="hide"></war-history-page_tab_month> </div>', 'war-history-page .tabs ul { border-bottom-color: rgb(254, 242, 99); border-bottom-width: 2px; } war-history-page .tabs.is-boxed li.is-active a { background-color: rgba(254, 242, 99, 0.55); border-color: rgb(254, 242, 99); text-shadow: 0px 0px 11px #fff; color: #333; font-weight: bold; } war-history-page .tabs.is-boxed a { text-shadow: 0px 0px 8px #fff; font-weight: bold; }', 'class="page-contents"', function(opts) {
+riot.tag2('war-history-page', '<div style="margin-top:22px;"></div> <war-history-page-controller term="{term}" callback="{controllerCallbak}"></war-history-page-controller> <war-history-page_tab_days source="{page_data}"></war-history-page_tab_days>', 'war-history-page .tabs ul { border-bottom-color: rgb(254, 242, 99); border-bottom-width: 2px; } war-history-page .tabs.is-boxed li.is-active a { background-color: rgba(254, 242, 99, 0.55); border-color: rgb(254, 242, 99); text-shadow: 0px 0px 11px #fff; color: #333; font-weight: bold; } war-history-page .tabs.is-boxed a { text-shadow: 0px 0px 8px #fff; font-weight: bold; }', 'class="page-contents"', function(opts) {
      this.page_data = { summary: { deamons: [] } };
 
      let end = moment().startOf();
@@ -2040,22 +2106,5 @@ riot.tag2('war-history-page', '<div style="margin-top:22px;"></div> <war-history
          this.term.to   = data.to;
 
          ACTIONS.fetchPagesWarHistory(this.term.from, this.term.to);
-     };
-
-     this.default_tag = 'home';
-     this.active_tag = null;
-     this.page_tabs = new PageTabs([
-         {code: 'days',  label: 'Overview',     tag: 'war-history-page_tab_days' },
-         {code: 'weeks', label: '作業時間統計', tag: 'war-history-page_tab_weeks' },
-         {code: 'month', label: '浄化明細',     tag: 'war-history-page_tab_month' },
-     ]);
-     this.on('mount', () => {
-         this.page_tabs.switchTab(this.tags)
-         this.update();
-     });
-
-     this.clickTab = (e, action, data) => {
-         if (this.page_tabs.switchTab(this.tags, data.code))
-             this.update();
      };
 });

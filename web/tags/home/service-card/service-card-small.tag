@@ -58,5 +58,16 @@
          padding: 11px 22px;
          overflow: auto;
      }
+
+     service-card-small .panel-block:hover {
+         background:rgb(255, 255, 236);
+     }
+
+     service-card-small .panel-block.is-active {
+         background:rgb(254, 242, 99);
+     }
+     service-card-small .panel-block.is-active {
+         border-left-color: rgb(254, 224, 0);
+     }
     </style>
 </service-card-small>

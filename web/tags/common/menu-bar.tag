@@ -96,7 +96,6 @@
          border-radius: 5px 0px 0px 5px;
          background: #ffffff;
          color: #333333;
-         text-shadow: 0px 0px 22px rgb(254, 242, 99);
      }
     </style>
 

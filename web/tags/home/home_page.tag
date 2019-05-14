@@ -96,7 +96,12 @@
 
          if (action.type=='TRANSFERD-IMPURE-TO-ANGEL') {
              this.request_impure = null;
-             this.tags['modal_request-impure'].update();
+
+             // TODO: う〜む。。。
+             if (this.tags['modal_request-impure'])
+                 this.tags['modal_request-impure'].update();
+             else
+                 this.update();
          }
 
          if (action.type=='SELECT-SERVICE-ITEM') {
