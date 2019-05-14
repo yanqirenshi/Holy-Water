@@ -30,7 +30,8 @@
            #:save-impure
            #:find-impures
            #:find-impures-cemetery
-           #:add-after-impure)
+           #:add-after-impure
+           #:impure-set-deamon)
   (:export #:find-orthodoxs
            #:get-orthodox)
   (:export #:find-angels
@@ -56,7 +57,8 @@
   (:export #:list-summay-purge-time-by-date-damon
            #:list-purge-by-angel
            #:list-cemeteries
-           #:list-summay-impure-cemeteries-by-date-damon))
+           #:list-summay-impure-cemeteries-by-date-damon
+           #:list-summary-purge-by-deamon))
 (in-package :holy-water)
 
 (mito:connect-toplevel :postgres :database-name "holy_water" :username "holy_water")

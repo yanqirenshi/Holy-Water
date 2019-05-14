@@ -1,20 +1,17 @@
 <purges_page_guntt-chart>
     <div style="overflow:auto; background:#fff; padding:22px;">
-        <svg class="chart-yabane"></svg>
+        <svg class="chart-yabane" ref="chart"></svg>
     </div>
 
     <script>
      this.on('update', () => {
-         let now   = moment().millisecond(0).second(0).minute(0).hour(0);
-         let start = moment(now).startOf('d').hour(7);
-
          let options = {
              scale: {
                  x: {
                      cycle: 'hours',
                      tick:  88,
-                     start: start,
-                     end:   moment(now).add( 1, 'd').startOf('d').hour(6),
+                     start: this.opts.from,
+                     end:   this.opts.to,
                  }
              },
              stage: {
@@ -23,9 +20,12 @@
          }
 
          let hw = new HolyWater()
-         let data = this.opts.data.list.map((d) => {
+         let data = this.opts.source.map((d) => {
              return hw.makeGunntChartData(d);
          });
+
+         let element = this.refs.chart;
+         while (element.firstChild) element.removeChild(element.firstChild);
 
          try {
              new D3jsYabane()

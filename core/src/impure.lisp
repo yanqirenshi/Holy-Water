@@ -1,14 +1,14 @@
 (in-package :holy-water)
 
 (defun create-impure (&key creator
-                          (name "????????")
-                          (description ""))
+                        (name "????????")
+                        (description ""))
   (let ((by-id (creator-id creator)))
     (create-dao 'rs_impure-active
-                     :name name
-                     :description description
-                     :created-by by-id
-                     :updated-by by-id)))
+                :name name
+                :description description
+                :created-by by-id
+                :updated-by by-id)))
 
 
 (defgeneric add-impure (target impure &key creator)
@@ -84,7 +84,9 @@
       (dbi:fetch-all (apply #'dbi:execute (dbi:prepare mito:*connection* sql) vals)))))
 
 (defun get-impure (&key id)
-  (find-dao 'rs_impure-active :id id))
+  (or (find-dao 'rs_impure-active :id id)
+      (find-dao 'rs_impure-finished :id id)
+      (find-dao 'rs_impure-discarded :id id)))
 
 (defun make-impure-finished (impure &key editor)
   (let ((by-id (creator-id editor)))
@@ -108,3 +110,21 @@
          (inner-join :ev_purge-start
                      :on (:= :rs_impure-active.id :ev_purge-start.impure-id))
          (where (:= :ev_purge-start.angel-id (object-id angel))))))
+
+(defun impure-set-deamon (angel impure deamon &key editor)
+  (assert (angel-impure angel :id (mito:object-id angel)))
+  (let* ((impure-id (mito:object-id impure))
+         (deamon-id (mito:object-id deamon))
+         (editor-id (mito:object-id editor))
+         (deamon-impure (find-dao 'th_deamon-impure :impure-id impure-id)))
+    (if deamon-impure
+        (progn
+          (setf (deamon-id  deamon-impure) deamon-id)
+          (setf (updated-by deamon-impure) editor-id)
+          (mito:save-dao deamon-impure))
+        (progn
+          (mito:create-dao 'th_deamon-impure
+                           :deamon-id deamon-id
+                           :impure-id impure-id
+                           :created-by editor-id
+                           :updated-by editor-id)))))

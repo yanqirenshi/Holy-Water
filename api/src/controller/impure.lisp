@@ -145,3 +145,9 @@
                         :name name
                         :description description
                         :creator angel)))
+
+
+(defun impure-set-deamon (angel impure deamon-id)
+  (let ((deamon (hw::get-deamon :id deamon-id)))
+    (assert deamon)
+    (hw:impure-set-deamon angel impure deamon :editor angel)))

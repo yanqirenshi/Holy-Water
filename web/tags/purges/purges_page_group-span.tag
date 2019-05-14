@@ -9,7 +9,7 @@
 
     <script>
      this.sumHours = () => {
-         let time_sec = new HolyWater().summaryPurges(this.opts.data.list);
+         let time_sec = new HolyWater().summaryPurges(this.opts.source);
 
          return new TimeStripper().format_sec(time_sec)
      };

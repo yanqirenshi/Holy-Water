@@ -353,6 +353,26 @@ class Actions extends Vanilla_Redux_Actions {
             to:   response,
         };
     }
+    setImpureDeamon (impure, deamon) {
+        let path = '/impures/%d/deamons'.format(impure.id);
+        let post_data = {
+            deamon: {
+                id: deamon.id,
+            }
+        };
+
+        API.post(path, post_data, (json, success) => {
+            STORE.dispatch(this.setedImpureDeamon(json));
+        });
+    }
+    setedImpureDeamon (response) {
+        this.pushSuccessMessage('Impure と Deamon の関連付けが完了しました。');
+
+        return {
+            type: 'SETED-IMPURE-DEAMON',
+            data: {},
+        };
+    }
     /////
     ///// Action
     /////

@@ -1,20 +1,27 @@
 <purges_page_group-span-deamon>
     <p>区分毎の作業時間</p>
 
-    <table class="table hw-box-shadow" style="margin-top: 33px;">
+    <table class="table is-bordered is-striped is-narrow is-hoverable"
+           style="margin-top: 33px;">
         <thead>
             <tr>
-                <th>Naem</th>
-                <th>Time</th>
+                <th colspan="2">Deamon</th>
+                <th colspan="2">Action Results</th>
+            </tr>
+            <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Elapsed Time</th>
                 <th>Count</th>
             </tr>
         </thead>
 
         <tbody>
-            <tr each={deamon in data()}>
-                <td>{deamon.name}</td>
-                <td>{ts.format_sec(deamon.time)}</td>
-                <td>{deamon.list.length}</td>
+            <tr each={rec in data()}>
+                <td>{rec.deamon_name_short}</td>
+                <td>{rec.deamon_name}</td>
+                <td style="text-align:right;">{ts.format_sec(rec.elapsed_time)}</td>
+                <td style="text-align:right;">{rec.purge_count}</td>
             </tr>
         </tbody>
     </table>
@@ -24,7 +31,7 @@
      this.ts = new TimeStripper();
 
      this.data = () => {
-         return this.hw.summaryPurgesAtDeamons(this.opts.data.list);
+         return this.opts.source
      };
     </script>
 

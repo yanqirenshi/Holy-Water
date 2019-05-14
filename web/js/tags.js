@@ -1554,7 +1554,10 @@ riot.tag2('modal-change-deamon-impure-area', '<div class="root-container"> <h1 c
      };
 });
 
-riot.tag2('modal-change-deamon', '<div class="modal {opts.open ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-content" style="width:888px;"> <div class="card"> <header class="card-header"> <p class="card-header-title"> Change Deamon <span style="margin-left: 22px; color: #f00; font-weight:bold;">注意: 実装中</span> </p> </header> <div class="card-content"> <div class="content"> <div class="flex-contener"> <div class="choose-demaon-area"> <modal-change-deamon-area source="{opts.source}" callback="{callback}"></modal-change-deamon-area> </div> <div class="view-impure-area"> <modal-change-deamon-impure-area source="{opts.source}" choosed_deamon="{choosed_deamon}" callback="{callback}"></modal-change-deamon-impure-area> </div> </div> <div class="control-area"> <button class="button is-small" onclick="{clickCancel}">Cancel</button> <button class="button is-small is-danger" disabled="{isDisabled()}">Save</button> </div> </div> </div> </div> </div> <button class="modal-close is-large" aria-label="close" onclick="{clickCancel}"></button> </div>', 'modal-change-deamon .flex-contener { display:flex; height:555px; } modal-change-deamon .choose-demaon-area { flex-grow: 1; padding: 11px; width: 211px; } modal-change-deamon .choose-demaon-area .deamon-item { margin-left: 11px; margin-bottom: 11px; } modal-change-deamon .view-impure-area { flex-grow: 1; padding: 11px; background: rgba(254, 242, 100, 0.08); border-radius: 8px; box-shadow: 0px 0px 22px rgba(254, 242, 100, 0.08); width: 222px; display: flex; flex-direction: column; } modal-change-deamon modal-change-deamon-impure-area { height: 100%; } modal-change-deamon .control-area { display: flex; justify-content: space-between; margin-top: 11px; }', '', function(opts) {
+riot.tag2('modal-change-deamon', '<div class="modal {isOpen()}"> <div class="modal-background"></div> <div class="modal-content" style="width:888px;"> <div class="card"> <header class="card-header"> <p class="card-header-title"> Change Deamon <span style="margin-left: 22px; color: #f00; font-weight:bold;">注意: 実装中</span> </p> </header> <div class="card-content"> <div class="content"> <div class="flex-contener"> <div class="choose-demaon-area"> <modal-change-deamon-area source="{opts.source}" callback="{callback}"></modal-change-deamon-area> </div> <div class="view-impure-area"> <modal-change-deamon-impure-area source="{opts.source}" choosed_deamon="{choosed_deamon}" callback="{callback}"></modal-change-deamon-impure-area> </div> </div> <div class="control-area"> <button class="button is-small" onclick="{clickCancel}">Cancel</button> <button class="button is-small is-danger" onclick="{clickSave}" disabled="{isDisabled()}">Save</button> </div> </div> </div> </div> </div> <button class="modal-close is-large" aria-label="close" onclick="{clickCancel}"></button> </div>', 'modal-change-deamon .flex-contener { display:flex; height:555px; } modal-change-deamon .choose-demaon-area { flex-grow: 1; padding: 11px; width: 211px; } modal-change-deamon .choose-demaon-area .deamon-item { margin-left: 11px; margin-bottom: 11px; } modal-change-deamon .view-impure-area { flex-grow: 1; padding: 11px; background: rgba(254, 242, 100, 0.08); border-radius: 8px; box-shadow: 0px 0px 22px rgba(254, 242, 100, 0.08); width: 222px; display: flex; flex-direction: column; } modal-change-deamon modal-change-deamon-impure-area { height: 100%; } modal-change-deamon .control-area { display: flex; justify-content: space-between; margin-top: 11px; }', '', function(opts) {
+     this.isOpen = () => {
+         return this.opts.source ? 'is-active' : '';
+     };
      this.isDisabled = () => {
          if (!this.opts.source)
              return 'disabled';
@@ -1566,7 +1569,6 @@ riot.tag2('modal-change-deamon', '<div class="modal {opts.open ? \'is-active\' :
      };
 
      this.choosed_deamon = null;
-
      this.on('update', () => {
          if (!this.opts.source)
              return;
@@ -1604,6 +1606,12 @@ riot.tag2('modal-change-deamon', '<div class="modal {opts.open ? \'is-active\' :
      };
      this.clickCancel = () => {
          this.opts.callback('close-modal-change-deamon');
+     };
+     this.clickSave = () => {
+         let impure = { id: this.opts.source.impure_id };
+         let deamon = this.choosed_deamon;
+
+         ACTIONS.setImpureDeamon(impure, deamon);
      };
 });
 
@@ -1721,12 +1729,12 @@ riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow i
      };
 });
 
-riot.tag2('purges_page', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 class="title hw-text-white">期間</h1> <purges_page_filter style="margin-bottom:22px; padding-left:33px; padding-right:33px;" from="{from}" to="{to}" callback="{callback}"></purges_page_filter> </div> <div> <h1 class="title hw-text-white">Summary</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <div style="margin-right: 88px;"> <purges_page_group-span data="{data()}"></purges_page_group-span> </div> <div> <purges_page_group-span-deamon data="{data()}"></purges_page_group-span-deamon> </div> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Guntt Chart</h1> <div style="padding-left:33px; padding-right:33px;"> <purges_page_guntt-chart data="{data()}"></purges_page_guntt-chart> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Purge hisotry</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <purges-list source="{purges}" callback="{callback}"></purges-list> </div> </div> </div> <purge-result-editor data="{edit_target}" callback="{callback}"></purge-result-editor> <modal-change-deamon open="{modal_change_deamon_open}" source="{modal_data}" callback="{callback}"></modal-change-deamon> <div style="height:111px;"></div>', 'purges_page { height: 100%; width: 100%; display: block; overflow: auto; } purges_page .card { border-radius: 8px; } purges_page button.refresh{ margin-top:6px; margin-right:8px; }', 'class="page-contents"', function(opts) {
+riot.tag2('purges_page', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 class="title hw-text-white">期間</h1> <purges_page_filter style="margin-bottom:22px; padding-left:33px; padding-right:33px;" from="{from}" to="{to}" callback="{callback}"></purges_page_filter> </div> <div> <h1 class="title hw-text-white">Summary</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <div style="margin-right: 88px;"> <purges_page_group-span source="{this.summary.deamons}"></purges_page_group-span> </div> <div> <purges_page_group-span-deamon source="{this.summary.deamons}"></purges_page_group-span-deamon> </div> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Guntt Chart</h1> <div style="padding-left:33px; padding-right:33px;"> <purges_page_guntt-chart source="{purges}" from="{from}" to="{to}"></purges_page_guntt-chart> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Purge hisotry</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <purges-list source="{purges}" callback="{callback}"></purges-list> </div> </div> </div> <purge-result-editor data="{edit_target}" callback="{callback}"></purge-result-editor> <modal-change-deamon source="{modal_data}" callback="{callback}"></modal-change-deamon> <div style="height:111px;"></div>', 'purges_page { height: 100%; width: 100%; display: block; overflow: auto; } purges_page .card { border-radius: 8px; } purges_page button.refresh{ margin-top:6px; margin-right:8px; }', 'class="page-contents"', function(opts) {
      this.purges = [];
-     this.modal_change_deamon_open = false;
+     this.summary = { deamons: [] };
 
-     this.from = moment().startOf('day');
-     this.to   = moment().add(1, 'd').startOf('day');
+     this.from = moment().hour(7).startOf('hour');
+     this.to   = moment(this.from).add(1, 'd');
      this.moveDate = (unit, amount) => {
          this.from = this.from.add(amount, unit);
          this.to   = this.to.add(amount, unit);
@@ -1738,7 +1746,6 @@ riot.tag2('purges_page', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 
      this.modal_data = null;
      this.callback = (action, data) => {
          if ('open-modal-change-deamon'==action) {
-             this.modal_change_deamon_open = true;
 
              this.modal_data = this.purges.find((d) => {
                  return d.purge_id == data.purge_id;
@@ -1752,7 +1759,7 @@ riot.tag2('purges_page', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 
              return;
          }
          if ('close-modal-change-deamon'==action) {
-             this.modal_change_deamon_open = false;
+             this.modal_data = null;
              this.update();
 
              return;
@@ -1789,7 +1796,15 @@ riot.tag2('purges_page', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 
          this.refreshData();
      });
      STORE.subscribe((action) => {
+         if (action.type=='SETED-IMPURE-DEAMON') {
+             this.modal_data = null;
+             this.update();
+             ACTIONS.fetchPagesPurges(this.from, this.to);
+         };
+
          if (action.type=='FETCHED-PAGES-PURGES') {
+             this.summary = action.response.summary;
+
              this.purges = action.response.purges.map((d) => {
                  d.purge_start = moment(d.purge_start);
                  d.purge_end   = moment(d.purge_end);
@@ -1839,35 +1854,32 @@ riot.tag2('purges_page_filter', '<input class="input hw-box-shadow" type="text" 
      };
 });
 
-riot.tag2('purges_page_group-span-deamon', '<p>区分毎の作業時間</p> <table class="table hw-box-shadow" style="margin-top: 33px;"> <thead> <tr> <th>Naem</th> <th>Time</th> <th>Count</th> </tr> </thead> <tbody> <tr each="{deamon in data()}"> <td>{deamon.name}</td> <td>{ts.format_sec(deamon.time)}</td> <td>{deamon.list.length}</td> </tr> </tbody> </table>', 'purges_page_group-span-deamon > p { width: 100%; color: #fff; font-weight: bold; text-shadow: 0px 0px 22px #333333; text-align: center; font-size: 22px; }', '', function(opts) {
+riot.tag2('purges_page_group-span-deamon', '<p>区分毎の作業時間</p> <table class="table is-bordered is-striped is-narrow is-hoverable" style="margin-top: 33px;"> <thead> <tr> <th colspan="2">Deamon</th> <th colspan="2">Action Results</th> </tr> <tr> <th>Code</th> <th>Name</th> <th>Elapsed Time</th> <th>Count</th> </tr> </thead> <tbody> <tr each="{rec in data()}"> <td>{rec.deamon_name_short}</td> <td>{rec.deamon_name}</td> <td style="text-align:right;">{ts.format_sec(rec.elapsed_time)}</td> <td style="text-align:right;">{rec.purge_count}</td> </tr> </tbody> </table>', 'purges_page_group-span-deamon > p { width: 100%; color: #fff; font-weight: bold; text-shadow: 0px 0px 22px #333333; text-align: center; font-size: 22px; }', '', function(opts) {
      this.hw = new HolyWater();
      this.ts = new TimeStripper();
 
      this.data = () => {
-         return this.hw.summaryPurgesAtDeamons(this.opts.data.list);
+         return this.opts.source
      };
 });
 
 riot.tag2('purges_page_group-span', '<p class="hw-text-white" style="width:100%; font-weight:bold; text-align: center;font-size: 22px;"> 合計作業時間 </p> <p class="hw-text-white" style="font-size: 111px;"> {sumHours()} </p>', '', '', function(opts) {
      this.sumHours = () => {
-         let time_sec = new HolyWater().summaryPurges(this.opts.data.list);
+         let time_sec = new HolyWater().summaryPurges(this.opts.source);
 
          return new TimeStripper().format_sec(time_sec)
      };
 });
 
-riot.tag2('purges_page_guntt-chart', '<div style="overflow:auto; background:#fff; padding:22px;"> <svg class="chart-yabane"></svg> </div>', 'purges_page_guntt-chart { display: block; margin-left: 22px; margin-right: 22px; padding: 22px 11px; background: #fff; border-radius: 3px; } purges_page_guntt-chart > div { width: 100%; border-radius: 3px; } purges_page_guntt-chart > div > svg{ background: #fff; }', '', function(opts) {
+riot.tag2('purges_page_guntt-chart', '<div style="overflow:auto; background:#fff; padding:22px;"> <svg class="chart-yabane" ref="chart"></svg> </div>', 'purges_page_guntt-chart { display: block; margin-left: 22px; margin-right: 22px; padding: 22px 11px; background: #fff; border-radius: 3px; } purges_page_guntt-chart > div { width: 100%; border-radius: 3px; } purges_page_guntt-chart > div > svg{ background: #fff; }', '', function(opts) {
      this.on('update', () => {
-         let now   = moment().millisecond(0).second(0).minute(0).hour(0);
-         let start = moment(now).startOf('d').hour(7);
-
          let options = {
              scale: {
                  x: {
                      cycle: 'hours',
                      tick:  88,
-                     start: start,
-                     end:   moment(now).add( 1, 'd').startOf('d').hour(6),
+                     start: this.opts.from,
+                     end:   this.opts.to,
                  }
              },
              stage: {
@@ -1876,9 +1888,12 @@ riot.tag2('purges_page_guntt-chart', '<div style="overflow:auto; background:#fff
          }
 
          let hw = new HolyWater()
-         let data = this.opts.data.list.map((d) => {
+         let data = this.opts.source.map((d) => {
              return hw.makeGunntChartData(d);
          });
+
+         let element = this.refs.chart;
+         while (element.firstChild) element.removeChild(element.firstChild);
 
          try {
              new D3jsYabane()

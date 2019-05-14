@@ -11,25 +11,30 @@
 
         <div>
             <h1 class="title hw-text-white">Summary</h1>
+
             <div style="display:flex; padding-left:33px; padding-right:33px;">
                 <div style="margin-right: 88px;">
-                    <purges_page_group-span data={data()}></purges_page_group-span>
+                    <purges_page_group-span source={this.summary.deamons}></purges_page_group-span>
                 </div>
                 <div>
-                    <purges_page_group-span-deamon data={data()}></purges_page_group-span-deamon>
+                    <purges_page_group-span-deamon source={this.summary.deamons}></purges_page_group-span-deamon>
                 </div>
             </div>
         </div>
 
         <div style="margin-top:33px;">
             <h1 class="title hw-text-white">Guntt Chart</h1>
+
             <div style="padding-left:33px; padding-right:33px;">
-                <purges_page_guntt-chart data={data()}></purges_page_guntt-chart>
+                <purges_page_guntt-chart source={purges}
+                                         from={from}
+                                         to={to}></purges_page_guntt-chart>
             </div>
         </div>
 
         <div style="margin-top:33px;">
             <h1 class="title hw-text-white">Purge hisotry</h1>
+
             <div style="display:flex; padding-left:33px; padding-right:33px;">
                 <purges-list source={purges} callback={callback}></purges-list>
             </div>
@@ -39,20 +44,19 @@
     <purge-result-editor data={edit_target}
                          callback={callback}></purge-result-editor>
 
-    <modal-change-deamon open={modal_change_deamon_open}
-                         source={modal_data}
+    <modal-change-deamon source={modal_data}
                          callback={callback}></modal-change-deamon>
 
     <div style="height:111px;"></div>
 
     <script>
      this.purges = [];
-     this.modal_change_deamon_open = false;
+     this.summary = { deamons: [] };
     </script>
 
     <script>
-     this.from = moment().startOf('day');
-     this.to   = moment().add(1, 'd').startOf('day');
+     this.from = moment().hour(7).startOf('hour');
+     this.to   = moment(this.from).add(1, 'd');
      this.moveDate = (unit, amount) => {
          this.from = this.from.add(amount, unit);
          this.to   = this.to.add(amount, unit);
@@ -66,7 +70,6 @@
      this.modal_data = null;
      this.callback = (action, data) => {
          if ('open-modal-change-deamon'==action) {
-             this.modal_change_deamon_open = true;
 
              this.modal_data = this.purges.find((d) => {
                  return d.purge_id == data.purge_id;
@@ -80,7 +83,7 @@
              return;
          }
          if ('close-modal-change-deamon'==action) {
-             this.modal_change_deamon_open = false;
+             this.modal_data = null;
              this.update();
 
              return;
@@ -119,7 +122,15 @@
          this.refreshData();
      });
      STORE.subscribe((action) => {
+         if (action.type=='SETED-IMPURE-DEAMON') {
+             this.modal_data = null;
+             this.update();
+             ACTIONS.fetchPagesPurges(this.from, this.to);
+         };
+
          if (action.type=='FETCHED-PAGES-PURGES') {
+             this.summary = action.response.summary;
+
              this.purges = action.response.purges.map((d) => {
                  d.purge_start = moment(d.purge_start);
                  d.purge_end   = moment(d.purge_end);

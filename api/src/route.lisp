@@ -208,6 +208,15 @@
       (render-json (hw.api.ctrl:impure-incantation angel impure spell)))))
 
 
+(defroute ("/impures/:id/deamons" :method :POST) (&key id |deamon|)
+  (with-angel (angel)
+    (let ((impure (hw::get-impure :id (parse-integer id)))
+          (deamon-id (cdr (assoc "id" |deamon| :test 'equal))))
+      (unless impure (throw-code 404))
+      (hw.api.ctrl:impure-set-deamon angel impure deamon-id)
+      (render-json (list :code 200 :message "success.")))))
+
+
 ;;;;;
 ;;;;; Purge
 ;;;;;

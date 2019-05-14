@@ -1,6 +1,6 @@
 <modal-change-deamon>
 
-    <div class="modal {opts.open ? 'is-active' : ''}">
+    <div class="modal {isOpen()}">
         <div class="modal-background"></div>
 
         <div class="modal-content" style="width:888px;">
@@ -32,7 +32,9 @@
                             <button class="button is-small"
                                     onclick={clickCancel}>Cancel</button>
 
-                            <button class="button is-small is-danger" disabled={isDisabled()}>Save</button>
+                            <button class="button is-small is-danger"
+                                    onclick={clickSave}
+                                    disabled={isDisabled()}>Save</button>
                         </div>
                     </div>
                 </div>
@@ -46,6 +48,9 @@
     </div>
 
     <script>
+     this.isOpen = () => {
+         return this.opts.source ? 'is-active' : '';
+     };
      this.isDisabled = () => {
          if (!this.opts.source)
              return 'disabled';
@@ -59,7 +64,6 @@
 
     <script>
      this.choosed_deamon = null;
-
      this.on('update', () => {
          if (!this.opts.source)
              return;
@@ -97,6 +101,12 @@
      };
      this.clickCancel = () => {
          this.opts.callback('close-modal-change-deamon');
+     };
+     this.clickSave = () => {
+         let impure = { id: this.opts.source.impure_id };
+         let deamon = this.choosed_deamon;
+
+         ACTIONS.setImpureDeamon(impure, deamon);
      };
     </script>
 
