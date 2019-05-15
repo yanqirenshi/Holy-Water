@@ -23,7 +23,7 @@ riot.tag2('app-page-area', '', '', '', function(opts) {
      });
 });
 
-riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" site="{site()}" moves="{[]}"></menu-bar> <app-page-area></app-page-area> <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p> <message-area></message-area> <popup-working-action data="{impure()}"></popup-working-action> <menu-add-impure></menu-add-impure> <modal-create-impure open="{modal_open}" maledict="{modal_maledict}"></modal-create-impure>', '', '', function(opts) {
+riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" site="{site()}" moves="{[]}"></menu-bar> <app-page-area></app-page-area> <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p> <message-area></message-area> <popup-working-action data="{impure()}"></popup-working-action> <menu-add-impure></menu-add-impure> <modal-create-impure open="{modal_open}" maledict="{modal_maledict}"></modal-create-impure> <modal-create-after-impure></modal-create-after-impure>', '', '', function(opts) {
      this.site = () => {
          return STORE.state().get('site');
      };
@@ -249,7 +249,7 @@ riot.tag2('page-tabs', '<div class="tabs is-{type()}"> <ul> <li each="{opts.core
      };
 });
 
-riot.tag2('section-breadcrumb', '<nav class="breadcrumb" aria-label="breadcrumbs"> <ul> <li each="{path()}" class="{active ? \'is-active\' : \'\'}"> <a href="{href}" aria-current="page">{label}</a> </li> </ul> </nav>', 'section-breadcrumb .breadcrumb a { font-weight: bold; text-shadow: 0px 0px 22px rgba(254, 242, 99); color: #d05d89; } section-breadcrumb .breadcrumb a:hover { text-shadow: 0px 0px 22px #333; color: #ffffff; }', '', function(opts) {
+riot.tag2('section-breadcrumb', '<nav class="breadcrumb" aria-label="breadcrumbs"> <ul> <li each="{path()}" class="{active ? \'is-active\' : \'\'}"> <a href="{href}" aria-current="page">{label}</a> </li> </ul> </nav>', 'section-breadcrumb .breadcrumb a { font-weight: bold; text-shadow: 0px 0px 22px #ffffff; color: rgba(254, 242, 1); } section-breadcrumb .breadcrumb a:hover { text-shadow: 0px 0px 22px #333333; color: #ffffff; } section-breadcrumb .breadcrumb li.is-active a { color: #ffffff; text-shadow: 0px 0px 22px rgba(254, 242, 1); }', '', function(opts) {
      this.label = (node, is_last, node_name) => {
          if (node.menu_label)
              return node.menu_label;
@@ -392,6 +392,183 @@ riot.tag2('menu-add-impure', '<div style="position:fixed; right: 33px; top: 22px
      };
 });
 
+riot.tag2('modal-change-deamon-area', '<h1 class="title is-4">Deamons</h1> <p class="control has-icons-left has-icons-right"> <input class="input is-small" type="text" placeholder="Search" onkeyup="{keyUp}"> <span class="icon is-small is-left"> <i class="fas fa-search"></i> </span> </p> <div> <button each="{deamon in deamons()}" class="button is-small deamon-item" deamon-id="{deamon.id}" onclick="{clickDeamon}"> {deamon.name} ({deamon.name_short}) </button> </div>', '', '', function(opts) {
+     this.clickDeamon = (e) => {
+         let deamon_id = e.target.getAttribute('deamon-id');
+
+         this.opts.callback('choose-deamon', { id: deamon_id });
+     };
+
+     this.filter = null;
+
+     this.keyUp = (e) => {
+         let str = e.target.value;
+
+         if (str.length==0)
+             this.filter = null;
+         else
+             this.filter = str
+
+         this.update();
+     };
+
+     this.deamons = () => {
+         let filter = this.filter;
+         let deamons = STORE.get('deamons.list');
+
+         if (!this.filter)
+             return deamons
+
+         filter = filter.toLowerCase();
+
+         let out = deamons.filter((d) => {
+
+             return (d.id + '').toLowerCase().indexOf(filter) >= 0
+                 || d.name.toLowerCase().indexOf(filter) >= 0
+                 || d.name_short.toLowerCase().indexOf(filter) >= 0
+         });
+
+         return out;
+     };
+});
+
+riot.tag2('modal-change-deamon-impure-area', '<div class="root-container"> <h1 class="title is-4">Impure</h1> <div class="basic-info-area" style="font-size:12px;"> <p>{val(\'impure_name\')} (ID: {val(\'impure_id\')})</p> <p style="background:#fff; flex-grow: 1; overflow: auto;"> <description-markdown source="{val(\'impure_description\')}"></description-markdown> </p> </div> <div class="deamon-area"> <h1 class="title is-6" style="margin-bottom: 8px;">Deamon</h1> <div style="padding-left:11px;"> <p>{val(\'impure_deamon\')}</p> <button class="button is-small deamon-item {impureDeamon() ? \'\' : \'hide\'}" onclick="{clickRemove}"> 削除 </button> </div> </div> </div>', 'modal-change-deamon-impure-area .root-container { height: 100%; display: flex; flex-direction: column; } modal-change-deamon-impure-area .basic-info-area { padding-left:11px; flex-grow: 1; display: flex; flex-direction: column; } modal-change-deamon-impure-area .deamon-area { height:99px; margin-top:11px; }', '', function(opts) {
+     this.clickRemove = (e) => {
+         this.opts.callback('remove-deamon');
+     }
+
+     this.val = (name) => {
+         if (!this.opts.source)
+             return '';
+
+         if ('impure_deamon'!=name)
+             return this.opts.source[name];
+
+         let deamon = this.opts.choosed_deamon;
+
+         if (!deamon || deamon.id===null)
+             return 'なし';
+
+         return deamon.name + ' (ID:' + deamon.id + ')';
+     };
+     this.impureDeamon = () => {
+         if (!this.opts.source)
+             return null;
+
+         let deamon = this.opts.choosed_deamon;
+
+         if (!deamon || deamon.id===null)
+             return null;
+
+         return deamon;
+     };
+     this.deamons = () => {
+         return STORE.get('deamons.list');
+     };
+});
+
+riot.tag2('modal-change-deamon', '<div class="modal {isOpen()}"> <div class="modal-background"></div> <div class="modal-content" style="width:888px;"> <div class="card"> <header class="card-header"> <p class="card-header-title"> Change Deamon <span style="margin-left: 22px; color: #f00; font-weight:bold;">注意: 実装中</span> </p> </header> <div class="card-content"> <div class="content"> <div class="flex-contener"> <div class="choose-demaon-area"> <modal-change-deamon-area source="{opts.source}" callback="{callback}"></modal-change-deamon-area> </div> <div class="view-impure-area"> <modal-change-deamon-impure-area source="{opts.source}" choosed_deamon="{choosed_deamon}" callback="{callback}"></modal-change-deamon-impure-area> </div> </div> <div class="control-area"> <button class="button is-small" onclick="{clickCancel}">Cancel</button> <button class="button is-small is-danger" onclick="{clickSave}" disabled="{isDisabled()}">Save</button> </div> </div> </div> </div> </div> <button class="modal-close is-large" aria-label="close" onclick="{clickCancel}"></button> </div>', 'modal-change-deamon .flex-contener { display:flex; height:555px; } modal-change-deamon .choose-demaon-area { flex-grow: 1; padding: 11px; width: 211px; } modal-change-deamon .choose-demaon-area .deamon-item { margin-left: 11px; margin-bottom: 11px; } modal-change-deamon .view-impure-area { flex-grow: 1; padding: 11px; background: rgba(254, 242, 100, 0.08); border-radius: 8px; box-shadow: 0px 0px 22px rgba(254, 242, 100, 0.08); width: 222px; display: flex; flex-direction: column; } modal-change-deamon modal-change-deamon-impure-area { height: 100%; } modal-change-deamon .control-area { display: flex; justify-content: space-between; margin-top: 11px; }', '', function(opts) {
+     this.isOpen = () => {
+         return this.opts.source ? 'is-active' : '';
+     };
+     this.isDisabled = () => {
+         if (!this.opts.source)
+             return 'disabled';
+
+         if (this.choosed_deamon.id == this.opts.source.deamon_id)
+             return 'disabled';
+
+         return '';
+     };
+
+     this.choosed_deamon = null;
+     this.on('update', () => {
+         if (!this.opts.source)
+             return;
+
+         if (!this.choosed_deamon) {
+             let id = this.opts.source.deamon_id;
+
+             if (!id)
+                 this.choosed_deamon = { id: null };
+             else
+                 this.choosed_deamon = STORE.get('deamons.ht')[id];
+         }
+     });
+
+     this.callback = (action, data) => {
+         if (action=='choose-deamon') {
+             let deamons = STORE.get('deamons.ht');
+
+             this.choosed_deamon = deamons[data.id];
+
+             if (!this.choosed_deamon)
+                 this.choosed_deamon = { id: null };
+
+             this.update();
+
+             return;
+         }
+         if (action=='remove-deamon') {
+             this.choosed_deamon = { id: null };
+
+             this.update();
+
+             return;
+         }
+     };
+     this.clickCancel = () => {
+         this.opts.callback('close-modal-change-deamon');
+     };
+     this.clickSave = () => {
+         let impure = { id: this.opts.source.impure_id };
+         let deamon = this.choosed_deamon;
+
+         ACTIONS.setImpureDeamon(impure, deamon);
+     };
+});
+
+riot.tag2('modal-create-after-impure', '<div class="modal {opts.impure ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card" style="width:999px;"> <header class="modal-card-head" style="padding: 11px 22px;"> <p class="modal-card-title" style="font-size:16px;">後続の Impure を作成</p> <button class="delete" aria-label="close" onclick="{clickCloseButton}"></button> </header> <section class="modal-card-body" style="display:flex;"> <div style="flex-grow:1;"> <input class="input is-small" type="text" placeholder="Title" ref="name"> <textarea class="textarea is-small" placeholder="Description" rows="6" style="margin-top:11px; height: 333px;" ref="description"></textarea> <h1 class="title is-6" style="margin-bottom: 3px; margin-top:11px;">Deamon:</h1> <div style="margin-left:11px;"> <p style="margin-bottom:11px;">なし</p> <input class="input is-small" type="text" placeholder="Search Deamon" ref="name"> <div style="margin-top:11px;"> <button class="button is-small">Deamon 1</button> <button class="button is-small">Deamon 2</button> <button class="button is-small">Deamon 3</button> </div> </div> </div> <div style="padding-left: 22px; padding-right: 22px; display:flex; flex-direction: column; justify-content: center;;"> <h1 class="title is-6">Copy</h1> <button class="button is-small">←</button> </div> <div style="flex-grow:1;padding: 11px;background: #eeeeee;border-radius: 3px;"> <h1 class="title is-6" style="margin-bottom: 3px;">Title:</h1> <p style="padding-left:11px;">title ....</p> <h1 class="title is-6" style="margin-bottom: 3px; margin-top: 11px;">description:</h1> <p style="padding-left:11px;">markdon -> html ....</p> <h1 class="title is-6" style="margin-bottom: 3px; margin-top: 11px;">Deamon:</h1> <p style="padding-left:11px;">Deamon...</p> </div> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display: flex; justify-content: space-between;"> <button class="button is-small" onclick="{clickCloseButton}">Cancel</button> <button class="button is-small is-success" onclick="{clickCreateButton}">Create!</button> </footer> </div> </div>', '', '', function(opts) {
+     this.maledict = null;
+     STORE.subscribe((action) => {
+         if (action.type=='OPEN-MODAL-CREATE-IMPURE') {
+             this.maledict = action.maledict;
+             this.update();
+
+             return;
+         }
+
+         if (action.type=='CLOSE-MODAL-CREATE-IMPURE') {
+             this.maledict = null;
+             this.update();
+
+             return;
+         }
+
+         if (action.type=='CREATED-MALEDICT-IMPURE') {
+             this.maledict = null;
+             this.update();
+
+             return;
+         }
+     });
+
+     this.maledictName = () => {
+         return this.maledict ? this.maledict.name : '';
+     }
+
+     this.clickCreateButton = (e) => {
+         ACTIONS.createMaledictImpure (this.maledict, {
+             name: this.refs['name'].value,
+             description: this.refs['description'].value,
+             maledict: this.opts.maledict
+         });
+     };
+     this.clickCloseButton = (e) => {
+         ACTIONS.closeModalCreateImpure();
+     };
+});
+
 riot.tag2('modal-create-impure', '<div class="modal {maledict ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head"> <p class="modal-card-title">やる事を追加</p> <button class="delete" aria-label="close" onclick="{clickCloseButton}"></button> </header> <section class="modal-card-body"> <h4 class="title is-6">場所: {maledictName()}</h4> <div> <span>接頭文字:</span> <button each="{prefixes}" class="button is-small" style="margin-left: 8px;" onclick="{clickTitlePrefix}" riot-value="{label}">{label}</button> </div> <input class="input" type="text" placeholder="Title" ref="name" style="margin-top:11px;"> <textarea class="textarea" placeholder="Description" rows="6" style="margin-top:11px;" ref="description"></textarea> </section> <footer class="modal-card-foot"> <button class="button" onclick="{clickCloseButton}">Cancel</button> <button class="button is-success" onclick="{clickCreateButton}">Create!</button> </footer> </div> </div>', '', '', function(opts) {
      this.maledict = null;
      STORE.subscribe((action) => {
@@ -468,6 +645,76 @@ riot.tag2('modal-create-impure', '<div class="modal {maledict ? \'is-active\' : 
      };
      this.clickCloseButton = (e) => {
          ACTIONS.closeModalCreateImpure();
+     };
+});
+
+riot.tag2('modal-purge-result-editor', '<div class="modal {opts.data ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head"> <p class="modal-card-title">作業時間の変更</p> <button class="delete" aria-label="close" action="close-purge-result-editor" onclick="{clickButton}"></button> </header> <section class="modal-card-body"> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">Impure</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'impure_name\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">作業時間</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'elapsed-time\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">開始</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'start\'))}" ref="start" type="{\'datetime\'}"> </p> <div style="padding-top: 5px;"> <button class="button is-small" action="now" onclick="{clickSetDate}">今</button> <button class="button is-small {isHide(\'before-end\')}" action="before-end" onclick="{clickSetDate}">前の作業の終了</button> <button class="button is-small" action="revert-start" onclick="{clickSetDate}">元に戻す</button> </div> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">終了</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'end\'))}" ref="end" type="{\'datetime\'}"> <div style="padding-top: 5px;"> <button class="button is-small" action="now" onclick="{clickSetDate}">今</button> <button class="button is-small {isHide(\'after-start\')}" action="after-start" onclick="{clickSetDate}">後の作業の開始</button> <button class="button is-small" action="revert-end" onclick="{clickSetDate}">元に戻す</button> </div> </p> </div> </div> </div> </section> <footer class="modal-card-foot" style="padding: 11px 22px;"> <button class="button is-small is-success" action="save-purge-result-editor" onclick="{clickButton}">Save changes</button> <button class="button is-small" action="close-purge-result-editor" onclick="{clickButton}">Cancel</button> </footer> </div> </div>', '', '', function(opts) {
+     this.clickButton = (e) => {
+         let action = e.target.getAttribute('action');
+
+         if (action != 'save-purge-result-editor') {
+             this.opts.callback(action);
+             return;
+         }
+
+         let stripper = new TimeStripper();
+
+         this.opts.callback(action, {
+             id: this.opts.data.id,
+             start: stripper.str2date(this.refs.start.value),
+             end: stripper.str2date(this.refs.end.value)
+         })
+     };
+     this.clickSetDate = (e) => {
+         let target = e.target;
+
+         let input = target.parentNode.parentNode.firstElementChild.firstElementChild;
+         let action = target.getAttribute('action');
+
+         let value = (action) => {
+             if (action=='now')
+                 return moment();
+
+             if (action=='after-start')
+                 return this.opts.source.after_start;
+
+             if (action=='before-end')
+                 return this.opts.source.before_end;
+
+             if (action=='revert-start')
+                 return this.opts.data.start;
+
+             if (action=='revert-end')
+                 return this.opts.data.end;
+
+             throw Error('Not Supported yet. action=' + action) ;
+         };
+
+         input.value = moment(value(action)).format('YYYY-MM-DD HH:mm:ss');
+     };
+
+     this.isHide = (code) => {
+         if (code=='after-start')
+             return this.opts.source.after_start ? '' : 'hide';
+
+         if (code=='before-end')
+             return this.opts.source.before_end ? '' : 'hide';
+     };
+     this.getVal = (key) => {
+         let data = this.opts.data;
+
+         if (!data)
+             return '';
+
+         if (key=='elapsed-time')
+             return new TimeStripper().format_elapsedTime(this.opts.data.start, this.opts.data.end);
+
+         return data[key];
+     };
+     this.date2str = (date) => {
+         if (!date) return '';
+
+         return moment(date).format("YYYY-MM-DD HH:mm:ss");
      };
 });
 
@@ -1489,212 +1736,6 @@ riot.tag2('orthodoxs-page_tab-orthdoxs', '<section class="section"> <div class="
      });
 });
 
-riot.tag2('modal-change-deamon-area', '<h1 class="title is-4">Deamons</h1> <p class="control has-icons-left has-icons-right"> <input class="input is-small" type="text" placeholder="Search" onkeyup="{keyUp}"> <span class="icon is-small is-left"> <i class="fas fa-search"></i> </span> </p> <div> <button each="{deamon in deamons()}" class="button is-small deamon-item" deamon-id="{deamon.id}" onclick="{clickDeamon}"> {deamon.name} ({deamon.name_short}) </button> </div>', '', '', function(opts) {
-     this.clickDeamon = (e) => {
-         let deamon_id = e.target.getAttribute('deamon-id');
-
-         this.opts.callback('choose-deamon', { id: deamon_id });
-     };
-
-     this.filter = null;
-
-     this.keyUp = (e) => {
-         let str = e.target.value;
-
-         if (str.length==0)
-             this.filter = null;
-         else
-             this.filter = str
-
-         this.update();
-     };
-
-     this.deamons = () => {
-         let filter = this.filter;
-         let deamons = STORE.get('deamons.list');
-
-         if (!this.filter)
-             return deamons
-
-         filter = filter.toLowerCase();
-
-         let out = deamons.filter((d) => {
-
-             return (d.id + '').toLowerCase().indexOf(filter) >= 0
-                 || d.name.toLowerCase().indexOf(filter) >= 0
-                 || d.name_short.toLowerCase().indexOf(filter) >= 0
-         });
-
-         return out;
-     };
-});
-
-riot.tag2('modal-change-deamon-impure-area', '<div class="root-container"> <h1 class="title is-4">Impure</h1> <div class="basic-info-area" style="font-size:12px;"> <p>{val(\'impure_name\')} (ID: {val(\'impure_id\')})</p> <p style="background:#fff; flex-grow: 1; overflow: auto;"> <description-markdown source="{val(\'impure_description\')}"></description-markdown> </p> </div> <div class="deamon-area"> <h1 class="title is-6" style="margin-bottom: 8px;">Deamon</h1> <div style="padding-left:11px;"> <p>{val(\'impure_deamon\')}</p> <button class="button is-small deamon-item {impureDeamon() ? \'\' : \'hide\'}" onclick="{clickRemove}"> 削除 </button> </div> </div> </div>', 'modal-change-deamon-impure-area .root-container { height: 100%; display: flex; flex-direction: column; } modal-change-deamon-impure-area .basic-info-area { padding-left:11px; flex-grow: 1; display: flex; flex-direction: column; } modal-change-deamon-impure-area .deamon-area { height:99px; margin-top:11px; }', '', function(opts) {
-     this.clickRemove = (e) => {
-         this.opts.callback('remove-deamon');
-     }
-
-     this.val = (name) => {
-         if (!this.opts.source)
-             return '';
-
-         if ('impure_deamon'!=name)
-             return this.opts.source[name];
-
-         let deamon = this.opts.choosed_deamon;
-
-         if (!deamon || deamon.id===null)
-             return 'なし';
-
-         return deamon.name + ' (ID:' + deamon.id + ')';
-     };
-     this.impureDeamon = () => {
-         if (!this.opts.source)
-             return null;
-
-         let deamon = this.opts.choosed_deamon;
-
-         if (!deamon || deamon.id===null)
-             return null;
-
-         return deamon;
-     };
-     this.deamons = () => {
-         return STORE.get('deamons.list');
-     };
-});
-
-riot.tag2('modal-change-deamon', '<div class="modal {isOpen()}"> <div class="modal-background"></div> <div class="modal-content" style="width:888px;"> <div class="card"> <header class="card-header"> <p class="card-header-title"> Change Deamon <span style="margin-left: 22px; color: #f00; font-weight:bold;">注意: 実装中</span> </p> </header> <div class="card-content"> <div class="content"> <div class="flex-contener"> <div class="choose-demaon-area"> <modal-change-deamon-area source="{opts.source}" callback="{callback}"></modal-change-deamon-area> </div> <div class="view-impure-area"> <modal-change-deamon-impure-area source="{opts.source}" choosed_deamon="{choosed_deamon}" callback="{callback}"></modal-change-deamon-impure-area> </div> </div> <div class="control-area"> <button class="button is-small" onclick="{clickCancel}">Cancel</button> <button class="button is-small is-danger" onclick="{clickSave}" disabled="{isDisabled()}">Save</button> </div> </div> </div> </div> </div> <button class="modal-close is-large" aria-label="close" onclick="{clickCancel}"></button> </div>', 'modal-change-deamon .flex-contener { display:flex; height:555px; } modal-change-deamon .choose-demaon-area { flex-grow: 1; padding: 11px; width: 211px; } modal-change-deamon .choose-demaon-area .deamon-item { margin-left: 11px; margin-bottom: 11px; } modal-change-deamon .view-impure-area { flex-grow: 1; padding: 11px; background: rgba(254, 242, 100, 0.08); border-radius: 8px; box-shadow: 0px 0px 22px rgba(254, 242, 100, 0.08); width: 222px; display: flex; flex-direction: column; } modal-change-deamon modal-change-deamon-impure-area { height: 100%; } modal-change-deamon .control-area { display: flex; justify-content: space-between; margin-top: 11px; }', '', function(opts) {
-     this.isOpen = () => {
-         return this.opts.source ? 'is-active' : '';
-     };
-     this.isDisabled = () => {
-         if (!this.opts.source)
-             return 'disabled';
-
-         if (this.choosed_deamon.id == this.opts.source.deamon_id)
-             return 'disabled';
-
-         return '';
-     };
-
-     this.choosed_deamon = null;
-     this.on('update', () => {
-         if (!this.opts.source)
-             return;
-
-         if (!this.choosed_deamon) {
-             let id = this.opts.source.deamon_id;
-
-             if (!id)
-                 this.choosed_deamon = { id: null };
-             else
-                 this.choosed_deamon = STORE.get('deamons.ht')[id];
-         }
-     });
-
-     this.callback = (action, data) => {
-         if (action=='choose-deamon') {
-             let deamons = STORE.get('deamons.ht');
-
-             this.choosed_deamon = deamons[data.id];
-
-             if (!this.choosed_deamon)
-                 this.choosed_deamon = { id: null };
-
-             this.update();
-
-             return;
-         }
-         if (action=='remove-deamon') {
-             this.choosed_deamon = { id: null };
-
-             this.update();
-
-             return;
-         }
-     };
-     this.clickCancel = () => {
-         this.opts.callback('close-modal-change-deamon');
-     };
-     this.clickSave = () => {
-         let impure = { id: this.opts.source.impure_id };
-         let deamon = this.choosed_deamon;
-
-         ACTIONS.setImpureDeamon(impure, deamon);
-     };
-});
-
-riot.tag2('modal-purge-result-editor', '<div class="modal {opts.data ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head"> <p class="modal-card-title">作業時間の変更</p> <button class="delete" aria-label="close" action="close-purge-result-editor" onclick="{clickButton}"></button> </header> <section class="modal-card-body"> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">Impure</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'impure_name\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">作業時間</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'elapsed-time\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">開始</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'start\'))}" ref="start" type="{\'datetime\'}"> </p> <div style="padding-top: 5px;"> <button class="button is-small" action="now" onclick="{clickSetDate}">今</button> <button class="button is-small {isHide(\'before-end\')}" action="before-end" onclick="{clickSetDate}">前の作業の終了</button> <button class="button is-small" action="revert-start" onclick="{clickSetDate}">元に戻す</button> </div> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">終了</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'end\'))}" ref="end" type="{\'datetime\'}"> <div style="padding-top: 5px;"> <button class="button is-small" action="now" onclick="{clickSetDate}">今</button> <button class="button is-small {isHide(\'after-start\')}" action="after-start" onclick="{clickSetDate}">後の作業の開始</button> <button class="button is-small" action="revert-end" onclick="{clickSetDate}">元に戻す</button> </div> </p> </div> </div> </div> </section> <footer class="modal-card-foot" style="padding: 11px 22px;"> <button class="button is-small is-success" action="save-purge-result-editor" onclick="{clickButton}">Save changes</button> <button class="button is-small" action="close-purge-result-editor" onclick="{clickButton}">Cancel</button> </footer> </div> </div>', '', '', function(opts) {
-     this.clickButton = (e) => {
-         let action = e.target.getAttribute('action');
-
-         if (action != 'save-purge-result-editor') {
-             this.opts.callback(action);
-             return;
-         }
-
-         let stripper = new TimeStripper();
-
-         this.opts.callback(action, {
-             id: this.opts.data.id,
-             start: stripper.str2date(this.refs.start.value),
-             end: stripper.str2date(this.refs.end.value)
-         })
-     };
-     this.clickSetDate = (e) => {
-         let target = e.target;
-
-         let input = target.parentNode.parentNode.firstElementChild.firstElementChild;
-         let action = target.getAttribute('action');
-
-         let value = (action) => {
-             if (action=='now')
-                 return moment();
-
-             if (action=='after-start')
-                 return this.opts.source.after_start;
-
-             if (action=='before-end')
-                 return this.opts.source.before_end;
-
-             if (action=='revert-start')
-                 return this.opts.data.start;
-
-             if (action=='revert-end')
-                 return this.opts.data.end;
-
-             throw Error('Not Supported yet. action=' + action) ;
-         };
-
-         input.value = moment(value(action)).format('YYYY-MM-DD HH:mm:ss');
-     };
-
-     this.isHide = (code) => {
-         if (code=='after-start')
-             return this.opts.source.after_start ? '' : 'hide';
-
-         if (code=='before-end')
-             return this.opts.source.before_end ? '' : 'hide';
-     };
-     this.getVal = (key) => {
-         let data = this.opts.data;
-
-         if (!data)
-             return '';
-
-         if (key=='elapsed-time')
-             return new TimeStripper().format_elapsedTime(this.opts.data.start, this.opts.data.end);
-
-         return data[key];
-     };
-     this.date2str = (date) => {
-         if (!date) return '';
-
-         return moment(date).format("YYYY-MM-DD HH:mm:ss");
-     };
-});
-
 riot.tag2('move-date-operator', '<div class="operator hw-box-shadow"> <div class="befor"> <button class="button" onclick="{clickBefor}"><</button> </div> <div class="trg"> <span>{opts.label}</span> </div> <div class="after"> <button class="button" onclick="{clickAfter}">></button> </div> </div>', 'move-date-operator .operator { display: flex; margin-left:11px; border-radius: 8px; } move-date-operator .operator span { font-size:18px; } move-date-operator .button{ border: none; } move-date-operator .befor, move-date-operator .befor .button{ border-radius: 8px 0px 0px 8px; } move-date-operator .after, move-date-operator .after .button{ border-radius: 0px 8px 8px 0px; } move-date-operator .operator > div { border: 1px solid #dbdbdb; width: 36px; } move-date-operator .operator > div.trg{ padding-top: 5px; padding-left: 8px; border-left: none; border-right: none; background: #ffffff; }', '', function(opts) {
      this.clickBefor = () => {
          this.opts.callback('move-date', {
@@ -1708,6 +1749,114 @@ riot.tag2('move-date-operator', '<div class="operator hw-box-shadow"> <div class
              amount: 1,
          });
      }
+});
+
+riot.tag2('page-purges', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 class="title hw-text-white">期間</h1> <purges_page_filter style="margin-bottom:22px; padding-left:33px; padding-right:33px;" from="{from}" to="{to}" callback="{callback}"></purges_page_filter> </div> <div> <h1 class="title hw-text-white">Summary</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <div style="margin-right: 88px;"> <purges_page_group-span source="{this.summary.deamons}"></purges_page_group-span> </div> <div> <purges_page_group-span-deamon source="{this.summary.deamons}"></purges_page_group-span-deamon> </div> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Guntt Chart</h1> <div style="padding-left:33px; padding-right:33px;"> <purges_page_guntt-chart source="{purges}" from="{from}" to="{to}"></purges_page_guntt-chart> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Purge hisotry</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <purges-list source="{purges}" callback="{callback}"></purges-list> </div> </div> </div> <modal-purge-result-editor data="{edit_target}" source="{edit_data}" callback="{callback}"></modal-purge-result-editor> <modal-change-deamon source="{modal_data}" callback="{callback}"></modal-change-deamon> <div style="height:111px;"></div>', 'page-purges { height: 100%; width: 100%; display: block; overflow: auto; } page-purges .card { border-radius: 8px; } page-purges button.refresh{ margin-top:6px; margin-right:8px; }', 'class="page-contents"', function(opts) {
+     this.purges = [];
+     this.summary = { deamons: [] };
+
+     this.from = moment().hour(7).startOf('hour');
+     this.to   = moment(this.from).add(1, 'd');
+     this.moveDate = (unit, amount) => {
+         this.from = this.from.add(amount, unit);
+         this.to   = this.to.add(amount, unit);
+
+         this.tags['purges_page_filter'].update();
+     };
+
+     this.edit_target = null;
+     this.edit_data   = { before_end: null, after_start: null };
+     this.modal_data = null;
+     this.callback = (action, data) => {
+         if ('open-modal-change-deamon'==action) {
+
+             this.modal_data = this.purges.find((d) => {
+                 return d.purge_id == data.purge_id;
+             });
+
+             if (this.modal_data==null)
+                 return;
+
+             this.update();
+
+             return;
+         }
+         if ('close-modal-change-deamon'==action) {
+             this.modal_data = null;
+             this.update();
+
+             return;
+         }
+
+         if ('open-purge-result-editor'==action) {
+             this.edit_target = STORE.get('purges').ht[data.id];
+             this.edit_data = {
+                 before_end: data.before_end,
+                 after_start: data.after_start,
+             }
+             this.tags['modal-purge-result-editor'].update();
+
+             return;
+         }
+
+         if ('close-purge-result-editor'==action) {
+             this.edit_target = null;
+             this.tags['modal-purge-result-editor'].update();
+             return;
+         }
+
+         if ('save-purge-result-editor'==action)
+             ACTIONS.saveActionResult(data);
+
+         if ('move-date'==action)
+             this.moveDate(data.unit, data.amount);
+
+         if ('refresh'==action)
+             this.refreshData();
+     };
+
+     this.refreshData = () => {
+         ACTIONS.fetchPagesPurges(this.from, this.to);
+     };
+     this.on('mount', () => {
+         this.refreshData();
+     });
+     STORE.subscribe((action) => {
+         if (action.type=='SETED-IMPURE-DEAMON') {
+             this.modal_data = null;
+             this.update();
+
+             ACTIONS.fetchPagesPurges(this.from, this.to);
+         };
+
+         if (action.type=='FETCHED-PAGES-PURGES') {
+             this.summary = action.response.summary;
+
+             this.purges = action.response.purges.map((d) => {
+                 d.purge_start = moment(d.purge_start);
+                 d.purge_end   = moment(d.purge_end);
+                 return d;
+             });
+
+             this.update();
+
+             return;
+         }
+
+         if (action.type=='SAVED-ACTION-RESULT') {
+             this.edit_target = null;
+             ACTIONS.pushSuccessMessage('Purge の実績の変更が完了しました。');
+             ACTIONS.fetchPagesPurges(this.from, this.to);
+
+             return;
+         }
+     });
+
+     this.data = () => {
+         let list = STORE.get('purges');
+
+         return list;
+     };
 });
 
 riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth hw-box-shadow" style="font-size:12px;"> <thead> <tr> <th rowspan="2">Impure</th> <th colspan="4">Purge</th> <th colspan="3">作業間隔</th> <th colspan="2">Deamon</th> </tr> <tr> <th>開始</th> <th>終了</th> <th>時間</th> <th>操作</th> <th>後作業</th> <th>前作業</th> <th>操作</th> <th>Name</th> <th>操作</th> </tr> </thead> <tbody> <tr each="{rec in data()}" purge_id="{rec.purge_id}" impure_id="{rec.impure_id}" deamon_id="{rec.deamon_id}"> <td> <a href="#purges/impures/{rec.impure_id}"> {rec.impure_name} </a> </td> <td>{fdt(rec.purge_start)}</td> <td>{fdt(rec.purge_end)}</td> <td style="text-align: right;">{elapsedTime(rec.purge_start, rec.purge_end)}</td> <td> <button class="button is-small" data-id="{rec.purge_id}" before-end="{beforEnd(rec)}" after-start="{afterStart(rec)}" onclick="{clickEditTermButton}">変</button> </td> <td style="text-align:right;">{fmtSpan(rec.distance.after)}</td> <td style="text-align:right;">{fmtSpan(rec.distance.befor)}</td> <td> <button class="button is-small" disabled>変</button> </td> <td> <a href="#purges/deamons/{rec.deamon_id}"> {rec.deamon_name_short} </a> </td> <td> <button class="button is-small" onclick="{clickChangeDemon}">変</button> </td> </tr> </tbody> </table>', 'purges-list .table tbody td { vertical-align: middle; }', '', function(opts) {
@@ -1787,118 +1936,6 @@ riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow i
      }
      this.elapsedTime = (start, end) => {
          return new TimeStripper().format_elapsedTime(start, end);
-     };
-});
-
-riot.tag2('purges_page', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 class="title hw-text-white">期間</h1> <purges_page_filter style="margin-bottom:22px; padding-left:33px; padding-right:33px;" from="{from}" to="{to}" callback="{callback}"></purges_page_filter> </div> <div> <h1 class="title hw-text-white">Summary</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <div style="margin-right: 88px;"> <purges_page_group-span source="{this.summary.deamons}"></purges_page_group-span> </div> <div> <purges_page_group-span-deamon source="{this.summary.deamons}"></purges_page_group-span-deamon> </div> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Guntt Chart</h1> <div style="padding-left:33px; padding-right:33px;"> <purges_page_guntt-chart source="{purges}" from="{from}" to="{to}"></purges_page_guntt-chart> </div> </div> <div style="margin-top:33px;"> <h1 class="title hw-text-white">Purge hisotry</h1> <div style="display:flex; padding-left:33px; padding-right:33px;"> <purges-list source="{purges}" callback="{callback}"></purges-list> </div> </div> </div> <modal-purge-result-editor data="{edit_target}" source="{edit_data}" callback="{callback}"></modal-purge-result-editor> <modal-change-deamon source="{modal_data}" callback="{callback}"></modal-change-deamon> <div style="height:111px;"></div>', 'purges_page { height: 100%; width: 100%; display: block; overflow: auto; } purges_page .card { border-radius: 8px; } purges_page button.refresh{ margin-top:6px; margin-right:8px; }', 'class="page-contents"', function(opts) {
-     this.purges = [];
-     this.summary = { deamons: [] };
-
-     this.from = moment().hour(7).startOf('hour');
-     this.to   = moment(this.from).add(1, 'd');
-     this.moveDate = (unit, amount) => {
-         this.from = this.from.add(amount, unit);
-         this.to   = this.to.add(amount, unit);
-
-         this.tags['purges_page_filter'].update();
-     };
-
-     this.edit_target = null;
-     this.edit_data   = { before_end: null, after_start: null };
-     this.modal_data = null;
-     this.callback = (action, data) => {
-         if ('open-modal-change-deamon'==action) {
-
-             this.modal_data = this.purges.find((d) => {
-                 return d.purge_id == data.purge_id;
-             });
-
-             if (this.modal_data==null)
-                 return;
-
-             this.update();
-
-             return;
-         }
-         if ('close-modal-change-deamon'==action) {
-             this.modal_data = null;
-             this.update();
-
-             return;
-         }
-
-         if ('open-purge-result-editor'==action) {
-             this.edit_target = STORE.get('purges').ht[data.id];
-             this.edit_data = {
-                 before_end: data.before_end,
-                 after_start: data.after_start,
-             }
-             this.tags['modal-purge-result-editor'].update();
-
-             return;
-         }
-
-         if ('close-purge-result-editor'==action) {
-             this.edit_target = null;
-             this.tags['modal-purge-result-editor'].update();
-             return;
-         }
-
-         if ('save-purge-result-editor'==action)
-             ACTIONS.saveActionResult(data);
-
-         if ('move-date'==action)
-             this.moveDate(data.unit, data.amount);
-
-         if ('refresh'==action)
-             this.refreshData();
-     };
-
-     this.refreshData = () => {
-         ACTIONS.fetchPurgeHistory(this.from, this.to);
-         ACTIONS.fetchPagesPurges(this.from, this.to);
-     };
-     this.on('mount', () => {
-         this.refreshData();
-     });
-     STORE.subscribe((action) => {
-         if (action.type=='SETED-IMPURE-DEAMON') {
-             this.modal_data = null;
-             this.update();
-             ACTIONS.fetchPagesPurges(this.from, this.to);
-         };
-
-         if (action.type=='FETCHED-PAGES-PURGES') {
-             this.summary = action.response.summary;
-
-             this.purges = action.response.purges.map((d) => {
-                 d.purge_start = moment(d.purge_start);
-                 d.purge_end   = moment(d.purge_end);
-                 return d;
-             });
-
-             this.update();
-
-             return;
-         }
-
-         if (action.type=='FETCHED-PURGE-HISTORY') {
-             this.update();
-             return;
-         }
-
-         if (action.type=='SAVED-ACTION-RESULT') {
-             this.edit_target = null;
-             ACTIONS.pushSuccessMessage('Purge の実績の変更が完了しました。');
-             ACTIONS.fetchPurgeHistory(this.from, this.to);
-             return;
-         }
-     });
-
-     this.data = () => {
-         let list = STORE.get('purges');
-
-         return list;
      };
 });
 

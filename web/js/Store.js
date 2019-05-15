@@ -101,7 +101,7 @@ class Store extends Vanilla_Redux_Store {
     pagePurges () {
         return {
             code: "purges",
-            tag: 'purges_page',
+            tag: 'page-purges',
             menu_label: '浄歴',
             children: [
                 this.childPageImpures(),

@@ -16,6 +16,8 @@
     <modal-create-impure open={modal_open}
                          maledict={modal_maledict}></modal-create-impure>
 
+    <modal-create-after-impure></modal-create-after-impure>
+
     <script>
      this.site = () => {
          return STORE.state().get('site');

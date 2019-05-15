@@ -11,12 +11,16 @@
     <style>
      section-breadcrumb .breadcrumb a {
          font-weight: bold;
-         text-shadow: 0px 0px 22px rgba(254, 242, 99);
-         color: #d05d89;
+         text-shadow: 0px 0px 22px #ffffff;
+         color: rgba(254, 242, 1);
      }
      section-breadcrumb .breadcrumb a:hover {
-         text-shadow: 0px 0px 22px #333;
+         text-shadow: 0px 0px 22px #333333;
          color: #ffffff;
+     }
+     section-breadcrumb .breadcrumb li.is-active a {
+         color: #ffffff;
+         text-shadow: 0px 0px 22px rgba(254, 242, 1);
      }
     </style>
 

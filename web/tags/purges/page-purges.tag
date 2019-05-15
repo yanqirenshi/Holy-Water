@@ -1,4 +1,4 @@
-<purges_page class="page-contents">
+<page-purges class="page-contents">
     <div style="padding: 33px 88px 88px 88px;">
         <div>
             <h1 class="title hw-text-white">期間</h1>
@@ -121,7 +121,6 @@
 
     <script>
      this.refreshData = () => {
-         ACTIONS.fetchPurgeHistory(this.from, this.to);
          ACTIONS.fetchPagesPurges(this.from, this.to);
      };
      this.on('mount', () => {
@@ -131,6 +130,7 @@
          if (action.type=='SETED-IMPURE-DEAMON') {
              this.modal_data = null;
              this.update();
+
              ACTIONS.fetchPagesPurges(this.from, this.to);
          };
 
@@ -148,15 +148,11 @@
              return;
          }
 
-         if (action.type=='FETCHED-PURGE-HISTORY') {
-             this.update();
-             return;
-         }
-
          if (action.type=='SAVED-ACTION-RESULT') {
              this.edit_target = null;
              ACTIONS.pushSuccessMessage('Purge の実績の変更が完了しました。');
-             ACTIONS.fetchPurgeHistory(this.from, this.to);
+             ACTIONS.fetchPagesPurges(this.from, this.to);
+
              return;
          }
      });
@@ -171,20 +167,20 @@
     </script>
 
     <style>
-     purges_page {
+     page-purges {
          height: 100%;
          width: 100%;
          display: block;
          overflow: auto;
      }
 
-     purges_page .card {
+     page-purges .card {
          border-radius: 8px;
      }
 
-     purges_page button.refresh{
+     page-purges button.refresh{
          margin-top:6px;
          margin-right:8px;
      }
     </style>
-</purges_page>
+</page-purges>
