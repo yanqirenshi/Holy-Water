@@ -45,7 +45,7 @@
          border-bottom-width: 2px;
      }
      orthodoxs-page .tabs.is-boxed li.is-active a {
-         background-color: rgba(254, 242, 99, 0.55);
+         background-color: rgba(254, 242, 99, 1);
          border-color: rgb(254, 242, 99);
 
          text-shadow: 0px 0px 11px #fff;

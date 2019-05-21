@@ -1,8 +1,10 @@
 <modal-purge-result-editor>
+
     <div class="modal {opts.data ? 'is-active' : ''}">
         <div class="modal-background"></div>
         <div class="modal-card">
-            <header class="modal-card-head">
+
+            <header class="modal-card-head" style="padding: 11px 22px; font-size: 18px;">
                 <p class="modal-card-title">作業時間の変更</p>
                 <button class="delete"
                         aria-label="close"
@@ -32,7 +34,7 @@
                     <div class="field-body">
                         <div class="field">
                             <p class="control">
-                                <input class="input is-static" type="text" value={getVal('elapsed-time')} readonly>
+                                <input class="input is-static" type="text" value={getVal('elapsed_time')} readonly>
                             </p>
                         </div>
                     </div>
@@ -45,12 +47,14 @@
                     <div class="field-body">
                         <div class="field">
                             <p class="control">
-                                <input class="input" type="datetime" value={date2str(getVal('start'))} ref="start">
+                                <input class="input" type="datetime" value={date2str(getVal('purge_start'))} ref="start">
                             </p>
                             <div style="padding-top: 5px;">
-                                <button class="button is-small" action="now"           onclick={clickSetDate}>今</button>
-                                <button class="button is-small {isHide('before-end')}" action="before-end"    onclick={clickSetDate}>前の作業の終了</button>
-                                <button class="button is-small" action="revert-start"  onclick={clickSetDate}>元に戻す</button>
+                                <button class="button is-small"                        action="now"                onclick={clickSetDate}>今</button>
+                                <button class="button is-small {isHide('before-end')}" action="before-end"         onclick={clickSetDate}>前の作業の終了</button>
+                                <button class="button is-small"                        action="clear-under-hour"   onclick={clickSetDate}>分と秒をクリア</button>
+                                <button class="button is-small"                        action="clear-under-minute" onclick={clickSetDate}>秒をクリア</button>
+                                <button class="button is-small is-warging"             action="revert-start"       onclick={clickSetDate}>元に戻す</button>
                             </div>
                         </div>
                     </div>
@@ -63,11 +67,13 @@
                     <div class="field-body">
                         <div class="field">
                             <p class="control">
-                                <input class="input" type="datetime" value={date2str(getVal('end'))} ref="end">
+                                <input class="input" type="datetime" value={date2str(getVal('purge_end'))} ref="end">
                                 <div style="padding-top: 5px;">
-                                    <button class="button is-small" action="now"            onclick={clickSetDate}>今</button>
-                                    <button class="button is-small {isHide('after-start')}" action="after-start" onclick={clickSetDate}>後の作業の開始</button>
-                                    <button class="button is-small" action="revert-end"     onclick={clickSetDate}>元に戻す</button>
+                                    <button class="button is-small"                         action="now"                onclick={clickSetDate}>今</button>
+                                    <button class="button is-small {isHide('after-start')}" action="after-start"        onclick={clickSetDate}>後の作業の開始</button>
+                                    <button class="button is-small"                         action="clear-under-hour"   onclick={clickSetDate}>分と秒をクリア</button>
+                                    <button class="button is-small"                         action="clear-under-minute" onclick={clickSetDate}>秒をクリア</button>
+                                    <button class="button is-small is-warging"              action="revert-end"         onclick={clickSetDate}>元に戻す</button>
                                 </div>
                             </p>
                         </div>
@@ -76,9 +82,9 @@
 
             </section>
 
-            <footer class="modal-card-foot" style="padding: 11px 22px;">
-                <button class="button is-small is-success" action="save-purge-result-editor" onclick={clickButton}>Save changes</button>
+            <footer class="modal-card-foot" style="padding: 11px 22px; display:flex; justify-content: space-between;">
                 <button class="button is-small" action="close-purge-result-editor" onclick={clickButton}>Cancel</button>
+                <button class="button is-small is-success" action="save-purge-result-editor" onclick={clickButton}>Save</button>
             </footer>
         </div>
     </div>
@@ -95,7 +101,7 @@
          let stripper = new TimeStripper();
 
          this.opts.callback(action, {
-             id: this.opts.data.id,
+             id: this.opts.data.purge_id,
              start: stripper.str2date(this.refs.start.value),
              end: stripper.str2date(this.refs.end.value)
          })
@@ -106,7 +112,7 @@
          let input = target.parentNode.parentNode.firstElementChild.firstElementChild;
          let action = target.getAttribute('action');
 
-         let value = (action) => {
+         let value = () => {
              if (action=='now')
                  return moment();
 
@@ -117,15 +123,22 @@
                  return this.opts.source.before_end;
 
              if (action=='revert-start')
-                 return this.opts.data.start;
+                 return this.opts.data.purge_start;
 
-             if (action=='revert-end')
-                 return this.opts.data.end;
+             if (action=='revert-end') {
+                 return this.opts.data.purge_end;
+             }
+
+             if (action=='clear-under-hour')
+                 return moment(input.value).startOf('hour');
+
+             if (action=='clear-under-minute')
+                 return moment(input.value).startOf('minute');
 
              throw Error('Not Supported yet. action=' + action) ;
          };
 
-         input.value = moment(value(action)).format('YYYY-MM-DD HH:mm:ss');
+         input.value = moment(value()).format('YYYY-MM-DD HH:mm:ss');
      };
     </script>
 
@@ -143,8 +156,8 @@
          if (!data)
              return '';
 
-         if (key=='elapsed-time')
-             return new TimeStripper().format_elapsedTime(this.opts.data.start, this.opts.data.end);
+         if (key=='elapsed_time')
+             return new TimeStripper().format_sec(data[key]);
 
          return data[key];
      };

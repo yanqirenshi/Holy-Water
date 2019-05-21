@@ -52,10 +52,3 @@
                          :on (:= :ev_collect_impure.maledict_id :th_angel_maledict.maledict_id))
              (where (:and (:= :th_angel_maledict.angel_id (mito:object-id angel))
                           (:= :ev_collect_impure.impure_id id)))))))
-
-(defgeneric angel-impure (angel &key id)
-  (:method ((angel rs_angel) &key id)
-    (when id
-      (or (angel-impure-core 'rs_impure-active    angel id)
-          (angel-impure-core 'rs_impure-finished  angel id)
-          (angel-impure-core 'rs_impure-discarded angel id)))))

@@ -11,18 +11,26 @@
 
     <section class="section" style="padding-top:22px; padding-bottom:22px;">
         <div class="container">
+            <div class="contents">
+                <impure_page-controller></impure_page-controller>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="section" style="padding-top:22px; padding-bottom:22px;">
+        <div class="container">
             <page-tabs core={page_tabs}
-                       callback={clickTab}
-                       type="toggle"></page-tabs>
+                       callback={clickTab}></page-tabs>
         </div>
     </section>
 
     <div class="tab-contents-area">
-        <impure_page_tab-basic       class="hide" source={impure}></impure_page_tab-basic>
-        <impure_page_tab-purges      class="hide" source={impure}></impure_page_tab-purges>
-        <impure_page_tab-incantation class="hide" source={impure}></impure_page_tab-incantation>
-        <impure_page_tab-requests    class="hide" source={impure}></impure_page_tab-requests>
-        <impure_page_tab-chains      class="hide" source={impure}></impure_page_tab-chains>
+        <impure_page_tab-basic       class="hide" source={source.impure}></impure_page_tab-basic>
+        <impure_page_tab-purges      class="hide" source={source.purges}></impure_page_tab-purges>
+        <impure_page_tab-incantation class="hide" source={source.spells}></impure_page_tab-incantation>
+        <impure_page_tab-requests    class="hide" source={source.requests}></impure_page_tab-requests>
+        <impure_page_tab-chains      class="hide" source={[]}></impure_page_tab-chains>
     </div>
 
     <script>
@@ -60,14 +68,25 @@
 
     <script>
      this.impure = null;
+     this.source = {
+         impure: null,
+         purges: [],
+         spells: [],
+         requests: [],
+     };
+
      STORE.subscribe((action) => {
-         if (action.type=='FETCHED-IMPURE') {
-             this.impure = action.impure;
+         if (action.type=='FETCHED-PAGES-IMPURE') {
+             this.source = action.response;
+
              this.update();
          }
      });
      this.on('mount', () => {
-         ACTIONS.fetchImpure(this.id());
+         let id = this.id();
+
+         ACTIONS.fetchPagesImpure({ id: id });
+         ACTIONS.fetchImpure(id);
      });
     </script>
 
@@ -86,4 +105,25 @@
      }
     </style>
 
+    <style>
+     impure_page .tabs ul {
+         border-bottom-color: rgb(254, 242, 99);
+         border-bottom-width: 2px;
+     }
+     impure_page .tabs.is-boxed li.is-active a {
+         background-color: rgba(254, 242, 99, 1);
+         border-color: rgb(254, 242, 99);
+
+         text-shadow: 0px 0px 11px #fff;
+         color: #333;
+         font-weight: bold;
+     }
+     impure_page .tabs.is-boxed  li {
+         margin-left: 8px;
+     }
+     impure_page .tabs.is-boxed a {
+         text-shadow: 0px 0px 8px #fff;
+         font-weight: bold;
+     }
+    </style>
 </impure_page>

@@ -30,6 +30,7 @@
                                (:file "ev_request-message")
                                (:file "ev_incantation")
                                (:file "re_impure")))
+                 (:file "dependency")
                  (:file "auth")
                  (:file "creator")
                  (:file "angel-maledict")

@@ -1,13 +1,12 @@
 <impure-card-footer>
 
     <footer class="card-footer" style="font-size:14px; height:33px;">
-        <span class="card-footer-item action" action={startStopAction()}  onclick={clickButton}>{startStopLabel()}</span>
+        <span class="card-footer-item action {opts.status}" action={startStopAction()}  onclick={clickButton}>{startStopLabel()}</span>
         <span class="card-footer-item view"   action="move-2-view"        onclick={clickButton}>照会</span>
         <span class="card-footer-item open"   action={changeSizeAction()} onclick={clickButton}>{changeSizeLabel()}</span>
     </footer>
 
     <script>
-
      this.startStopLabel = () => {
          if (!this.opts.status)
              return '開始';
@@ -46,5 +45,15 @@
          this.opts.callback(action);
      };
     </script>
+
+    <style>
+     impure-card-footer .action.start {
+         border-radius: 0px 0px 0px 5px;
+         background-color: #FEF264;
+     }
+     impure-card-footer .action.start:hover {
+         font-weight: bold;
+     }
+    </style>
 
 </impure-card-footer>

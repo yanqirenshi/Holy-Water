@@ -25,3 +25,14 @@
   (when (and angel from to)
     (list :|cemeteries| (hw:list-cemeteries angel :from from :to to)
           :|daily| (hw:list-summay-impure-cemeteries-by-date-damon angel :from from :to to))))
+
+
+(defun pages-impure (angel impure)
+  (when (and angel impure)
+    (list :|impure|   (dao2impure   impure)
+          :|deamon|   (dao2deamon   (hw::impure-deamon   impure))
+          :|maledict| (dao2maledict (hw::impure-maledict impure))
+          :|purges|   (hw::impure-purge-list   impure)
+          :|spells|   (hw::impure-spell-list   impure)
+          :|requests| (hw::impure-request-list impure)
+          :|chains|   (hw::impure-chain-list   impure))))

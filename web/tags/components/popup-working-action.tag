@@ -81,5 +81,10 @@
          border-radius: 8px;
          box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666);
      }
+
+     popup-working-action .hw-button {
+         background: #fff;
+         box-shadow: none;
+     }
     </style>
 </popup-working-action>

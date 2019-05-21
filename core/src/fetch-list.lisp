@@ -49,6 +49,7 @@
            (:as :ev_purge_end.description :purge_description)
            (:as :ev_purge_end.start       :purge_start)
            (:as :ev_purge_end.end         :purge_end)
+           (:as (:- :ev_purge_end.end :ev_purge_end.start) :elapsed_time)
            (:as :rs_impure.id             :impure_id)
            (:as :rs_impure.name           :impure_name)
            (:as :rs_impure.description    :impure_description)
@@ -79,12 +80,10 @@
       (list-purge-by-angel-sql angel :from from :to to)
     (let ((results (fetch-list sql vals)))
       (dolist (rec results)
-        (setf (getf rec :|purge_start|)
-              (local-time:format-timestring nil (local-time:universal-to-timestamp (getf rec :|purge_start|))))
-        (setf (getf rec :|purge_end|)
-              (local-time:format-timestring nil (local-time:universal-to-timestamp (getf rec :|purge_end|)))))
+        (timestamptz2timestamp! rec :|purge_start|)
+        (timestamptz2timestamp! rec :|purge_end|)
+        (interval2second!       rec :|elapsed_time|))
       results)))
-
 
 ;;;;;
 ;;;;; 墓標の日別/悪魔別の数
@@ -198,4 +197,44 @@
               (if (eq :null (getf rec :|elapsed_time|))
                   0
                   (second (assoc :seconds (getf rec :|elapsed_time|))))))
+      results)))
+
+;;;;;
+;;;;; maledict impures
+;;;;;
+(defun list-maledict-impures-sql (angel maledict)
+  (sxql:yield
+   (select ((:as :ev_collect_impure.impure_id :id)
+            :rs_impure.name
+            :rs_impure.description
+            (:as :ev_purge_start.id             :purge_id)
+            (:as :ev_purge_start.start          :purge_started_at)
+            (:as :th_deamon_impure.deamon_id    :deamon_id)
+            (:as :rs_deamon.name                :deamon_name)
+            (:as :ev_collect_impure.maledict_id :maledict_id)
+            (:as :rs_maledict.name              :maledict_name)
+            (:as :rs_maledict.description       :maledict_description)
+            (:as :rs_maledict.order             :maledict_order)
+            (:as :rs_maledict.deletable         :maledict_deletable))
+     (from :th_angel_maledict)
+     (left-join :ev_collect_impure
+                :on (:= :th_angel_maledict.maledict_id :ev_collect_impure.maledict_id))
+     (left-join (:as :rs_impure_active :rs_impure)
+                :on (:= :ev_collect_impure.impure_id :rs_impure.id))
+     (left-join :th_deamon_impure
+                :on (:= :rs_impure.id :th_deamon_impure.impure_id))
+     (left-join :rs_deamon
+                :on (:= :th_deamon_impure.impure_id :rs_deamon.id))
+     (left-join :ev_purge_start
+                :on (:= :ev_collect_impure.impure_id :ev_purge_start.impure_id))
+     (left-join :rs_maledict
+                :on (:= :th_angel_maledict.maledict_id :rs_maledict.id))
+     (where (:and (:= :th_angel_maledict.angel_id (mito:object-id angel))
+                  (:= :th_angel_maledict.maledict_id (mito:object-id maledict)))))))
+
+(defun list-maledict-impures (angel maledict)
+  (multiple-value-bind (sql vals)
+      (list-maledict-impures-sql angel maledict)
+    (let ((results (fetch-list sql vals)))
+      ;; TODO: なんかする？
       results)))

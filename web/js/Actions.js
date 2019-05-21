@@ -442,6 +442,8 @@ class Actions extends Vanilla_Redux_Actions {
         }.bind(this));
     }
     savedActionResult () {
+        ACTIONS.pushSuccessMessage('Purge の実績の変更が完了しました。');
+
         return {
             type: 'SAVED-ACTION-RESULT'
         };
@@ -682,7 +684,7 @@ class Actions extends Vanilla_Redux_Actions {
     ///// Page
     /////
     fetchPagesOrthodox (orthodox) {
-        let path = '/panges/orthodoxs/%s'.format(orthodox.id);
+        let path = '/pages/orthodoxs/%s'.format(orthodox.id);
 
         API.get(path, function (json, success) {
             if (success)
@@ -698,7 +700,7 @@ class Actions extends Vanilla_Redux_Actions {
         };
     }
     fetchPagesWarHistory (start, end) {
-        let path = '/panges/war-history?';
+        let path = '/pages/war-history?';
 
         path += 'start=' + start.format('YYYY-MM-DD');
         path += '&';
@@ -719,7 +721,7 @@ class Actions extends Vanilla_Redux_Actions {
         };
     }
     fetchPagesPurges (start, end) {
-        let path = '/panges/purges?';
+        let path = '/pages/purges?';
 
         path += 'from=' + moment(start).format('YYYY-MM-DD');
         path += '&';
@@ -740,7 +742,7 @@ class Actions extends Vanilla_Redux_Actions {
         };
     }
     fetchPagesCemeteries (start, end) {
-        let path = '/panges/cemeteries?';
+        let path = '/pages/cemeteries?';
 
         path += 'from=' + moment(start).format('YYYY-MM-DD');
         path += '&';
@@ -756,6 +758,23 @@ class Actions extends Vanilla_Redux_Actions {
 
         return {
             type: 'FETCHED-PAGES-CEMETERIES',
+            data: {},
+            response: response
+        };
+    }
+    fetchPagesImpure (impure) {
+        let path = '/pages/impures/' + impure.id ;
+
+        API.get(path, function (json, success) {
+            if (success)
+                STORE.dispatch(this.fetchedPagesImpure(json));
+        }.bind(this));
+    }
+    fetchedPagesImpure (response) {
+        let state = STORE.state().toJS();
+
+        return {
+            type: 'FETCHED-PAGES-IMPURE',
             data: {},
             response: response
         };

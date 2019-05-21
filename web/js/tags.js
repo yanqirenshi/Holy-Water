@@ -1,13 +1,25 @@
 riot.tag2('angel-page-change-password', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">パスワード変更</h1> <h2 class="subtitle hw-text-white">準備中</h2> </div> </section>', '', '', function(opts) {
 });
 
+riot.tag2('angel-page-github', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Github Token</h1> <div class="contents" style="padding-left:22px;"> <div></div> <div> <input class="input is-small" type="text" placeholder="Text input" style="width:222px;"> <div style="margin-top:11px;"> <button class="button is-small">Save</button> </div> </div> </div> </div> </section>', '', '', function(opts) {
+     this.clickSignOut = () => {
+         ACTIONS.signOut();
+     };
+});
+
+riot.tag2('angel-page-gitlab', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Gitlab Token</h1> <div class="contents" style="padding-left:22px;"> <div></div> <div> <input class="input is-small" type="text" placeholder="Text input" style="width:222px;"> <div style="margin-top:11px;"> <button class="button is-small">Save</button> </div> </div> </div> </div> </section>', '', '', function(opts) {
+     this.clickSignOut = () => {
+         ACTIONS.signOut();
+     };
+});
+
 riot.tag2('angel-page-sign-out', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">サインアウト</h1> <h2 class="subtitle hw-text-white"></h2> <div class="contents"> <button class="button is-danger hw-box-shadow" style="margin-left:22px; margin-top:11px;" onclick="{clickSignOut}">Sign Out</button> </div> </div> </section>', '', '', function(opts) {
      this.clickSignOut = () => {
          ACTIONS.signOut();
      };
 });
 
-riot.tag2('angel_page', '<section class="section"> <div class="container"> <h1 class="title is-1 hw-text-white">準備中。。。</h1> </div> </section>', '', 'class="page-contents"', function(opts) {
+riot.tag2('angel_page', '<section class="section"> <div class="container"> </div> </section>', '', 'class="page-contents"', function(opts) {
 });
 
 riot.tag2('app-page-area', '', '', '', function(opts) {
@@ -648,7 +660,7 @@ riot.tag2('modal-create-impure', '<div class="modal {maledict ? \'is-active\' : 
      };
 });
 
-riot.tag2('modal-purge-result-editor', '<div class="modal {opts.data ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head"> <p class="modal-card-title">作業時間の変更</p> <button class="delete" aria-label="close" action="close-purge-result-editor" onclick="{clickButton}"></button> </header> <section class="modal-card-body"> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">Impure</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'impure_name\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">作業時間</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'elapsed-time\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">開始</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'start\'))}" ref="start" type="{\'datetime\'}"> </p> <div style="padding-top: 5px;"> <button class="button is-small" action="now" onclick="{clickSetDate}">今</button> <button class="button is-small {isHide(\'before-end\')}" action="before-end" onclick="{clickSetDate}">前の作業の終了</button> <button class="button is-small" action="revert-start" onclick="{clickSetDate}">元に戻す</button> </div> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">終了</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'end\'))}" ref="end" type="{\'datetime\'}"> <div style="padding-top: 5px;"> <button class="button is-small" action="now" onclick="{clickSetDate}">今</button> <button class="button is-small {isHide(\'after-start\')}" action="after-start" onclick="{clickSetDate}">後の作業の開始</button> <button class="button is-small" action="revert-end" onclick="{clickSetDate}">元に戻す</button> </div> </p> </div> </div> </div> </section> <footer class="modal-card-foot" style="padding: 11px 22px;"> <button class="button is-small is-success" action="save-purge-result-editor" onclick="{clickButton}">Save changes</button> <button class="button is-small" action="close-purge-result-editor" onclick="{clickButton}">Cancel</button> </footer> </div> </div>', '', '', function(opts) {
+riot.tag2('modal-purge-result-editor', '<div class="modal {opts.data ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head" style="padding: 11px 22px; font-size: 18px;"> <p class="modal-card-title">作業時間の変更</p> <button class="delete" aria-label="close" action="close-purge-result-editor" onclick="{clickButton}"></button> </header> <section class="modal-card-body"> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">Impure</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'impure_name\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">作業時間</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'elapsed_time\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">開始</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'purge_start\'))}" ref="start" type="{\'datetime\'}"> </p> <div style="padding-top: 5px;"> <button class="button is-small" action="now" onclick="{clickSetDate}">今</button> <button class="button is-small {isHide(\'before-end\')}" action="before-end" onclick="{clickSetDate}">前の作業の終了</button> <button class="button is-small" action="clear-under-hour" onclick="{clickSetDate}">分と秒をクリア</button> <button class="button is-small" action="clear-under-minute" onclick="{clickSetDate}">秒をクリア</button> <button class="button is-small is-warging" action="revert-start" onclick="{clickSetDate}">元に戻す</button> </div> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">終了</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'purge_end\'))}" ref="end" type="{\'datetime\'}"> <div style="padding-top: 5px;"> <button class="button is-small" action="now" onclick="{clickSetDate}">今</button> <button class="button is-small {isHide(\'after-start\')}" action="after-start" onclick="{clickSetDate}">後の作業の開始</button> <button class="button is-small" action="clear-under-hour" onclick="{clickSetDate}">分と秒をクリア</button> <button class="button is-small" action="clear-under-minute" onclick="{clickSetDate}">秒をクリア</button> <button class="button is-small is-warging" action="revert-end" onclick="{clickSetDate}">元に戻す</button> </div> </p> </div> </div> </div> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display:flex; justify-content: space-between;"> <button class="button is-small" action="close-purge-result-editor" onclick="{clickButton}">Cancel</button> <button class="button is-small is-success" action="save-purge-result-editor" onclick="{clickButton}">Save</button> </footer> </div> </div>', '', '', function(opts) {
      this.clickButton = (e) => {
          let action = e.target.getAttribute('action');
 
@@ -660,7 +672,7 @@ riot.tag2('modal-purge-result-editor', '<div class="modal {opts.data ? \'is-acti
          let stripper = new TimeStripper();
 
          this.opts.callback(action, {
-             id: this.opts.data.id,
+             id: this.opts.data.purge_id,
              start: stripper.str2date(this.refs.start.value),
              end: stripper.str2date(this.refs.end.value)
          })
@@ -671,7 +683,7 @@ riot.tag2('modal-purge-result-editor', '<div class="modal {opts.data ? \'is-acti
          let input = target.parentNode.parentNode.firstElementChild.firstElementChild;
          let action = target.getAttribute('action');
 
-         let value = (action) => {
+         let value = () => {
              if (action=='now')
                  return moment();
 
@@ -682,15 +694,22 @@ riot.tag2('modal-purge-result-editor', '<div class="modal {opts.data ? \'is-acti
                  return this.opts.source.before_end;
 
              if (action=='revert-start')
-                 return this.opts.data.start;
+                 return this.opts.data.purge_start;
 
-             if (action=='revert-end')
-                 return this.opts.data.end;
+             if (action=='revert-end') {
+                 return this.opts.data.purge_end;
+             }
+
+             if (action=='clear-under-hour')
+                 return moment(input.value).startOf('hour');
+
+             if (action=='clear-under-minute')
+                 return moment(input.value).startOf('minute');
 
              throw Error('Not Supported yet. action=' + action) ;
          };
 
-         input.value = moment(value(action)).format('YYYY-MM-DD HH:mm:ss');
+         input.value = moment(value()).format('YYYY-MM-DD HH:mm:ss');
      };
 
      this.isHide = (code) => {
@@ -706,8 +725,8 @@ riot.tag2('modal-purge-result-editor', '<div class="modal {opts.data ? \'is-acti
          if (!data)
              return '';
 
-         if (key=='elapsed-time')
-             return new TimeStripper().format_elapsedTime(this.opts.data.start, this.opts.data.end);
+         if (key=='elapsed_time')
+             return new TimeStripper().format_sec(data[key]);
 
          return data[key];
      };
@@ -718,7 +737,7 @@ riot.tag2('modal-purge-result-editor', '<div class="modal {opts.data ? \'is-acti
      };
 });
 
-riot.tag2('popup-working-action', '<button class="button is-small hw-button" style="margin-right:11px;" onclick="{clickStop}">Stop</button> <span style="font-size:12px;">{name()}</span> <div style="margin-top: 8px;"> <p style="display:inline; font-size:12px; margin-right:22px;"> <span style="font-size:12px;width:88px;display:inline-block;">経過: {distance()}</span> <span style="font-size:12px;">開始: </span> <span style="font-size:12px;">{start()}</span> </p> <button class="button is-small hw-button" onclick="{clickStopAndClose}">Stop & Close</button> </div>', 'popup-working-action { display: block; position: fixed; bottom: 33px; right: 33px; background: #fff; padding: 11px 22px; border: 1px solid #ededed; border-radius: 8px; box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666); }', 'class="{hide()}"', function(opts) {
+riot.tag2('popup-working-action', '<button class="button is-small hw-button" style="margin-right:11px;" onclick="{clickStop}">Stop</button> <span style="font-size:12px;">{name()}</span> <div style="margin-top: 8px;"> <p style="display:inline; font-size:12px; margin-right:22px;"> <span style="font-size:12px;width:88px;display:inline-block;">経過: {distance()}</span> <span style="font-size:12px;">開始: </span> <span style="font-size:12px;">{start()}</span> </p> <button class="button is-small hw-button" onclick="{clickStopAndClose}">Stop & Close</button> </div>', 'popup-working-action { display: block; position: fixed; bottom: 33px; right: 33px; background: #fff; padding: 11px 22px; border: 1px solid #ededed; border-radius: 8px; box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666); } popup-working-action .hw-button { background: #fff; box-shadow: none; }', 'class="{hide()}"', function(opts) {
 
      this.clickStop = () => {
          let impure = this.opts.data;
@@ -883,7 +902,7 @@ riot.tag2('home_impures', '<div class="flex-parent" style="height:100%; margin-t
      });
 });
 
-riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Maledicts</p> <a each="{data()}" class="panel-block {isActive(id)}" onclick="{clickItem}" maledict-id="{id}" style="padding: 5px 8px;"> <span style="width:120px; font-size:11px;" maledict-id="{id}"> {name} </span> <span class="operators" style="font-size:14px;"> <span class="icon" title="ここに「やること」を追加する。" maledict-id="{id}" maledict-name="{name}" onclick="{clickAddButton}"> <i class="far fa-plus-square" maledict-id="{id}"></i> </span> <span class="move-door {dragging ? \'open\' : \'close\'}" ref="move-door" dragover="{dragover}" drop="{drop}"> <span class="icon closed-door"> <i class="fas fa-door-closed"></i> </span> <span class="icon opened-door" maledict-id="{id}"> <i class="fas fa-door-open" maledict-id="{id}"></i> </span> </span> </span> </a> </nav>', 'home_maledicts > .panel { width: 188px; border-radius: 4px 4px 0 0; } home_maledicts > .panel > .panel-heading{ font-size:12px; font-weight:bold; } home_maledicts .panel-block { background:#fff; } home_maledicts .panel-block:hover { background:rgb(255, 255, 236); } home_maledicts .panel-block.is-active { background:rgb(254, 242, 99); } home_maledicts .panel-block.is-active { border-left-color: rgb(254, 224, 0); } home_maledicts .move-door.close .opened-door { display: none; } home_maledicts .move-door.open .closed-door { display: none; } home_maledicts .operators { width: 53px; } home_maledicts .operators .icon { color: #cccccc; } home_maledicts .operators .icon:hover { color: #880000; } home_maledicts .operators .move-door.open .icon { color: #880000; }', '', function(opts) {
+riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Maledicts</p> <a each="{data()}" class="panel-block {isActive(id)}" onclick="{clickItem}" maledict-id="{id}" style="padding: 5px 8px;"> <span style="width:120px; font-size:11px;" maledict-id="{id}"> {name} </span> <span class="operators" style="font-size:14px;"> <span class="icon" title="ここに「やること」を追加する。" maledict-id="{id}" maledict-name="{name}" onclick="{clickAddButton}"> <i class="far fa-plus-square" maledict-id="{id}"></i> </span> <span class="move-door {dragging ? \'open\' : \'close\'}" ref="move-door" dragover="{dragover}" drop="{drop}"> <span class="icon closed-door"> <i class="fas fa-door-closed"></i> </span> <span class="icon opened-door" maledict-id="{id}"> <i class="fas fa-door-open" maledict-id="{id}"></i> </span> </span> </span> </a> <a class="panel-block" style="padding: 5px 8px; height:35px;"> <span style="width:120px; font-size:11px;" maledict-id="{id}">Waiting for ... (実装中)</span> </a> </nav>', 'home_maledicts > .panel { width: 188px; border-radius: 4px 4px 0 0; } home_maledicts > .panel > .panel-heading{ font-size:12px; font-weight:bold; } home_maledicts .panel-block { background:#fff; } home_maledicts .panel-block:hover { background:rgb(255, 255, 236); } home_maledicts .panel-block.is-active { background:rgb(254, 242, 99); } home_maledicts .panel-block.is-active { border-left-color: rgb(254, 224, 0); } home_maledicts .move-door.close .opened-door { display: none; } home_maledicts .move-door.open .closed-door { display: none; } home_maledicts .operators { width: 53px; } home_maledicts .operators .icon { color: #cccccc; } home_maledicts .operators .icon:hover { color: #880000; } home_maledicts .operators .move-door.open .icon { color: #880000; }', '', function(opts) {
      this.dragging = false;
 
      this.dragover = (e) => {
@@ -995,12 +1014,14 @@ riot.tag2('home_page', '<div class="bucket-area"> <home_maledicts data="{STORE.g
 
          if (action.type=='START-TRANSFERD-IMPURE-TO-ANGEL') {
              this.request_impure = action.contents;
-             this.tags['modal_request-impure'].update();
+             this.update();
+
          }
 
          if (action.type=='STOP-TRANSFERD-IMPURE-TO-ANGEL') {
              this.request_impure = null;
-             this.tags['modal_request-impure'].update();
+             this.update();
+
          }
 
          if (action.type=='TRANSFERD-IMPURE-TO-ANGEL') {
@@ -1091,8 +1112,7 @@ riot.tag2('icon-door-opened', '<span class="icon opened-door" maledict-id="{id}"
 riot.tag2('icon-ranning', '<i class="fas fa-running"></i>', 'icon-ranning i { color: #cccccc; } icon-ranning i:hover { color: #880000; }', '', function(opts) {
 });
 
-riot.tag2('impure-card-footer', '<footer class="card-footer" style="font-size:14px; height:33px;"> <span class="card-footer-item action" action="{startStopAction()}" onclick="{clickButton}">{startStopLabel()}</span> <span class="card-footer-item view" action="move-2-view" onclick="{clickButton}">照会</span> <span class="card-footer-item open" action="{changeSizeAction()}" onclick="{clickButton}">{changeSizeLabel()}</span> </footer>', '', '', function(opts) {
-
+riot.tag2('impure-card-footer', '<footer class="card-footer" style="font-size:14px; height:33px;"> <span class="card-footer-item action {opts.status}" action="{startStopAction()}" onclick="{clickButton}">{startStopLabel()}</span> <span class="card-footer-item view" action="move-2-view" onclick="{clickButton}">照会</span> <span class="card-footer-item open" action="{changeSizeAction()}" onclick="{clickButton}">{changeSizeLabel()}</span> </footer>', 'impure-card-footer .action.start { border-radius: 0px 0px 0px 5px; background-color: #FEF264; } impure-card-footer .action.start:hover { font-weight: bold; }', '', function(opts) {
      this.startStopLabel = () => {
          if (!this.opts.status)
              return '開始';
@@ -1541,10 +1561,13 @@ riot.tag2('service-card-small', '<div class="card hw-box-shadow"> <header class=
      };
 });
 
+riot.tag2('impure_page-controller', '<div class="controller-container" style=""> <p>期間</p> <input class="input is-small" type="text" placeholder="YYYY-MM-DD"> <p>〜</p> <input class="input is-small" type="text" placeholder="YYYY-MM-DD"> <button class="button is-small" disabled>Refresh ※準備中</button> </div>', 'impure_page-controller > .controller-container { display:flex; background: #FEF264; padding: 11px 22px; border-radius: 3px; } impure_page-controller > .controller-container > * { margin-right: 11px; } impure_page-controller > .controller-container > p { font-weight: bold; } impure_page-controller > .controller-container > input.input { border-radius: 3px; width: 111px; }', '', function(opts) {
+});
+
 riot.tag2('impure_page-tabs', '<div class="tabs is-toggle"> <ul> <li class="is-active"> <a> <span>基本情報</span> </a> </li> <li> <a> <span>浄化履歴</span> </a> </li> <li> <a> <span>Impure の鎖</span> </a> </li> <li> <a> <span>依頼履歴</span> </a> </li> </ul> </div>', 'impure_page-tabs li > a { background: #fff; }', '', function(opts) {
 });
 
-riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">Impure</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section" style="padding-top:22px; padding-bottom:22px;"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}" type="toggle"></page-tabs> </div> </section> <div class="tab-contents-area"> <impure_page_tab-basic class="hide" source="{impure}"></impure_page_tab-basic> <impure_page_tab-purges class="hide" source="{impure}"></impure_page_tab-purges> <impure_page_tab-incantation class="hide" source="{impure}"></impure_page_tab-incantation> <impure_page_tab-requests class="hide" source="{impure}"></impure_page_tab-requests> <impure_page_tab-chains class="hide" source="{impure}"></impure_page_tab-chains> </div>', 'impure_page page-tabs li a{ background: #fff; } impure_page { width: 100%; height: 100%; display: block; overflow: auto; }', '', function(opts) {
+riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">Impure</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section" style="padding-top:22px; padding-bottom:22px;"> <div class="container"> <div class="contents"> <impure_page-controller></impure_page-controller> </div> </div> </section> <section class="section" style="padding-top:22px; padding-bottom:22px;"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> </section> <div class="tab-contents-area"> <impure_page_tab-basic class="hide" source="{source.impure}"></impure_page_tab-basic> <impure_page_tab-purges class="hide" source="{source.purges}"></impure_page_tab-purges> <impure_page_tab-incantation class="hide" source="{source.spells}"></impure_page_tab-incantation> <impure_page_tab-requests class="hide" source="{source.requests}"></impure_page_tab-requests> <impure_page_tab-chains class="hide" source="{[]}"></impure_page_tab-chains> </div>', 'impure_page page-tabs li a{ background: #fff; } impure_page { width: 100%; height: 100%; display: block; overflow: auto; } impure_page .tabs ul { border-bottom-color: rgb(254, 242, 99); border-bottom-width: 2px; } impure_page .tabs.is-boxed li.is-active a { background-color: rgba(254, 242, 99, 1); border-color: rgb(254, 242, 99); text-shadow: 0px 0px 11px #fff; color: #333; font-weight: bold; } impure_page .tabs.is-boxed li { margin-left: 8px; } impure_page .tabs.is-boxed a { text-shadow: 0px 0px 8px #fff; font-weight: bold; }', '', function(opts) {
      this.page_tabs = new PageTabs([
          {code: 'basic',       label: '基本情報', tag: 'impure_page_tab-basic' },
          {code: 'purges',      label: '浄化履歴', tag: 'impure_page_tab-purges' },
@@ -1574,18 +1597,29 @@ riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"
      };
 
      this.impure = null;
+     this.source = {
+         impure: null,
+         purges: [],
+         spells: [],
+         requests: [],
+     };
+
      STORE.subscribe((action) => {
-         if (action.type=='FETCHED-IMPURE') {
-             this.impure = action.impure;
+         if (action.type=='FETCHED-PAGES-IMPURE') {
+             this.source = action.response;
+
              this.update();
          }
      });
      this.on('mount', () => {
-         ACTIONS.fetchImpure(this.id());
+         let id = this.id();
+
+         ACTIONS.fetchPagesImpure({ id: id });
+         ACTIONS.fetchImpure(id);
      });
 });
 
-riot.tag2('impure_page_tab-basic', '<section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white is-4">Name</h1> <div class="contents hw-text-white" style="font-weight:bold;"> <p>{name()}</p> </div> </div> </section> <section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white is-4">Description</h1> <div class="contents hw-text-white" style="font-weight:bold;"> <p><pre>{description()}</pre></p> </div> </div> </section>', '', '', function(opts) {
+riot.tag2('impure_page_tab-basic', '<section class="section" style="padding-top: 22px; padding-bottom:22px;"> <div class="container"> <h1 class="title hw-text-white is-4">Name</h1> <div class="contents hw-text-white" style="font-weight:bold; padding-left:22px;"> <p>{name()}</p> </div> </div> </section> <section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white is-4">Description</h1> <div class="contents description" style="margin-left: 22px;"> <description-markdown source="{description()}"></description-markdown> </div> </div> </section>', 'impure_page_tab-basic .description { background: #fff; border-radius: 3px; line-height: 14px; }', '', function(opts) {
      this.name = () => {
          let impure = this.opts.source;
 
@@ -1607,37 +1641,28 @@ riot.tag2('impure_page_tab-basic', '<section class="section" style="padding-top:
 riot.tag2('impure_page_tab-chains', '<section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white">準備中</h1> </div> </section>', '', '', function(opts) {
 });
 
-riot.tag2('impure_page_tab-incantation', '<section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white"></h1> <div class="contents"> <request-messages-list sources="{sources()}"></request-messages-list> </div> </div> </section>', '', '', function(opts) {
-     this.sources = () => {
-         let impure = this.opts.source;
+riot.tag2('impure_page_tab-incantation', '<section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white"></h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable"> <thead> <tr> <th rowspan="2">ID</th> <th rowspan="2" colspan="2">Date</th> <th colspan="2">祓魔師</th> <th rowspan="2">Spell</th> </tr> <tr> <th>ID</th> <th>Name</th> </tr> </thead> <tbody> <tr each="{rec in opts.source}"> <td>{rec.id}</td> <td>{dt(rec.incantation_at)}</td> <td>{week(rec.incantation_at)}</td> <td>{rec.angel_id}</td> <td>{rec.angel_name}</td> <td>{contents(rec.spell)}</td> </tbody> </table> </div> </div> </section>', '', '', function(opts) {
+     let hw = new HolyWater();
 
-         if (!impure)
-             return [];
-
-         return impure.sources;
-     };
+     this.dt   = (v) => { return hw.str2yyyymmddhhmmss(v); };
+     this.week = (v) => { return hw.str2week(v); };
+     this.contents = (v) => { return hw.descriptionViewShort(v); };
 });
 
-riot.tag2('impure_page_tab-purges', '<section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white"></h1> <div class="contents"> <purges-list data="{purges()}" callback="{callback}"></purges-list> </div> </div> </section>', '', '', function(opts) {
-     this.purges = () => {
-         if (!this.opts.source)
-             return { list: [], ht: {} };
+riot.tag2('impure_page_tab-purges', '<section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white"></h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable"> <thead> <tr> <th colspan="6">Purge</th> <th colspan="2">祓魔師</th> </tr> <tr> <th>ID</th> <th colspan="2">Start</th> <th colspan="2">End</th> <th>Elapsed Time [s]</th> <th>ID</th> <th>Name</th> </tr> </thead> <tbody> <tr each="{rec in opts.source}"> <td>{rec.id}</td> <td>{dt(rec.start)}</td> <td>{week(rec.start)}</td> <td>{dt(rec.end)}</td> <td>{week(rec.end)}</td> <td style="text-align:right;">{time(rec.elapsed_time)}</td> <td>{rec.angel_id}</td> <td>{rec.angel_name}</td> </tr> </tbody> </table> </div> </div> </section>', '', '', function(opts) {
+     let hw = new HolyWater();
 
-         return { list: this.opts.source.purges, ht: {} };
-     };
-     this.callback = (action, data) => {
-     };
+     this.dt   = (v) => { return hw.str2yyyymmddhhmmss(v); };
+     this.week = (v) => { return hw.str2week(v); };
+     this.time = (v) => { return hw.int2hhmmss(v); };
 });
 
-riot.tag2('impure_page_tab-requests', '<section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white"></h1> <div class="contents"> <request-messages-list sources="{requests()}"></request-messages-list> </div> </div> </section>', '', '', function(opts) {
-     this.requests = () => {
-         let impure = this.opts.source;
+riot.tag2('impure_page_tab-requests', '<section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white"></h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable"> <thead> <tr> <th rowspan="2" colspan="2">Date</th> <th colspan="2">From</th> <th colspan="2">To</th> <th rowspan="2">Message</th> </tr> <tr> <th>ID</th> <th>Name</th> <th>ID</th> <th>Name</th> </tr> </thead> <tbody> <tr each="{rec in opts.source}" request-message-id="{rec.id}" angel-from-id="{rec.angel_from_id}" angel-to-id="{rec.angel_to_id}" impure-id="{rec.impure_id}"> <td> {dt(rec.messaged_at)} </td> <td> {week(rec.messaged_at)} </td> <td> {rec.angel_from_id} </td> <td>{rec.angel_from_name}</td> <td> {rec.angel_to_id} </td> <td>{rec.angel_to_name}</td> <td>{contents(rec.contents)}</td> </tr> </tbody> </table> </div> </div> </section>', '', '', function(opts) {
+     let hw = new HolyWater();
 
-         if (!impure)
-             return [];
-
-         return impure.requests;
-     };
+     this.dt   = (v) => { return hw.str2yyyymmddhhmmss(v); };
+     this.week = (v) => { return hw.str2week(v); };
+     this.contents = (v) => { return hw.descriptionViewShort(v); };
 });
 
 riot.tag2('orthodox-page', '<hw-page-header title="正教会" type="child"></hw-page-header> <section class="section" style="padding-top: 11px; padding-bottom: 11px;"> <div class="container"> <page-tabs core="{page_tabs}" type="toggle" callback="{clickTab}"></page-tabs> </div> </section> <div> <orthodox-page_tab-basic class="hide"></orthodox-page_tab-basic> <orthodox-page_tab-members class="hide"></orthodox-page_tab-members> <orthodox-page_tab-paladin class="hide"></orthodox-page_tab-paladin> <orthodox-page_tab-primate class="hide"></orthodox-page_tab-primate> </div>', '', '', function(opts) {
@@ -1696,7 +1721,7 @@ riot.tag2('orthodox-list', '<table class="table is-bordered is-striped is-narrow
      };
 });
 
-riot.tag2('orthodoxs-page', '<section class="section" style="padding-top: 55px; padding-bottom: 11px;"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> </section> <div> <orthodoxs-page_tab-orthdoxs class="hide"></orthodoxs-page_tab-orthdoxs> <orthodoxs-page_tab-exorcists class="hide"></orthodoxs-page_tab-exorcists> </div>', 'orthodoxs-page { width: 100%; height: 100%; display: block; overflow: auto; } orthodoxs-page .tabs ul { border-bottom-color: rgb(254, 242, 99); border-bottom-width: 2px; } orthodoxs-page .tabs.is-boxed li.is-active a { background-color: rgba(254, 242, 99, 0.55); border-color: rgb(254, 242, 99); text-shadow: 0px 0px 11px #fff; color: #333; font-weight: bold; } orthodoxs-page .tabs.is-boxed a { text-shadow: 0px 0px 8px #fff; font-weight: bold; }', 'class="page-contents"', function(opts) {
+riot.tag2('orthodoxs-page', '<section class="section" style="padding-top: 55px; padding-bottom: 11px;"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> </section> <div> <orthodoxs-page_tab-orthdoxs class="hide"></orthodoxs-page_tab-orthdoxs> <orthodoxs-page_tab-exorcists class="hide"></orthodoxs-page_tab-exorcists> </div>', 'orthodoxs-page { width: 100%; height: 100%; display: block; overflow: auto; } orthodoxs-page .tabs ul { border-bottom-color: rgb(254, 242, 99); border-bottom-width: 2px; } orthodoxs-page .tabs.is-boxed li.is-active a { background-color: rgba(254, 242, 99, 1); border-color: rgb(254, 242, 99); text-shadow: 0px 0px 11px #fff; color: #333; font-weight: bold; } orthodoxs-page .tabs.is-boxed a { text-shadow: 0px 0px 8px #fff; font-weight: bold; }', 'class="page-contents"', function(opts) {
      this.default_tag = 'home';
      this.active_tag = null;
      this.page_tabs = new PageTabs([
@@ -1789,7 +1814,9 @@ riot.tag2('page-purges', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 
          }
 
          if ('open-purge-result-editor'==action) {
-             this.edit_target = STORE.get('purges').ht[data.id];
+             this.edit_target = this.purges.find((d) => {
+                 return d.purge_id == data.id;
+             });
              this.edit_data = {
                  before_end: data.before_end,
                  after_start: data.after_start,
@@ -1845,7 +1872,6 @@ riot.tag2('page-purges', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 
 
          if (action.type=='SAVED-ACTION-RESULT') {
              this.edit_target = null;
-             ACTIONS.pushSuccessMessage('Purge の実績の変更が完了しました。');
              ACTIONS.fetchPagesPurges(this.from, this.to);
 
              return;
@@ -1859,7 +1885,7 @@ riot.tag2('page-purges', '<div style="padding: 33px 88px 88px 88px;"> <div> <h1 
      };
 });
 
-riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth hw-box-shadow" style="font-size:12px;"> <thead> <tr> <th rowspan="2">Impure</th> <th colspan="4">Purge</th> <th colspan="3">作業間隔</th> <th colspan="2">Deamon</th> </tr> <tr> <th>開始</th> <th>終了</th> <th>時間</th> <th>操作</th> <th>後作業</th> <th>前作業</th> <th>操作</th> <th>Name</th> <th>操作</th> </tr> </thead> <tbody> <tr each="{rec in data()}" purge_id="{rec.purge_id}" impure_id="{rec.impure_id}" deamon_id="{rec.deamon_id}"> <td> <a href="#purges/impures/{rec.impure_id}"> {rec.impure_name} </a> </td> <td>{fdt(rec.purge_start)}</td> <td>{fdt(rec.purge_end)}</td> <td style="text-align: right;">{elapsedTime(rec.purge_start, rec.purge_end)}</td> <td> <button class="button is-small" data-id="{rec.purge_id}" before-end="{beforEnd(rec)}" after-start="{afterStart(rec)}" onclick="{clickEditTermButton}">変</button> </td> <td style="text-align:right;">{fmtSpan(rec.distance.after)}</td> <td style="text-align:right;">{fmtSpan(rec.distance.befor)}</td> <td> <button class="button is-small" disabled>変</button> </td> <td> <a href="#purges/deamons/{rec.deamon_id}"> {rec.deamon_name_short} </a> </td> <td> <button class="button is-small" onclick="{clickChangeDemon}">変</button> </td> </tr> </tbody> </table>', 'purges-list .table tbody td { vertical-align: middle; }', '', function(opts) {
+riot.tag2('purges-list', '<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth hw-box-shadow" style="font-size:12px;"> <thead> <tr> <th colspan="2">Deamon</th> <th rowspan="2">Impure</th> <th colspan="4">Purge</th> <th colspan="3">作業間隔</th> </tr> <tr> <th>Name</th> <th>操作</th> <th>開始</th> <th>終了</th> <th>時間</th> <th>操作</th> <th>後作業</th> <th>前作業</th> <th>操作</th> </tr> </thead> <tbody> <tr each="{rec in data()}" purge_id="{rec.purge_id}" impure_id="{rec.impure_id}" deamon_id="{rec.deamon_id}"> <td> <a href="#purges/deamons/{rec.deamon_id}"> {rec.deamon_name_short} </a> </td> <td> <button class="button is-small" onclick="{clickChangeDemon}">変</button> </td> <td> <a href="#purges/impures/{rec.impure_id}"> {rec.impure_name} </a> </td> <td>{fdt(rec.purge_start)}</td> <td>{fdt(rec.purge_end)}</td> <td style="text-align: right;">{elapsedTime(rec.purge_start, rec.purge_end)}</td> <td> <button class="button is-small" data-id="{rec.purge_id}" before-end="{beforEnd(rec)}" after-start="{afterStart(rec)}" onclick="{clickEditTermButton}">変</button> </td> <td style="text-align:right;">{fmtSpan(rec.distance.after)}</td> <td style="text-align:right;">{fmtSpan(rec.distance.befor)}</td> <td> <button class="button is-small" disabled>変</button> </td> </tr> </tbody> </table>', 'purges-list .table tbody td { vertical-align: middle; }', '', function(opts) {
      this.ts = new TimeStripper();
      this.befor_data = null;
      this.fmtSpan = (v) => {
@@ -2039,20 +2065,9 @@ riot.tag2('request-messages-list', '<table class="table is-bordered is-striped i
 
          return moment(v).format('YYYY-MM-DD HH:mm')
      };
+     let hw = new HolyWater();
      this.contents = (v) => {
-         let lines = v.split('\n').filter((d) => {
-             return d.trim().length > 0;
-         });
-
-         let suffix = '';
-         if (lines.length>1 || lines[0].length>33)
-             suffix = '...';
-
-         let val = lines[0];
-         if (val.length>33)
-             val = val.substring(0,33);
-
-         return val + suffix;
+         return hw.descriptionViewShort(v);
      };
      this.clickToReaded = (e) => {
          let button = e.target;

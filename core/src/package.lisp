@@ -62,3 +62,28 @@
 (in-package :holy-water)
 
 (mito:connect-toplevel :postgres :database-name "holy_water" :username "holy_water")
+
+(defun timestamptz2timestamp (v)
+  (local-time:format-timestring nil (local-time:universal-to-timestamp v)))
+
+(defun timestamptz2timestamp! (plist indicator)
+  (setf (getf plist indicator)
+   (timestamptz2timestamp (getf plist indicator))))
+
+(defun interval2second (v)
+  (second (assoc :seconds v)))
+
+(defun interval2second! (plist indicator)
+  (setf (getf plist indicator)
+        (interval2second (getf plist indicator)))
+  plist)
+
+(defun fetch-all-list (sxql &key infrate infrate!)
+  (multiple-value-bind (sxql vals)
+      (sxql:yield sxql)
+    (let ((results (fetch-list sxql vals)))
+      (cond (infrate  (mapcar #'(lambda (rec) (funcall infrate rec)) results))
+            (infrate! (dolist (rec results)
+                        (funcall infrate! rec))
+                      results)))))
+

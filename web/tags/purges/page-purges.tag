@@ -92,7 +92,9 @@
          }
 
          if ('open-purge-result-editor'==action) {
-             this.edit_target = STORE.get('purges').ht[data.id];
+             this.edit_target = this.purges.find((d) => {
+                 return d.purge_id == data.id;
+             });
              this.edit_data = {
                  before_end: data.before_end,
                  after_start: data.after_start,
@@ -150,7 +152,6 @@
 
          if (action.type=='SAVED-ACTION-RESULT') {
              this.edit_target = null;
-             ACTIONS.pushSuccessMessage('Purge の実績の変更が完了しました。');
              ACTIONS.fetchPagesPurges(this.from, this.to);
 
              return;

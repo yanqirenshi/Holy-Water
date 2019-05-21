@@ -76,10 +76,10 @@ app .hw-button {
 }
 
 app .hw-button:hover {
-    color: #ffffff;
+    color: #333333;
 
     border: 1px solid #ededed;
     background: rgba(254, 242, 99, 0.8);
     box-shadow: 0px 0px 22px #ffffff;
-    font-shadow: 0px 0px 3px #333333;
+    text-shadow: 0px 0px 3px #ffffff;
 }

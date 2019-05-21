@@ -57,20 +57,9 @@
 
          return moment(v).format('YYYY-MM-DD HH:mm')
      };
+     let hw = new HolyWater();
      this.contents = (v) => {
-         let lines = v.split('\n').filter((d) => {
-             return d.trim().length > 0;
-         });
-
-         let suffix = '';
-         if (lines.length>1 || lines[0].length>33)
-             suffix = '...';
-
-         let val = lines[0];
-         if (val.length>33)
-             val = val.substring(0,33);
-
-         return val + suffix;
+         return hw.descriptionViewShort(v);
      };
      this.clickToReaded = (e) => {
          let button = e.target;

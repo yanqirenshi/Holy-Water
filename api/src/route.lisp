@@ -251,23 +251,29 @@
 ;;;;;
 ;;;;; Page
 ;;;;;
-(defroute "/panges/orthodoxs/:orthodox-id" (&key orthodox-id)
+(defroute "/pages/orthodoxs/:orthodox-id" (&key orthodox-id)
   (with-angel (angel)
     (let ((orthodox (hw:get-orthodox :id (parse-integer orthodox-id))))
       (unless orthodox (throw-code 404))
       (render-json (hw.api.ctrl:pages-orthodox orthodox :angel angel)))))
 
-(defroute "/panges/war-history" (&key |start| |end|)
+(defroute "/pages/war-history" (&key |start| |end|)
   (with-angel (angel)
     (render-json (hw.api.ctrl:pages-wor-history angel |start| |end|))))
 
-(defroute "/panges/purges" (&key |from| |to|)
+(defroute "/pages/purges" (&key |from| |to|)
   (with-angel (angel)
     (render-json (hw.api.ctrl:pages-purges angel |from| |to|))))
 
-(defroute "/panges/cemeteries" (&key |from| |to|)
+(defroute "/pages/cemeteries" (&key |from| |to|)
   (with-angel (angel)
     (render-json (hw.api.ctrl:pages-cemetery angel |from| |to|))))
+
+(defroute "/pages/impures/:id" (&key id)
+  (with-angel (angel)
+    (let ((impure (hw::get-impure :id (parse-integer id))))
+      (render-json (hw.api.ctrl:pages-impure angel impure)))))
+
 
 ;;;;;
 ;;;;; Error pages

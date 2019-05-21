@@ -86,12 +86,14 @@
 
          if (action.type=='START-TRANSFERD-IMPURE-TO-ANGEL') {
              this.request_impure = action.contents;
-             this.tags['modal_request-impure'].update();
+             this.update();
+             // this.tags['modal_request-impure'].update();
          }
 
          if (action.type=='STOP-TRANSFERD-IMPURE-TO-ANGEL') {
              this.request_impure = null;
-             this.tags['modal_request-impure'].update();
+             this.update();
+             /* this.tags['modal_request-impure'].update(); */
          }
 
          if (action.type=='TRANSFERD-IMPURE-TO-ANGEL') {

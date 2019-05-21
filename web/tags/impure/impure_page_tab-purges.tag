@@ -5,21 +5,46 @@
             <h1 class="title hw-text-white"></h1>
 
             <div class="contents">
-                <purges-list  data={purges()} callback={callback}></purges-list>
+                <table class="table is-bordered is-striped is-narrow is-hoverable">
+                    <thead>
+                        <tr>
+                            <th colspan="6">Purge</th>
+                            <th colspan="2">祓魔師</th>
+                        </tr>
+                        <tr>
+                            <th>ID</th>
+                            <th colspan="2">Start</th>
+                            <th colspan="2">End</th>
+                            <th>Elapsed Time [s]</th>
+                            <th>ID</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr each={rec in opts.source}>
+                            <td>{rec.id}</td>
+                            <td>{dt(rec.start)}</td>
+                            <td>{week(rec.start)}</td>
+                            <td>{dt(rec.end)}</td>
+                            <td>{week(rec.end)}</td>
+                            <td style="text-align:right;">{time(rec.elapsed_time)}</td>
+                            <td>{rec.angel_id}</td>
+                            <td>{rec.angel_name}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
         </div>
     </section>
 
     <script>
-     this.purges = () => {
-         if (!this.opts.source)
-             return { list: [], ht: {} };
+     let hw = new HolyWater();
 
-         return { list: this.opts.source.purges, ht: {} };
-     };
-     this.callback = (action, data) => {
-     };
+     this.dt   = (v) => { return hw.str2yyyymmddhhmmss(v); };
+     this.week = (v) => { return hw.str2week(v); };
+     this.time = (v) => { return hw.int2hhmmss(v); };
     </script>
 
 </impure_page_tab-purges>

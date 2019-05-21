@@ -36,6 +36,10 @@
 
             </span>
         </a>
+
+        <a class="panel-block" style="padding: 5px 8px; height:35px;">
+            <span style="width:120px; font-size:11px;" maledict-id={id}>Waiting for ... (実装中)</span>
+        </a>
     </nav>
 
     <script>

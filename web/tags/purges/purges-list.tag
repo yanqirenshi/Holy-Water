@@ -3,20 +3,20 @@
            style="font-size:12px;">
         <thead>
             <tr>
+                <th colspan="2">Deamon</th>
                 <th rowspan="2">Impure</th>
                 <th colspan="4">Purge</th>
                 <th colspan="3">作業間隔</th>
-                <th colspan="2">Deamon</th>
             </tr>
             <tr>
+                <th>Name</th>
+                <th>操作</th>
                 <th>開始</th>
                 <th>終了</th>
                 <th>時間</th>
                 <th>操作</th>
                 <th>後作業</th>
                 <th>前作業</th>
-                <th>操作</th>
-                <th>Name</th>
                 <th>操作</th>
             </tr>
         </thead>
@@ -25,6 +25,16 @@
                 purge_id={rec.purge_id}
                 impure_id={rec.impure_id}
                 deamon_id={rec.deamon_id}>
+                <td>
+                    <a href="#purges/deamons/{rec.deamon_id}">
+                        {rec.deamon_name_short}
+                    </a>
+                </td>
+                <td>
+                    <button class="button is-small"
+                            onclick={clickChangeDemon}>変</button>
+                    <!-- <button class="button is-small" disabled>削</button> -->
+                </td>
                 <td>
                     <a href="#purges/impures/{rec.impure_id}">
                         {rec.impure_name}
@@ -45,16 +55,6 @@
                 <td style="text-align:right;">{fmtSpan(rec.distance.befor)}</td>
                 <td>
                     <button class="button is-small" disabled>変</button>
-                </td>
-                <td>
-                    <a href="#purges/deamons/{rec.deamon_id}">
-                        {rec.deamon_name_short}
-                    </a>
-                </td>
-                <td>
-                    <button class="button is-small"
-                            onclick={clickChangeDemon}>変</button>
-                    <!-- <button class="button is-small" disabled>削</button> -->
                 </td>
             </tr>
         </tbody>
