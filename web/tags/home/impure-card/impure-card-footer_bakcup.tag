@@ -1,25 +1,23 @@
-<impure-card-footer>
+<impure-card-footer_backup>
 
-    <div>
-        <span class="menu-item action {opts.status}"
+    <footer class="card-footer" style="font-size:14px; height:33px;">
+        <span class="card-footer-item">
+            <impure-card-move-icon callback={opts.callback}
+                                   data={opts.data}></impure-card-move-icon>
+        </span>
+
+        <span class="card-footer-item action {opts.status}"
               action={startStopAction()}
               onclick={clickButton}>{startStopLabel()}</span>
 
-        <span class="menu-item view"
+        <span class="card-footer-item view"
               action="move-2-view"
               onclick={clickButton}>照会</span>
 
-        <span class="menu-item open"
+        <span class="card-footer-item open"
               action={changeSizeAction()}
               onclick={clickButton}>{changeSizeLabel()}</span>
-
-        <span class="spacer"></span>
-
-        <span>
-            <impure-card-move-icon2 callback={opts.callback}
-                                    data={opts.data}></impure-card-move-icon2>
-        </span>
-    </div>
+    </footer>
 
     <script>
      this.startStopLabel = () => {
@@ -62,30 +60,13 @@
     </script>
 
     <style>
-     impure-card-footer > div {
-         font-size:14px;
-         height:33px;
-         padding: 0px 6px;
-         padding-top: 3px;
-
-         display: flex;
-     }
-     impure-card-footer .action.start {
+     impure-card-footer_backup .action.start {
          border-radius: 0px 0px 0px 5px;
          background-color: #FEF264;
      }
-     impure-card-footer .spacer {
-         flex-grow: 1;
-     }
-     impure-card-footer .menu-item {
-         width: 55px;
-         text-align: center;
-         padding-top: 4px;
-     }
-     impure-card-footer .menu-item:hover {
+     impure-card-footer_backup .action.start:hover {
          font-weight: bold;
-         text-shadow: 0px 0px 22px #FEF264;
      }
     </style>
 
-</impure-card-footer>
+</impure-card-footer_backup>

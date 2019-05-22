@@ -12,13 +12,14 @@
     <section class="section" style="padding-top:22px; padding-bottom:22px;">
         <div class="container">
             <div class="contents">
-                <impure_page-controller></impure_page-controller>
+                <impure_page-controller source={term}
+                                        callback={callback}></impure_page-controller>
             </div>
         </div>
     </section>
 
 
-    <section class="section" style="padding-top:22px; padding-bottom:22px;">
+    <section class="section" style="padding-top:0px; padding-bottom:22px;">
         <div class="container">
             <page-tabs core={page_tabs}
                        callback={clickTab}></page-tabs>
@@ -34,6 +35,21 @@
     </div>
 
     <script>
+     this.callback = (action, data) => {
+         if (action=='refresh') {
+             let id = this.id();
+             ACTIONS.fetchPagesImpure({ id: id });
+
+             return ;
+         }
+     };
+    </script>
+
+    <script>
+     this.term = {
+         from: moment().add('month', -1),
+         to:   moment(),
+     }
      this.page_tabs = new PageTabs([
          {code: 'basic',       label: '基本情報', tag: 'impure_page_tab-basic' },
          {code: 'purges',      label: '浄化履歴', tag: 'impure_page_tab-purges' },

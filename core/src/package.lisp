@@ -47,6 +47,7 @@
            #:finish-impure
            #:move-impure
            #:get-request-message
+           #:create-request
            #:create-request-message
            #:find-impure-request-messages)
   (:export #:find-deccots
@@ -58,7 +59,9 @@
            #:list-purge-by-angel
            #:list-cemeteries
            #:list-summay-impure-cemeteries-by-date-damon
-           #:list-summary-purge-by-deamon))
+           #:list-summary-purge-by-deamon
+           #:list-requested-uncomplete-impures
+           #:list-request-messages-unred))
 (in-package :holy-water)
 
 (mito:connect-toplevel :postgres :database-name "holy_water" :username "holy_water")
@@ -67,8 +70,10 @@
   (local-time:format-timestring nil (local-time:universal-to-timestamp v)))
 
 (defun timestamptz2timestamp! (plist indicator)
-  (setf (getf plist indicator)
-   (timestamptz2timestamp (getf plist indicator))))
+  (let ((val (getf plist indicator)))
+    (when val
+      (setf (getf plist indicator)
+            (timestamptz2timestamp val)))))
 
 (defun interval2second (v)
   (second (assoc :seconds v)))
@@ -86,4 +91,3 @@
             (infrate! (dolist (rec results)
                         (funcall infrate! rec))
                       results)))))
-

@@ -373,6 +373,21 @@ class Actions extends Vanilla_Redux_Actions {
             data: {},
         };
     }
+
+    fetchImpureAtWaitingFor () {
+        let path = '/impures?waiting-for=true';
+
+        API.get(path, function (json, success) {
+            if (success)
+                STORE.dispatch(this.fetchedImpureAtWaitingFor(json));
+        }.bind(this));
+    }
+    fetchedImpureAtWaitingFor (response) {
+        return {
+            type: 'FETCHED-IMPURE-AT-WAITING-FOR',
+        };
+    }
+
     /////
     ///// Action
     /////
@@ -776,6 +791,22 @@ class Actions extends Vanilla_Redux_Actions {
         return {
             type: 'FETCHED-PAGES-IMPURE',
             data: {},
+            response: response
+        };
+    }
+    fetchPagesHomeRequests () {
+        let path = '/pages/requests';
+
+        API.get(path, function (json, success) {
+            if (success)
+                STORE.dispatch(this.fetchedPagesHomeRequests(json));
+        }.bind(this));
+    }
+    fetchedPagesHomeRequests (response) {
+        let state = STORE.state().toJS();
+
+        return {
+            type: 'FETCHED-PAGES-HOME-REQUESTS',
             response: response
         };
     }

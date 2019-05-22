@@ -48,3 +48,6 @@
   (dbi:with-transaction mito:*connection*
     (dao2request-message
      (hw::read-request-message angel request-message-unread))))
+
+(defun pages-requests (angel)
+  (list :|unread| (hw:list-request-messages-unred angel)))

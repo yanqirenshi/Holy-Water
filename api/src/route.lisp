@@ -35,9 +35,11 @@
   (hw.api.ctrl:sing-out (get-session-key))
   (render-json nil))
 
-(defroute "/angels" ()
-  (with-angel (angel)
-    (render-json (hw.api.ctrl:find-angels angel))))
+(defroute "/angels" (&key |ghost-id|)
+  (render-json (if (null |ghost-id|)
+                   (with-angel (angel)
+                     (hw.api.ctrl:find-angels angel))
+                   (hw.api.ctrl::get-angel :ghost-id (parse-integer |ghost-id|)))))
 
 (defroute "/angels/request/messages/unread" ()
   (with-angel (angel)
@@ -134,6 +136,12 @@
 ;;;;;
 ;;;;; Impure
 ;;;;;
+(defroute "/impures" (&key |waiting-for|)
+  (with-angel (angel)
+    (when (string= "true" |waiting-for|)
+      (render-json (hw:list-requested-uncomplete-impures angel)))))
+
+
 (defroute "/impures/purging" ()
   (with-angel (angel)
     (render-json (hw.api.ctrl:get-impure-purging angel))))
@@ -273,6 +281,10 @@
   (with-angel (angel)
     (let ((impure (hw::get-impure :id (parse-integer id))))
       (render-json (hw.api.ctrl:pages-impure angel impure)))))
+
+(defroute "/pages/requests" ()
+  (with-angel (angel)
+    (render-json (hw.api.ctrl:pages-requests angel))))
 
 
 ;;;;;

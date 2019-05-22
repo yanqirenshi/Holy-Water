@@ -12,7 +12,7 @@
                     <h1 class="title is-4 hw-text-white">Messages</h1>
 
                     <div class="contents hw-text-white">
-                        <request-messages-list></request-messages-list>
+                        <request-messages-list source={source.unread}></request-messages-list>
                     </div>
                 </div>
             </section>
@@ -20,9 +20,18 @@
     </section>
 
     <script>
+     this.source = { unread: [] };
+    </script>
+
+    <script>
+     this.on('mount', () => {
+         ACTIONS.fetchPagesHomeRequests();
+     });
      STORE.subscribe((action) => {
-         if (action.type=='FETCHED-REQUEST-MESSAGES-UNREAD')
+         if (action.type=='FETCHED-PAGES-HOME-REQUESTS') {
+             this.source.unread = action.response.unread;
              this.update();
+         }
      });
     </script>
 

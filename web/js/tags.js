@@ -251,7 +251,7 @@ riot.tag2('message-item', '<article class="message hw-box-shadow is-{opts.data.t
      };
 });
 
-riot.tag2('page-tabs', '<div class="tabs is-{type()}"> <ul> <li each="{opts.core.tabs}" class="{opts.core.active_tab==code ? \'is-active\' : \'\'}"> <a code="{code}" onclick="{clickTab}">{label}</a> </li> </ul> </div>', 'page-tabs .is-boxed li:first-child { margin-left: 22px; } page-tabs .is-toggle li a { background: #ffffff; } page-tabs .tabs.is-toggle li.is-active a { background-color: RGB(254, 242, 99); border-color: RGB(254, 242, 99); font-weight: bold; }', '', function(opts) {
+riot.tag2('page-tabs', '<div class="tabs is-{type()} is-small"> <ul> <li each="{opts.core.tabs}" class="{opts.core.active_tab==code ? \'is-active\' : \'\'}"> <a code="{code}" onclick="{clickTab}">{label}</a> </li> </ul> </div>', 'page-tabs .is-boxed li:first-child { margin-left: 22px; } page-tabs .is-toggle li a { background: #ffffff; } page-tabs .tabs.is-toggle li.is-active a { background-color: RGB(254, 242, 99); border-color: RGB(254, 242, 99); font-weight: bold; }', '', function(opts) {
      this.clickTab = (e) => {
          let code = e.target.getAttribute('code');
          this.opts.callback(e, 'CLICK-TAB', { code: code });
@@ -902,7 +902,7 @@ riot.tag2('home_impures', '<div class="flex-parent" style="height:100%; margin-t
      });
 });
 
-riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Maledicts</p> <a each="{data()}" class="panel-block {isActive(id)}" onclick="{clickItem}" maledict-id="{id}" style="padding: 5px 8px;"> <span style="width:120px; font-size:11px;" maledict-id="{id}"> {name} </span> <span class="operators" style="font-size:14px;"> <span class="icon" title="ここに「やること」を追加する。" maledict-id="{id}" maledict-name="{name}" onclick="{clickAddButton}"> <i class="far fa-plus-square" maledict-id="{id}"></i> </span> <span class="move-door {dragging ? \'open\' : \'close\'}" ref="move-door" dragover="{dragover}" drop="{drop}"> <span class="icon closed-door"> <i class="fas fa-door-closed"></i> </span> <span class="icon opened-door" maledict-id="{id}"> <i class="fas fa-door-open" maledict-id="{id}"></i> </span> </span> </span> </a> <a class="panel-block" style="padding: 5px 8px; height:35px;"> <span style="width:120px; font-size:11px;" maledict-id="{id}">Waiting for ... (実装中)</span> </a> </nav>', 'home_maledicts > .panel { width: 188px; border-radius: 4px 4px 0 0; } home_maledicts > .panel > .panel-heading{ font-size:12px; font-weight:bold; } home_maledicts .panel-block { background:#fff; } home_maledicts .panel-block:hover { background:rgb(255, 255, 236); } home_maledicts .panel-block.is-active { background:rgb(254, 242, 99); } home_maledicts .panel-block.is-active { border-left-color: rgb(254, 224, 0); } home_maledicts .move-door.close .opened-door { display: none; } home_maledicts .move-door.open .closed-door { display: none; } home_maledicts .operators { width: 53px; } home_maledicts .operators .icon { color: #cccccc; } home_maledicts .operators .icon:hover { color: #880000; } home_maledicts .operators .move-door.open .icon { color: #880000; }', '', function(opts) {
+riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Maledicts</p> <a each="{data()}" class="panel-block {isActive(id)}" onclick="{clickItem}" maledict-id="{id}" style="padding: 5px 8px;"> <span style="width:120px; font-size:11px;" maledict-id="{id}"> {name} </span> <span class="operators" style="font-size:14px;"> <span class="icon" title="ここに「やること」を追加する。" maledict-id="{id}" maledict-name="{name}" onclick="{clickAddButton}"> <i class="far fa-plus-square" maledict-id="{id}"></i> </span> <span class="move-door {dragging ? \'open\' : \'close\'}" ref="move-door" dragover="{dragover}" drop="{drop}"> <span class="icon closed-door"> <i class="fas fa-door-closed"></i> </span> <span class="icon opened-door" maledict-id="{id}"> <i class="fas fa-door-open" maledict-id="{id}"></i> </span> </span> </span> </a> <a class="panel-block" style="padding: 5px 8px; height:35px;"> <span style="width:120px; font-size:11px;" maledict-id="{id}" onclick="{clickWaitingFor}">Waiting for ... ※実装中</span> </a> </nav>', 'home_maledicts > .panel { width: 188px; border-radius: 4px 4px 0 0; } home_maledicts > .panel > .panel-heading{ font-size:12px; font-weight:bold; } home_maledicts .panel-block { background:#fff; } home_maledicts .panel-block:hover { background:rgb(255, 255, 236); } home_maledicts .panel-block.is-active { background:rgb(254, 242, 99); } home_maledicts .panel-block.is-active { border-left-color: rgb(254, 224, 0); } home_maledicts .move-door.close .opened-door { display: none; } home_maledicts .move-door.open .closed-door { display: none; } home_maledicts .operators { width: 53px; } home_maledicts .operators .icon { color: #cccccc; } home_maledicts .operators .icon:hover { color: #880000; } home_maledicts .operators .move-door.open .icon { color: #880000; }', '', function(opts) {
      this.dragging = false;
 
      this.dragover = (e) => {
@@ -917,6 +917,9 @@ riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-h
          e.preventDefault();
      };
 
+     this.clickWaitingFor = (e) => {
+         ACTIONS.fetchImpureAtWaitingFor();
+     };
      this.clickItem = (e) => {
          let target = e.target;
          let maledict = this.opts.data.ht[target.getAttribute('maledict-id')];
@@ -1112,7 +1115,47 @@ riot.tag2('icon-door-opened', '<span class="icon opened-door" maledict-id="{id}"
 riot.tag2('icon-ranning', '<i class="fas fa-running"></i>', 'icon-ranning i { color: #cccccc; } icon-ranning i:hover { color: #880000; }', '', function(opts) {
 });
 
-riot.tag2('impure-card-footer', '<footer class="card-footer" style="font-size:14px; height:33px;"> <span class="card-footer-item action {opts.status}" action="{startStopAction()}" onclick="{clickButton}">{startStopLabel()}</span> <span class="card-footer-item view" action="move-2-view" onclick="{clickButton}">照会</span> <span class="card-footer-item open" action="{changeSizeAction()}" onclick="{clickButton}">{changeSizeLabel()}</span> </footer>', 'impure-card-footer .action.start { border-radius: 0px 0px 0px 5px; background-color: #FEF264; } impure-card-footer .action.start:hover { font-weight: bold; }', '', function(opts) {
+riot.tag2('impure-card-footer', '<div> <span class="menu-item action {opts.status}" action="{startStopAction()}" onclick="{clickButton}">{startStopLabel()}</span> <span class="menu-item view" action="move-2-view" onclick="{clickButton}">照会</span> <span class="menu-item open" action="{changeSizeAction()}" onclick="{clickButton}">{changeSizeLabel()}</span> <span class="spacer"></span> <span> <impure-card-move-icon2 callback="{opts.callback}" data="{opts.data}"></impure-card-move-icon2> </span> </div>', 'impure-card-footer > div { font-size:14px; height:33px; padding: 0px 6px; padding-top: 3px; display: flex; } impure-card-footer .action.start { border-radius: 0px 0px 0px 5px; background-color: #FEF264; } impure-card-footer .spacer { flex-grow: 1; } impure-card-footer .menu-item { width: 55px; text-align: center; padding-top: 4px; } impure-card-footer .menu-item:hover { font-weight: bold; text-shadow: 0px 0px 22px #FEF264; }', '', function(opts) {
+     this.startStopLabel = () => {
+         if (!this.opts.status)
+             return '開始';
+
+         return '停止';
+     }
+     this.startStopAction = () => {
+         if (!this.opts.status)
+             return 'start-action';
+
+         return 'stop-action';
+     }
+     this.changeSizeLabel = () => {
+         if (this.opts.mode == 'large')
+             return '閉じる'
+
+         return '開く'
+     }
+     this.changeSizeAction = () => {
+         if (this.opts.mode == 'large')
+             return 'switch-small'
+
+         return 'switch-large'
+     }
+
+     this.clickButton = (e) => {
+         let target = e.target;
+         let action = target.getAttribute('action');
+
+         if (action=='start-action' && this.opts.status)
+             return;
+
+         if (action=='stop-action' && !this.opts.status)
+             return;
+
+         this.opts.callback(action);
+     };
+});
+
+riot.tag2('impure-card-footer_backup', '<footer class="card-footer" style="font-size:14px; height:33px;"> <span class="card-footer-item"> <impure-card-move-icon callback="{opts.callback}" data="{opts.data}"></impure-card-move-icon> </span> <span class="card-footer-item action {opts.status}" action="{startStopAction()}" onclick="{clickButton}">{startStopLabel()}</span> <span class="card-footer-item view" action="move-2-view" onclick="{clickButton}">照会</span> <span class="card-footer-item open" action="{changeSizeAction()}" onclick="{clickButton}">{changeSizeLabel()}</span> </footer>', 'impure-card-footer_backup .action.start { border-radius: 0px 0px 0px 5px; background-color: #FEF264; } impure-card-footer_backup .action.start:hover { font-weight: bold; }', '', function(opts) {
      this.startStopLabel = () => {
          if (!this.opts.status)
              return '開始';
@@ -1327,7 +1370,20 @@ riot.tag2('impure-card-move-icon', '<a href="#" class="card-header-icon" aria-la
      };
 });
 
-riot.tag2('impure-card-small', '<div class="card hw-box-shadow"> <impure-card-header callback="{opts.callback}" data="{opts.data}"></impure-card-header> <div class="card-content"> <div class="content" style="font-size:12px;"> <p>{name()}</p> </div> </div> <impure-card-footer callback="{this.opts.callback}" status="{opts.status}" mode="small"></impure-card-footer> </div>', 'impure-card-small > .card { width: 188px; height: 188px; float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; border: 1px solid #dddddd; border-radius: 5px; } impure-card-small > .card .card-content{ height: calc(188px - 33px - 33px - 1px); padding: 11px 22px; overflow: auto; word-break: break-all; }', '', function(opts) {
+riot.tag2('impure-card-move-icon2', '<a href="#" aria-label="more options"> <span class="icon" title="このアイコンを扉へドラッグ&ドロップすると、扉の場所へ移動できます。" draggable="true" dragstart="{dragStart}" dragend="{dragEnd}"> <icon-ranning></icon-ranning> </span> </a>', 'impure-card-move-icon2 a.card-header-icon { padding: 5px 8px; }', '', function(opts) {
+     this.dragStart = (e) => {
+         let target = e.target;
+
+         e.dataTransfer.setData('impure', JSON.stringify(this.opts.data));
+
+         this.opts.callback('start-drag');
+     };
+     this.dragEnd = (e) => {
+         this.opts.callback('end-drag');
+     };
+});
+
+riot.tag2('impure-card-small', '<div class="card hw-box-shadow"> <div class="card-content"> <div class="content" style="font-size:12px;"> <p>{name()}</p> </div> </div> <impure-card-footer callback="{opts.callback}" data="{opts.data}" status="{opts.status}" mode="small"></impure-card-footer> </div>', 'impure-card-small > .card { width: 188px; height: 188px; float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; border: 1px solid #dddddd; border-radius: 5px; } impure-card-small > .card .card-content{ height: calc(188px - 33px - 1px); padding: 11px 11px; overflow: auto; word-break: break-all; }', '', function(opts) {
      this.name = () => {
          if (!this.opts.data) return '????????'
          return this.opts.data.name;
@@ -1561,13 +1617,29 @@ riot.tag2('service-card-small', '<div class="card hw-box-shadow"> <header class=
      };
 });
 
-riot.tag2('impure_page-controller', '<div class="controller-container" style=""> <p>期間</p> <input class="input is-small" type="text" placeholder="YYYY-MM-DD"> <p>〜</p> <input class="input is-small" type="text" placeholder="YYYY-MM-DD"> <button class="button is-small" disabled>Refresh ※準備中</button> </div>', 'impure_page-controller > .controller-container { display:flex; background: #FEF264; padding: 11px 22px; border-radius: 3px; } impure_page-controller > .controller-container > * { margin-right: 11px; } impure_page-controller > .controller-container > p { font-weight: bold; } impure_page-controller > .controller-container > input.input { border-radius: 3px; width: 111px; }', '', function(opts) {
+riot.tag2('impure_page-controller', '<div class="controller-container"> <div class="term"> <p style="margin-right:11px;">期間</p> <input class="input is-small" type="text" placeholder="YYYY-MM-DD" riot-value="{opts.source.from.format(\'YYYY-MM-DD\')}" disabled> <p class="week">{opts.source.from.format(\'ddd\')}</p> <p style="margin-left:11px;margin-right:11px;">〜</p> <input class="input is-small" type="text" placeholder="YYYY-MM-DD" riot-value="{opts.source.to.format(\'YYYY-MM-DD\')}" disabled> <p class="week">{opts.source.to.format(\'ddd\')}</p> <div style="width:33px;"></div> <button class="button is-small" onclick="{clickRefresh}">Refresh</button> </div> </div> <div class="operators"> <button class="button is-small" disabled>作業開始</button> <button class="button is-small" disabled>作業終了</button> <button class="button is-small" disabled>呪文詠唱</button> <button class="button is-small" disabled>後続作成</button> <button class="button is-small" disabled>埋葬</button> </div>', 'impure_page-controller > .controller-container { display:flex; flex-direction: column; background: #FEF264; padding: 11px 22px; border-radius: 3px; } impure_page-controller > .controller-container > .term { display:flex; } impure_page-controller > .controller-container > .term > p { font-weight: bold; } impure_page-controller > .controller-container > .term > input.input { border-radius: 3px; width: 111px; text-align: center; margin-right: 5px; } impure_page-controller > .controller-container > .term > .move-date { background: none; border: none; } impure_page-controller > .controller-container > .term > .week { font-weight:normal; } impure_page-controller > .operators { margin-top: 22px; display:flex; justify-content:flex-end; } impure_page-controller > .operators > .button { margin-right: 11px; box-shadow: 0px 0px 22px #FEF264; } impure_page-controller > .operators > .button:hover { background: #FEF264; box-shadow: 0px 0px 22px #ffffff; }', '', function(opts) {
+     this.clickRefresh = () => {
+         this.opts.callback('refresh');
+     };
 });
 
 riot.tag2('impure_page-tabs', '<div class="tabs is-toggle"> <ul> <li class="is-active"> <a> <span>基本情報</span> </a> </li> <li> <a> <span>浄化履歴</span> </a> </li> <li> <a> <span>Impure の鎖</span> </a> </li> <li> <a> <span>依頼履歴</span> </a> </li> </ul> </div>', 'impure_page-tabs li > a { background: #fff; }', '', function(opts) {
 });
 
-riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">Impure</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section" style="padding-top:22px; padding-bottom:22px;"> <div class="container"> <div class="contents"> <impure_page-controller></impure_page-controller> </div> </div> </section> <section class="section" style="padding-top:22px; padding-bottom:22px;"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> </section> <div class="tab-contents-area"> <impure_page_tab-basic class="hide" source="{source.impure}"></impure_page_tab-basic> <impure_page_tab-purges class="hide" source="{source.purges}"></impure_page_tab-purges> <impure_page_tab-incantation class="hide" source="{source.spells}"></impure_page_tab-incantation> <impure_page_tab-requests class="hide" source="{source.requests}"></impure_page_tab-requests> <impure_page_tab-chains class="hide" source="{[]}"></impure_page_tab-chains> </div>', 'impure_page page-tabs li a{ background: #fff; } impure_page { width: 100%; height: 100%; display: block; overflow: auto; } impure_page .tabs ul { border-bottom-color: rgb(254, 242, 99); border-bottom-width: 2px; } impure_page .tabs.is-boxed li.is-active a { background-color: rgba(254, 242, 99, 1); border-color: rgb(254, 242, 99); text-shadow: 0px 0px 11px #fff; color: #333; font-weight: bold; } impure_page .tabs.is-boxed li { margin-left: 8px; } impure_page .tabs.is-boxed a { text-shadow: 0px 0px 8px #fff; font-weight: bold; }', '', function(opts) {
+riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">Impure</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section" style="padding-top:22px; padding-bottom:22px;"> <div class="container"> <div class="contents"> <impure_page-controller source="{term}" callback="{callback}"></impure_page-controller> </div> </div> </section> <section class="section" style="padding-top:0px; padding-bottom:22px;"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> </section> <div class="tab-contents-area"> <impure_page_tab-basic class="hide" source="{source.impure}"></impure_page_tab-basic> <impure_page_tab-purges class="hide" source="{source.purges}"></impure_page_tab-purges> <impure_page_tab-incantation class="hide" source="{source.spells}"></impure_page_tab-incantation> <impure_page_tab-requests class="hide" source="{source.requests}"></impure_page_tab-requests> <impure_page_tab-chains class="hide" source="{[]}"></impure_page_tab-chains> </div>', 'impure_page page-tabs li a{ background: #fff; } impure_page { width: 100%; height: 100%; display: block; overflow: auto; } impure_page .tabs ul { border-bottom-color: rgb(254, 242, 99); border-bottom-width: 2px; } impure_page .tabs.is-boxed li.is-active a { background-color: rgba(254, 242, 99, 1); border-color: rgb(254, 242, 99); text-shadow: 0px 0px 11px #fff; color: #333; font-weight: bold; } impure_page .tabs.is-boxed li { margin-left: 8px; } impure_page .tabs.is-boxed a { text-shadow: 0px 0px 8px #fff; font-weight: bold; }', '', function(opts) {
+     this.callback = (action, data) => {
+         if (action=='refresh') {
+             let id = this.id();
+             ACTIONS.fetchPagesImpure({ id: id });
+
+             return ;
+         }
+     };
+
+     this.term = {
+         from: moment().add('month', -1),
+         to:   moment(),
+     }
      this.page_tabs = new PageTabs([
          {code: 'basic',       label: '基本情報', tag: 'impure_page_tab-basic' },
          {code: 'purges',      label: '浄化履歴', tag: 'impure_page_tab-purges' },
@@ -2047,13 +2119,13 @@ riot.tag2('randing', '', '', '', function(opts) {
 riot.tag2('randing_page_root', '', '', '', function(opts) {
 });
 
-riot.tag2('request-messages-list', '<table class="table is-bordered is-striped is-narrow is-hoverable"> <thead> <tr> <th></th> <th>ID</th> <th>発生日時</th> <th>Impure</th> <th>From</th> <th class="message">Contents</th> </tr> </thead> <tbody> <tr each="{message in sources()}"> <td> <button class="button" message-id="{message.id}" onclick="{clickToReaded}">既読にする</button> </td> <td> {message.id} </td> <td>{dt(message.messaged_at)}</td> <td> <a href="#home/requests/impures/{message.impure_id}"> {message.impure_id} </a> </td> <td>{message.angel_id_from} </td> <td class="message"> <pre>{message.contents}</pre> </td> </tr> </tbody> </table>', '', '', function(opts) {
-     this.sources = () => {
-         if (this.opts.sources)
-             return this.opts.sources;
+riot.tag2('request-messages-list', '<table class="table is-bordered is-striped is-narrow is-hoverable"> <thead> <tr> <th rowspan="2"></th> <th colspan="4">Request</th> <th colspan="2">Impure</th> </tr> <tr> <th>発生日時</th> <th colspan="2">From</th> <th class="message">Contents</th> <th>ID</th> <th>Name</th> </tr> </thead> <tbody> <tr each="{message in source()}"> <td> <button class="button is-small" message-id="{message.id}" onclick="{clickToReaded}">既読にする</button> </td> <td nowrap>{dt(message.requested_at)}</td> <td nowrap>{message.angel_from_id}</td> <td nowrap>{message.angel_from_name}</td> <td class="message"> <pre>{message.message}</pre> </td> <td> <a href="#home/requests/impures/{message.impure_id}"> {message.impure_id} </a> </td> <td style="width:333px;">{message.impure_name}</td> </tr> </tbody> </table>', 'request-messages-list .table td { font-size:14px; vertical-align: middle; } request-messages-list .message > pre { padding: 8px; }', '', function(opts) {
+     this.source = () => {
+         if (!this.opts.source)
+             return [];
 
-         return STORE.get('requests.messages.unread.list').sort((a, b) => {
-             if (new Date(a.messaged_at) > new Date(b.messaged_at))
+         return this.opts.source.sort((a, b) => {
+             if (new Date(a.requested_at) > new Date(b.requested_at))
                  return -1;
              else
                  return 1;
@@ -2077,16 +2149,19 @@ riot.tag2('request-messages-list', '<table class="table is-bordered is-striped i
 
          ACTIONS.changeToReadRequestMessage(id);
      };
-     STORE.subscribe((action) => {
-         if (action.type=='FETCHED-REQUEST-MESSAGES-UNREAD')
-             this.update();
-     });
 });
 
-riot.tag2('request-messages', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">Request</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Messages</h1> <div class="contents hw-text-white"> <request-messages-list></request-messages-list> </div> </div> </section> </div> </section>', 'request-messages { width: 100%; height: 100%; display: block; overflow: auto; }', '', function(opts) {
+riot.tag2('request-messages', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">Request</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Messages</h1> <div class="contents hw-text-white"> <request-messages-list source="{source.unread}"></request-messages-list> </div> </div> </section> </div> </section>', 'request-messages { width: 100%; height: 100%; display: block; overflow: auto; }', '', function(opts) {
+     this.source = { unread: [] };
+
+     this.on('mount', () => {
+         ACTIONS.fetchPagesHomeRequests();
+     });
      STORE.subscribe((action) => {
-         if (action.type=='FETCHED-REQUEST-MESSAGES-UNREAD')
+         if (action.type=='FETCHED-PAGES-HOME-REQUESTS') {
+             this.source.unread = action.response.unread;
              this.update();
+         }
      });
 });
 

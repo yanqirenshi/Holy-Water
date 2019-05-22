@@ -4,48 +4,55 @@
 
         <thead>
             <tr>
-                <th></th>
-                <th>ID</th>
+                <th rowspan="2"></th>
+                <th colspan="4">Request</th>
+                <th colspan="2">Impure</th>
+            </tr>
+            <tr>
                 <th>発生日時</th>
-                <th>Impure</th>
-                <th>From</th>
+                <th colspan="2">From</th>
                 <th class="message">Contents</th>
+                <th>ID</th>
+                <th>Name</th>
             </tr>
         </thead>
 
         <tbody>
-            <tr each={message in sources()}>
+            <tr each={message in source()}>
                 <td>
-                    <button class="button"
+                    <button class="button is-small"
                             message-id="{message.id}"
                             onclick={clickToReaded}>既読にする</button>
                 </td>
-                <td>
-                    {message.id}
+
+                <td nowrap>{dt(message.requested_at)}</td>
+
+                <td nowrap>{message.angel_from_id}</td>
+                <td nowrap>{message.angel_from_name}</td>
+
+                <td class="message">
+                    <pre>{message.message}</pre>
                 </td>
-                <td>{dt(message.messaged_at)}</td>
+
                 <td>
                     <a href="#home/requests/impures/{message.impure_id}">
                         {message.impure_id}
                     </a>
                 </td>
-                <td>{message.angel_id_from}
-                </td>
-                <td class="message">
-                    <pre>{message.contents}</pre>
-                </td>
+
+                <td style="width:333px;">{message.impure_name}</td>
             </tr>
         </tbody>
 
     </table>
 
     <script>
-     this.sources = () => {
-         if (this.opts.sources)
-             return this.opts.sources;
+     this.source = () => {
+         if (!this.opts.source)
+             return [];
 
-         return STORE.get('requests.messages.unread.list').sort((a, b) => {
-             if (new Date(a.messaged_at) > new Date(b.messaged_at))
+         return this.opts.source.sort((a, b) => {
+             if (new Date(a.requested_at) > new Date(b.requested_at))
                  return -1;
              else
                  return 1;
@@ -69,10 +76,16 @@
 
          ACTIONS.changeToReadRequestMessage(id);
      };
-     STORE.subscribe((action) => {
-         if (action.type=='FETCHED-REQUEST-MESSAGES-UNREAD')
-             this.update();
-     });
     </script>
+
+    <style>
+     request-messages-list .table td {
+         font-size:14px;
+         vertical-align: middle;
+     }
+     request-messages-list .message > pre {
+         padding: 8px;
+     }
+    </style>
 
 </request-messages-list>

@@ -2,8 +2,8 @@
 
     <div class="card hw-box-shadow">
 
-        <impure-card-header callback={opts.callback}
-                            data={opts.data}></impure-card-header>
+        <!-- <impure-card-header callback={opts.callback}
+             data={opts.data}></impure-card-header> -->
 
         <div class="card-content">
             <div class="content" style="font-size:12px;">
@@ -11,7 +11,8 @@
             </div>
         </div>
 
-        <impure-card-footer callback={this.opts.callback}
+        <impure-card-footer callback={opts.callback}
+                            data={opts.data}
                             status={opts.status}
                             mode="small"></impure-card-footer>
     </div>
@@ -40,8 +41,8 @@
          border-radius: 5px;
      }
      impure-card-small > .card .card-content{
-         height: calc(188px - 33px - 33px - 1px);
-         padding: 11px 22px;
+         height: calc(188px - 33px - 1px);
+         padding: 11px 11px;
          overflow: auto;
          word-break: break-all;
      }

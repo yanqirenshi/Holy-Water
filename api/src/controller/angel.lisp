@@ -55,6 +55,13 @@
 (defun get-angels (&key id)
   (hw:get-angel :id id))
 
+(defun get-angel (&key ghost-id)
+  (let ((angel (hw::ghost-angel :ghost-id ghost-id)))
+    (if angel
+        (dao2angel angel)
+        :null)))
+
+
 ;;;;;
 ;;;;; request message
 ;;;;;

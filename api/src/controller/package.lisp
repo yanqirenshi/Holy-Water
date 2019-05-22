@@ -41,5 +41,6 @@
            #:pages-wor-history
            #:pages-purges
            #:pages-cemetery
-           #:pages-impure))
+           #:pages-impure
+           #:pages-requests))
 (in-package :holy-water.api.controller)

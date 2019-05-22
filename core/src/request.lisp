@@ -1,10 +1,18 @@
 (in-package :holy-water)
 
-(defun create-request-message (impure angel-from angel-to message)
+(defun create-request (impure angel-from angel-to)
+  (mito:create-dao 'ev_request
+                   :impure-id     (mito:object-id impure)
+                   :angel-id-from (mito:object-id angel-from)
+                   :angel-id-to   (mito:object-id angel-to)
+                   :requested-at  (local-time:now)))
+
+(defun create-request-message (impure angel-from angel-to message request)
   (mito:create-dao 'ev_request-message-unread
                    :impure-id     (mito:object-id impure)
                    :angel-id-from (mito:object-id angel-from)
                    :angel-id-to   (mito:object-id angel-to)
+                   :request-id    (mito:object-id request)
                    :contents      message
                    :messaged-at   (local-time:now)))
 
@@ -29,6 +37,8 @@
                                  :impure-id     (impure-id unread)
                                  :angel-id-from (angel-id-from unread)
                                  :angel-id-to   (angel-id-to unread)
+                                 :angel-id-to   (angel-id-to unread)
+                                 :request-id    (request-id unread)
                                  :contents      (contents unread)
                                  :messaged-at   (messaged-at unread)
                                  :readed-at     (local-time:now)

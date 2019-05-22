@@ -1,5 +1,5 @@
 <page-tabs>
-    <div class="tabs is-{type()}">
+    <div class="tabs is-{type()} is-small">
         <ul>
             <li each={opts.core.tabs}
                 class="{opts.core.active_tab==code ? 'is-active' : ''}">
