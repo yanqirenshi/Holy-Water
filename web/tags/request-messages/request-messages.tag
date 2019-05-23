@@ -31,6 +31,13 @@
          if (action.type=='FETCHED-PAGES-HOME-REQUESTS') {
              this.source.unread = action.response.unread;
              this.update();
+
+             return;
+         }
+
+         if (action.type=='CHANGED-TO-READ-REQUEST-MESSAGE') {
+             ACTIONS.fetchPagesHomeRequests();
+             return;
          }
      });
     </script>

@@ -21,7 +21,7 @@
             <tr each={message in source()}>
                 <td>
                     <button class="button is-small"
-                            message-id="{message.id}"
+                            message-id="{message.message_id}"
                             onclick={clickToReaded}>既読にする</button>
                 </td>
 
@@ -31,7 +31,7 @@
                 <td nowrap>{message.angel_from_name}</td>
 
                 <td class="message">
-                    <pre>{message.message}</pre>
+                    <pre>{message.message_contents}</pre>
                 </td>
 
                 <td>

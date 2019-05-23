@@ -1,6 +1,6 @@
 <impure-card-footer>
 
-    <div>
+    <div class="{opts.mode}">
         <span class="menu-item action {opts.status}"
               action={startStopAction()}
               onclick={clickButton}>{startStopLabel()}</span>
@@ -13,9 +13,9 @@
               action={changeSizeAction()}
               onclick={clickButton}>{changeSizeLabel()}</span>
 
-        <span class="spacer"></span>
+        <span class="spacer" if={opts.mode=="small"}></span>
 
-        <span>
+        <span class="move-icon">
             <impure-card-move-icon2 callback={opts.callback}
                                     data={opts.data}></impure-card-move-icon2>
         </span>
@@ -63,25 +63,49 @@
 
     <style>
      impure-card-footer > div {
-         font-size:14px;
-         height:33px;
          padding: 0px 6px;
          padding-top: 3px;
 
          display: flex;
      }
+     impure-card-footer > div.small {
+         font-size: 14px;
+         height:33px;
+         padding: 0px 6px;
+         padding-top: 3px;
+
+     }
+     impure-card-footer > div.large {
+         font-size: 18px;
+         height:38px;
+         padding: 0px 6px;
+         padding-top: 3px;
+
+         justify-content: flex-end;
+     }
+
      impure-card-footer .action.start {
-         border-radius: 0px 0px 0px 5px;
          background-color: #FEF264;
+         border-radius: 0px 0px 0px 0px;
      }
      impure-card-footer .spacer {
          flex-grow: 1;
      }
-     impure-card-footer .menu-item {
+     impure-card-footer > div.small .menu-item {
          width: 55px;
          text-align: center;
          padding-top: 4px;
+         margin-left: 11px;
      }
+     impure-card-footer > div.large .menu-item {
+         width: 55px;
+         text-align: center;
+         padding-top: 4px;
+         margin-right: 22px;
+     }
+     impure-card-footer > div.large .move-icon { padding-top: 3px; }
+     impure-card-footer > div.small .move-icon { padding-top: 2px; }
+
      impure-card-footer .menu-item:hover {
          font-weight: bold;
          text-shadow: 0px 0px 22px #FEF264;

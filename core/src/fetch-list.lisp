@@ -306,7 +306,8 @@
            (:as :ev_request.angel_id_to   :angel_to_id)
            (:as :rs_angel_to.name         :angel_to_name)
 
-           (:as :ev_request_message_unread.contents :message)
+           (:as :ev_request_message_unread.id       :message_id)
+           (:as :ev_request_message_unread.contents :message_contents)
 
            (:as :ev_request.impure_id  :impure_id)
            (:as :rs_impure.name        :impure_name)

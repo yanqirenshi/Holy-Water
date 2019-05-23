@@ -1,7 +1,7 @@
 <impure-card-large>
     <div class="card hw-box-shadow">
-        <impure-card-header callback={opts.callback}
-                            data={opts.data}></impure-card-header>
+        <!-- <impure-card-header callback={opts.callback}
+             data={opts.data}></impure-card-header> -->
 
         <div class="card-content" style="display:flex;flex-direction:column;">
             <div>
@@ -64,7 +64,7 @@
     <style>
      impure-card-large > .card {
          width: calc(222px + 222px + 222px + 22px + 22px);
-         height: calc(222px + 222px + 22px);
+         height: calc(188px + 188px + 22px + 1px);
          float: left;
          margin-left: 22px;
          margin-top: 1px;
@@ -72,11 +72,14 @@
 
          border: 1px solid #dddddd;
          border-radius: 5px;
+
+         display: flex;
+         flex-direction: column;
      }
      impure-card-large > .card .card-content{
-         height: calc(222px + 222px + 22px - 33px - 33px - 1px);
-         padding: 11px 22px;
+         padding: 22px 22px;
          overflow: auto;
+         flex-grow: 1;
      }
      impure-card-large .tabs {
          font-size:12px;
