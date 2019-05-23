@@ -28,6 +28,7 @@
            #:save-purge-term)
   (:export #:sing-in
            #:sing-out
+           #:sing-up-by-ghost
            #:find-angels
            #:get-angels
            #:angel-received-messages

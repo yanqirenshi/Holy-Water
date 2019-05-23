@@ -1,12 +1,15 @@
 (in-package :holy-water)
 
-(defun ghost-angel (&key ghost-id)
-  (car (select-dao 'rs_angel
-         (inner-join :th_ghost_shadow_angel
-                     :on (:= :rs_angel.id :th_ghost_shadow_angel.angel_id))
-         (inner-join :rs_ghost_shadow
-                     :on (:= :th_ghost_shadow_angel.ghost_shadow_id :rs_ghost_shadow.id))
-         (where (:= :rs_ghost_shadow.ghost_id ghost-id)))))
+(defun ghost-angel (&key ghost ghost-id)
+  (let ((ghost-id (cond (ghost (ghost-id ghost))
+                        (ghost-id ghost-id))))
+    (when ghost-id
+      (car (select-dao 'rs_angel
+             (inner-join :th_ghost_shadow_angel
+                         :on (:= :rs_angel.id :th_ghost_shadow_angel.angel_id))
+             (inner-join :rs_ghost_shadow
+                         :on (:= :th_ghost_shadow_angel.ghost_shadow_id :rs_ghost_shadow.id))
+             (where (:= :rs_ghost_shadow.ghost_id ghost-id)))))))
 
 
 (defgeneric angel-impure (angel &key id)

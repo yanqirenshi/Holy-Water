@@ -1,6 +1,6 @@
 <impure_page_tab-basic>
 
-    <section class="section" style="padding-top: 22px; padding-bottom:22px;">
+    <section class="section" style="padding-bottom:22px; style="padding:0px;"">
         <div class="container">
             <h1 class="title hw-text-white is-4">Name</h1>
 

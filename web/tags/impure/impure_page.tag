@@ -141,5 +141,8 @@
          text-shadow: 0px 0px 8px #fff;
          font-weight: bold;
      }
+     impure_page .table th, impure_page .table td {
+         font-size: 14px;
+     }
     </style>
 </impure_page>

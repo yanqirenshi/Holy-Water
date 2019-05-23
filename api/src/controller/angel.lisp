@@ -26,6 +26,23 @@
 (defun sing-out (session-key)
   (remhash session-key caveman2:*session*))
 
+(defun ensure-ghost-shadow (ghost-id &key creator)
+  (or (hw::get-ghost-shadow :ghost-id ghost-id)
+      (hw::make-ghost-shadow ghost-id :creator creator)))
+
+(defun ensure-ghost-angel (ghost name &key creator)
+  (or (hw::ghost-angel :ghost ghost)
+      (let ((angel (hw::create-angel :name name :creator creator)))
+        (hw::make-ghost-shadow_angel ghost angel :creator creator)
+        angel)))
+
+(defun sing-up-by-ghost (id name &key creator)
+  (dao2angel
+   (ensure-ghost-angel (ensure-ghost-shadow id :creator creator)
+                       name
+                       :creator creator)))
+
+
 ;;;;;
 ;;;;;
 ;;;;;

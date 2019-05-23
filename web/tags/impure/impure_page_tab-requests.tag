@@ -1,6 +1,6 @@
 <impure_page_tab-requests>
 
-    <section class="section" style="padding-top: 22px;">
+    <section class="section" style="padding:0px;">
         <div class="container">
             <h1 class="title hw-text-white"></h1>
 
@@ -40,7 +40,9 @@
                                 {rec.angel_to_id}
                             </td>
                             <td>{rec.angel_to_name}</td>
-                            <td>{contents(rec.contents)}</td>
+                            <td>
+                                <description-markdown source={contents(rec.contents)}></description-markdown>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

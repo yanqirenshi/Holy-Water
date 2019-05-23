@@ -35,6 +35,15 @@
   (hw.api.ctrl:sing-out (get-session-key))
   (render-json nil))
 
+(defroute ("/sign/up/ghost/:id" :method :POST) (&key id |name|)
+  (with-angel (angel)
+    (let ((name (quri:url-decode |name|)))
+      (validation id   :integer :require t)
+      (validation name :string  :require t)
+      (render-json (hw.api.ctrl:sing-up-by-ghost (parse-integer id)
+                                                 name
+                                                 :creator angel)))))
+
 (defroute "/angels" (&key |ghost-id|)
   (render-json (if (null |ghost-id|)
                    (with-angel (angel)

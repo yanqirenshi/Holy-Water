@@ -1,7 +1,5 @@
 <description-markdown>
-    <p>
-        <pre ref="markdown-html" style=" background: none;"></pre>
-    </p>
+    <div ref="markdown-html" style=" background: none;"></div>
 
     <script>
      this.on('update', () => {
@@ -16,5 +14,12 @@
          this.refs['markdown-html'].innerHTML = html;
      });
     </script>
+
+    <style>
+     description-markdown * { font-size: 12px; }
+     description-markdown h1 { font-size: 16px; font-weight: bold;}
+
+     description-markdown ul    { list-style-type: disc; margin-left: 22px; }
+    </style>
 
 </description-markdown>
