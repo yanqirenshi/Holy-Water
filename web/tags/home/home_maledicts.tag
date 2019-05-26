@@ -86,7 +86,11 @@
                                  return a.ORDER < b.ORDER;
                              });
 
-         ACTIONS.selectedHomeMaledict(maledicts[0]);
+         let maledict_selected = STORE.get('selected.home.maledict');
+         if (!maledict_selected)
+             maledict_selected = maledicts[0];
+
+         ACTIONS.selectedHomeMaledict(maledict_selected);
      });
     </script>
 

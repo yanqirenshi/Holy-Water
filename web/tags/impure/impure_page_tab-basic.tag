@@ -45,6 +45,9 @@
          border-radius: 3px;
          line-height: 14px;
      }
+     impure_page_tab-basic description-markdown > div {
+         padding: 22px;
+     }
     </style>
 
 </impure_page_tab-basic>

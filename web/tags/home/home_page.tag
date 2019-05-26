@@ -20,7 +20,8 @@
         <!-- ----------------------- -->
         <home_impures maledict={maledict()}
                       callback={callback}
-                      filter={squeeze_word}></home_impures>
+                      filter={squeeze_word}
+                      source={impures}></home_impures>
 
         <!-- ----------------------- -->
         <!--   Other Service Items   -->
@@ -40,6 +41,7 @@
      this.maledict       = null; //選択された maledict
      this.squeeze_word   = null;
      this.request_impure = null;
+     this.impures        = [];
     </script>
 
     <script>
@@ -48,6 +50,11 @@
      }
      this.maledict = () => {
          return STORE.get('selected.home.maledict');
+     };
+     this.fetchPageData = (maledict_in) => {
+         let maledict = maledict_in || this.maledict();
+
+         ACTIONS.fetchPagesImpures(maledict.id);
      };
     </script>
 
@@ -66,44 +73,56 @@
      };
 
      STORE.subscribe((action) => {
-         if (action.type=='SELECTED-HOME-MALEDICT') {
+         if (action.type=='MOVED-IMPURE' ||
+             action.type=='FINISHED-IMPURE' ||
+             action.type=='STARTED-ACTION' ||
+             action.type=='STOPED-ACTION' ||
+             action.type=='SAVED-IMPURE') {
 
+             this.fetchPageData();
+
+             return;
+         }
+
+         if (action.type=='FETCHED-PAGES-IMPURES') {
+             this.impures = action.response.impures;
              this.update();
 
-             let maledict = this.maledict();
-             ACTIONS.fetchMaledictImpures(maledict.id);
+             return;
+         }
+
+         if (action.type=='SELECTED-HOME-MALEDICT') {
+             this.fetchPageData();
+
+             return;
          }
 
          if (action.type=='CREATED-MALEDICT-IMPURE') {
              let maledict_selected = this.maledict();
 
              if (action.maledict.id == maledict_selected.id)
-                 ACTIONS.fetchMaledictImpures(maledict_selected.id);
+                 this.fetchPageData(maledict_selected);
          }
-
-         if (action.type=='FETCHED-MALEDICTS')
-             this.update();
 
          if (action.type=='START-TRANSFERD-IMPURE-TO-ANGEL') {
              this.request_impure = action.contents;
              this.update();
-             // this.tags['modal_request-impure'].update();
+
+             return;
          }
 
          if (action.type=='STOP-TRANSFERD-IMPURE-TO-ANGEL') {
              this.request_impure = null;
              this.update();
-             /* this.tags['modal_request-impure'].update(); */
+
+             return;
          }
 
          if (action.type=='TRANSFERD-IMPURE-TO-ANGEL') {
              this.request_impure = null;
+             this.fetchPageData();
 
-             // TODO: う〜む。。。
-             if (this.tags['modal_request-impure'])
-                 this.tags['modal_request-impure'].update();
-             else
-                 this.update();
+             return;
          }
 
          if (action.type=='SELECT-SERVICE-ITEM') {
@@ -112,6 +131,8 @@
 
              let service = action.data.selected.home.service;
              ACTIONS.fetchServiceItems(service.service, service.id);
+
+             return;
          }
      });
 

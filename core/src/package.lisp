@@ -61,7 +61,8 @@
            #:list-summay-impure-cemeteries-by-date-damon
            #:list-summary-purge-by-deamon
            #:list-requested-uncomplete-impures
-           #:list-request-messages-unred))
+           #:list-request-messages-unred
+           #:list-maledict-impures))
 (in-package :holy-water)
 
 (mito:connect-toplevel :postgres :database-name "holy_water" :username "holy_water")

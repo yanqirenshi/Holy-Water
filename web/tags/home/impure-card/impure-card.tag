@@ -42,8 +42,11 @@
          return this.opts.open ? 'large' : 'small';
      };
      this.isStart = () => {
-         if (!this.opts.data) return false;
-         if (!this.opts.data.purge) return false;
+         if (!this.opts.data)
+             return false;
+
+         if (!this.opts.data.purge_started_at)
+             return false;
 
          return true;
      }

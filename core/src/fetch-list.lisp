@@ -211,6 +211,7 @@
             (:as :ev_purge_start.start          :purge_started_at)
             (:as :th_deamon_impure.deamon_id    :deamon_id)
             (:as :rs_deamon.name                :deamon_name)
+            (:as :rs_deamon.name_short          :deamon_name_short)
             (:as :ev_collect_impure.maledict_id :maledict_id)
             (:as :rs_maledict.name              :maledict_name)
             (:as :rs_maledict.description       :maledict_description)
@@ -224,7 +225,7 @@
      (left-join :th_deamon_impure
                 :on (:= :rs_impure.id :th_deamon_impure.impure_id))
      (left-join :rs_deamon
-                :on (:= :th_deamon_impure.impure_id :rs_deamon.id))
+                :on (:= :th_deamon_impure.deamon_id :rs_deamon.id))
      (left-join :ev_purge_start
                 :on (:= :ev_collect_impure.impure_id :ev_purge_start.impure_id))
      (left-join :rs_maledict
@@ -233,11 +234,12 @@
                   (:= :th_angel_maledict.maledict_id (mito:object-id maledict)))))))
 
 (defun list-maledict-impures (angel maledict)
-  (multiple-value-bind (sql vals)
-      (list-maledict-impures-sql angel maledict)
-    (let ((results (fetch-list sql vals)))
-      ;; TODO: なんかする？
-      results)))
+  (when (and angel maledict)
+    (multiple-value-bind (sql vals)
+        (list-maledict-impures-sql angel maledict)
+      (let ((results (fetch-list sql vals)))
+        ;; TODO: なんかする？
+        results))))
 
 
 ;;;;;

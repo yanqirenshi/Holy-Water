@@ -291,6 +291,12 @@
     (let ((impure (hw::get-impure :id (parse-integer id))))
       (render-json (hw.api.ctrl:pages-impure angel impure)))))
 
+(defroute "/pages/impures" (&key |maledict-id|)
+  (with-angel (angel)
+    (let* ((maledict-id (validation |maledict-id| :integer :require t))
+           (maledict (hw:get-maledict :id maledict-id)))
+      (render-json (hw.api.ctrl:pages-impures angel maledict)))))
+
 (defroute "/pages/requests" ()
   (with-angel (angel)
     (render-json (hw.api.ctrl:pages-requests angel))))

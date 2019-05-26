@@ -14,7 +14,7 @@
      this.isHide = () => {
          if (!this.opts || !this.opts.type)
              return 'hide';
-         dump(this.opts.type);
+
          if (this.opts.type=='child')
              return '';
 

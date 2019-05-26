@@ -377,7 +377,7 @@ riot.tag2('hw-page-header', '<section class="section" style="padding-bottom: 22p
      this.isHide = () => {
          if (!this.opts || !this.opts.type)
              return 'hide';
-         dump(this.opts.type);
+
          if (this.opts.type=='child')
              return '';
 
@@ -870,7 +870,9 @@ riot.tag2('home_impures', '<div class="flex-parent" style="height:100%; margin-t
          return this.opts.maledict ? '' : 'hide';
      };
      this.impures = () => {
-         let out = STORE.get('impures').list.sort((a, b) => {
+         let list = this.opts.source;
+
+         let out = list.sort((a, b) => {
              return a.id > b.id ? 1 : -1;
          });
 
@@ -882,24 +884,6 @@ riot.tag2('home_impures', '<div class="flex-parent" style="height:100%; margin-t
              return d.name.toLowerCase().indexOf(filter.toLowerCase()) >= 0;
          });
      };
-
-     STORE.subscribe((action) => {
-         if (action.type=='FETCHED-MALEDICT-IMPURES') {
-             this.update();
-
-             return;
-         }
-
-         if (action.type=='MOVED-IMPURE' ||
-             action.type=='FINISHED-IMPURE' ||
-             action.type=='TRANSFERD-IMPURE-TO-ANGEL' ||
-             action.type=='STARTED-ACTION' ||
-             action.type=='STOPED-ACTION' ||
-             action.type=='SAVED-IMPURE') {
-
-             ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
-         }
-     });
 });
 
 riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Maledicts</p> <a each="{data()}" class="panel-block {isActive(id)}" onclick="{clickItem}" maledict-id="{id}" style="padding: 5px 8px;"> <span style="width:120px; font-size:11px;" maledict-id="{id}"> {name} </span> <span class="operators" style="font-size:14px;"> <span class="icon" title="ここに「やること」を追加する。" maledict-id="{id}" maledict-name="{name}" onclick="{clickAddButton}"> <i class="far fa-plus-square" maledict-id="{id}"></i> </span> <span class="move-door {dragging ? \'open\' : \'close\'}" ref="move-door" dragover="{dragover}" drop="{drop}"> <span class="icon closed-door"> <i class="fas fa-door-closed"></i> </span> <span class="icon opened-door" maledict-id="{id}"> <i class="fas fa-door-open" maledict-id="{id}"></i> </span> </span> </span> </a> <a class="panel-block" style="padding: 5px 8px; height:35px;"> <span style="width:120px; font-size:11px;" maledict-id="{id}" onclick="{clickWaitingFor}">Waiting for ... ※実装中</span> </a> </nav>', 'home_maledicts > .panel { width: 188px; border-radius: 4px 4px 0 0; } home_maledicts > .panel > .panel-heading{ font-size:12px; font-weight:bold; } home_maledicts .panel-block { background:#fff; } home_maledicts .panel-block:hover { background:rgb(255, 255, 236); } home_maledicts .panel-block.is-active { background:rgb(254, 242, 99); } home_maledicts .panel-block.is-active { border-left-color: rgb(254, 224, 0); } home_maledicts .move-door.close .opened-door { display: none; } home_maledicts .move-door.open .closed-door { display: none; } home_maledicts .operators { width: 53px; } home_maledicts .operators .icon { color: #cccccc; } home_maledicts .operators .icon:hover { color: #880000; } home_maledicts .operators .move-door.open .icon { color: #880000; }', '', function(opts) {
@@ -940,7 +924,11 @@ riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-h
                                  return a.ORDER < b.ORDER;
                              });
 
-         ACTIONS.selectedHomeMaledict(maledicts[0]);
+         let maledict_selected = STORE.get('selected.home.maledict');
+         if (!maledict_selected)
+             maledict_selected = maledicts[0];
+
+         ACTIONS.selectedHomeMaledict(maledict_selected);
      });
 
      this.data = () => {
@@ -969,18 +957,24 @@ riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-h
      });
 });
 
-riot.tag2('home_page', '<div class="bucket-area"> <home_maledicts data="{STORE.get(\'maledicts\')}" select="{maledict()}" callback="{callback}" dragging="{dragging}"></home_maledicts> <home_orthodox-angels></home_orthodox-angels> <home_other-services></home_other-services> </div> <div class="contetns-area"> <div style="display:flex;"> <home_squeeze-area callback="{callback}"></home_squeeze-area> <home_request-area></home_request-area> </div> <home_impures maledict="{maledict()}" callback="{callback}" filter="{squeeze_word}"></home_impures> <home_servie-items></home_servie-items> </div> <home_modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_modal-create-impure> <modal_request-impure source="{request_impure}"></modal_request-impure>', 'home_page { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; } home_page home_squeeze-area { margin-right: 55px; }', '', function(opts) {
+riot.tag2('home_page', '<div class="bucket-area"> <home_maledicts data="{STORE.get(\'maledicts\')}" select="{maledict()}" callback="{callback}" dragging="{dragging}"></home_maledicts> <home_orthodox-angels></home_orthodox-angels> <home_other-services></home_other-services> </div> <div class="contetns-area"> <div style="display:flex;"> <home_squeeze-area callback="{callback}"></home_squeeze-area> <home_request-area></home_request-area> </div> <home_impures maledict="{maledict()}" callback="{callback}" filter="{squeeze_word}" source="{impures}"></home_impures> <home_servie-items></home_servie-items> </div> <home_modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_modal-create-impure> <modal_request-impure source="{request_impure}"></modal_request-impure>', 'home_page { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } home_page > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; } home_page home_squeeze-area { margin-right: 55px; }', '', function(opts) {
      this.modal_open     = false;
      this.modal_maledict = null;
      this.maledict       = null;
      this.squeeze_word   = null;
      this.request_impure = null;
+     this.impures        = [];
 
      this.impure = () => {
          return STORE.get('purging.impure');
      }
      this.maledict = () => {
          return STORE.get('selected.home.maledict');
+     };
+     this.fetchPageData = (maledict_in) => {
+         let maledict = maledict_in || this.maledict();
+
+         ACTIONS.fetchPagesImpures(maledict.id);
      };
 
      this.callback = (action, data) => {
@@ -997,43 +991,56 @@ riot.tag2('home_page', '<div class="bucket-area"> <home_maledicts data="{STORE.g
      };
 
      STORE.subscribe((action) => {
-         if (action.type=='SELECTED-HOME-MALEDICT') {
+         if (action.type=='MOVED-IMPURE' ||
+             action.type=='FINISHED-IMPURE' ||
+             action.type=='STARTED-ACTION' ||
+             action.type=='STOPED-ACTION' ||
+             action.type=='SAVED-IMPURE') {
 
+             this.fetchPageData();
+
+             return;
+         }
+
+         if (action.type=='FETCHED-PAGES-IMPURES') {
+             this.impures = action.response.impures;
              this.update();
 
-             let maledict = this.maledict();
-             ACTIONS.fetchMaledictImpures(maledict.id);
+             return;
+         }
+
+         if (action.type=='SELECTED-HOME-MALEDICT') {
+             this.fetchPageData();
+
+             return;
          }
 
          if (action.type=='CREATED-MALEDICT-IMPURE') {
              let maledict_selected = this.maledict();
 
              if (action.maledict.id == maledict_selected.id)
-                 ACTIONS.fetchMaledictImpures(maledict_selected.id);
+                 this.fetchPageData(maledict_selected);
          }
-
-         if (action.type=='FETCHED-MALEDICTS')
-             this.update();
 
          if (action.type=='START-TRANSFERD-IMPURE-TO-ANGEL') {
              this.request_impure = action.contents;
              this.update();
 
+             return;
          }
 
          if (action.type=='STOP-TRANSFERD-IMPURE-TO-ANGEL') {
              this.request_impure = null;
              this.update();
 
+             return;
          }
 
          if (action.type=='TRANSFERD-IMPURE-TO-ANGEL') {
              this.request_impure = null;
+             this.fetchPageData();
 
-             if (this.tags['modal_request-impure'])
-                 this.tags['modal_request-impure'].update();
-             else
-                 this.update();
+             return;
          }
 
          if (action.type=='SELECT-SERVICE-ITEM') {
@@ -1042,6 +1049,8 @@ riot.tag2('home_page', '<div class="bucket-area"> <home_maledicts data="{STORE.g
 
              let service = action.data.selected.home.service;
              ACTIONS.fetchServiceItems(service.service, service.id);
+
+             return;
          }
      });
 
@@ -1333,7 +1342,15 @@ riot.tag2('impure-card-large_tab_show-description', '', 'impure-card-large_tab_s
 
 });
 
-riot.tag2('impure-card-large_tab_show', '<div style="width:100%; height:100%;"> <div style="flex-grow:1; display:flex; flex-direction:column;"> <p style="font-weight: bold;">{name()}</p> <div class="description" style="padding:11px; overflow:auto;"> <impure-card-large_tab_show-description contents="{this.description()}"></impure-card-large_tab_show-description> </div> </div> </div>', '', '', function(opts) {
+riot.tag2('impure-card-large_tab_show', '<div style="width:100%; height:100%;"> <div style="flex-grow:1; display:flex; flex-direction:column;"> <p if="{opts.data.deamon_id}" style="font-size:14px;">Deamon: {deamon()}</p> <p style="font-weight: bold;">{name()}</p> <div class="description" style="padding:11px; overflow:auto;"> <impure-card-large_tab_show-description contents="{this.description()}"></impure-card-large_tab_show-description> </div> </div> </div>', '', '', function(opts) {
+     this.deamon = () => {
+         let impure = this.opts.data;
+
+         if (!impure)
+             return null
+
+         return "%s (%s)".format(this.opts.data.deamon_name, this.opts.data.deamon_name_short);
+     };
      this.name = () => {
          if (!this.opts.data) return '????????'
 
@@ -1349,7 +1366,7 @@ riot.tag2('impure-card-large_tab_show', '<div style="width:100%; height:100%;"> 
              out = out.replace(/{/g, '\\{');
              out = out.replace(/}/g, '\\}');
          } catch (e) {
-             dump(e);
+             console.warn(e);
              console.trace();
          }
 
@@ -1383,10 +1400,21 @@ riot.tag2('impure-card-move-icon2', '<a href="#" aria-label="more options"> <spa
      };
 });
 
-riot.tag2('impure-card-small', '<div class="card hw-box-shadow"> <div class="card-content"> <div class="content" style="font-size:12px;"> <p>{name()}</p> </div> </div> <impure-card-footer callback="{opts.callback}" data="{opts.data}" status="{opts.status}" mode="small"></impure-card-footer> </div>', 'impure-card-small > .card { width: 188px; height: 188px; float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; border: 1px solid #dddddd; border-radius: 5px; } impure-card-small > .card .card-content{ height: calc(188px - 33px - 1px); padding: 11px 11px; overflow: auto; word-break: break-all; }', '', function(opts) {
+riot.tag2('impure-card-small', '<div class="card hw-box-shadow"> <div class="card-content"> <div class="content" style="font-size:12px;"> <p> <span if="{opts.data.deamon_id}" class="deamon" title="{deamonVal(\'deamon_name\')}"> {deamonVal(\'deamon_name_short\')} </span> {name()} </p> </div> </div> <impure-card-footer callback="{opts.callback}" data="{opts.data}" status="{opts.status}" mode="small"></impure-card-footer> </div>', 'impure-card-small > .card { width: 188px; height: 188px; float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; border: 1px solid #dddddd; border-radius: 5px; } impure-card-small > .card .card-content{ height: calc(188px - 33px - 1px); padding: 11px 11px; overflow: auto; word-break: break-all; } impure-card-small .deamon { background: #efefef; margin-right: 5px; padding: 3px 5px; border-radius: 3px; }', '', function(opts) {
+     this.deamonVal = (name) => {
+         let impure = this.opts.data;
+
+         if (!impure)
+             return null
+
+         return this.opts.data[name];
+     };
      this.name = () => {
-         if (!this.opts.data) return '????????'
-         return this.opts.data.name;
+         let impure = this.opts.data;
+         if (!impure)
+             return '????????'
+
+         return impure.name;
      };
      this.description = () => {
          if (!this.opts.data) return ''
@@ -1431,8 +1459,11 @@ riot.tag2('impure-card', '<impure-card-small data="{opts.data}" status="{status(
          return this.opts.open ? 'large' : 'small';
      };
      this.isStart = () => {
-         if (!this.opts.data) return false;
-         if (!this.opts.data.purge) return false;
+         if (!this.opts.data)
+             return false;
+
+         if (!this.opts.data.purge_started_at)
+             return false;
 
          return true;
      }
@@ -1691,7 +1722,7 @@ riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"
      });
 });
 
-riot.tag2('impure_page_tab-basic', '<section class="section" style="padding-bottom:22px; style=" padding:0px> <div class="container"> <h1 class="title hw-text-white is-4">Name</h1> <div class="contents hw-text-white" style="font-weight:bold; padding-left:22px;"> <p>{name()}</p> </div> </div> </section> <section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white is-4">Description</h1> <div class="contents description" style="margin-left: 22px;"> <description-markdown source="{description()}"></description-markdown> </div> </div> </section>', 'impure_page_tab-basic .description { background: #fff; border-radius: 3px; line-height: 14px; }', '', function(opts) {
+riot.tag2('impure_page_tab-basic', '<section class="section" style="padding-bottom:22px; style=" padding:0px> <div class="container"> <h1 class="title hw-text-white is-4">Name</h1> <div class="contents hw-text-white" style="font-weight:bold; padding-left:22px;"> <p>{name()}</p> </div> </div> </section> <section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white is-4">Description</h1> <div class="contents description" style="margin-left: 22px;"> <description-markdown source="{description()}"></description-markdown> </div> </div> </section>', 'impure_page_tab-basic .description { background: #fff; border-radius: 3px; line-height: 14px; } impure_page_tab-basic description-markdown > div { padding: 22px; }', '', function(opts) {
      this.name = () => {
          let impure = this.opts.source;
 

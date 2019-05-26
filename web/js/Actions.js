@@ -810,6 +810,22 @@ class Actions extends Vanilla_Redux_Actions {
             response: response
         };
     }
+    fetchPagesImpures (maledict_id) {
+        let path = '/pages/impures?maledict-id=' + maledict_id;
+
+        API.get(path, function (json, success) {
+            if (success)
+                STORE.dispatch(this.fetchedPagesImpures(json));
+        }.bind(this));
+    }
+    fetchedPagesImpures (response) {
+        let state = STORE.state().toJS();
+
+        return {
+            type: 'FETCHED-PAGES-IMPURES',
+            response: response
+        };
+    }
     /////
     ///// Page
     /////

@@ -1,5 +1,4 @@
 <home_impures class={hide()}>
-    <!-- <div style="padding-left:22px;">Debug: maledict={this.opts.maledict ? this.opts.maledict.name : ''}</div> -->
 
     <div class="flex-parent" style="height:100%; margin-top: -8px;">
         <div class="card-container">
@@ -33,7 +32,9 @@
          return this.opts.maledict ? '' : 'hide';
      };
      this.impures = () => {
-         let out = STORE.get('impures').list.sort((a, b) => {
+         let list = this.opts.source;
+
+         let out = list.sort((a, b) => {
              return a.id > b.id ? 1 : -1;
          });
 
@@ -45,26 +46,6 @@
              return d.name.toLowerCase().indexOf(filter.toLowerCase()) >= 0;
          });
      };
-    </script>
-
-    <script>
-     STORE.subscribe((action) => {
-         if (action.type=='FETCHED-MALEDICT-IMPURES') {
-             this.update();
-
-             return;
-         }
-
-         if (action.type=='MOVED-IMPURE' ||
-             action.type=='FINISHED-IMPURE' ||
-             action.type=='TRANSFERD-IMPURE-TO-ANGEL' ||
-             action.type=='STARTED-ACTION' ||
-             action.type=='STOPED-ACTION' ||
-             action.type=='SAVED-IMPURE') {
-
-             ACTIONS.fetchMaledictImpures(this.opts.maledict.id);
-         }
-     });
     </script>
 
     <style>
