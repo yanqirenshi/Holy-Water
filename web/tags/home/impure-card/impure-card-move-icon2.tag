@@ -15,7 +15,6 @@
     <script>
      this.dragStart = (e) => {
          let target = e.target;
-
          e.dataTransfer.setData('impure', JSON.stringify(this.opts.data));
 
          this.opts.callback('start-drag');

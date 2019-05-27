@@ -77,7 +77,8 @@
              action.type=='FINISHED-IMPURE' ||
              action.type=='STARTED-ACTION' ||
              action.type=='STOPED-ACTION' ||
-             action.type=='SAVED-IMPURE') {
+             action.type=='SAVED-IMPURE' ||
+             action.type=='SETED-IMPURE-DEAMON') {
 
              this.fetchPageData();
 
