@@ -712,6 +712,7 @@ class Actions extends Vanilla_Redux_Actions {
         return {
             type: 'FETCHED-PAGES-ORTHODOX',
             data: {},
+            response: response,
         };
     }
     fetchPagesWarHistory (start, end) {

@@ -12,7 +12,9 @@
                 ((:file "package")
                  (:module "dao"
                   :components ((:file "rs_angel")
+                               (:file "rs_grigori")
                                (:file "rs_orthodox")
+                               (:file "rs_orthodox-duty")
                                (:file "rs_maledict-type")
                                (:file "rs_maledict")
                                (:file "rs_deamon")
@@ -36,6 +38,7 @@
                  (:file "angel-maledict")
                  (:file "collect-impure")
                  (:file "orthodox")
+                 (:file "orthodox-duty")
                  (:file "angel")
                  (:file "maledict")
                  (:file "impure")

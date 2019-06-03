@@ -34,9 +34,12 @@
          this.opts.callback(target.getAttribute('action'), { spell: spell });
      };
      STORE.subscribe((action) => {
-         if (action.type=='SAVED-IMPURE-INCANTATION-SOLO')
+         if (action.type=='SAVED-IMPURE-INCANTATION-SOLO') {
              if (this.opts.data.id==action.impure.id)
                  this.clickClearButton();
+
+             return;
+         }
      });
     </script>
 

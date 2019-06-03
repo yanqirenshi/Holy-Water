@@ -33,7 +33,8 @@
            #:add-after-impure
            #:impure-set-deamon)
   (:export #:find-orthodoxs
-           #:get-orthodox)
+           #:get-orthodox
+           #:find-orthodox-duties)
   (:export #:find-angels
            #:get-angel
            #:get-angel-at-auth
@@ -62,7 +63,8 @@
            #:list-summary-purge-by-deamon
            #:list-requested-uncomplete-impures
            #:list-request-messages-unred
-           #:list-maledict-impures))
+           #:list-maledict-impures
+           #:list-orthodox-angels))
 (in-package :holy-water)
 
 (mito:connect-toplevel :postgres :database-name "holy_water" :username "holy_water")

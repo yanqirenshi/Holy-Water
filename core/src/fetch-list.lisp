@@ -230,7 +230,8 @@
                 :on (:= :ev_collect_impure.impure_id :ev_purge_start.impure_id))
      (left-join :rs_maledict
                 :on (:= :th_angel_maledict.maledict_id :rs_maledict.id))
-     (where (:and (:= :th_angel_maledict.angel_id (mito:object-id angel))
+     (where (:and (:not-null :ev_collect_impure.impure_id)
+                  (:= :th_angel_maledict.angel_id (mito:object-id angel))
                   (:= :th_angel_maledict.maledict_id (mito:object-id maledict)))))))
 
 (defun list-maledict-impures (angel maledict)
@@ -336,3 +337,32 @@
                    :infrate! #'list-request-messages-unred-infrate!)
    (fetch-all-list (list-request-messages-unred-sql angel :rs_impure_discarded)
                    :infrate! #'list-request-messages-unred-infrate!)))
+
+;;;;;
+;;;;;
+;;;;;
+(defun list-orthodox-angels-sql (&key orthodox)
+  (select (:rs_angel.id
+           :rs_angel.name
+           (:as :rs_orthodox_duty.id     :orthodox_duty_id)
+           (:as :rs_orthodox_duty.name   :orthodox_duty_name)
+           (:as :rs_orthodox_duty.description   :orthodox_duty_description)
+           (:as :th_orthodox_angel.appointed_at :orthodox_angel_appointed_at)
+           (:as :rs_orthodox.id          :orthodox_id)
+           (:as :rs_orthodox.name        :orthodox_name)
+           (:as :rs_orthodox.description :orthodox_description))
+    (from :th_orthodox_angel)
+    (inner-join :rs_angel
+                :on (:= :th_orthodox_angel.angel_id :rs_angel.id))
+    (left-join  :rs_orthodox
+                :on (:= :th_orthodox_angel.orthodox_id :rs_orthodox.id))
+    (left-join  :rs_orthodox_duty
+                :on (:= :th_orthodox_angel.orthodox_duty_id :rs_orthodox_duty.id))
+    (where (:= :th_orthodox_angel.orthodox_id (mito:object-id orthodox)))))
+
+(defun list-orthodox-angels-infrate! (rec)
+  (timestamptz2timestamp! rec :|appointed_at|))
+
+(defun list-orthodox-angels (&key orthodox)
+  (fetch-all-list (list-orthodox-angels-sql :orthodox orthodox)
+                  :infrate! #'list-orthodox-angels-infrate!))

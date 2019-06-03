@@ -3,9 +3,8 @@
 (defun pages-orthodox (orthodox &key angel)
   (declare (ignore angel))
   (list :|orthodox| (dao2orthodox orthodox)
-        :|primate|  :null ;; 首座主教。 オーナー
-        :|paladin|  nil   ;; かんりしゃけんげんをもつ。
-        :|angels|   nil))
+        :|duties|   (find-orthodox-duties)
+        :|angels|   (hw:list-orthodox-angels :orthodox orthodox)))
 
 (defun pages-wor-history (angel start end)
   (when (and angel start end)

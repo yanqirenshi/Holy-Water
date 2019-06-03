@@ -12,6 +12,10 @@
     box-shadow: 0px 0px 22px #333333;
 }
 
+app .hw-box-shadow-light {
+    box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.8);
+}
+
 .table > thead > tr > th {
     color: #333;
     background: #FEF263;

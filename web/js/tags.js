@@ -1332,7 +1332,9 @@ riot.tag2('impure-card-large_tab_edit', '<div class="form-contents"> <div class=
          return this.opts.data.name;
      };
      this.description = () => {
-         if (!this.opts.data) return ''
+         if (!this.opts.data)
+             return ''
+
          return this.opts.data.description.trim();
      };
 });
@@ -1360,9 +1362,12 @@ riot.tag2('impure-card-large_tab_incantation', '<div class="form-contents"> <div
          this.opts.callback(target.getAttribute('action'), { spell: spell });
      };
      STORE.subscribe((action) => {
-         if (action.type=='SAVED-IMPURE-INCANTATION-SOLO')
+         if (action.type=='SAVED-IMPURE-INCANTATION-SOLO') {
              if (this.opts.data.id==action.impure.id)
                  this.clickClearButton();
+
+             return;
+         }
      });
 });
 
@@ -1803,42 +1808,49 @@ riot.tag2('impure_page_tab-requests', '<section class="section" style="padding:0
      this.contents = (v) => { return hw.descriptionViewShort(v); };
 });
 
-riot.tag2('orthodox-page', '<hw-page-header title="正教会" type="child"></hw-page-header> <section class="section" style="padding-top: 11px; padding-bottom: 11px;"> <div class="container"> <page-tabs core="{page_tabs}" type="toggle" callback="{clickTab}"></page-tabs> </div> </section> <div> <orthodox-page_tab-basic class="hide"></orthodox-page_tab-basic> <orthodox-page_tab-members class="hide"></orthodox-page_tab-members> <orthodox-page_tab-paladin class="hide"></orthodox-page_tab-paladin> <orthodox-page_tab-primate class="hide"></orthodox-page_tab-primate> </div>', '', '', function(opts) {
-     this.page_tabs = new PageTabs([
-         {code: 'basic',   label: '基本情報', tag: 'orthodox-page_tab-basic' },
-         {code: 'members', label: '祓魔師',   tag: 'orthodox-page_tab-members' },
-         {code: 'paladin', label: '聖騎士',   tag: 'orthodox-page_tab-paladin' },
-         {code: 'primate', label: '首座主教', tag: 'orthodox-page_tab-primate' },
-     ]);
-     this.on('mount', () => {
-         this.page_tabs.switchTab(this.tags)
-         this.update();
-     });
+riot.tag2('orthodox-page-angels-list-item', '<div> <h1 class="title is-5 hw-text-white">{opts.duty.name}</h1> <div if="{angels().length==0}" style="margin-bottom:22px; padding-left:22px;"> <p class="hw-text-white" style="font-size: 18px; font-weight:bold;"> 空席 </p> </div> <div class="angels"> <div each="{angel in angels()}" class="angel hw-box-shadow-light"> <p>{angel.name}</p> </div> </div> </div>', 'orthodox-page-angels-list-item .title:not(:last-child) { margin-bottom: 11px; border-bottom: 1px solid #fff; } orthodox-page-angels-list-item .angels { display: flex; flex-wrap: wrap; padding-left:22px; margin-top:22px; } orthodox-page-angels-list-item .angel { width: 88px; height: 88px; background: #fff; border-radius: 88px; margin-right: 11px; margin-bottom: 11px; border: 1px solid #eeeeee; font-size: 12px; display: flex; justify-content: center; } orthodox-page-angels-list-item .angel > p { align-self: center; font-weight: bold; }', '', function(opts) {
+     this.angels = () => {
+         let list = this.opts.source.angels.filter((angel) => {
+             return angel.orthodox_duty_id == this.opts.duty.id;
+         });
 
-     this.clickTab = (e, action, data) => {
-         if (this.page_tabs.switchTab(this.tags, data.code))
-             this.update();
+         return list.sort((a, b) => {
+             return (a.orthodox_angel_appointed_at > b.orthodox_angel_appointed_at) ? 1 : -1;
+         });
      };
+});
 
+riot.tag2('orthodox-page-angels-list', '<div> <h1 class="title is-3 hw-text-white">構成員</h1> <div each="{duty in opts.source.duties}" style="padding-left:22px;"> <orthodox-page-angels-list-item duty="{duty}" source="{opts.source}"></orthodox-page-angels-list-item> </div> </div>', '', '', function(opts) {
+});
+
+riot.tag2('orthodox-page-basic-info', '<div style="padding-left:22px;"> <h1 class="title is-3">基本情報</h1> <div class="contents-item"> <h1 class="title is-4">Name</h1> <div class="contents"> <p class="">{opts.source.orthodox.name}</p> </div> </div> <div class="contents-item" style="margin-top:33px;"> <h1 class="title is-4 ">Description</h1> <div class="contents"> <p class="">{opts.source.orthodox.description}</p> </div> </div> </div>', 'orthodox-page-basic-info .contents-item { background:rgba(255,255,255,0.8); padding:22px; border-radius:5px; }', '', function(opts) {
+     this.on('update', () => {
+         dump(this.opts.source.orthodox)
+     });
+});
+
+riot.tag2('orthodox-page', '<div class="flex-container"> <div class="angels-list"> <orthodox-page-angels-list source="{source}"></orthodox-page-angels-list> </div> <div class="basic-info"> <orthodox-page-basic-info source="{source}"></orthodox-page-basic-info> </div> </div>', 'orthodox-page .flex-container { display: flex; padding: 55px; 222px; justify-content: center; } orthodox-page .flex-container > * { display: block; } orthodox-page .flex-container > .angels-list { flex-grow: 1; max-width:555px; margin-right: 22px; } orthodox-page .flex-container > .basic-info { width: 333px; }', 'class="page-contents"', function(opts) {
+     this.source = {
+         angels: [],
+         duties: [],
+         orthodox: null
+     };
      this.orthodox = () => {
          let id = location.hash.split('/').reverse()[0];
 
          return STORE.get('orthodoxs.ht.' + id);
      };
+     this.on('mount', () => {
+         ACTIONS.fetchPagesOrthodox(this.orthodox());
+     });
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-PAGES-ORTHODOX') {
+             this.source = action.response;
+             this.update();
 
-     ACTIONS.fetchPagesOrthodox(this.orthodox());
-});
-
-riot.tag2('orthodox-page_tab-basic', '<section class="section"> <div class="container"> <hw-section-title title="概要"></hw-section-title> <h2 class="subtitle"></h2> </div> </section> <section class="section"> <div class="container"> <hw-section-title title="組織"></hw-section-title> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable"> <thead> <tr> <th>役職</th> <th>概要</th> </tr> </thead> <tbody> <tr> <th>首座主教</th> <td>XXX, YYY, ZZZ</td> </tr> <tr> <th>聖騎士</th> <td>PPP</td> </tr> <tr> <th>祓魔師</th> <td> 9999 名</td> </tr> </tbody> </table> </div> </div> </section>', '', '', function(opts) {
-});
-
-riot.tag2('orthodox-page_tab-members', '<section class="section"> <div class="container"> <hw-section-title title="準備中。。。"></hw-section-title> <div class="contents"> <p>表示したり、追加したり。</p> </div> </div> </section>', '', '', function(opts) {
-});
-
-riot.tag2('orthodox-page_tab-paladin', '<section class="section"> <div class="container"> <hw-section-title title="準備中。。。"></hw-section-title> <div class="contents"> <p>表示したり、選出したり。</p> </div> </div> </section>', '', '', function(opts) {
-});
-
-riot.tag2('orthodox-page_tab-primate', '<section class="section"> <div class="container"> <hw-section-title title="準備中。。。"></hw-section-title> <div class="contents"> <p>表示したり、選出したり。</p> </div> </div> </section>', '', '', function(opts) {
+             return;
+         }
+     });
 });
 
 riot.tag2('exorcists-list', '<table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Ghost ID</th> </tr> </thead> <tbody> <tr each="{exorcist in exorcists()}"> <td><a href="{idLink(exorcist)}">{exorcist.id}</a></td> <td>{exorcist.name}</td> <td>{exorcist.ghost_id}</td> </tr> </tbody> </table>', '', '', function(opts) {

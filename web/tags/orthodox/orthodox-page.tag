@@ -1,48 +1,58 @@
-<orthodox-page>
+<orthodox-page class="page-contents">
 
-    <hw-page-header title="正教会" type="child"></hw-page-header>
+    <div class="flex-container">
 
-    <section class="section" style="padding-top: 11px; padding-bottom: 11px;">
-        <div class="container">
-            <page-tabs core={page_tabs}
-                       type="toggle"
-                       callback={clickTab}></page-tabs>
+        <div class="angels-list">
+            <orthodox-page-angels-list source={source}></orthodox-page-angels-list>
         </div>
-    </section>
 
-    <div>
-        <orthodox-page_tab-basic   class="hide"></orthodox-page_tab-basic>
-        <orthodox-page_tab-members class="hide"></orthodox-page_tab-members>
-        <orthodox-page_tab-paladin   class="hide"></orthodox-page_tab-paladin>
-        <orthodox-page_tab-primate   class="hide"></orthodox-page_tab-primate>
+        <div class="basic-info">
+            <orthodox-page-basic-info source={source}></orthodox-page-basic-info>
+        </div>
+
     </div>
 
     <script>
-     this.page_tabs = new PageTabs([
-         {code: 'basic',   label: '基本情報', tag: 'orthodox-page_tab-basic' },
-         {code: 'members', label: '祓魔師',   tag: 'orthodox-page_tab-members' },
-         {code: 'paladin', label: '聖騎士',   tag: 'orthodox-page_tab-paladin' },
-         {code: 'primate', label: '首座主教', tag: 'orthodox-page_tab-primate' },
-     ]);
-     this.on('mount', () => {
-         this.page_tabs.switchTab(this.tags)
-         this.update();
-     });
-
-     this.clickTab = (e, action, data) => {
-         if (this.page_tabs.switchTab(this.tags, data.code))
-             this.update();
+     this.source = {
+         angels: [],
+         duties: [],
+         orthodox: null
      };
-    </script>
-
-    <script>
      this.orthodox = () => {
          let id = location.hash.split('/').reverse()[0];
 
          return STORE.get('orthodoxs.ht.' + id);
      };
+     this.on('mount', () => {
+         ACTIONS.fetchPagesOrthodox(this.orthodox());
+     });
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-PAGES-ORTHODOX') {
+             this.source = action.response;
+             this.update();
 
-     ACTIONS.fetchPagesOrthodox(this.orthodox());
+             return;
+         }
+     });
     </script>
+
+    <style>
+     orthodox-page .flex-container {
+         display: flex;
+         padding: 55px; 222px;
+         justify-content: center;
+     }
+     orthodox-page .flex-container > * {
+         display: block;
+     }
+     orthodox-page .flex-container > .angels-list {
+         flex-grow: 1;
+         max-width:555px;
+         margin-right: 22px;
+     }
+     orthodox-page .flex-container > .basic-info {
+         width: 333px;
+     }
+    </style>
 
 </orthodox-page>
