@@ -876,12 +876,20 @@ riot.tag2('home_impures', '<div class="flex-parent" style="height:100%; margin-t
              return a.id > b.id ? 1 : -1;
          });
 
-         let filter = this.opts.filter;
+         let keyword = this.opts.filter;
          if (this.opts.filter===null)
              return out;
 
+         keyword = keyword.toLowerCase();
          return out.filter((d) => {
-             return d.name.toLowerCase().indexOf(filter.toLowerCase()) >= 0;
+             if (d.deamon_name_short &&
+                 d.deamon_name_short.toLowerCase().indexOf(keyword) >= 0)
+                 return true;
+
+             if (d.name.toLowerCase().indexOf(keyword) >= 0)
+                 return true;
+
+             return false;
          });
      };
 });
