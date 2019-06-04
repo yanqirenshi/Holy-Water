@@ -2,60 +2,25 @@
     <nav class="panel hw-box-shadow">
         <p class="panel-heading">Maledicts</p>
 
-        <a each={data()}
-           class="panel-block {isActive(id)}"
+        <a each={maledict in data()}
+           class="panel-block {isActive(maledict.id)}"
            onclick={clickItem}
            maledict-id={id}
            style="padding: 5px 8px; height: 35px;">
 
-            <span style="width:120px; font-size:11px;" maledict-id={id}>
-                {name}
+            <span style="width:120px; font-size:11px;" maledict-id={maledict.id}>
+                {maledict.name}
             </span>
 
-            <span if={id > 0}
-                  class="operators"
-                  style="font-size:14px;">
-                <span class="icon" title="ここに「やること」を追加する。"
-                      maledict-id={id}
-                      maledict-name={name}
-                      onclick={clickAddButton}>
-                    <i class="far fa-plus-square" maledict-id={id}></i>
-                </span>
-
-                <span class="move-door {dragging ? 'open' : 'close'}"
-                      ref="move-door"
-                      dragover={dragover}
-                      drop={drop}>
-
-                    <span class="icon closed-door">
-                        <i class="fas fa-door-closed"></i>
-                    </span>
-
-                    <span class="icon opened-door" maledict-id={id}>
-                        <i class="fas fa-door-open" maledict-id={id}></i>
-                    </span>
-                </span>
-
-            </span>
+            <home-maledicts-item-operators maledict={maledict}
+                                           dragging={dragging}
+                                           callback={opts.callback}>
+            </home-maledicts-item-operators>
         </a>
     </nav>
 
     <script>
      this.dragging = false;
-    </script>
-
-    <script>
-     this.dragover = (e) => {
-         e.preventDefault();
-     };
-     this.drop = (e) => {
-         let impure = JSON.parse(e.dataTransfer.getData('impure'));
-         let maledict = this.opts.data.ht[e.target.getAttribute('maledict-id')];
-
-         ACTIONS.moveImpure(maledict, impure);
-
-         e.preventDefault();
-     };
     </script>
 
     <script>
@@ -77,9 +42,6 @@
     </script>
 
     <script>
-     this.clickWaitingFor = (e) => {
-         ACTIONS.fetchImpureAtWaitingFor();
-     };
      this.clickItem = (e) => {
          let target = e.target;
          let maledict_id = target.getAttribute('maledict-id');
@@ -90,14 +52,6 @@
              ACTIONS.selectedHomeMaledict(this.opts.data.ht[target.getAttribute('maledict-id')]);
          }
 
-     };
-     this.clickAddButton = (e) => {
-         let target = e.target;
-         let maledict = this.opts.data.ht[target.getAttribute('maledict-id')];
-
-         this.opts.callback('open-modal-create-impure', maledict);
-
-         e.stopPropagation();
      };
      this.on('mount', () => {
          let maledicts = this.data()
@@ -165,24 +119,6 @@
      }
      home_maledicts .panel-block.is-active {
          border-left-color: rgb(254, 224, 0);
-     }
-     home_maledicts .move-door.close .opened-door {
-         display: none;
-     }
-     home_maledicts .move-door.open .closed-door {
-         display: none;
-     }
-     home_maledicts .operators {
-         width: 53px;
-     }
-     home_maledicts .operators .icon {
-         color: #cccccc;
-     }
-     home_maledicts .operators .icon:hover {
-         color: #880000;
-     }
-     home_maledicts .operators .move-door.open .icon {
-         color: #880000;
      }
     </style>
 </home_maledicts>

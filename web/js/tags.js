@@ -824,17 +824,25 @@ riot.tag2('home_impure', '', '', '', function(opts) {
 riot.tag2('home_impure_root', '', '', '', function(opts) {
 });
 
-riot.tag2('home-maledicts-item-operators', '<span if="{opts.maledict.id > 0}" class="operators" style="font-size:14px;"> <span class="icon" title="ここに「やること」を追加する。" maledict-id="{opts.maledict.id}" maledict-name="{opts.maledict.name}" onclick="{clickAddButton}"> <i class="far fa-plus-square" maledict-id="{id}"></i> </span> <span class="move-door {opts.dragging ? \'open\' : \'close\'}" ref="move-door" dragover="{dragover}" drop="{drop}"> <span class="icon closed-door"> <i class="fas fa-door-closed"></i> </span> <span class="icon opened-door" maledict-id="{id}"> <i class="fas fa-door-open" maledict-id="{id}"></i> </span> </span> </span>', '', '', function(opts) {
+riot.tag2('home-maledicts-item-operators', '<span if="{opts.maledict.id > 0}" class="operators" style="font-size:14px;"> <span class="icon" title="ここに「やること」を追加する。" maledict-id="{opts.maledict.id}" maledict-name="{opts.maledict.name}" onclick="{clickAddButton}"> <i class="far fa-plus-square" maledict-id="{opts.maledict.id}"></i> </span> <span class="move-door {opts.dragging ? \'open\' : \'close\'}" ref="move-door" dragover="{dragover}" drop="{drop}"> <span class="icon closed-door"> <i class="fas fa-door-closed"></i> </span> <span class="icon opened-door" maledict-id="{opts.maledict.id}"> <i class="fas fa-door-open" maledict-id="{opts.maledict.id}"></i> </span> </span> </span>', 'home-maledicts-item-operators { display: flex; width: 53px; } home-maledicts-item-operators .move-door.close .opened-door { display: none; } home-maledicts-item-operators .move-door.open .closed-door { display: none; } home-maledicts-item-operators .operators { width: 53px; } home-maledicts-item-operators .operators .icon { color: #cccccc; } home-maledicts-item-operators .operators .icon:hover { color: #880000; } home-maledicts-item-operators .operators .move-door.open .icon { color: #880000; }', '', function(opts) {
      this.dragover = (e) => {
          e.preventDefault();
      };
      this.drop = (e) => {
          let impure = JSON.parse(e.dataTransfer.getData('impure'));
-         let maledict = this.opts.data.ht[e.target.getAttribute('maledict-id')];
+         let maledict = opts.maledict;
 
          ACTIONS.moveImpure(maledict, impure);
 
          e.preventDefault();
+     };
+
+     this.clickAddButton = (e) => {
+         let maledict = opts.maledict;
+
+         this.opts.callback('open-modal-create-impure', maledict);
+
+         e.stopPropagation();
      };
 });
 
@@ -908,20 +916,8 @@ riot.tag2('home_impures', '<div class="flex-parent" style="height:100%; margin-t
      };
 });
 
-riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Maledicts</p> <a each="{data()}" class="panel-block {isActive(id)}" onclick="{clickItem}" maledict-id="{id}" style="padding: 5px 8px; height: 35px;"> <span style="width:120px; font-size:11px;" maledict-id="{id}"> {name} </span> <span if="{id > 0}" class="operators" style="font-size:14px;"> <span class="icon" title="ここに「やること」を追加する。" maledict-id="{id}" maledict-name="{name}" onclick="{clickAddButton}"> <i class="far fa-plus-square" maledict-id="{id}"></i> </span> <span class="move-door {dragging ? \'open\' : \'close\'}" ref="move-door" dragover="{dragover}" drop="{drop}"> <span class="icon closed-door"> <i class="fas fa-door-closed"></i> </span> <span class="icon opened-door" maledict-id="{id}"> <i class="fas fa-door-open" maledict-id="{id}"></i> </span> </span> </span> </a> </nav>', 'home_maledicts > .panel { width: 188px; border-radius: 4px 4px 0 0; } home_maledicts > .panel > .panel-heading{ font-size:12px; font-weight:bold; } home_maledicts .panel-block { background:#fff; } home_maledicts .panel-block:hover { background:rgb(255, 255, 236); } home_maledicts .panel-block.is-active { background:rgb(254, 242, 99); } home_maledicts .panel-block.is-active { border-left-color: rgb(254, 224, 0); } home_maledicts .move-door.close .opened-door { display: none; } home_maledicts .move-door.open .closed-door { display: none; } home_maledicts .operators { width: 53px; } home_maledicts .operators .icon { color: #cccccc; } home_maledicts .operators .icon:hover { color: #880000; } home_maledicts .operators .move-door.open .icon { color: #880000; }', '', function(opts) {
+riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Maledicts</p> <a each="{maledict in data()}" class="panel-block {isActive(maledict.id)}" onclick="{clickItem}" maledict-id="{id}" style="padding: 5px 8px; height: 35px;"> <span style="width:120px; font-size:11px;" maledict-id="{maledict.id}"> {maledict.name} </span> <home-maledicts-item-operators maledict="{maledict}" dragging="{dragging}" callback="{opts.callback}"> </home-maledicts-item-operators> </a> </nav>', 'home_maledicts > .panel { width: 188px; border-radius: 4px 4px 0 0; } home_maledicts > .panel > .panel-heading{ font-size:12px; font-weight:bold; } home_maledicts .panel-block { background:#fff; } home_maledicts .panel-block:hover { background:rgb(255, 255, 236); } home_maledicts .panel-block.is-active { background:rgb(254, 242, 99); } home_maledicts .panel-block.is-active { border-left-color: rgb(254, 224, 0); }', '', function(opts) {
      this.dragging = false;
-
-     this.dragover = (e) => {
-         e.preventDefault();
-     };
-     this.drop = (e) => {
-         let impure = JSON.parse(e.dataTransfer.getData('impure'));
-         let maledict = this.opts.data.ht[e.target.getAttribute('maledict-id')];
-
-         ACTIONS.moveImpure(maledict, impure);
-
-         e.preventDefault();
-     };
 
      this.default_maledicts = [
          {
@@ -939,9 +935,6 @@ riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-h
          });
      };
 
-     this.clickWaitingFor = (e) => {
-         ACTIONS.fetchImpureAtWaitingFor();
-     };
      this.clickItem = (e) => {
          let target = e.target;
          let maledict_id = target.getAttribute('maledict-id');
@@ -952,14 +945,6 @@ riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-h
              ACTIONS.selectedHomeMaledict(this.opts.data.ht[target.getAttribute('maledict-id')]);
          }
 
-     };
-     this.clickAddButton = (e) => {
-         let target = e.target;
-         let maledict = this.opts.data.ht[target.getAttribute('maledict-id')];
-
-         this.opts.callback('open-modal-create-impure', maledict);
-
-         e.stopPropagation();
      };
      this.on('mount', () => {
          let maledicts = this.data()
