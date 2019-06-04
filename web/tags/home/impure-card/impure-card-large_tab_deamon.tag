@@ -2,21 +2,18 @@
 
     <div>
 
-        <div style="padding-left:22px; padding-right:22px;">
+        <div class="view">
             <div class="selected" style="padding: 11px 22px;">
                 <p>{selectedDeamon()}</p>
             </div>
 
-            <div style="margin-top:8px; display:flex; justify-content:space-between;">
+            <div style="margin-top:8px; display:flex; justify-content:flex-end;">
                 <button class="button is-small" onclick={clickRevert} disabled={isDisabled()}>Revert</button>
-                <button class="button is-small is-danger" onclick={clickSave} disabled={isDisabled()}>Save</button>
             </div>
         </div>
 
         <div class="selector">
-            <h1 class="title is-5">Select Deamon:</h1>
-
-            <div>
+            <div style="height: 100%;">
                 <input class="input is-small"
                        type="text"
                        placeholder="Filter"
@@ -29,6 +26,10 @@
                             onclick={selectDeamon}>
                         {obj.name_short} : {obj.name}
                     </button>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end;">
+                    <button class="button is-small is-danger" onclick={clickSave} disabled={isDisabled()}>Save</button>
                 </div>
             </div>
         </div>
@@ -115,8 +116,10 @@
     <style>
      impure-card-large_tab_deamon > div {
          display:flex;
-         flex-direction: column;
          height: 100%;
+     }
+     impure-card-large_tab_deamon .view {
+         width: 232px;
      }
      impure-card-large_tab_deamon .selected {
          background: #efefef;
@@ -124,12 +127,12 @@
          border-radius: 3px;
      }
      impure-card-large_tab_deamon .selector {
-         flex-grow: 1;
-
-         margin-top: 22px;
+         width: 432px;
+         margin-left: 11px;
      }
      impure-card-large_tab_deamon .selector > div {
          padding: 0px 22px;
+
          display: flex;
          flex-direction: column;
      }
@@ -143,10 +146,12 @@
          flex-grow: 1;
 
          display: flex;
+         align-content: flex-start;
          flex-wrap: wrap;
      }
      impure-card-large_tab_deamon .selector .deamons > * {
-         margin-right: 11px; margin-bottom: 11px;
+         margin-right: 11px;
+         margin-bottom: 11px;
      }
     </style>
 
