@@ -288,11 +288,8 @@
   (timestamptz2timestamp! rec :|requested_at|))
 
 (defun list-requested-uncomplete-impures (angel)
-  (nconc
-   (fetch-all-list (list-requested-uncomplete-impures-sql angel)
-                   :infrate! #'list-requested-uncomplete-impures-infrate!)
-   (fetch-all-list (list-requested-uncomplete-impures-sql angel)
-                   :infrate! #'list-requested-uncomplete-impures-infrate!)))
+  (fetch-all-list (list-requested-uncomplete-impures-sql angel)
+                  :infrate! #'list-requested-uncomplete-impures-infrate!))
 
 
 ;;;;;

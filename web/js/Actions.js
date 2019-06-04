@@ -190,6 +190,18 @@ class Actions extends Vanilla_Redux_Actions {
             },
         });
     }
+    selectedHomeMaledictWatingFor (maledict) {
+        let state = STORE.get('selected');
+
+        state.home.maledict = maledict;
+
+        STORE.dispatch({
+            type: 'SELECTED-HOME-MALEDICT-WATING-FOR',
+            data: {
+                selected: state
+            },
+        });
+    }
     /////
     ///// Deamons
     /////
@@ -385,6 +397,7 @@ class Actions extends Vanilla_Redux_Actions {
     fetchedImpureAtWaitingFor (response) {
         return {
             type: 'FETCHED-IMPURE-AT-WAITING-FOR',
+            response: response,
         };
     }
 

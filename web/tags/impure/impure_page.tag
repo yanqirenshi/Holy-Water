@@ -13,6 +13,7 @@
         <div class="container">
             <div class="contents">
                 <impure_page-controller source={term}
+                                        impure={source.impure}
                                         callback={callback}></impure_page-controller>
             </div>
         </div>

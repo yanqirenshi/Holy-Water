@@ -1,9 +1,9 @@
 <home_page>
     <div class="bucket-area">
         <home_maledicts data={STORE.get('maledicts')}
-                                  select={maledict()}
-                                  callback={callback}
-                                  dragging={dragging}></home_maledicts>
+                        select={maledict()}
+                        callback={callback}
+                        dragging={dragging}></home_maledicts>
         <home_orthodox-angels></home_orthodox-angels>
 
         <home_other-services></home_other-services>
@@ -73,13 +73,22 @@
      };
 
      STORE.subscribe((action) => {
-         if (action.type=='MOVED-IMPURE' ||
-             action.type=='FINISHED-IMPURE' ||
-             action.type=='STARTED-ACTION' ||
-             action.type=='STOPED-ACTION' ||
-             action.type=='SAVED-IMPURE' ||
-             action.type=='SETED-IMPURE-DEAMON') {
+         if (action.type=='FETCHED-IMPURE-AT-WAITING-FOR') {
+             this.impures = action.response;
+             this.update();
 
+             return;
+         }
+
+         let targets = [
+             'MOVED-IMPURE',
+             'FINISHED-IMPURE',
+             'STARTED-ACTION',
+             'STOPED-ACTION',
+             'SAVED-IMPURE',
+             'SETED-IMPURE-DEAMON',
+         ];
+         if (targets.find((d) => { return d == action.type})) {
              this.fetchPageData();
 
              return;
@@ -94,6 +103,12 @@
 
          if (action.type=='SELECTED-HOME-MALEDICT') {
              this.fetchPageData();
+
+             return;
+         }
+
+         if (action.type=='SELECTED-HOME-MALEDICT-WATING-FOR') {
+             ACTIONS.fetchImpureAtWaitingFor();
 
              return;
          }

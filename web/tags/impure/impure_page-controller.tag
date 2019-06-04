@@ -3,20 +3,39 @@
     <div class="controller-container">
 
         <div class="operators">
-            <button class="button is-small"onclick={clickRefresh} >Refresh</button>
+            <button class="button is-small" onclick={click} action="refresh">Refresh</button>
             <span style="flex-grow:1;"></span>
-            <button class="button is-small" disabled>作業開始</button>
-            <button class="button is-small" disabled>作業終了</button>
-            <button class="button is-small" disabled>呪文詠唱</button>
-            <button class="button is-small" disabled>後続作成</button>
-            <button class="button is-small" disabled>埋葬</button>
+            <button class="button is-small {isHide('start')}" onclick={click} action="start" disabled>作業開始</button>
+            <button class="button is-small {isHide('stop')}" onclick={click} action="stop" disabled>作業終了</button>
+            <button class="button is-small" onclick={click} action="spell" disabled>呪文詠唱</button>
+            <button class="button is-small" onclick={click} action="create-after" disabled>後続作成</button>
+            <button class="button is-small {isHide('attain')}" onclick={click} action="attain" disabled>埋葬</button>
         </div>
 
     </div>
 
     <script>
-     this.clickRefresh = () => {
-         this.opts.callback('refresh');
+     this.click = (e) => {
+         let action = e.target.getAttribute('action');
+
+         this.opts.callback(action);
+     };
+    </script>
+
+    <script>
+     this.isHide = (action) => {
+         if (!this.opts.impure)
+             return 'hide';
+
+         if (action=='start')
+             return this.opts.impure.start ? 'hide' : '';
+
+         if (action=='stop')
+             return this.opts.impure.start ? '' : 'hide';
+
+         dump(this.opts.impure)
+
+         return '';
      };
     </script>
 

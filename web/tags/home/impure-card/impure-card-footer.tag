@@ -5,13 +5,13 @@
               action={startStopAction()}
               onclick={clickButton}>{startStopLabel()}</span>
 
-        <span class="menu-item view"
-              action="move-2-view"
-              onclick={clickButton}>照会</span>
-
         <span class="menu-item open"
               action={changeSizeAction()}
               onclick={clickButton}>{changeSizeLabel()}</span>
+
+        <span class="menu-item view"
+              action="move-2-view"
+              onclick={clickButton}>照会</span>
 
         <span class="spacer" if={opts.mode=="small"}></span>
 

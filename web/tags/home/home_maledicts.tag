@@ -6,13 +6,15 @@
            class="panel-block {isActive(id)}"
            onclick={clickItem}
            maledict-id={id}
-           style="padding: 5px 8px;">
+           style="padding: 5px 8px; height: 35px;">
 
             <span style="width:120px; font-size:11px;" maledict-id={id}>
                 {name}
             </span>
 
-            <span class="operators" style="font-size:14px;">
+            <span if={id > 0}
+                  class="operators"
+                  style="font-size:14px;">
                 <span class="icon" title="ここに「やること」を追加する。"
                       maledict-id={id}
                       maledict-name={name}
@@ -36,12 +38,6 @@
 
             </span>
         </a>
-
-        <a class="panel-block" style="padding: 5px 8px; height:35px;">
-            <span style="width:120px; font-size:11px;"
-                  maledict-id={id}
-                  onclick={clickWaitingFor}>Waiting for ... ※実装中</span>
-        </a>
     </nav>
 
     <script>
@@ -63,14 +59,37 @@
     </script>
 
     <script>
+     this.default_maledicts = [
+         {
+             deletable: 0,
+             description: "",
+             id: -1,
+             'maledict-type': {NAME: "Waiting For ...", ORDER: 0, DELETABLE: 0, DESCRIPTION: ""},
+             name: "Waiting For ... ※実装中",
+             order: 666,
+         },
+     ];
+     this.getDefaultMaeldict = (maledict_id) => {
+         return this.default_maledicts.find((d) => {
+             return d.id = maledict_id;
+         });
+     };
+    </script>
+
+    <script>
      this.clickWaitingFor = (e) => {
          ACTIONS.fetchImpureAtWaitingFor();
      };
      this.clickItem = (e) => {
          let target = e.target;
-         let maledict = this.opts.data.ht[target.getAttribute('maledict-id')];
+         let maledict_id = target.getAttribute('maledict-id');
 
-         ACTIONS.selectedHomeMaledict(maledict);
+         if (maledict_id==-1) {
+             ACTIONS.selectedHomeMaledictWatingFor(this.getDefaultMaeldict(maledict_id));
+         } else {
+             ACTIONS.selectedHomeMaledict(this.opts.data.ht[target.getAttribute('maledict-id')]);
+         }
+
      };
      this.clickAddButton = (e) => {
          let target = e.target;
@@ -98,14 +117,15 @@
      this.data = () => {
          if (!this.opts.data) return [];
 
-         return this.opts.data.list.filter((d)=>{
+         let out = this.opts.data.list.filter((d)=>{
              return d['maledict-type']['ORDER']!=999;
          });
+
+         return out.concat(this.default_maledicts);
      };
     </script>
 
     <script>
-     this.active_maledict = null;
      this.isActive = (id) => {
          if (!opts.select) return;
 
