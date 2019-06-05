@@ -1,26 +1,21 @@
 <impure-card-small>
 
-    <div class="card hw-box-shadow">
-
-        <div class="card-content">
-            <div class="content" style="font-size:12px;">
-                <p>
-                    <span if={opts.data.deamon_id}
-                          class="deamon"
-                          title={deamonVal('deamon_name')}>
-                        {deamonVal('deamon_name_short')}
-                    </span>
-                    {name()}
-                </p>
-            </div>
-        </div>
-
-        <impure-card-footer callback={opts.callback}
-                            data={opts.data}
-                            maledict={opts.maledict}
-                            status={opts.status}
-                            mode="small"></impure-card-footer>
+    <div class="content" style="font-size:12px;">
+        <p>
+            <span if={opts.data.deamon_id}
+                  class="deamon"
+                  title={deamonVal('deamon_name')}>
+                {deamonVal('deamon_name_short')}
+            </span>
+            {name()}
+        </p>
     </div>
+
+    <impure-card-footer callback={opts.callback}
+                        data={opts.data}
+                        maledict={opts.maledict}
+                        status={opts.status}
+                        mode="small"></impure-card-footer>
 
     <script>
      this.deamonVal = (name) => {
@@ -45,21 +40,17 @@
     </script>
 
     <style>
-     impure-card-small > .card {
-         width: 188px;
-         height: 188px;
-         float: left;
-         margin-left: 22px;
-         margin-top: 1px;
-         margin-bottom: 22px;
+     impure-card-small {
+         align-items: stretch;
+         flex-grow: 1;
 
-         border: 1px solid #dddddd;
-         border-radius: 5px;
+         display: flex;
+         flex-direction: column;
      }
-     impure-card-small > .card .card-content{
-         height: calc(188px - 33px - 1px);
+     impure-card-small .content {
+         flex-grow: 1;
+
          padding: 11px 11px;
-         overflow: auto;
          word-break: break-all;
      }
      impure-card-small .deamon {

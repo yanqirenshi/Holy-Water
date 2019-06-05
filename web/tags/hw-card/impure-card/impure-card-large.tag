@@ -1,27 +1,25 @@
 <impure-card-large>
-    <div class="card hw-box-shadow">
 
-        <div class="card-content" style="display:flex;flex-direction:column;">
-            <div>
-                <page-tabs core={page_tabs} callback={clickTab}></page-tabs>
-            </div>
-
-            <div style="margin-top:11px; flex-grow:1;">
-                <impure-card-large_tab_show         class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_show>
-                <impure-card-large_tab_edit         class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_edit>
-                <impure-card-large_tab_deamon       class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_deamon>
-                <impure-card-large_tab_incantation  class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_incantation>
-                <impure-card-large_tab_create-after class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_create-after>
-                <impure-card-large_tab_finish       class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_finish>
-            </div>
+    <div class="content">
+        <div>
+            <page-tabs core={page_tabs} callback={clickTab}></page-tabs>
         </div>
 
-        <impure-card-footer callback={this.opts.callback}
-                            data={opts.data}
-                            maledict={opts.maledict}
-                            status={opts.status}
-                            mode="large"></impure-card-footer>
+        <div class="tab-contents" style="">
+            <impure-card-large_tab_show         class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_show>
+            <impure-card-large_tab_edit         class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_edit>
+            <impure-card-large_tab_deamon       class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_deamon>
+            <impure-card-large_tab_incantation  class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_incantation>
+            <impure-card-large_tab_create-after class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_create-after>
+            <impure-card-large_tab_finish       class="hide" data={opts.data} callback={opts.callback}></impure-card-large_tab_finish>
+        </div>
     </div>
+
+    <impure-card-footer callback={this.opts.callback}
+                        data={opts.data}
+                        maledict={opts.maledict}
+                        status={opts.status}
+                        mode="large"></impure-card-footer>
 
     <script>
      STORE.subscribe((action) => {
@@ -64,16 +62,43 @@
     </script>
 
     <style>
+     impure-card-large {
+         align-items: stretch;
+         flex-grow: 1;
+
+         display: flex;
+         flex-direction: column;
+     }
+     impure-card-large .content{
+         align-items: stretch;
+         flex-grow: 1;
+
+         padding: 11px 11px;
+
+         display:flex;
+         flex-direction:column;
+     }
+     impure-card-large .content:not(:last-child) {
+         margin-bottom: 0px;
+     }
+     impure-card-large .tab-contents {
+         padding-left: 11px;
+         padding-right: 11px;
+         margin-top:11px;
+
+         flex-grow:1;
+     }
+
+     impure-card-large .tabs > ul { margin-left:0px; }
+     impure-card-large .tabs > ul > li { margin-top: .25em; }
+
+
+
      impure-card-large > .card {
-         width: calc(222px + 222px + 222px + 22px + 22px);
-         height: calc(188px + 188px + 22px + 1px);
          float: left;
          margin-left: 22px;
          margin-top: 1px;
          margin-bottom: 22px;
-
-         border: 1px solid #dddddd;
-         border-radius: 5px;
 
          display: flex;
          flex-direction: column;

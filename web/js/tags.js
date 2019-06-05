@@ -1397,7 +1397,7 @@ riot.tag2('impure-card-footer', '<div class="{opts.mode}"> <span if="{!isWaiting
 riot.tag2('impure-card-header', '<header class="card-header" style="height:33px;"> <p class="card-header-title">Impure</p> <impure-card-move-icon callback="{opts.callback}" data="{opts.data}"></impure-card-move-icon> </header>', '', '', function(opts) {
 });
 
-riot.tag2('impure-card-large', '<div class="card hw-box-shadow"> <div class="card-content" style="display:flex;flex-direction:column;"> <div> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> <div style="margin-top:11px; flex-grow:1;"> <impure-card-large_tab_show class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_show> <impure-card-large_tab_edit class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_edit> <impure-card-large_tab_deamon class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_deamon> <impure-card-large_tab_incantation class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_incantation> <impure-card-large_tab_create-after class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_create-after> <impure-card-large_tab_finish class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_finish> </div> </div> <impure-card-footer callback="{this.opts.callback}" data="{opts.data}" maledict="{opts.maledict}" status="{opts.status}" mode="large"></impure-card-footer> </div>', 'impure-card-large > .card { width: calc(222px + 222px + 222px + 22px + 22px); height: calc(188px + 188px + 22px + 1px); float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; border: 1px solid #dddddd; border-radius: 5px; display: flex; flex-direction: column; } impure-card-large > .card .card-content{ padding: 22px 22px; overflow: auto; flex-grow: 1; } impure-card-large .tabs { font-size:12px; }', '', function(opts) {
+riot.tag2('impure-card-large', '<div class="content"> <div> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> <div class="tab-contents" style=""> <impure-card-large_tab_show class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_show> <impure-card-large_tab_edit class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_edit> <impure-card-large_tab_deamon class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_deamon> <impure-card-large_tab_incantation class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_incantation> <impure-card-large_tab_create-after class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_create-after> <impure-card-large_tab_finish class="hide" data="{opts.data}" callback="{opts.callback}"></impure-card-large_tab_finish> </div> </div> <impure-card-footer callback="{this.opts.callback}" data="{opts.data}" maledict="{opts.maledict}" status="{opts.status}" mode="large"></impure-card-footer>', 'impure-card-large { align-items: stretch; flex-grow: 1; display: flex; flex-direction: column; } impure-card-large .content{ align-items: stretch; flex-grow: 1; padding: 11px 11px; display:flex; flex-direction:column; } impure-card-large .content:not(:last-child) { margin-bottom: 0px; } impure-card-large .tab-contents { padding-left: 11px; padding-right: 11px; margin-top:11px; flex-grow:1; } impure-card-large .tabs > ul { margin-left:0px; } impure-card-large .tabs > ul > li { margin-top: .25em; } impure-card-large > .card { float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; display: flex; flex-direction: column; } impure-card-large > .card .card-content{ padding: 22px 22px; overflow: auto; flex-grow: 1; } impure-card-large .tabs { font-size:12px; }', '', function(opts) {
      STORE.subscribe((action) => {
          if (action.type=='SAVED-IMPURE') {
          }
@@ -1666,7 +1666,7 @@ riot.tag2('impure-card-move-icon2', '<a href="#" aria-label="more options"> <spa
      };
 });
 
-riot.tag2('impure-card-small', '<div class="card hw-box-shadow"> <div class="card-content"> <div class="content" style="font-size:12px;"> <p> <span if="{opts.data.deamon_id}" class="deamon" title="{deamonVal(\'deamon_name\')}"> {deamonVal(\'deamon_name_short\')} </span> {name()} </p> </div> </div> <impure-card-footer callback="{opts.callback}" data="{opts.data}" maledict="{opts.maledict}" status="{opts.status}" mode="small"></impure-card-footer> </div>', 'impure-card-small > .card { width: 188px; height: 188px; float: left; margin-left: 22px; margin-top: 1px; margin-bottom: 22px; border: 1px solid #dddddd; border-radius: 5px; } impure-card-small > .card .card-content{ height: calc(188px - 33px - 1px); padding: 11px 11px; overflow: auto; word-break: break-all; } impure-card-small .deamon { background: #efefef; margin-right: 5px; padding: 3px 5px; border-radius: 3px; }', '', function(opts) {
+riot.tag2('impure-card-small', '<div class="content" style="font-size:12px;"> <p> <span if="{opts.data.deamon_id}" class="deamon" title="{deamonVal(\'deamon_name\')}"> {deamonVal(\'deamon_name_short\')} </span> {name()} </p> </div> <impure-card-footer callback="{opts.callback}" data="{opts.data}" maledict="{opts.maledict}" status="{opts.status}" mode="small"></impure-card-footer>', 'impure-card-small { align-items: stretch; flex-grow: 1; display: flex; flex-direction: column; } impure-card-small .content { flex-grow: 1; padding: 11px 11px; word-break: break-all; } impure-card-small .deamon { background: #efefef; margin-right: 5px; padding: 3px 5px; border-radius: 3px; }', '', function(opts) {
      this.deamonVal = (name) => {
          let impure = this.opts.data;
 
@@ -1688,13 +1688,13 @@ riot.tag2('impure-card-small', '<div class="card hw-box-shadow"> <div class="car
      };
 });
 
-riot.tag2('impure-card', '<impure-card-small data="{opts.data}" status="{status()}" callback="{callback}" maledict="{opts.maledict}"></impure-card-small> <impure-card-large data="{opts.data}" status="{status()}" callback="{callback}" maledict="{opts.maledict}"></impure-card-large>', 'impure-card.large > impure-card-small { display: none; } impure-card.small > impure-card-large { display: none; } impure-card[status=start] div.card impure-card-header > .card-header { background: rgba(254, 242, 99, 0.888); } impure-card[status=start] impure-card-small > .card .card-content p { font-weight: bold; } impure-card[status=start] .card { box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666); }', 'class="{cardSize()}" status="{status()}"', function(opts) {
+riot.tag2('impure-card', '<impure-card-small if="{cardSize()==⁗small⁗}" data="{opts.source}" status="{status()}" callback="{callback}" maledict="{opts.maledict}"></impure-card-small> <impure-card-large if="{cardSize()==⁗large⁗}" data="{opts.source}" status="{status()}" callback="{callback}" maledict="{opts.maledict}"></impure-card-large>', 'impure-card { display: flex; flex-direction: column; align-items: stretch; border-radius: 5px; border: 1px solid #dddddd; background: #ffffff; } impure-card.small { width: 188px; height: 188px; } impure-card.large { width: calc(222px + 222px + 222px + 22px + 22px); height: calc(188px + 188px + 22px + 1px); } impure-card[status=start] p { font-weight: bold; } impure-card[status=start] { box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666); }', 'class="hw-box-shadow {cardSize()}" status="{status()}"', function(opts) {
      this.callback = (action, data) => {
          if ('switch-large'==action)
-             return this.opts.callbacks.switchSize('large', opts.data);
+             return this.opts.callbacks.switchSize('large', opts.source);
 
          if ('switch-small'==action)
-             return this.opts.callbacks.switchSize('small', opts.data);
+             return this.opts.callbacks.switchSize('small', opts.source);
 
          if ('start-drag'==action)
              ACTIONS.startDragImpureIcon();
@@ -1703,32 +1703,32 @@ riot.tag2('impure-card', '<impure-card-small data="{opts.data}" status="{status(
              ACTIONS.endDragImpureIcon();
 
          if ('start-action'==action)
-             ACTIONS.startImpure(this.opts.data);
+             ACTIONS.startImpure(this.opts.source);
 
          if ('stop-action'==action)
-             ACTIONS.stopImpure(this.opts.data);
+             ACTIONS.stopImpure(this.opts.source);
 
          if ('finishe-impure'==action)
-             ACTIONS.finishImpure(this.opts.data, true, data.spell);
+             ACTIONS.finishImpure(this.opts.source, true, data.spell);
 
          if ('save-impure-contents'==action)
              ACTIONS.saveImpure(data);
 
          if ('move-2-view'==action)
-             location.hash = '#home/impures/' + this.opts.data.id;
+             location.hash = '#home/impures/' + this.opts.source.id;
 
          if ('incantation'==action)
-             ACTIONS.saveImpureIncantationSolo(this.opts.data, data.spell);
+             ACTIONS.saveImpureIncantationSolo(this.opts.source, data.spell);
      };
 
      this.cardSize = () => {
          return this.opts.open ? 'large' : 'small';
      };
      this.isStart = () => {
-         if (!this.opts.data)
+         if (!this.opts.source)
              return false;
 
-         if (!this.opts.data.purge_started_at)
+         if (!this.opts.source.purge_started_at)
              return false;
 
          return true;
