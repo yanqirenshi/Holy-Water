@@ -1,7 +1,13 @@
-<impure-card class="{cardSize()}" status={status()}>
+<hw-card class="{cardSize()}" status={status()}>
 
-    <impure-card-small data={opts.data} status={status()} callback={callback}></impure-card-small>
-    <impure-card-large data={opts.data} status={status()} callback={callback}></impure-card-large>
+    <impure-card-small data={opts.data}
+                       status={status()} callback={callback}
+                       maledict={opts.maledict}></impure-card-small>
+
+    <impure-card-large data={opts.data}
+                       status={status()}
+                       callback={callback}
+                       maledict={opts.maledict}></impure-card-large>
 
     <script>
      this.callback = (action, data) => {
@@ -56,21 +62,21 @@
     </script>
 
     <style>
-     impure-card.large > impure-card-small {
+     hw-card.large > impure-card-small {
          display: none;
      }
-     impure-card.small > impure-card-large {
+     hw-card.small > impure-card-large {
          display: none;
      }
-     impure-card[status=start] div.card impure-card-header > .card-header {
+     hw-card[status=start] div.card impure-card-header > .card-header {
          background: rgba(254, 242, 99, 0.888);
      }
-     impure-card[status=start] impure-card-small > .card .card-content p {
+     hw-card[status=start] impure-card-small > .card .card-content p {
          font-weight: bold;
      }
-     impure-card[status=start] .card {
+     hw-card[status=start] .card {
          box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666);
      }
     </style>
 
-</impure-card>
+</hw-card>

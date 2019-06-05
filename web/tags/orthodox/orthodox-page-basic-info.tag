@@ -20,12 +20,6 @@
         </div>
     </div>
 
-    <script>
-     this.on('update', () => {
-         dump(this.opts.source.orthodox)
-     });
-    </script>
-
     <style>
      orthodox-page-basic-info .contents-item {
          background:rgba(255,255,255,0.8);

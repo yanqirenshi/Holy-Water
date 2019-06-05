@@ -1,7 +1,8 @@
 <impure-card-footer>
 
     <div class="{opts.mode}">
-        <span class="menu-item action {opts.status}"
+        <span if={!isWaitingFor()}
+              class="menu-item action {opts.status}"
               action={startStopAction()}
               onclick={clickButton}>{startStopLabel()}</span>
 
@@ -15,37 +16,41 @@
 
         <span class="spacer" if={opts.mode=="small"}></span>
 
-        <span class="move-icon">
+        <span if={!isWaitingFor()}
+              class="move-icon">
             <impure-card-move-icon2 callback={opts.callback}
                                     data={opts.data}></impure-card-move-icon2>
         </span>
     </div>
 
     <script>
+     this.isWaitingFor = () => {
+         return this.opts.maledict.id==-1
+     };
      this.startStopLabel = () => {
          if (!this.opts.status)
              return '開始';
 
          return '停止';
-     }
+     };
      this.startStopAction = () => {
          if (!this.opts.status)
              return 'start-action';
 
          return 'stop-action';
-     }
+     };
      this.changeSizeLabel = () => {
          if (this.opts.mode == 'large')
              return '閉じる'
 
          return '開く'
-     }
+     };
      this.changeSizeAction = () => {
          if (this.opts.mode == 'large')
              return 'switch-small'
 
          return 'switch-large'
-     }
+     };
 
      this.clickButton = (e) => {
          let target = e.target;

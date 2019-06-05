@@ -35,7 +35,7 @@
                  .draw();
          } catch (e) {
              ACTIONS.pushErrorMessage('Guntt Chart の描画に失敗しました。');
-             dump(e);
+             console.log(e);
          }
      });
     </script>

@@ -2,9 +2,6 @@
 
     <div class="card hw-box-shadow">
 
-        <!-- <impure-card-header callback={opts.callback}
-             data={opts.data}></impure-card-header> -->
-
         <div class="card-content">
             <div class="content" style="font-size:12px;">
                 <p>
@@ -20,6 +17,7 @@
 
         <impure-card-footer callback={opts.callback}
                             data={opts.data}
+                            maledict={opts.maledict}
                             status={opts.status}
                             mode="small"></impure-card-footer>
     </div>

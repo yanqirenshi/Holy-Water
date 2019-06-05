@@ -18,6 +18,7 @@
 
         <impure-card-footer callback={this.opts.callback}
                             data={opts.data}
+                            maledict={opts.maledict}
                             status={opts.status}
                             mode="large"></impure-card-footer>
     </div>

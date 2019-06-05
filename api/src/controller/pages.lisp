@@ -28,7 +28,7 @@
 
 (defun pages-impure (angel impure)
   (when (and angel impure)
-    (list :|impure|   (dao2impure   impure)
+    (list :|impure|   (dao2impure   impure :angel angel)
           :|deamon|   (dao2deamon   (hw::impure-deamon   impure))
           :|maledict| (dao2maledict (hw::impure-maledict impure))
           :|purges|   (hw::impure-purge-list   impure)

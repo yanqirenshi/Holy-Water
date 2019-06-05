@@ -4,10 +4,11 @@
         <div class="card-container">
             <div style="overflow: hidden; padding-bottom: 222px; padding-top: 22px;">
 
-                <impure-card each={impure in impures()}
-                             data={impure}
-                             open={open_cards[impure.id]}
-                             callbacks={callbacks}></impure-card>
+                <hw-card each={impure in impures()}
+                         data={impure}
+                         maledict={maledict()}
+                         open={open_cards[impure.id]}
+                         callbacks={callbacks}></hw-card>
 
             </div>
         </div>
@@ -28,6 +29,9 @@
     </script>
 
     <script>
+     this.maledict = () => {
+         return this.opts.maledict;
+     };
      this.hide = () => {
          return this.opts.maledict ? '' : 'hide';
      };
