@@ -1,4 +1,4 @@
-<impure-card class="hw-box-shadow {cardSize()}">
+<impure-card class="hw-box-shadow {cardSize()}" status={status()}>
 
     <impure-card-small if={cardSize()=="small"}
                        data={opts.source}
@@ -84,13 +84,10 @@
          width: calc(222px + 222px + 222px + 22px + 22px);
          height: calc(188px + 188px + 22px + 1px);
      }
-     impure-card[status=start] div.card impure-card-header > .card-header {
-         background: rgba(254, 242, 99, 0.888);
-     }
-     impure-card[status=start] impure-card-small > .card .card-content p {
+     impure-card[status=start] p {
          font-weight: bold;
      }
-     impure-card[status=start] .card {
+     impure-card[status=start] {
          box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666);
      }
     </style>
