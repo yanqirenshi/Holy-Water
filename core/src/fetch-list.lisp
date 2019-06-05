@@ -216,7 +216,8 @@
             (:as :rs_maledict.name              :maledict_name)
             (:as :rs_maledict.description       :maledict_description)
             (:as :rs_maledict.order             :maledict_order)
-            (:as :rs_maledict.deletable         :maledict_deletable))
+            (:as :rs_maledict.deletable         :maledict_deletable)
+            (:as "IMPURE"                       :_class))
      (from :th_angel_maledict)
      (left-join :ev_collect_impure
                 :on (:= :th_angel_maledict.maledict_id :ev_collect_impure.maledict_id))

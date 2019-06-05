@@ -1,0 +1,98 @@
+<impure-card class="hw-box-shadow {cardSize()}">
+
+    <impure-card-small if={cardSize()=="small"}
+                       data={opts.source}
+                       status={status()}
+                       callback={callback}
+                       maledict={opts.maledict}></impure-card-small>
+
+    <impure-card-large if={cardSize()=="large"}
+                       data={opts.source}
+                       status={status()}
+                       callback={callback}
+                       maledict={opts.maledict}></impure-card-large>
+
+    <script>
+     this.callback = (action, data) => {
+         if ('switch-large'==action)
+             return this.opts.callbacks.switchSize('large', opts.source);
+
+         if ('switch-small'==action)
+             return this.opts.callbacks.switchSize('small', opts.source);
+
+         if ('start-drag'==action)
+             ACTIONS.startDragImpureIcon();
+
+         if ('end-drag'==action)
+             ACTIONS.endDragImpureIcon();
+
+         if ('start-action'==action)
+             ACTIONS.startImpure(this.opts.source);
+
+         if ('stop-action'==action)
+             ACTIONS.stopImpure(this.opts.source);
+
+         if ('finishe-impure'==action)
+             ACTIONS.finishImpure(this.opts.source, true, data.spell);
+
+         if ('save-impure-contents'==action)
+             ACTIONS.saveImpure(data);
+
+         if ('move-2-view'==action)
+             location.hash = '#home/impures/' + this.opts.source.id;
+
+         if ('incantation'==action)
+             ACTIONS.saveImpureIncantationSolo(this.opts.source, data.spell);
+     };
+    </script>
+
+    <script>
+     this.cardSize = () => {
+         return this.opts.open ? 'large' : 'small';
+     };
+     this.isStart = () => {
+         if (!this.opts.source)
+             return false;
+
+         if (!this.opts.source.purge_started_at)
+             return false;
+
+         return true;
+     }
+     this.status = () => {
+         return this.isStart() ? 'start' : '';
+     };
+    </script>
+
+    <style>
+     impure-card {
+         display: flex;
+         flex-direction: column;
+         align-items: stretch;
+
+         border-radius: 5px;
+         border: 1px solid #dddddd;
+
+         background: #ffffff;
+     }
+     /* Card Size */
+     impure-card.small {
+         width: 188px;
+         height: 188px;
+     }
+     impure-card.large {
+         width: calc(222px + 222px + 222px + 22px + 22px);
+         height: calc(188px + 188px + 22px + 1px);
+     }
+     impure-card[status=start] div.card impure-card-header > .card-header {
+         background: rgba(254, 242, 99, 0.888);
+     }
+     impure-card[status=start] impure-card-small > .card .card-content p {
+         font-weight: bold;
+     }
+     impure-card[status=start] .card {
+         box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666);
+     }
+    </style>
+
+</impure-card>

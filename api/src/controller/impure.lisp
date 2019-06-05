@@ -18,7 +18,7 @@
     (write-key-value "name"        (slot-value obj 'name))
     (write-key-value "description" (slot-value obj 'description))
     (write-key-value "purge"       (or (slot-value obj 'purge)       :null))
-    (write-key-value "finished_at" (or (slot-value obj 'finished-at) :null))
+    (write-key-value "finished_at" (or (timestamp2str (slot-value obj 'finished-at)) :null))
     (write-key-value "start"       (or (slot-value obj 'start)       :null))
     (write-key-value "end"         (or (slot-value obj 'end)         :null))
     (write-key-value "purges"      (slot-value obj 'purges))
@@ -29,12 +29,20 @@
   (or (symbol-name (class-name (class-of dao)))
       :null))
 
+(defgeneric dao2impure_finished-at (dao)
+  (:method ((dao hw::rs_impure-finished))
+    (hw::finished-at dao))
+  (:method (dao)
+    nil))
+
+
 (defun dao2impure (dao &key angel with-details)
   (when dao
     (let ((impure (make-instance 'impure)))
       (setf (id impure)            (mito:object-id dao))
       (setf (name impure)          (hw::name dao))
       (setf (description impure)   (hw::description dao))
+      (setf (finished-at impure)   (dao2impure_finished-at dao))
       (setf (_class impure)        (dao2impure_class dao))
       ;; purge
       (when angel

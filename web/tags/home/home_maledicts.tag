@@ -5,7 +5,7 @@
         <a each={maledict in data()}
            class="panel-block {isActive(maledict.id)}"
            onclick={clickItem}
-           maledict-id={id}
+           maledict-id={maledict.id}
            style="padding: 5px 8px; height: 35px;">
 
             <span style="width:120px; font-size:11px;" maledict-id={maledict.id}>

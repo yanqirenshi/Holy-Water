@@ -1,13 +1,15 @@
 <home_impures class={hide()}>
 
+    <!-- TODO: このへん混乱しとるね。。 -->
     <div class="flex-parent" style="height:100%; margin-top: -8px;">
         <div class="card-container">
-            <div style="overflow: hidden; padding-bottom: 222px; padding-top: 22px;">
+            <div>
 
-                <impure-card each={impure in impures()}
-                             data={impure}
-                             open={open_cards[impure.id]}
-                             callbacks={callbacks}></impure-card>
+                <hw-card each={obj in impures()}
+                         source={obj}
+                         maledict={maledict()}
+                         open={open_cards[obj.id]}
+                         callbacks={callbacks}></hw-card>
 
             </div>
         </div>
@@ -28,6 +30,9 @@
     </script>
 
     <script>
+     this.maledict = () => {
+         return this.opts.maledict;
+     };
      this.hide = () => {
          return this.opts.maledict ? '' : 'hide';
      };
@@ -69,5 +74,15 @@
          overflow-x: hidden;
          flex-grow: 1;
      }
+     home_impures .card-container > div {
+         padding-bottom: 222px;
+         padding-top: 22px;
+         display: flex;
+         flex-wrap: wrap;
+     }
+     home_impures .card-container > div > * {
+         margin: 0px 0px 22px 22px;
+     }
     </style>
+
 </home_impures>
