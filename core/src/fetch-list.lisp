@@ -265,7 +265,8 @@
 
               (:as :rs_maledict.id :maledict_id)
               (:as :rs_maledict.name :maledict_name)
-              (:as :rs_maledict.description :maledict_description))
+              (:as :rs_maledict.description :maledict_description)
+              (:as "IMPURE_WAITING-FOR" :_class))
       (from (:as :rs_impure_active :rs_impure))
       (inner-join :ev_request
                   :on (:= :rs_impure.id :ev_request.impure_id))

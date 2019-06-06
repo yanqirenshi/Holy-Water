@@ -31,12 +31,20 @@
              id: -1,
              'maledict-type': {NAME: "Waiting For ...", ORDER: 0, DELETABLE: 0, DESCRIPTION: ""},
              name: "Waiting For ... ※実装中",
-             order: 666,
+             order: 666666,
+         },
+         {
+             deletable: 0,
+             description: "",
+             id: -10,
+             'maledict-type': {NAME: "Messages", ORDER: 0, DELETABLE: 0, DESCRIPTION: ""},
+             name: "Messages ... ※実装中",
+             order: 555555,
          },
      ];
      this.getDefaultMaeldict = (maledict_id) => {
          return this.default_maledicts.find((d) => {
-             return d.id = maledict_id;
+             return d.id == maledict_id;
          });
      };
     </script>
@@ -48,6 +56,8 @@
 
          if (maledict_id==-1) {
              ACTIONS.selectedHomeMaledictWatingFor(this.getDefaultMaeldict(maledict_id));
+         } else if (maledict_id==-10) {
+             ACTIONS.selectedHomeMaledictMessages(this.getDefaultMaeldict(maledict_id));
          } else {
              ACTIONS.selectedHomeMaledict(this.opts.data.ht[target.getAttribute('maledict-id')]);
          }

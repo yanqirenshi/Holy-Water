@@ -180,9 +180,7 @@ class Actions extends Vanilla_Redux_Actions {
     }
     selectedHomeMaledict (maledict) {
         let state = STORE.get('selected');
-        dump('1--');
-        dump(maledict);
-        dump('2--');
+
         state.home.maledict = maledict;
 
         STORE.dispatch({
@@ -199,6 +197,18 @@ class Actions extends Vanilla_Redux_Actions {
 
         STORE.dispatch({
             type: 'SELECTED-HOME-MALEDICT-WATING-FOR',
+            data: {
+                selected: state
+            },
+        });
+    }
+    selectedHomeMaledictMessages (maledict) {
+        let state = STORE.get('selected');
+
+        state.home.maledict = maledict;
+
+        STORE.dispatch({
+            type: 'SELECTED-HOME-MALEDICT-MESSAGES',
             data: {
                 selected: state
             },

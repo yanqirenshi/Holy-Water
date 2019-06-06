@@ -929,12 +929,20 @@ riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-h
              id: -1,
              'maledict-type': {NAME: "Waiting For ...", ORDER: 0, DELETABLE: 0, DESCRIPTION: ""},
              name: "Waiting For ... ※実装中",
-             order: 666,
+             order: 666666,
+         },
+         {
+             deletable: 0,
+             description: "",
+             id: -10,
+             'maledict-type': {NAME: "Messages", ORDER: 0, DELETABLE: 0, DESCRIPTION: ""},
+             name: "Messages ... ※実装中",
+             order: 555555,
          },
      ];
      this.getDefaultMaeldict = (maledict_id) => {
          return this.default_maledicts.find((d) => {
-             return d.id = maledict_id;
+             return d.id == maledict_id;
          });
      };
 
@@ -944,6 +952,8 @@ riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-h
 
          if (maledict_id==-1) {
              ACTIONS.selectedHomeMaledictWatingFor(this.getDefaultMaeldict(maledict_id));
+         } else if (maledict_id==-10) {
+             ACTIONS.selectedHomeMaledictMessages(this.getDefaultMaeldict(maledict_id));
          } else {
              ACTIONS.selectedHomeMaledict(this.opts.data.ht[target.getAttribute('maledict-id')]);
          }
@@ -1059,6 +1069,13 @@ riot.tag2('home_page', '<div class="bucket-area"> <home_maledicts data="{STORE.g
 
          if (action.type=='SELECTED-HOME-MALEDICT-WATING-FOR') {
              ACTIONS.fetchImpureAtWaitingFor();
+
+             return;
+         }
+
+         if (action.type=='SELECTED-HOME-MALEDICT-MESSAGES') {
+
+             this.update();
 
              return;
          }
@@ -1348,7 +1365,25 @@ riot.tag2('service-card-small', '<div class="card hw-box-shadow"> <header class=
      };
 });
 
-riot.tag2('hw-card', '<impure-card if="{opts.source._class==⁗IMPURE⁗}" source="{opts.source}" maledict="{opts.maledict}" open="{opts.open}" callbacks="{opts.callbacks}"></impure-card>', '', '', function(opts) {
+riot.tag2('hw-card', '<impure-card if="{opts.source._class==⁗IMPURE⁗}" source="{opts.source}" maledict="{opts.maledict}" open="{opts.open}" callbacks="{opts.callbacks}"></impure-card> <hw-card_impure-waiting-for if="{opts.source._class==⁗IMPURE_WAITING-FOR⁗}" source="{opts.source}" maledict="{opts.maledict}" open="{opts.open}" callbacks="{opts.callbacks}"></hw-card_impure-waiting-for>', '', '', function(opts) {
+});
+
+riot.tag2('hw-card_impure-waiting-for', '<hw-card_impure-waiting-for_small source="{source()}"></hw-card_impure-waiting-for_small>', 'hw-card_impure-waiting-for { display: flex; flex-direction: column; align-items: stretch; border-radius: 5px; border: 1px solid #dddddd; background: #ffffff; } hw-card_impure-waiting-for.small { width: 188px; height: 188px; } hw-card_impure-waiting-for.large { width: calc(222px + 222px + 222px + 22px + 22px); height: calc(188px + 188px + 22px + 1px); }', 'class="hw-box-shadow {cardSize()}"', function(opts) {
+     this.cardSize = () => {
+         return this.opts.open ? 'large' : 'small';
+     };
+
+     this.source = () => {
+         return {
+             obj: opts.source,
+             maledict: opts.maledict,
+             open: opts.open,
+             callbacks: opts.callbacks,
+         }
+     };
+});
+
+riot.tag2('hw-card_impure-waiting-for_small', '<div class="contents"> <p>{opts.source.obj.name}</p> </div>', 'hw-card_impure-waiting-for_small .contents { padding: 11px; font-size: 12px; word-break: break-all; }', '', function(opts) {
 });
 
 riot.tag2('impure-card-footer', '<div class="{opts.mode}"> <span if="{!isWaitingFor()}" class="menu-item action {opts.status}" action="{startStopAction()}" onclick="{clickButton}">{startStopLabel()}</span> <span class="menu-item open" action="{changeSizeAction()}" onclick="{clickButton}">{changeSizeLabel()}</span> <span class="menu-item view" action="move-2-view" onclick="{clickButton}">照会</span> <span class="spacer" if="{opts.mode==⁗small⁗}"></span> <span if="{!isWaitingFor()}" class="move-icon"> <impure-card-move-icon2 callback="{opts.callback}" data="{opts.data}"></impure-card-move-icon2> </span> </div>', 'impure-card-footer > div { padding: 0px 6px; padding-top: 3px; display: flex; } impure-card-footer > div.small { font-size: 14px; height:33px; padding: 0px 6px; padding-top: 3px; } impure-card-footer > div.large { font-size: 18px; height:38px; padding: 0px 6px; padding-top: 3px; justify-content: flex-end; } impure-card-footer .action.start { background-color: #FEF264; border-radius: 0px 0px 0px 0px; } impure-card-footer .spacer { flex-grow: 1; } impure-card-footer > div.small .menu-item { width: 55px; text-align: center; padding-top: 4px; margin-left: 11px; } impure-card-footer > div.large .menu-item { width: 55px; text-align: center; padding-top: 4px; margin-right: 22px; } impure-card-footer > div.large .move-icon { padding-top: 3px; } impure-card-footer > div.small .move-icon { padding-top: 2px; } impure-card-footer .menu-item:hover { font-weight: bold; text-shadow: 0px 0px 22px #FEF264; }', '', function(opts) {

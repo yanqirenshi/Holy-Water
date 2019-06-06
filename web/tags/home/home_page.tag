@@ -113,6 +113,13 @@
              return;
          }
 
+         if (action.type=='SELECTED-HOME-MALEDICT-MESSAGES') {
+             // ACTIONS.fetchImpureAtWaitingFor();
+             this.update();
+
+             return;
+         }
+
          if (action.type=='CREATED-MALEDICT-IMPURE') {
              let maledict_selected = this.maledict();
 
