@@ -2,14 +2,14 @@
 
     <section class="section" style="padding-bottom: 22px;">
         <div class="container">
-            <h1 class="title hw-text-white">Impure</h1>
+            <h1 class="title hw-text-white">{this.name()}</h1>
             <h2 class="subtitle hw-text-white">
                 <section-breadcrumb></section-breadcrumb>
             </h2>
         </div>
     </section>
 
-    <section class="section" style="padding-top:22px; padding-bottom:22px;">
+    <section class="section" style="padding-top:0px;">
         <div class="container">
             <div class="contents">
                 <impure_page-controller source={term}
@@ -39,8 +39,18 @@
      this.callback = (action, data) => {
          if (action=='refresh') {
              let id = this.id();
-             ACTIONS.fetchPagesImpure({ id: id });
 
+             ACTIONS.fetchPagesImpure({ id: id });
+             return ;
+         }
+
+         if (action=='stop') {
+             ACTIONS.stopImpure(this.source.impure);
+             return ;
+         }
+
+         if (action=='start') {
+             ACTIONS.startImpure(this.source.impure);
              return ;
          }
      };
@@ -75,8 +85,9 @@
          return location.hash.split('/').reverse()[0];
      }
      this.name = () => {
-         if (this.impure)
-             return this.impure.name;
+         let impure = this.source.impure;
+         if (impure)
+             return impure.name;
 
          return '';
      };
@@ -84,7 +95,6 @@
 
 
     <script>
-     this.impure = null;
      this.source = {
          impure: null,
          purges: [],
@@ -95,8 +105,21 @@
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-PAGES-IMPURE') {
              this.source = action.response;
-
              this.update();
+
+             return;
+         }
+         if (action.type=='STARTED-ACTION') {
+             if (action.impure.id==this.source.impure.id)
+                 ACTIONS.fetchPagesImpure(this.source.impure);
+
+             return;
+         }
+         if (action.type=='STOPED-ACTION') {
+             if (action.impure.id==this.source.impure.id)
+                 ACTIONS.fetchPagesImpure(this.source.impure);
+
+             return;
          }
      });
      this.on('mount', () => {

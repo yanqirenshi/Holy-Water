@@ -1,6 +1,6 @@
 <impure_page-controller>
 
-    <div class="controller-container">
+    <div class="controller-container" style="width: 555px;">
 
         <div class="operators">
             <button class="button is-small" onclick={click} action="refresh">Refresh</button>

@@ -5,7 +5,7 @@ class Store extends Vanilla_Redux_Store {
     initPageHome () {
         return {
             code: "home", menu_label: '戦場',
-            tag: 'home_page',
+            tag: 'page-home',
             children: [
                 {
                     code: 'impures',

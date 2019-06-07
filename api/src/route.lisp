@@ -54,6 +54,9 @@
   (with-angel (angel)
     (render-json (hw.api.ctrl:angel-received-messages angel))))
 
+(defroute "/requests/messages" ()
+  (with-angel (angel)
+    (render-json (hw.api.ctrl:request-messages angel))))
 
 (defroute ("/requests/messages/:message-id" :method :POST)
     (&key message-id)
@@ -263,6 +266,11 @@
     (let ((deccot (hw:get-angel-deccot angel service :id deccot-id)))
       (unless deccot (throw-code 404))
       (render-json (hw.api.ctrl:find-deccot-items angel deccot)))))
+
+;;;;;
+;;;;; request
+;;;;;
+
 
 
 ;;;;;

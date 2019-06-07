@@ -1,4 +1,4 @@
-<home_impures class={hide()}>
+<page-home_card-pool class={hide()}>
 
     <!-- TODO: このへん混乱しとるね。。 -->
     <div class="flex-parent" style="height:100%; margin-top: -8px;">
@@ -8,7 +8,7 @@
                 <hw-card each={obj in impures()}
                          source={obj}
                          maledict={maledict()}
-                         open={open_cards[obj.id]}
+                         open={openCard(obj)}
                          callbacks={callbacks}></hw-card>
 
             </div>
@@ -17,12 +17,27 @@
 
     <script>
      this.open_cards = {};
+     this.openCard = (obj) => {
+         let ht = this.open_cards[obj._class];
+
+         if (!ht)
+             return false;
+
+         return ht[obj.id] ? true : false;
+     };
      this.callbacks = {
          switchSize: (size, data) => {
+             let cls = data._class;
+             let id  = data.id;
+             let ht  = this.open_cards;
+
+             if (!ht[cls])
+                 ht[cls] = {};
+
              if (size=='small')
-                 delete this.open_cards[data.id]
+                 delete ht[cls][data.id]
              else if (size=='large')
-                 this.open_cards[data.id] = true;
+                 ht[cls][data.id] = true;
 
              this.update();
          }
@@ -62,27 +77,27 @@
     </script>
 
     <style>
-     home_impures .flex-parent {
+     page-home_card-pool .flex-parent {
          display: flex;
          flex-direction: column;
      }
 
-     home_impures .card-container {
+     page-home_card-pool .card-container {
          padding-right: 22px;
          display: block;
          overflow: auto;
          overflow-x: hidden;
          flex-grow: 1;
      }
-     home_impures .card-container > div {
+     page-home_card-pool .card-container > div {
          padding-bottom: 222px;
          padding-top: 22px;
          display: flex;
          flex-wrap: wrap;
      }
-     home_impures .card-container > div > * {
+     page-home_card-pool .card-container > div > * {
          margin: 0px 0px 22px 22px;
      }
     </style>
 
-</home_impures>
+</page-home_card-pool>

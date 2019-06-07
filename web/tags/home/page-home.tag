@@ -1,4 +1,4 @@
-<home_page>
+<page-home>
     <div class="bucket-area">
         <home_maledicts data={STORE.get('maledicts')}
                         select={maledict()}
@@ -18,10 +18,10 @@
         <!-- ----------------------- -->
         <!--   Impures               -->
         <!-- ----------------------- -->
-        <home_impures maledict={maledict()}
-                      callback={callback}
-                      filter={squeeze_word}
-                      source={impures}></home_impures>
+        <page-home_card-pool maledict={maledict()}
+                             callback={callback}
+                             filter={squeeze_word}
+                             source={impures}></page-home_card-pool>
 
         <!-- ----------------------- -->
         <!--   Other Service Items   -->
@@ -68,13 +68,27 @@
 
          if ('squeeze-impure'==action) {
              this.squeeze_word = (data.trim().length==0 ? null : data);
-             this.tags['home_impures'].update();
+             this.tags['page-home_card-pool'].update();
          }
      };
 
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-IMPURE-AT-WAITING-FOR') {
              this.impures = action.response;
+             this.update();
+
+             return;
+         }
+
+         if (action.type=='FETCHED-REQUESTS-MESSAGES') {
+             this.impures = action.response;
+             this.update();
+
+             return;
+         }
+
+         if (action.type=='FETCHED-PAGES-IMPURES') {
+             this.impures = action.response.impures;
              this.update();
 
              return;
@@ -94,12 +108,6 @@
              return;
          }
 
-         if (action.type=='FETCHED-PAGES-IMPURES') {
-             this.impures = action.response.impures;
-             this.update();
-
-             return;
-         }
 
          if (action.type=='SELECTED-HOME-MALEDICT') {
              this.fetchPageData();
@@ -114,8 +122,7 @@
          }
 
          if (action.type=='SELECTED-HOME-MALEDICT-MESSAGES') {
-             // ACTIONS.fetchImpureAtWaitingFor();
-             this.update();
+             ACTIONS.fetchRequestMessages();
 
              return;
          }
@@ -150,7 +157,7 @@
 
          if (action.type=='SELECT-SERVICE-ITEM') {
              this.tags['home_maledicts'].update();
-             this.tags['home_impures'].update();
+             this.tags['page-home_card-pool'].update();
 
              let service = action.data.selected.home.service;
              ACTIONS.fetchServiceItems(service.service, service.id);
@@ -180,7 +187,7 @@
     </script>
 
     <style>
-     home_page {
+     page-home {
          height: 100%;
          width: 100%;
          padding: 22px 0px 0px 22px;
@@ -188,14 +195,14 @@
          display: flex;
      }
 
-     home_page > .contetns-area {
+     page-home > .contetns-area {
          height: 100%;
          margin-left: 11px;
 
          flex-grow: 1;
      }
-     home_page home_squeeze-area {
+     page-home home_squeeze-area {
          margin-right: 55px;
      }
     </style>
-</home_page>
+</page-home>

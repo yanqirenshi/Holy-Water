@@ -445,6 +445,7 @@ class Actions extends Vanilla_Redux_Actions {
             data: {
                 impures: this.mergeData(impures, STORE.get('impures'))
             },
+            impure: impure_started,
         };
     }
     stopImpure (impure) {
@@ -465,6 +466,7 @@ class Actions extends Vanilla_Redux_Actions {
         return {
             type: 'STOPED-ACTION',
             data: { impures: this.mergeData([impure], STORE.get('impures')) },
+            impure: impure,
         };
     }
     saveActionResult (action_result) {
@@ -555,6 +557,19 @@ class Actions extends Vanilla_Redux_Actions {
     /////
     ///// Request Message
     /////
+    fetchRequestMessages () {
+        let path = '/requests/messages';
+
+        API.get(path, (response) => {
+            STORE.dispatch(this.fetchedRequestMessages(response));
+        });
+    }
+    fetchedRequestMessages (response) {
+        return {
+            type: 'FETCHED-REQUESTS-MESSAGES',
+            response: response
+        };
+    }
     fetchRequestMessagesUnread () {
         let path = '/angels/request/messages/unread';
 

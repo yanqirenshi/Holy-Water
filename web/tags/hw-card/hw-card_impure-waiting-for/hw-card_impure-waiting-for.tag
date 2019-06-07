@@ -1,21 +1,10 @@
 <hw-card_impure-waiting-for class="hw-box-shadow {cardSize()}">
 
-    <hw-card_impure-waiting-for_small source={source()}></hw-card_impure-waiting-for_small>
+    <hw-card_impure-waiting-for_small source={opts.source}></hw-card_impure-waiting-for_small>
 
     <script>
      this.cardSize = () => {
          return this.opts.open ? 'large' : 'small';
-     };
-    </script>
-
-    <script>
-     this.source = () => {
-         return {
-             obj: opts.source,
-             maledict: opts.maledict,
-             open: opts.open,
-             callbacks: opts.callbacks,
-         }
      };
     </script>
 

@@ -49,5 +49,8 @@
     (dao2request-message
      (hw::read-request-message angel request-message-unread))))
 
+(defun request-messages (angel)
+  (hw:list-request-messages-unred angel))
+
 (defun pages-requests (angel)
   (list :|unread| (hw:list-request-messages-unred angel)))
