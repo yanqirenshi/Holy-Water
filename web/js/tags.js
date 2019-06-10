@@ -2028,7 +2028,24 @@ riot.tag2('impure_page_tab-requests', '<section class="section" style="padding:0
      this.contents = (v) => { return hw.descriptionViewShort(v); };
 });
 
-riot.tag2('page-impure-waiting', '', '', '', function(opts) {
+riot.tag2('page-impure-waiting', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">{xxx}</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section"> <div class="container"> <h1 class="title hw-text-white">Impure</h1> </div> </section> <section class="section"> <div class="container"> <h1 class="title hw-text-white">Actions</h1> </div> </section> <section class="section"> <div class="container"> <h1 class="title hw-text-white">Messages</h1> </div> </section>', '', '', function(opts) {
+     this.source = {
+         impure: null,
+         maledict: null,
+         angel: null,
+         actions: [],
+         messages: [],
+     }
+     this.on('mount', () => {
+         let impure_id = location.hash.split('/').reverse()[0] * 1;
+
+         ACTIONS.fetchPagesImpureWaiting({id: impure_id});
+     })
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-PAGES-IMPURE-WAITING') {
+             dump(action.response);
+         }
+     });
 });
 
 riot.tag2('orthodox-page-angels-list-item', '<div> <h1 class="title is-5 hw-text-white">{opts.duty.name}</h1> <div if="{angels().length==0}" style="margin-bottom:22px; padding-left:22px;"> <p class="hw-text-white" style="font-size: 18px; font-weight:bold;"> 空席 </p> </div> <div class="angels"> <div each="{angel in angels()}" class="angel hw-box-shadow-light"> <p>{angel.name}</p> </div> </div> </div>', 'orthodox-page-angels-list-item .title:not(:last-child) { margin-bottom: 11px; border-bottom: 1px solid #fff; } orthodox-page-angels-list-item .angels { display: flex; flex-wrap: wrap; padding-left:22px; margin-top:22px; } orthodox-page-angels-list-item .angel { width: 88px; height: 88px; background: #fff; border-radius: 88px; margin-right: 11px; margin-bottom: 11px; border: 1px solid #eeeeee; font-size: 12px; display: flex; justify-content: center; } orthodox-page-angels-list-item .angel > p { align-self: center; font-weight: bold; }', '', function(opts) {

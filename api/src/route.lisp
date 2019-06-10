@@ -297,7 +297,14 @@
 (defroute "/pages/impures/:id" (&key id)
   (with-angel (angel)
     (let ((impure (hw::get-impure :id (parse-integer id))))
+      (unless impure (throw-code 404))
       (render-json (hw.api.ctrl:pages-impure angel impure)))))
+
+(defroute "/pages/impures/:id/waiting" (&key id)
+  (with-angel (angel)
+    (let ((impure (hw::get-impure :id (parse-integer id))))
+      (unless impure (throw-code 404))
+      (render-json (hw.api.ctrl:pages-impure-waiting angel impure)))))
 
 (defroute "/pages/impures" (&key |maledict-id|)
   (with-angel (angel)

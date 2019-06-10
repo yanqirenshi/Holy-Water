@@ -868,6 +868,22 @@ class Actions extends Vanilla_Redux_Actions {
             response: response
         };
     }
+    fetchPagesImpureWaiting (impure) {
+        let path = '/pages/impures/%d/waiting'.format(impure.id);
+        dump(path);
+        API.get(path, function (json, success) {
+            if (success)
+                STORE.dispatch(this.fetchedPagesImpureWaiting(json));
+        }.bind(this));
+    }
+    fetchedPagesImpureWaiting (response) {
+        let state = STORE.state().toJS();
+
+        return {
+            type: 'FETCHED-PAGES-IMPURE-WAITING',
+            response: response
+        };
+    }
     /////
     ///// Page
     /////

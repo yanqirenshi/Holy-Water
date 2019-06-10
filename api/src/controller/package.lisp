@@ -45,5 +45,6 @@
            #:pages-cemetery
            #:pages-impures
            #:pages-impure
+           #:pages-impure-waiting
            #:pages-requests))
 (in-package :holy-water.api.controller)

@@ -37,6 +37,13 @@
           :|requests| (hw::impure-request-list impure)
           :|chains|   (hw::impure-chain-list   impure))))
 
-
 (defun pages-impures (angel maledict)
   (list :|impures| (hw:list-maledict-impures angel maledict)))
+
+(defun pages-impure-waiting (angel impure)
+  (when (and angel impure)
+    (list :|impure| :null
+          :|maledict| :null
+          :|angel| :null
+          :|actions| nil
+          :|messages| nil)))
