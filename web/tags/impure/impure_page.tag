@@ -28,7 +28,7 @@
     </section>
 
     <div class="tab-contents-area">
-        <impure_page_tab-basic       class="hide" source={source.impure}></impure_page_tab-basic>
+        <impure_page_tab-basic       class="hide" source={source}></impure_page_tab-basic>
         <impure_page_tab-purges      class="hide" source={source.purges}></impure_page_tab-purges>
         <impure_page_tab-incantation class="hide" source={source.spells}></impure_page_tab-incantation>
         <impure_page_tab-requests    class="hide" source={source.requests}></impure_page_tab-requests>

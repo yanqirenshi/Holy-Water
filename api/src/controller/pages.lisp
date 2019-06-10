@@ -31,6 +31,7 @@
     (list :|impure|   (dao2impure   impure :angel angel)
           :|deamon|   (dao2deamon   (hw::impure-deamon   impure))
           :|maledict| (dao2maledict (hw::impure-maledict impure))
+          :|angel|    (dao2angel    (hw::impure-angel impure))
           :|purges|   (hw::impure-purge-list   impure)
           :|spells|   (hw::impure-spell-list   impure)
           :|requests| (hw::impure-request-list impure)

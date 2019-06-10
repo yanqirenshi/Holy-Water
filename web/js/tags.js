@@ -1879,7 +1879,7 @@ riot.tag2('impure_page-controller', '<div class="controller-container" style="wi
 riot.tag2('impure_page-tabs', '<div class="tabs is-toggle"> <ul> <li class="is-active"> <a> <span>基本情報</span> </a> </li> <li> <a> <span>浄化履歴</span> </a> </li> <li> <a> <span>Impure の鎖</span> </a> </li> <li> <a> <span>依頼履歴</span> </a> </li> </ul> </div>', 'impure_page-tabs li > a { background: #fff; }', '', function(opts) {
 });
 
-riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">{this.name()}</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section" style="padding-top:0px;"> <div class="container"> <div class="contents"> <impure_page-controller source="{term}" impure="{source.impure}" callback="{callback}"></impure_page-controller> </div> </div> </section> <section class="section" style="padding-top:0px; padding-bottom:22px;"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> </section> <div class="tab-contents-area"> <impure_page_tab-basic class="hide" source="{source.impure}"></impure_page_tab-basic> <impure_page_tab-purges class="hide" source="{source.purges}"></impure_page_tab-purges> <impure_page_tab-incantation class="hide" source="{source.spells}"></impure_page_tab-incantation> <impure_page_tab-requests class="hide" source="{source.requests}"></impure_page_tab-requests> <impure_page_tab-chains class="hide" source="{[]}"></impure_page_tab-chains> </div>', 'impure_page page-tabs li a{ background: #fff; } impure_page { width: 100%; height: 100%; display: block; overflow: auto; } impure_page .tabs ul { border-bottom-color: rgb(254, 242, 99); border-bottom-width: 2px; } impure_page .tabs.is-boxed li.is-active a { background-color: rgba(254, 242, 99, 1); border-color: rgb(254, 242, 99); text-shadow: 0px 0px 11px #fff; color: #333; font-weight: bold; } impure_page .tabs.is-boxed li { margin-left: 8px; } impure_page .tabs.is-boxed a { text-shadow: 0px 0px 8px #fff; font-weight: bold; } impure_page .table th, impure_page .table td { font-size: 14px; }', '', function(opts) {
+riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">{this.name()}</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section" style="padding-top:0px;"> <div class="container"> <div class="contents"> <impure_page-controller source="{term}" impure="{source.impure}" callback="{callback}"></impure_page-controller> </div> </div> </section> <section class="section" style="padding-top:0px; padding-bottom:22px;"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> </section> <div class="tab-contents-area"> <impure_page_tab-basic class="hide" source="{source}"></impure_page_tab-basic> <impure_page_tab-purges class="hide" source="{source.purges}"></impure_page_tab-purges> <impure_page_tab-incantation class="hide" source="{source.spells}"></impure_page_tab-incantation> <impure_page_tab-requests class="hide" source="{source.requests}"></impure_page_tab-requests> <impure_page_tab-chains class="hide" source="{[]}"></impure_page_tab-chains> </div>', 'impure_page page-tabs li a{ background: #fff; } impure_page { width: 100%; height: 100%; display: block; overflow: auto; } impure_page .tabs ul { border-bottom-color: rgb(254, 242, 99); border-bottom-width: 2px; } impure_page .tabs.is-boxed li.is-active a { background-color: rgba(254, 242, 99, 1); border-color: rgb(254, 242, 99); text-shadow: 0px 0px 11px #fff; color: #333; font-weight: bold; } impure_page .tabs.is-boxed li { margin-left: 8px; } impure_page .tabs.is-boxed a { text-shadow: 0px 0px 8px #fff; font-weight: bold; } impure_page .table th, impure_page .table td { font-size: 14px; }', '', function(opts) {
      this.callback = (action, data) => {
          if (action=='refresh') {
              let id = this.id();
@@ -1967,9 +1967,21 @@ riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"
      });
 });
 
-riot.tag2('impure_page_tab-basic', '<section class="section" style="padding-top:0px; padding-bottom:22px; style=" padding:0px> <div class="container"> <h1 class="title hw-text-white is-4">Name</h1> <div class="contents hw-text-white" style="font-weight:bold; padding-left:22px;"> <p>{name()}</p> </div> </div> </section> <section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white is-4">Description</h1> <div class="contents description" style="margin-left: 22px;"> <description-markdown source="{description()}"></description-markdown> </div> </div> </section>', 'impure_page_tab-basic .description { background: #fff; border-radius: 3px; line-height: 14px; } impure_page_tab-basic description-markdown > div { padding: 22px; }', '', function(opts) {
+riot.tag2('impure_page_tab-basic', '<section class="section" style="padding-top:0px; padding-bottom:22px; style=" padding:0px> <div class="container"> <h1 class="title hw-text-white is-4" style="margin-bottom: 8px;">Maledict</h1> <div class="contents hw-text-white" style="font-weight:bold; padding-left:22px;"> <p>{maledict()} @{maledict_angel()}</p> </div> </div> </section> <section class="section" style="padding-top:0px; padding-bottom:22px; style=" padding:0px> <div class="container"> <h1 class="title hw-text-white is-4" style="margin-bottom: 8px;">Name</h1> <div class="contents hw-text-white" style="font-weight:bold; padding-left:22px;"> <p>{name()}</p> </div> </div> </section> <section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white is-4" style="margin-bottom: 8px;">Description</h1> <div class="contents description" style="margin-left: 22px;"> <description-markdown source="{description()}"></description-markdown> </div> </div> </section>', 'impure_page_tab-basic .description { background: #fff; border-radius: 3px; line-height: 14px; } impure_page_tab-basic description-markdown > div { padding: 22px; }', '', function(opts) {
+     this.maledict = () => {
+         if (!this.opts.source.maledict)
+             return '???';
+
+         return this.opts.source.maledict.name;
+     };
+     this.maledict_angel = () => {
+         if (!this.opts.source.angel)
+             return '';
+
+         return this.opts.source.angel.name;
+     };
      this.name = () => {
-         let impure = this.opts.source;
+         let impure = this.opts.source.impure;
 
          if (!impure)
              return '????????';
@@ -1977,7 +1989,7 @@ riot.tag2('impure_page_tab-basic', '<section class="section" style="padding-top:
          return impure.name;
      };
      this.description = () => {
-         let impure = this.opts.source;
+         let impure = this.opts.source.impure;
 
          if (!impure)
              return '????????';

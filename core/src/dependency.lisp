@@ -34,6 +34,23 @@
                        :on (:= :rs_maledict.id :ev_collect_impure.maledict_id))
            (where (:= :ev_collect_impure.impure_id (mito:object-id impure)))))))
 
+(defun impure-angel (impure)
+  (when impure
+    (car (select-dao 'rs_angel
+           (inner-join :th_angel_maledict
+                       :on (:= :rs_angel.id :th_angel_maledict.angel_id))
+           (inner-join :ev_collect_impure
+                       :on (:= :th_angel_maledict.maledict_id :ev_collect_impure.maledict_id))
+           (where (:= :ev_collect_impure.impure_id (mito:object-id impure)))))))
+
+(defun maledict-angel (maledict)
+  (when maledict
+    (car (select-dao 'rs_angel
+           (inner-join :th_angel_maledict
+                       :on (:= :rs_angel.id :th_angel_maledict.angel_id))
+           (where (:= :th_angel_maledict.maledict_id (mito:object-id maledict)))))))
+
+
 ;;;;;
 ;;;;; impure-purges
 ;;;;;
