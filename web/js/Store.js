@@ -33,6 +33,22 @@ class Store extends Vanilla_Redux_Store {
                         },
                     ],
                 },
+                {
+                    code: 'waiting',
+                    children: [
+                        {
+                            code: 'impures',
+                            children: [
+                                {
+                                    code: 'impure',
+                                    regex: new RegExp('^\\d+$'),
+                                    tag: 'page-impure-waiting',
+                                }
+                            ],
+                        },
+                    ],
+                },
+
             ],
         };
     }

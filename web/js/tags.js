@@ -360,6 +360,14 @@ riot.tag2('section-list', '<table class="table is-bordered is-striped is-narrow 
 });
 
 riot.tag2('description-markdown', '<div ref="markdown-html" style=" background: none;"></div>', 'description-markdown * { font-size: 12px; } description-markdown h1 { font-size: 16px; font-weight: bold;} description-markdown ul { list-style-type: disc; margin-left: 22px; }', '', function(opts) {
+     this.updateContents = (str) => {
+         let html = marked(str);
+
+         this.refs['markdown-html'].innerHTML = html;
+     };
+     this.on('mount', () => {
+         this.updateContents(this.opts.source || '');
+     });
      this.on('update', () => {
          this.refs['markdown-html'].innerHTML = '';
      });
@@ -367,9 +375,7 @@ riot.tag2('description-markdown', '<div ref="markdown-html" style=" background: 
          if (!this.opts.source)
              return;
 
-         let html = marked(this.opts.source);
-
-         this.refs['markdown-html'].innerHTML = html;
+         this.updateContents(this.opts.source);
      });
 });
 
@@ -875,7 +881,17 @@ riot.tag2('home_emergency-door', '<span class="move-door {dragging ? \'open\' : 
      });
 });
 
-riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Maledicts</p> <a each="{maledict in data()}" class="panel-block {isActive(maledict.id)}" onclick="{clickItem}" maledict-id="{maledict.id}" style="padding: 5px 8px; height: 35px;"> <span style="width:120px; font-size:11px;" maledict-id="{maledict.id}"> {maledict.name} </span> <home-maledicts-item-operators maledict="{maledict}" dragging="{dragging}" callback="{opts.callback}"> </home-maledicts-item-operators> </a> </nav>', 'home_maledicts > .panel { width: 188px; border-radius: 4px 4px 0 0; } home_maledicts > .panel > .panel-heading{ font-size:12px; font-weight:bold; } home_maledicts .panel-block { background:#fff; } home_maledicts .panel-block:hover { background:rgb(255, 255, 236); } home_maledicts .panel-block.is-active { background:rgb(254, 242, 99); } home_maledicts .panel-block.is-active { border-left-color: rgb(254, 224, 0); }', '', function(opts) {
+riot.tag2('home_maledicts-unread-message-counter', '<p if="{this.message_count>0}">(this.message_count)</p>', 'home_maledicts-unread-message-counter > p { font-size:12px; color:#a22041; padding-right:3px; }', '', function(opts) {
+     this.message_count = 0;
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-REQUEST-MESSAGES-UNREAD') {
+             this.message_count = STORE.get('requests.messages.unread.list').length;
+             this.update();
+         }
+     })
+});
+
+riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-heading">Maledicts</p> <a each="{maledict in data()}" class="panel-block {isActive(maledict.id)}" onclick="{clickItem}" maledict-id="{maledict.id}" style="padding: 5px 8px; height: 35px;"> <span style="width:120px; font-size:11px;" maledict-id="{maledict.id}"> {maledict.name} </span> <home-maledicts-item-operators maledict="{maledict}" dragging="{dragging}" callback="{opts.callback}"> </home-maledicts-item-operators> <home_maledicts-unread-message-counter if="{maledict.id==-10}"> </home_maledicts-unread-message-counter> </a> </nav>', 'home_maledicts > .panel { width: 188px; border-radius: 4px 4px 0 0; } home_maledicts > .panel > .panel-heading{ font-size:12px; font-weight:bold; } home_maledicts .panel-block { background:#fff; } home_maledicts .panel-block:hover { background:rgb(255, 255, 236); } home_maledicts .panel-block.is-active { background:rgb(254, 242, 99); } home_maledicts .panel-block.is-active { border-left-color: rgb(254, 224, 0); }', '', function(opts) {
      this.dragging = false;
 
      this.default_maledicts = [
@@ -892,7 +908,7 @@ riot.tag2('home_maledicts', '<nav class="panel hw-box-shadow"> <p class="panel-h
              description: "",
              id: -10,
              'maledict-type': {NAME: "Messages", ORDER: 0, DELETABLE: 0, DESCRIPTION: ""},
-             name: "Messages ... ※実装中",
+             name: "Messages ...",
              order: 555555,
          },
      ];
@@ -1160,7 +1176,7 @@ riot.tag2('home_other-services', '<nav class="panel hw-box-shadow"> <p class="pa
      });
 });
 
-riot.tag2('page-home', '<div class="bucket-area"> <home_maledicts data="{STORE.get(\'maledicts\')}" select="{maledict()}" callback="{callback}" dragging="{dragging}"></home_maledicts> <home_orthodox-angels></home_orthodox-angels> <home_other-services></home_other-services> </div> <div class="contetns-area"> <div style="display:flex;"> <home_squeeze-area callback="{callback}"></home_squeeze-area> <home_request-area></home_request-area> </div> <page-home_card-pool maledict="{maledict()}" callback="{callback}" filter="{squeeze_word}" source="{impures}"></page-home_card-pool> <home_servie-items></home_servie-items> </div> <home_modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_modal-create-impure> <modal_request-impure source="{request_impure}"></modal_request-impure>', 'page-home { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } page-home > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; } page-home home_squeeze-area { margin-right: 55px; }', '', function(opts) {
+riot.tag2('page-home', '<div class="bucket-area"> <home_maledicts data="{STORE.get(\'maledicts\')}" select="{maledict()}" callback="{callback}" dragging="{dragging}"></home_maledicts> <home_orthodox-angels></home_orthodox-angels> <home_other-services></home_other-services> </div> <div class="contetns-area"> <div style="display:flex;"> <home_squeeze-area callback="{callback}"></home_squeeze-area> </div> <page-home_card-pool maledict="{maledict()}" callback="{callback}" filter="{squeeze_word}" source="{impures}"></page-home_card-pool> <home_servie-items></home_servie-items> </div> <home_modal-create-impure open="{modal_open}" callback="{callback}" maledict="{modal_maledict}"></home_modal-create-impure> <modal_request-impure source="{request_impure}"></modal_request-impure>', 'page-home { height: 100%; width: 100%; padding: 22px 0px 0px 22px; display: flex; } page-home > .contetns-area { height: 100%; margin-left: 11px; flex-grow: 1; } page-home home_squeeze-area { margin-right: 55px; }', '', function(opts) {
      this.modal_open     = false;
      this.modal_maledict = null;
      this.maledict       = null;
@@ -1241,7 +1257,8 @@ riot.tag2('page-home', '<div class="bucket-area"> <home_maledicts data="{STORE.g
              return;
          }
 
-         if (action.type=='SELECTED-HOME-MALEDICT-MESSAGES') {
+         if (action.type=='SELECTED-HOME-MALEDICT-MESSAGES' ||
+             action.type=='CHANGED-TO-READ-REQUEST-MESSAGE') {
              ACTIONS.fetchRequestMessages();
 
              return;
@@ -1409,10 +1426,13 @@ riot.tag2('hw-card_impure-waiting-for', '<hw-card_impure-waiting-for_small sourc
      };
 });
 
-riot.tag2('hw-card_impure-waiting-for_small', '<div class="contents"> <p>{opts.source.obj.name}</p> </div>', 'hw-card_impure-waiting-for_small .contents { padding: 11px; font-size: 12px; word-break: break-all; }', '', function(opts) {
+riot.tag2('hw-card_impure-waiting-for_small', '<div class="contents"> <p> <a href="#home/waiting/impures/{opts.source.obj.id}">{opts.source.obj.name}</a> </p> </div>', 'hw-card_impure-waiting-for_small .contents { padding: 11px; font-size: 12px; word-break: break-all; }', '', function(opts) {
 });
 
-riot.tag2('hw-card_request-message-footer', '<button class="button is-small" onclick="{switchOpen}"> {this.opts.source.open ? \'閉じる\' : \'開く\'} </button>', 'hw-card_request-message-footer { display: flex; justify-content: flex-end; padding-top:8px; padding-right:11px; } hw-card_request-message-footer .button { border: none; }', '', function(opts) {
+riot.tag2('hw-card_request-message-footer', '<button if="{this.opts.source.open}" class="button is-small is-danger" onclick="{clickToReaded}"> 既読にする </button> <button class="button is-small" onclick="{switchOpen}"> {this.opts.source.open ? \'閉じる\' : \'開く\'} </button>', 'hw-card_request-message-footer { display: flex; padding-top:8px; padding-right:11px; padding-left: 11px; } hw-card_request-message-footer.large { justify-content: space-between; } hw-card_request-message-footer.small { justify-content: flex-end;} hw-card_request-message-footer .button { border: none; }', 'class="{this.opts.source.open ? \'large\' : \'small\'}"', function(opts) {
+     this.clickToReaded = () => {
+         ACTIONS.changeToReadRequestMessage(opts.source.obj.message_id)
+     };
      this.switchOpen = () => {
          let callback = this.opts.source.callbacks.switchSize;
          let obj = this.opts.source.obj;
@@ -1425,16 +1445,21 @@ riot.tag2('hw-card_request-message-footer', '<button class="button is-small" onc
      };
 });
 
-riot.tag2('hw-card_request-message-header', '<hw-card-label-angel-from angel_name="{opts.source.obj.angel_from_name}"></hw-card-label-angel-from> <span>{moment(opts.source.obj.requested_at).format(\'MM-DD HH:mm\')}</span>', 'hw-card_request-message-header { display: flex; justify-content: space-between; padding: 6px; font-size: 12px; border-bottom: 1px solid #eeeeee; }', '', function(opts) {
+riot.tag2('hw-card_request-message-header', '<hw-card-label-angel-from angel_name="{opts.source.obj.angel_from_name}"></hw-card-label-angel-from> <span>{timestamp()}</span>', 'hw-card_request-message-header { display: flex; justify-content: space-between; padding: 6px; font-size: 12px; border-bottom: 1px solid #eeeeee; }', '', function(opts) {
+     this.timestamp = () => {
+         return moment(opts.source.obj.requested_at).format(
+             opts.source.open ? 'YYYY-MM-DD HH:mm:ss dddd' : 'MM-DD HH:mm'
+         )
+     };
 });
 
-riot.tag2('hw-card_request-message', '<hw-card_request-message-header source="{opts.source}"></hw-card_request-message-header> <hw-card_request-message_small if="{!opts.source.open}" source="{opts.source}"></hw-card_request-message_small> <hw-card_request-message_large if="{opts.source.open}" source="{opts.source}"></hw-card_request-message_large> <hw-card_request-message-footer source="{opts.source}"></hw-card_request-message-footer>', 'hw-card_request-message { display: flex; flex-direction: column; align-items: stretch; border-radius: 5px; border: 1px solid #dddddd; background: #ffffff; } hw-card_request-message > hw-card_request-message_small { flex-grow: 1; } hw-card_request-message.small { width: 188px; height: 188px; } hw-card_request-message.large { width: calc(222px + 222px + 222px + 22px + 22px); height: calc(188px + 188px + 22px + 1px); }', 'class="hw-box-shadow {cardSize()}"', function(opts) {
+riot.tag2('hw-card_request-message', '<hw-card_request-message-header source="{opts.source}"></hw-card_request-message-header> <hw-card_request-message_small if="{!opts.source.open}" source="{opts.source}"></hw-card_request-message_small> <hw-card_request-message_large if="{opts.source.open}" source="{opts.source}"></hw-card_request-message_large> <hw-card_request-message-footer source="{opts.source}"></hw-card_request-message-footer>', 'hw-card_request-message { display: flex; flex-direction: column; align-items: stretch; border-radius: 5px; border: 1px solid #dddddd; background: #ffffff; } hw-card_request-message > hw-card_request-message_small { flex-grow: 1; } hw-card_request-message > hw-card_request-message_large { flex-grow: 1; } hw-card_request-message.small { width: 188px; height: 188px; } hw-card_request-message.large { width: calc(222px + 222px + 222px + 22px + 22px); height: calc(188px + 188px + 22px + 1px); }', 'class="hw-box-shadow {cardSize()}"', function(opts) {
      this.cardSize = () => {
          return this.opts.source.open ? 'large' : 'small';
      };
 });
 
-riot.tag2('hw-card_request-message_large', '<div class="contents"> </div>', 'hw-card_request-message_large .contents { display: flex; flex-direction: column; padding: 11px; font-size: 12px; word-break: break-all; }', '', function(opts) {
+riot.tag2('hw-card_request-message_large', '<div class="contents"> <div> <h1 class="title is-6">Message</h1> <description-markdown source="{opts.source.obj.message_contents}"></description-markdown> </div> <div> <div> <h1 class="title is-6">Impure</h1> <p style="margin-bottom:11px; font-weight:bold;"> <a href="#home/impures/{opts.source.obj.impure_id}"> {opts.source.obj.impure_name} </a> </p> <description-markdown source="{opts.source.obj.impure_description}"></description-markdown> </div> <div style="margin-top:11px;"> <h1 class="title is-6">Deamon</h1> <p>{this.opts.source.obj.deamon_name} ({this.opts.source.obj.deamon_name_short})</p> </div> </div> </div>', 'hw-card_request-message_large .contents { display: flex; height: 331px; padding: 11px 22px; font-size: 12px; word-break: break-all; } hw-card_request-message_large .contents > * { width:50%; overflow: auto; } hw-card_request-message_large .contents .title { margin-bottom: 8px; }', '', function(opts) {
 });
 
 riot.tag2('hw-card_request-message_small', '<div class="contents" style="padding-top: 6px; overflow:auto"> <p style="flex-grow:1;"> {opts.source.obj.message_contents} </p> <p style="margin-top:22px; font-size:9px; flex-grow:1;"> <hw-card-label-deamon deamon_id="{opts.source.obj.deamon_id}" deamon_name="{opts.source.obj.deamon_name}" deamon_name_short="{opts.source.obj.deamon_name_short}"></hw-card-label-deamon> <a href="#home/impures/{opts.source.obj.impure_id}"> {opts.source.obj.impure_name} </a> </p> </div>', 'hw-card_request-message_small .contents { display: flex; flex-direction: column; padding: 11px; font-size: 12px; word-break: break-all; }', '', function(opts) {
@@ -1989,6 +2014,9 @@ riot.tag2('impure_page_tab-requests', '<section class="section" style="padding:0
      this.dt   = (v) => { return hw.str2yyyymmddhhmmss(v); };
      this.week = (v) => { return hw.str2week(v); };
      this.contents = (v) => { return hw.descriptionViewShort(v); };
+});
+
+riot.tag2('page-impure-waiting', '', '', '', function(opts) {
 });
 
 riot.tag2('orthodox-page-angels-list-item', '<div> <h1 class="title is-5 hw-text-white">{opts.duty.name}</h1> <div if="{angels().length==0}" style="margin-bottom:22px; padding-left:22px;"> <p class="hw-text-white" style="font-size: 18px; font-weight:bold;"> 空席 </p> </div> <div class="angels"> <div each="{angel in angels()}" class="angel hw-box-shadow-light"> <p>{angel.name}</p> </div> </div> </div>', 'orthodox-page-angels-list-item .title:not(:last-child) { margin-bottom: 11px; border-bottom: 1px solid #fff; } orthodox-page-angels-list-item .angels { display: flex; flex-wrap: wrap; padding-left:22px; margin-top:22px; } orthodox-page-angels-list-item .angel { width: 88px; height: 88px; background: #fff; border-radius: 88px; margin-right: 11px; margin-bottom: 11px; border: 1px solid #eeeeee; font-size: 12px; display: flex; justify-content: center; } orthodox-page-angels-list-item .angel > p { align-self: center; font-weight: bold; }', '', function(opts) {

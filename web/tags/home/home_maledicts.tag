@@ -16,6 +16,9 @@
                                            dragging={dragging}
                                            callback={opts.callback}>
             </home-maledicts-item-operators>
+
+            <home_maledicts-unread-message-counter if={maledict.id==-10}>
+            </home_maledicts-unread-message-counter>
         </a>
     </nav>
 
@@ -38,7 +41,7 @@
              description: "",
              id: -10,
              'maledict-type': {NAME: "Messages", ORDER: 0, DELETABLE: 0, DESCRIPTION: ""},
-             name: "Messages ... ※実装中",
+             name: "Messages ...",
              order: 555555,
          },
      ];

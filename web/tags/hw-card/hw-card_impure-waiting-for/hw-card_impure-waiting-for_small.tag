@@ -1,7 +1,9 @@
 <hw-card_impure-waiting-for_small>
 
     <div class="contents">
-        <p>{opts.source.obj.name}</p>
+        <p>
+            <a href="#home/waiting/impures/{opts.source.obj.id}">{opts.source.obj.name}</a>
+        </p>
         <!-- <p>{opts.source.obj.description}</p> -->
     </div>
 

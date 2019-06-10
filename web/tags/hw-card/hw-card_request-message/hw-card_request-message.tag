@@ -27,6 +27,9 @@
      hw-card_request-message > hw-card_request-message_small {
          flex-grow: 1;
      }
+     hw-card_request-message > hw-card_request-message_large {
+         flex-grow: 1;
+     }
      /* Card Size */
      hw-card_request-message.small {
          width: 188px;

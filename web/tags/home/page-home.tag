@@ -12,20 +12,14 @@
     <div class="contetns-area">
         <div style="display:flex;">
             <home_squeeze-area callback={callback}></home_squeeze-area>
-            <home_request-area></home_request-area>
+            <!-- <home_request-area></home_request-area> -->
         </div>
 
-        <!-- ----------------------- -->
-        <!--   Impures               -->
-        <!-- ----------------------- -->
         <page-home_card-pool maledict={maledict()}
                              callback={callback}
                              filter={squeeze_word}
                              source={impures}></page-home_card-pool>
 
-        <!-- ----------------------- -->
-        <!--   Other Service Items   -->
-        <!-- ----------------------- -->
         <home_servie-items></home_servie-items>
     </div>
 
@@ -121,7 +115,8 @@
              return;
          }
 
-         if (action.type=='SELECTED-HOME-MALEDICT-MESSAGES') {
+         if (action.type=='SELECTED-HOME-MALEDICT-MESSAGES' ||
+             action.type=='CHANGED-TO-READ-REQUEST-MESSAGE') {
              ACTIONS.fetchRequestMessages();
 
              return;
