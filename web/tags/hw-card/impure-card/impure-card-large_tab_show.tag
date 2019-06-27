@@ -1,5 +1,5 @@
 <impure-card-large_tab_show>
-    <div style="width:100%; height:100%;">
+    <div style="width:100%; height:279px; overflow:auto;">
 
         <div style="flex-grow:1; display:flex; flex-direction:column;">
             <p if={opts.data.deamon_id} style="font-size:14px;">Deamon: {deamon()}</p>
@@ -7,7 +7,7 @@
             <p style="font-weight: bold;">{name()}</p>
 
             <div class="description" style="padding:11px; overflow:auto;">
-                <impure-card-large_tab_show-description contents={this.description()}></impure-card-large_tab_show-description>
+                <description-markdown source={this.description()}></description-markdown>
             </div>
         </div>
 

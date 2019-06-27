@@ -18,6 +18,9 @@
 
     <modal-create-after-impure></modal-create-after-impure>
 
+    <modal-attain-impure></modal-attain-impure>
+    <modal-spell-impure></modal-spell-impure>
+
     <script>
      this.site = () => {
          return STORE.state().get('site');

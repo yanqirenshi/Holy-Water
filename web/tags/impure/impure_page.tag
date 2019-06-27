@@ -53,6 +53,26 @@
              ACTIONS.startImpure(this.source.impure);
              return ;
          }
+
+         if (action=='attain') {
+             ACTIONS.confirmationAttainImpure(this.source.impure);
+             return ;
+         }
+
+         if (action=='spell') {
+             ACTIONS.openModalSpellImpure(this.source.impure);
+             return ;
+         }
+
+         if (action=='create-after') {
+             let impure = Object.assign({}, this.source.impure);
+
+             if(this.source.deamon)
+                 impure.deamon = Object.assign({}, this.source.deamon);
+
+             ACTIONS.openModalCreateAfterImpure(impure);
+             return ;
+         }
      };
     </script>
 
@@ -109,13 +129,15 @@
 
              return;
          }
-         if (action.type=='STARTED-ACTION') {
-             if (action.impure.id==this.source.impure.id)
-                 ACTIONS.fetchPagesImpure(this.source.impure);
 
-             return;
-         }
-         if (action.type=='STOPED-ACTION') {
+         let list = [
+             'STARTED-ACTION',
+             'STOPED-ACTION',
+             'FINISHED-IMPURE',
+             'SAVED-IMPURE-INCANTATION-SOLO',
+         ];
+
+         if (list.find((d) => { return d == action.type; })) {
              if (action.impure.id==this.source.impure.id)
                  ACTIONS.fetchPagesImpure(this.source.impure);
 

@@ -35,7 +35,7 @@ riot.tag2('app-page-area', '', '', '', function(opts) {
      });
 });
 
-riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" site="{site()}" moves="{[]}"></menu-bar> <app-page-area></app-page-area> <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p> <message-area></message-area> <popup-working-action data="{impure()}"></popup-working-action> <menu-add-impure></menu-add-impure> <modal-create-impure open="{modal_open}" maledict="{modal_maledict}"></modal-create-impure> <modal-create-after-impure></modal-create-after-impure>', '', '', function(opts) {
+riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" site="{site()}" moves="{[]}"></menu-bar> <app-page-area></app-page-area> <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p> <message-area></message-area> <popup-working-action data="{impure()}"></popup-working-action> <menu-add-impure></menu-add-impure> <modal-create-impure open="{modal_open}" maledict="{modal_maledict}"></modal-create-impure> <modal-create-after-impure></modal-create-after-impure> <modal-attain-impure></modal-attain-impure> <modal-spell-impure></modal-spell-impure>', '', '', function(opts) {
      this.site = () => {
          return STORE.state().get('site');
      };
@@ -410,6 +410,34 @@ riot.tag2('menu-add-impure', '<div style="position:fixed; right: 33px; top: 22px
      };
 });
 
+riot.tag2('modal-attain-impure', '<div class="modal {impure ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card" style="width: 555px;"> <header class="modal-card-head" style="padding: 11px 22px;"> <p class="modal-card-title" style="font-size: 14px;">Impure を葬りますか？</p> <button class="delete" aria-label="close" onclick="{clickClose}"></button> </header> <section class="modal-card-body"> <div class="contents"> <p><b>ID</b></p> <p style="padding-left:22px;">{impure ? impure.id : \'\'}</p> <p><b>Name</b></p> <p style="padding-left:22px;">{impure ? impure.name : \'\'}</p> <p style="margin-top:22px;"><b>完了メモ</b></p> <div style="padding-left:22px;"> <textarea class="textarea" placeholder="任意入力項目" ref="spell"></textarea> </div> </div> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display:flex; justify-content: space-between;"> <button class="button is-small" onclick="{clickClose}">Cancel</button> <button class="button is-small is-success" onclick="{clickAttain}">埋葬</button> </footer> </div> </div>', '', '', function(opts) {
+     this.clickAttain = () => {
+         ACTIONS.finishImpure(this.impure,
+                              true,
+                              this.refs.spell.value.trim());
+     };
+     this.clickClose = () => {
+         this.impure = null;
+         this.update();
+         return;
+     };
+
+     this.impure = null;
+     STORE.subscribe((action) => {
+         if (action.type=='CONFIRMATION-ATTAIN-IMPURE') {
+             this.impure = action.impure;
+             this.update();
+             return;
+         }
+
+         if (action.type=='FINISHED-IMPURE') {
+             this.impure = null;
+             this.update();
+             return;
+         }
+     });
+});
+
 riot.tag2('modal-change-deamon-area', '<h1 class="title is-4">Deamons</h1> <p class="control has-icons-left has-icons-right"> <input class="input is-small" type="text" placeholder="Search" onkeyup="{keyUp}"> <span class="icon is-small is-left"> <i class="fas fa-search"></i> </span> </p> <div> <button each="{deamon in deamons()}" class="button is-small deamon-item" deamon-id="{deamon.id}" onclick="{clickDeamon}"> {deamon.name} ({deamon.name_short}) </button> </div>', '', '', function(opts) {
      this.clickDeamon = (e) => {
          let deamon_id = e.target.getAttribute('deamon-id');
@@ -546,24 +574,107 @@ riot.tag2('modal-change-deamon', '<div class="modal {isOpen()}"> <div class="mod
      };
 });
 
-riot.tag2('modal-create-after-impure', '<div class="modal {opts.impure ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card" style="width:999px;"> <header class="modal-card-head" style="padding: 11px 22px;"> <p class="modal-card-title" style="font-size:16px;">後続の Impure を作成</p> <button class="delete" aria-label="close" onclick="{clickCloseButton}"></button> </header> <section class="modal-card-body" style="display:flex;"> <div style="flex-grow:1;"> <input class="input is-small" type="text" placeholder="Title" ref="name"> <textarea class="textarea is-small" placeholder="Description" rows="6" style="margin-top:11px; height: 333px;" ref="description"></textarea> <h1 class="title is-6" style="margin-bottom: 3px; margin-top:11px;">Deamon:</h1> <div style="margin-left:11px;"> <p style="margin-bottom:11px;">なし</p> <input class="input is-small" type="text" placeholder="Search Deamon" ref="name"> <div style="margin-top:11px;"> <button class="button is-small">Deamon 1</button> <button class="button is-small">Deamon 2</button> <button class="button is-small">Deamon 3</button> </div> </div> </div> <div style="padding-left: 22px; padding-right: 22px; display:flex; flex-direction: column; justify-content: center;;"> <h1 class="title is-6">Copy</h1> <button class="button is-small">←</button> </div> <div style="flex-grow:1;padding: 11px;background: #eeeeee;border-radius: 3px;"> <h1 class="title is-6" style="margin-bottom: 3px;">Title:</h1> <p style="padding-left:11px;">title ....</p> <h1 class="title is-6" style="margin-bottom: 3px; margin-top: 11px;">description:</h1> <p style="padding-left:11px;">markdon -> html ....</p> <h1 class="title is-6" style="margin-bottom: 3px; margin-top: 11px;">Deamon:</h1> <p style="padding-left:11px;">Deamon...</p> </div> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display: flex; justify-content: space-between;"> <button class="button is-small" onclick="{clickCloseButton}">Cancel</button> <button class="button is-small is-success" onclick="{clickCreateButton}">Create!</button> </footer> </div> </div>', '', '', function(opts) {
+riot.tag2('modal-create-after-impure-center', '<h1 class="title is-6">Copy</h1> <button class="button is-small" onclick="{clickCopy}">←</button>', 'modal-create-after-impure-center { display:flex; flex-direction: column; justify-content: center; padding-left: 22px; padding-right: 22px; }', '', function(opts) {
+     this.clickCopy = () => {
+         this.opts.callback('copy');
+     };
+});
+
+riot.tag2('modal-create-after-impure-left-deamon', '<div if="{!opts.source}"> なし </div> <div if="{opts.source}"> {nameShort()} : {name()} <button class="button is-small">削除</button> </div>', '', '', function(opts) {
+     this.name = () => {
+         return opts.source.name;
+     }
+     this.nameShort = () => {
+         return opts.source.name_short;
+     }
+});
+
+riot.tag2('modal-create-after-impure-left-deamons', '<input class="input is-small martin-top" type="text" placeholder="Search Deamon" ref="deamon_name" onkeyup="{keyUp}"> <div class="martin-top"> <button each="{deamon in deamons()}" class="button is-small deamon" deamon_id="{deamon.id}" onclick="{clickDeamon}"> {deamon.name_short} : {deamon.name} </button> </div>', 'modal-create-after-impure-left-deamons .deamon { margin-right: 6px; margin-bottom: 6px; }', '', function(opts) {
+     this.keyword = null;
+     this.keyUp = (e) => {
+         let keyword = e.target.value;
+         if (keyword.length==0)
+             this.keyword = null;
+         else
+             this.keyword = keyword;
+
+         this.update();
+     };
+     this.clickDeamon = (e) => {
+         let id = e.target.getAttribute('deamon_id');
+         this.opts.callback('select-deamon', STORE.get('deamons.ht')[id])
+     };
+     this.deamons = () => {
+         let list = STORE.get('deamons.list');
+
+         if (!this.keyword)
+             return list;
+
+         let keyword = this.keyword.toLowerCase();
+         return list.filter((d) => {
+             let name       = d.name.toLowerCase();
+             let name_short = d.name_short.toLowerCase();
+
+             return !(name.indexOf(keyword) == -1 && name_short.indexOf(keyword) == -1)
+         });
+     };
+});
+
+riot.tag2('modal-create-after-impure-right', '<h1 class="title is-6" style="margin-bottom: 3px;">Title:</h1> <p style="padding-left:11px;">{imprueVal(\'name\')}</p> <h1 class="title is-6" style="margin-bottom: 3px; margin-top: 11px;">description:</h1> <p style="padding-left:11px;"> <description-markdown source="{imprueVal(\'description\')}"></description-markdown> </p> <h1 class="title is-6" style="margin-bottom: 3px; margin-top: 11px;">Deamon:</h1> <p style="padding-left:11px;">{imprueVal(\'deamon\')}</p>', 'modal-create-after-impure-right { flex-grow: 1; display: flex; flex-direction: column; width:45%; padding: 11px; background: #eeeeee; border-radius: 3px; }', '', function(opts) {
+     this.imprueVal = (name) => {
+         let impure = this.opts.source;
+
+         if (!impure)
+             return '';
+
+         if (name=='deamon') {
+             let deamon = impure.deamon;
+
+             if (!deamon)
+                 return ''
+
+             return deamon.name + ' (' + deamon.name_short + ')';
+         }
+
+         return impure[name];
+     };
+});
+
+riot.tag2('modal-create-after-impure', '<div class="modal {impure ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card" style="width:999px;"> <header class="modal-card-head" style="padding: 11px 22px;"> <p class="modal-card-title" style="font-size:16px;">後続の Impure を作成</p> <button class="delete" aria-label="close" onclick="{clickClose}"></button> </header> <section class="modal-card-body" style="display:flex;"> <div class="left"> <input class="input is-small" type="text" placeholder="Title" ref="name"> <textarea class="textarea is-small martin-top" placeholder="Description" rows="6" style="height: 222px;" ref="description"></textarea> <h1 class="title is-6 martin-top" style="margin-bottom: 3px;">Deamon:</h1> <div class="martin-top"> <modal-create-after-impure-left-deamon source="{deamon}" callback="{callback}"></modal-create-after-impure-left-deamon> <modal-create-after-impure-left-deamons callback="{callback}"></modal-create-after-impure-left-deamons> </div> </div> <modal-create-after-impure-center source="{impure}" callback="{callback}"></modal-create-after-impure-center> <modal-create-after-impure-right source="{impure}"></modal-create-after-impure-right> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display: flex; justify-content: space-between;"> <button class="button is-small" onclick="{clickClose}">Cancel</button> <button class="button is-small is-success" onclick="{clickCreate}">Create!</button> </footer> </div> </div>', 'modal-create-after-impure .left { flex-grow: 1; display: flex; flex-direction: column; width:45%; } modal-create-after-impure .left .martin-top { margin-top:11px; }', '', function(opts) {
+     this.callback = (action, data) => {
+         if (action=='copy') {
+             this.refs.name.value = this.impure.name;
+             this.refs.description.value = this.impure.description;
+             this.deamon = this.impure.deamon;
+             this.update();
+
+             return;
+         }
+
+         if (action=='select-deamon') {
+             this.deamon = data;
+             this.update();
+         }
+     };
+
+     this.impure   = null;
      this.maledict = null;
+     this.deamon   = null;
      STORE.subscribe((action) => {
-         if (action.type=='OPEN-MODAL-CREATE-IMPURE') {
-             this.maledict = action.maledict;
+         if (action.type=='OPEN-MODAL-CREATE-AFTER-IMPURE') {
+             this.impure = action.impure;
              this.update();
 
              return;
          }
 
-         if (action.type=='CLOSE-MODAL-CREATE-IMPURE') {
-             this.maledict = null;
-             this.update();
-
-             return;
-         }
-
-         if (action.type=='CREATED-MALEDICT-IMPURE') {
+         let list = [
+             'CREATED-IMPURE-AFTER-IMPURE',
+             'CLOSE-MODAL-CREATE-IMPURE',
+             'CREATED-MALEDICT-IMPURE',
+         ];
+         if (list.find((d) => { return action.type == d;})) {
+             this.impure = null;
              this.maledict = null;
              this.update();
 
@@ -571,18 +682,18 @@ riot.tag2('modal-create-after-impure', '<div class="modal {opts.impure ? \'is-ac
          }
      });
 
-     this.maledictName = () => {
-         return this.maledict ? this.maledict.name : '';
-     }
+     this.clickCreate = (e) => {
+         let params = {
+             name: this.refs.name.value.trim(),
+             description: this.refs.description.value.trim(),
+         }
 
-     this.clickCreateButton = (e) => {
-         ACTIONS.createMaledictImpure (this.maledict, {
-             name: this.refs['name'].value,
-             description: this.refs['description'].value,
-             maledict: this.opts.maledict
-         });
+         if (this.deamon)
+             params.deamon_id = this.deamon.id
+
+         ACTIONS.createImpureAfterImpure(this.impure, params);
      };
-     this.clickCloseButton = (e) => {
+     this.clickClose = (e) => {
          ACTIONS.closeModalCreateImpure();
      };
 });
@@ -743,6 +854,33 @@ riot.tag2('modal-purge-result-editor', '<div class="modal {opts.data ? \'is-acti
      };
 });
 
+riot.tag2('modal-spell-impure', '<div class="modal {impure ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card" style="width: 555px;"> <header class="modal-card-head" style="padding: 11px 22px;"> <p class="modal-card-title" style="font-size: 14px;">呪文詠唱</p> <button class="delete" aria-label="close" onclick="{clickClose}"></button> </header> <section class="modal-card-body"> <div class="contents"> <p><b>ID</b></p> <p style="padding-left:22px;">{impure ? impure.id : \'\'}</p> <p><b>Name</b></p> <p style="padding-left:22px;">{impure ? impure.name : \'\'}</p> <p style="margin-top:22px;"><b>呪文</b></p> <div style="padding-left:22px;"> <textarea class="textarea" placeholder="必須入力項目" ref="spell"></textarea> </div> </div> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display:flex; justify-content: space-between;"> <button class="button is-small" onclick="{clickClose}">Cancel</button> <button class="button is-small is-success" onclick="{clickSpell}">詠唱</button> </footer> </div> </div>', '', '', function(opts) {
+     this.clickSpell = () => {
+         ACTIONS.saveImpureIncantationSolo(this.impure,
+                                           this.refs.spell.value.trim());
+     };
+     this.clickClose = () => {
+         this.impure = null;
+         this.update();
+         return;
+     };
+
+     this.impure = null;
+     STORE.subscribe((action) => {
+         if (action.type=='OPEN-MODAL-SPELL-IMPURE') {
+             this.impure = action.impure;
+             this.update();
+             return;
+         }
+
+         if (action.type=='SAVED-IMPURE-INCANTATION-SOLO') {
+             this.impure = null;
+             this.update();
+             return;
+         }
+     });
+});
+
 riot.tag2('popup-working-action', '<button class="button is-small hw-button" style="margin-right:11px;" onclick="{clickStop}">Stop</button> <span style="font-size:12px;">{name()}</span> <div style="margin-top: 8px;"> <p style="display:inline; font-size:12px; margin-right:22px;"> <span style="font-size:12px;width:88px;display:inline-block;">経過: {distance()}</span> <span style="font-size:12px;">開始: </span> <span style="font-size:12px;">{start()}</span> </p> <button class="button is-small hw-button" onclick="{clickStopAndClose}">Stop & Close</button> </div>', 'popup-working-action { display: block; position: fixed; bottom: 33px; right: 33px; background: #fff; padding: 11px 22px; border: 1px solid #ededed; border-radius: 8px; box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666); } popup-working-action .hw-button { background: #fff; box-shadow: none; }', 'class="{hide()}"', function(opts) {
 
      this.clickStop = () => {
@@ -881,8 +1019,9 @@ riot.tag2('home_emergency-door', '<span class="move-door {dragging ? \'open\' : 
      });
 });
 
-riot.tag2('home_maledicts-unread-message-counter', '<p if="{this.message_count>0}">(this.message_count)</p>', 'home_maledicts-unread-message-counter > p { font-size:12px; color:#a22041; padding-right:3px; }', '', function(opts) {
+riot.tag2('home_maledicts-unread-message-counter', '<p if="{this.message_count > 0}">({this.message_count})</p>', 'home_maledicts-unread-message-counter > p { font-size:12px; color:#a22041; padding-right:3px; }', '', function(opts) {
      this.message_count = 0;
+
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-REQUEST-MESSAGES-UNREAD') {
              this.message_count = STORE.get('requests.messages.unread.list').length;
@@ -1773,7 +1912,7 @@ riot.tag2('impure-card-large_tab_show-description', '', 'impure-card-large_tab_s
 
 });
 
-riot.tag2('impure-card-large_tab_show', '<div style="width:100%; height:100%;"> <div style="flex-grow:1; display:flex; flex-direction:column;"> <p if="{opts.data.deamon_id}" style="font-size:14px;">Deamon: {deamon()}</p> <p style="font-weight: bold;">{name()}</p> <div class="description" style="padding:11px; overflow:auto;"> <impure-card-large_tab_show-description contents="{this.description()}"></impure-card-large_tab_show-description> </div> </div> </div>', '', '', function(opts) {
+riot.tag2('impure-card-large_tab_show', '<div style="width:100%; height:279px; overflow:auto;"> <div style="flex-grow:1; display:flex; flex-direction:column;"> <p if="{opts.data.deamon_id}" style="font-size:14px;">Deamon: {deamon()}</p> <p style="font-weight: bold;">{name()}</p> <div class="description" style="padding:11px; overflow:auto;"> <description-markdown source="{this.description()}"></description-markdown> </div> </div> </div>', '', '', function(opts) {
      this.deamon = () => {
          let impure = this.opts.data;
 
@@ -1852,7 +1991,7 @@ riot.tag2('impure-card-small', '<div class="content" style="font-size:12px;"> <p
      };
 });
 
-riot.tag2('impure_page-controller', '<div class="controller-container" style="width: 555px;"> <div class="operators"> <button class="button is-small" onclick="{click}" action="refresh">Refresh</button> <span style="flex-grow:1;"></span> <button class="button is-small {isHide(\'start\')}" onclick="{click}" action="start">作業開始</button> <button class="button is-small {isHide(\'stop\')}" onclick="{click}" action="stop">作業終了</button> <button class="button is-small" onclick="{click}" action="spell" disabled>呪文詠唱</button> <button class="button is-small" onclick="{click}" action="create-after" disabled>後続作成</button> <button class="button is-small {isHide(\'attain\')}" onclick="{click}" action="attain" disabled>埋葬</button> </div> </div>', 'impure_page-controller > .controller-container { background: #FEF264; padding: 11px 22px; border-radius: 3px; } impure_page-controller .operators { display:flex; } impure_page-controller .operators > * { margin-right:11px; } impure_page-controller .operators > *:last-child { margin-right:0px; }', '', function(opts) {
+riot.tag2('impure_page-controller', '<div class="controller-container" style="width: 555px;"> <div class="operators"> <button class="button is-small" onclick="{click}" action="refresh">Refresh</button> <span style="flex-grow:1;"></span> <button class="button is-small {isHide(\'start\')}" onclick="{click}" action="start">作業開始</button> <button class="button is-small {isHide(\'stop\')}" onclick="{click}" action="stop">作業終了</button> <button class="button is-small" onclick="{click}" action="spell">呪文詠唱</button> <button class="button is-small" onclick="{click}" action="create-after">後続作成</button> <button class="button is-small {isHide(\'attain\')}" onclick="{click}" action="attain">埋葬</button> </div> </div>', 'impure_page-controller > .controller-container { background: #FEF264; padding: 11px 22px; border-radius: 3px; } impure_page-controller .operators { display:flex; } impure_page-controller .operators > * { margin-right:11px; } impure_page-controller .operators > *:last-child { margin-right:0px; }', '', function(opts) {
      this.click = (e) => {
          let action = e.target.getAttribute('action');
 
@@ -1895,6 +2034,26 @@ riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"
 
          if (action=='start') {
              ACTIONS.startImpure(this.source.impure);
+             return ;
+         }
+
+         if (action=='attain') {
+             ACTIONS.confirmationAttainImpure(this.source.impure);
+             return ;
+         }
+
+         if (action=='spell') {
+             ACTIONS.openModalSpellImpure(this.source.impure);
+             return ;
+         }
+
+         if (action=='create-after') {
+             let impure = Object.assign({}, this.source.impure);
+
+             if(this.source.deamon)
+                 impure.deamon = Object.assign({}, this.source.deamon);
+
+             ACTIONS.openModalCreateAfterImpure(impure);
              return ;
          }
      };
@@ -1946,13 +2105,15 @@ riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"
 
              return;
          }
-         if (action.type=='STARTED-ACTION') {
-             if (action.impure.id==this.source.impure.id)
-                 ACTIONS.fetchPagesImpure(this.source.impure);
 
-             return;
-         }
-         if (action.type=='STOPED-ACTION') {
+         let list = [
+             'STARTED-ACTION',
+             'STOPED-ACTION',
+             'FINISHED-IMPURE',
+             'SAVED-IMPURE-INCANTATION-SOLO',
+         ];
+
+         if (list.find((d) => { return d == action.type; })) {
              if (action.impure.id==this.source.impure.id)
                  ACTIONS.fetchPagesImpure(this.source.impure);
 
@@ -2028,7 +2189,18 @@ riot.tag2('impure_page_tab-requests', '<section class="section" style="padding:0
      this.contents = (v) => { return hw.descriptionViewShort(v); };
 });
 
-riot.tag2('page-impure-waiting', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">{xxx}</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section"> <div class="container"> <h1 class="title hw-text-white">Impure</h1> </div> </section> <section class="section"> <div class="container"> <h1 class="title hw-text-white">Actions</h1> </div> </section> <section class="section"> <div class="container"> <h1 class="title hw-text-white">Messages</h1> </div> </section>', '', '', function(opts) {
+riot.tag2('page-impure-waiting-actions', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">Actions</h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable" style="font-size:12px;"> <thead> <tr> <th colspan="2">Angel</th> <th colspan="5">Purge</th> </tr> <tr> <th>Id</th> <th>Name</th> <th>ID</th> <th>Start</th> <th>End</th> <th>Elapsed</th> <th>Description</th> </tr> </thead> <tbody> <tr each="{action in opts.source.actions}"> <td>{action.angel_id}</td> <td>{action.angel_name}</td> <td>{action.purge_id}</td> <td>{hw.str2yyyymmddhhmmss(action.purge_start)}</td> <td>{hw.str2yyyymmddhhmmss(action.purge_end)}</td> <td>{hw.int2hhmmss(action.elapsed_time)}</td> <td>{action.purge_description}</td> </tr> </tbody> </table> </div> </div> </section>', '', '', function(opts) {
+     this.hw = new HolyWater();
+});
+
+riot.tag2('page-impure-waiting-basic', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">Impure</h1> </div> </section>', '', '', function(opts) {
+});
+
+riot.tag2('page-impure-waiting-message', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">Messages</h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable" style="font-size:12px;"> <thead> <tr> <th colspan="6">Request</th> <th colspan="2">Message</th> </tr> <tr> <th>id</th> <th>time</th> <th colspan="2">from</th> <th colspan="2">to</th> <th>id</th> <th>contents</th> </tr> </thead> <tbody> <tr each="{msg in opts.source.messages}"> <td>{msg.ev_request.id}</td> <td>{hw.str2yyyymmddhhmmss(msg.ev_request.requested_at)}</td> <td>{msg.angel_from_id}</td> <td>{msg.angel_from_name}</td> <td>{msg.angel_to_id}</td> <td>{msg.angel_to_name}</td> <td>{msg.message_id}</td> <td>{msg.message_contents}</td> </tr> </tbody> </table> </div> </div> </section>', '', '', function(opts) {
+     this.hw = new HolyWater();
+});
+
+riot.tag2('page-impure-waiting', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">{xxx}</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <page-impure-waiting-basic source="{source}"></page-impure-waiting-basic> <page-impure-waiting-actions source="{source}"></page-impure-waiting-actions> <page-impure-waiting-message source="{source}"></page-impure-waiting-message>', '', '', function(opts) {
      this.source = {
          impure: null,
          maledict: null,
@@ -2043,7 +2215,8 @@ riot.tag2('page-impure-waiting', '<section class="section" style="padding-bottom
      })
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-PAGES-IMPURE-WAITING') {
-             dump(action.response);
+             this.source = action.response;
+             this.update();
          }
      });
 });
@@ -2146,6 +2319,9 @@ riot.tag2('orthodoxs-page_tab-orthdoxs', '<section class="section"> <div class="
          if (action.type=='FETCHED-ORTHODOXS')
              this.tags['orthodox-list'].update();
      });
+});
+
+riot.tag2('page-error-404', '', '', '', function(opts) {
 });
 
 riot.tag2('move-date-operator', '<div class="operator hw-box-shadow"> <div class="befor"> <button class="button" onclick="{clickBefor}"><</button> </div> <div class="trg"> <span>{opts.label}</span> </div> <div class="after"> <button class="button" onclick="{clickAfter}">></button> </div> </div>', 'move-date-operator .operator { display: flex; margin-left:11px; border-radius: 8px; } move-date-operator .operator span { font-size:18px; } move-date-operator .button{ border: none; } move-date-operator .befor, move-date-operator .befor .button{ border-radius: 8px 0px 0px 8px; } move-date-operator .after, move-date-operator .after .button{ border-radius: 0px 8px 8px 0px; } move-date-operator .operator > div { border: 1px solid #dbdbdb; width: 36px; } move-date-operator .operator > div.trg{ padding-top: 5px; padding-left: 8px; border-left: none; border-right: none; background: #ffffff; }', '', function(opts) {

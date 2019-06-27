@@ -147,13 +147,19 @@
       (hw.api.ctrl:move-impure angel impure to-maledict))))
 
 
-(defun create-after-impure (angel impure &key name description)
-  (dao2impure
-   (hw:add-after-impure angel
-                        impure
-                        :name name
-                        :description description
-                        :creator angel)))
+(defun create-after-impure (angel impure_before &key name description deamon-id)
+  (dbi:with-transaction mito:*connection*
+    (let ((deamon (hw::get-deamon :id deamon-id)))
+      (when deamon-id
+        (assert deamon))
+      (let ((impure (hw:add-after-impure angel
+                                         impure_before
+                                         :name name
+                                         :description description
+                                         :creator angel)))
+        (when deamon
+          (hw:impure-set-deamon angel impure deamon :editor angel))
+        (dao2impure impure)))))
 
 
 (defun impure-set-deamon (angel impure deamon-id)

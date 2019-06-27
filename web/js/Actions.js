@@ -324,6 +324,7 @@ class Actions extends Vanilla_Redux_Actions {
         return {
             type: 'FINISHED-IMPURE',
             data: {},
+            impure: impure,
         };
     }
     startTransferImpureToAngel (impure, angel) {
@@ -397,7 +398,6 @@ class Actions extends Vanilla_Redux_Actions {
             data: {},
         };
     }
-
     fetchImpureAtWaitingFor () {
         let path = '/impures?waiting-for=true';
 
@@ -412,7 +412,6 @@ class Actions extends Vanilla_Redux_Actions {
             response: response,
         };
     }
-
     /////
     ///// Action
     /////
@@ -489,6 +488,24 @@ class Actions extends Vanilla_Redux_Actions {
         return {
             type: 'SAVED-ACTION-RESULT'
         };
+    }
+    confirmationAttainImpure (impure) {
+        STORE.dispatch({
+            type: 'CONFIRMATION-ATTAIN-IMPURE',
+            impure: impure,
+        });
+    }
+    openModalSpellImpure (impure) {
+        STORE.dispatch({
+            type: 'OPEN-MODAL-SPELL-IMPURE',
+            impure: impure,
+        });
+    }
+    openModalCreateAfterImpure (impure) {
+        STORE.dispatch({
+            type: 'OPEN-MODAL-CREATE-AFTER-IMPURE',
+            impure: impure,
+        });
     }
     /////
     ///// Move Impure to Maledict

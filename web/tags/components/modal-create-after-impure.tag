@@ -1,88 +1,91 @@
 <modal-create-after-impure>
 
-    <div class="modal {opts.impure ? 'is-active' : ''}">
+    <div class="modal {impure ? 'is-active' : ''}">
         <div class="modal-background"></div>
         <div class="modal-card" style="width:999px;">
 
             <header class="modal-card-head" style="padding: 11px 22px;">
                 <p class="modal-card-title" style="font-size:16px;">後続の Impure を作成</p>
-                <button class="delete" aria-label="close" onclick={clickCloseButton}></button>
+                <button class="delete" aria-label="close" onclick={clickClose}></button>
             </header>
 
             <section class="modal-card-body" style="display:flex;">
-                <div style="flex-grow:1;">
+                <div class="left">
                     <input class="input is-small"
                            type="text"
                            placeholder="Title"
                            ref="name">
 
-                    <textarea class="textarea is-small"
+                    <textarea class="textarea is-small martin-top"
                               placeholder="Description"
                               rows="6"
-                              style="margin-top:11px; height: 333px;"
+                              style="height: 222px;"
                               ref="description"></textarea>
 
-                    <h1 class="title is-6" style="margin-bottom: 3px; margin-top:11px;">Deamon:</h1>
-                    <div style="margin-left:11px;">
-                        <p style="margin-bottom:11px;">なし</p>
+                    <h1 class="title is-6 martin-top"
+                        style="margin-bottom: 3px;">Deamon:</h1>
 
-                        <input class="input is-small"
-                               type="text"
-                               placeholder="Search Deamon"
-                               ref="name">
+                    <div class="martin-top">
+                        <modal-create-after-impure-left-deamon source={deamon}
+                                                               callback={callback}></modal-create-after-impure-left-deamon>
 
-                        <div style="margin-top:11px;">
-                            <button class="button is-small">Deamon 1</button>
-                            <button class="button is-small">Deamon 2</button>
-                            <button class="button is-small">Deamon 3</button>
-                        </div>
+                        <modal-create-after-impure-left-deamons callback={callback}></modal-create-after-impure-left-deamons>
                     </div>
                 </div>
 
-                <div style="padding-left: 22px; padding-right: 22px; display:flex; flex-direction: column; justify-content: center;;">
-                    <h1 class="title is-6">Copy</h1>
-                    <button class="button is-small">←</button>
-                </div>
-
-                <div style="flex-grow:1;padding: 11px;background: #eeeeee;border-radius: 3px;">
-                    <h1 class="title is-6" style="margin-bottom: 3px;">Title:</h1>
-                    <p style="padding-left:11px;">title ....</p>
-
-                    <h1 class="title is-6" style="margin-bottom: 3px; margin-top: 11px;">description:</h1>
-                    <p style="padding-left:11px;">markdon -> html ....</p>
-
-                    <h1 class="title is-6" style="margin-bottom: 3px; margin-top: 11px;">Deamon:</h1>
-                    <p style="padding-left:11px;">Deamon...</p>
-                </div>
-
+                <modal-create-after-impure-center source={impure} callback={callback}></modal-create-after-impure-center>
+                <modal-create-after-impure-right  source={impure}></modal-create-after-impure-right>
             </section>
 
             <footer class="modal-card-foot"
                     style="padding: 11px 22px; display: flex; justify-content: space-between;">
-                <button class="button is-small" onclick={clickCloseButton}>Cancel</button>
-                <button class="button is-small is-success" onclick={clickCreateButton}>Create!</button>
+
+                <button class="button is-small"
+                        onclick={clickClose}>Cancel</button>
+
+                <button class="button is-small is-success"
+                        onclick={clickCreate}>Create!</button>
             </footer>
         </div>
     </div>
 
     <script>
+     this.callback = (action, data) => {
+         if (action=='copy') {
+             this.refs.name.value = this.impure.name;
+             this.refs.description.value = this.impure.description;
+             this.deamon = this.impure.deamon;
+             this.update();
+
+             return;
+         }
+
+         if (action=='select-deamon') {
+             this.deamon = data;
+             this.update();
+         }
+     };
+    </script>
+
+    <script>
+     this.impure   = null;
      this.maledict = null;
+     this.deamon   = null;
      STORE.subscribe((action) => {
-         if (action.type=='OPEN-MODAL-CREATE-IMPURE') {
-             this.maledict = action.maledict;
+         if (action.type=='OPEN-MODAL-CREATE-AFTER-IMPURE') {
+             this.impure = action.impure;
              this.update();
 
              return;
          }
 
-         if (action.type=='CLOSE-MODAL-CREATE-IMPURE') {
-             this.maledict = null;
-             this.update();
-
-             return;
-         }
-
-         if (action.type=='CREATED-MALEDICT-IMPURE') {
+         let list = [
+             'CREATED-IMPURE-AFTER-IMPURE',
+             'CLOSE-MODAL-CREATE-IMPURE',
+             'CREATED-MALEDICT-IMPURE',
+         ];
+         if (list.find((d) => { return action.type == d;})) {
+             this.impure = null;
              this.maledict = null;
              this.update();
 
@@ -92,22 +95,32 @@
     </script>
 
     <script>
-     this.maledictName = () => {
-         return this.maledict ? this.maledict.name : '';
-     }
-    </script>
+     this.clickCreate = (e) => {
+         let params = {
+             name: this.refs.name.value.trim(),
+             description: this.refs.description.value.trim(),
+         }
 
-    <script>
-     this.clickCreateButton = (e) => {
-         ACTIONS.createMaledictImpure (this.maledict, {
-             name: this.refs['name'].value,
-             description: this.refs['description'].value,
-             maledict: this.opts.maledict
-         });
+         if (this.deamon)
+             params.deamon_id = this.deamon.id
+
+         ACTIONS.createImpureAfterImpure(this.impure, params);
      };
-     this.clickCloseButton = (e) => {
+     this.clickClose = (e) => {
          ACTIONS.closeModalCreateImpure();
      };
     </script>
+
+    <style>
+     modal-create-after-impure .left {
+         flex-grow: 1;
+         display: flex;
+         flex-direction: column;
+         width:45%;
+     }
+     modal-create-after-impure .left .martin-top {
+         margin-top:11px;
+     }
+    </style>
 
 </modal-create-after-impure>

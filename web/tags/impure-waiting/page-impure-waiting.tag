@@ -9,23 +9,9 @@
         </div>
     </section>
 
-    <section class="section">
-        <div class="container">
-            <h1 class="title hw-text-white">Impure</h1>
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="container">
-            <h1 class="title hw-text-white">Actions</h1>
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="container">
-            <h1 class="title hw-text-white">Messages</h1>
-        </div>
-    </section>
+    <page-impure-waiting-basic   source={source}></page-impure-waiting-basic>
+    <page-impure-waiting-actions source={source}></page-impure-waiting-actions>
+    <page-impure-waiting-message source={source}></page-impure-waiting-message>
 
     <script>
      this.source = {
@@ -42,7 +28,8 @@
      })
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-PAGES-IMPURE-WAITING') {
-             dump(action.response);
+             this.source = action.response;
+             this.update();
          }
      });
     </script>

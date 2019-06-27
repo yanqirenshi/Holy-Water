@@ -209,16 +209,18 @@
       (unless to-angel (throw-code 404))
       (render-json (hw.api.ctrl:transfer-impure angel to-angel impure message)))))
 
-(defroute ("/impures/:impure-id/afters" :method :post) (&key impure-id |name| |description|)
+(defroute ("/impures/:impure-id/afters" :method :post) (&key impure-id |name| |description| |deamon_id|)
   (with-angel (angel)
     (let ((name        (quri:url-decode (or |name| "")))
           (description (quri:url-decode (or |description| "")))
-          (impure      (hw::get-impure  :id impure-id)))
+          (impure      (hw::get-impure  :id impure-id))
+          (deamon-id   (if |deamon_id| (parse-integer |deamon_id|) nil)))
       (unless impure   (throw-code 404))
       (render-json (hw.api.ctrl:create-after-impure angel
                                                     impure
                                                     :name name
-                                                    :description description)))))
+                                                    :description description
+                                                    :deamon-id deamon-id)))))
 
 (defroute ("/impures/:id/incantation" :method :POST) (&key id |spell|)
   (with-angel (angel)

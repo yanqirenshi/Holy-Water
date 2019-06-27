@@ -10,11 +10,11 @@
 
             <button class="button is-small {isHide('stop')}" onclick={click} action="stop">作業終了</button>
 
-            <button class="button is-small" onclick={click} action="spell" disabled>呪文詠唱</button>
+            <button class="button is-small" onclick={click} action="spell">呪文詠唱</button>
 
-            <button class="button is-small" onclick={click} action="create-after" disabled>後続作成</button>
+            <button class="button is-small" onclick={click} action="create-after">後続作成</button>
 
-            <button class="button is-small {isHide('attain')}" onclick={click} action="attain" disabled>埋葬</button>
+            <button class="button is-small {isHide('attain')}" onclick={click} action="attain">埋葬</button>
         </div>
 
     </div>

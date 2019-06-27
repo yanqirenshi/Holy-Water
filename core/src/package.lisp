@@ -58,6 +58,7 @@
            #:create-incantation-duet)
   (:export #:list-summay-purge-time-by-date-damon
            #:list-purge-by-angel
+           #:list-purge-by-impure
            #:list-cemeteries
            #:list-summay-impure-cemeteries-by-date-damon
            #:list-summary-purge-by-deamon

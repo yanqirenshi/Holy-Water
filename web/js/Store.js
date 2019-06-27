@@ -201,6 +201,12 @@ class Store extends Vanilla_Redux_Store {
             home_page: 'home',
             randing_page: 'randing',
             pages: this.pages(),
+            error: {
+                404: {
+                    code: "error-404",
+                    tag: 'page-error-404',
+                },
+            }
         };
     }
     initSelectedData () {
