@@ -10,7 +10,7 @@
     </section>
 
     <section class="section" style="padding-top:0px;">
-        <div class="container">
+        <div class="container cards">
             <div style="display: flex;">
                 <div style="flex-grow: 1;">
                     <page-impure-contents source={source}></page-impure-contents>

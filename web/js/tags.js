@@ -2096,10 +2096,16 @@ riot.tag2('page-impure-card-deamon', '<div> <p>悪魔</p> </div> <div> <p>{deamo
      };
 });
 
-riot.tag2('page-impure-card-description', '<div> <p>Description</p> </div> <div class="description" style="flex-grow:1; overflow:auto;"> <description-markdown source="{\'\'}"></description-markdown> </div>', 'page-impure-card-description { display:flex; flex-direction:column; width: calc(88px * 5 + 11px * 4); height: calc(88px * 4 + 11px * 3); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; } page-impure-card-description .description { background: #eee; line-height: 14px; }', '', function(opts) {
+riot.tag2('page-impure-card-description', '<div> <p>Description</p> </div> <div class="description" style=""> <description-markdown source="{description()}"></description-markdown> </div>', 'page-impure-card-description { display:flex; flex-direction:column; width: calc(88px * 5 + 11px * 4); height: calc(88px * 4 + 11px * 3); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; } page-impure-card-description .description { flex-grow:1; overflow:auto; padding: 11px; background: #eee; line-height: 14px; }', '', function(opts) {
+     this.description = () => {
+         if (!this.opts.source.impure)
+             return '';
+
+         return this.opts.source.impure.description;
+     };
 });
 
-riot.tag2('page-impure-card-incantation', '<d> <p>{time()}</p> </d> <d> <p><b>呪文詠唱</b></p> <p>{angelName()}</p> <p>{spell()}</p> </d>', 'page-impure-card-incantation { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; font-size: 12px; }', '', function(opts) {
+riot.tag2('page-impure-card-incantation', '<div style="display:flex; flex-direction:column; height:100%;"> <div style="background:#cee4ae; padding:6px 8px; margin-bottom: 6px;"> <p><b>呪文詠唱:</b> {angelName()}</p> </div> <div class="description"> <description-markdown source="{spell()}"></description-markdown> </div> <div style="font-size:8px; text-align:right;"> <p>{time()}</p> </div> </div>', 'page-impure-card-incantation { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; font-size: 12px; } page-impure-card-incantation .description { word-break: break-all; flex-grow: 1; overflow: auto; }', '', function(opts) {
      this.time = () => {
          let time = moment(this.opts.source.incantation_at);
 
@@ -2113,7 +2119,7 @@ riot.tag2('page-impure-card-incantation', '<d> <p>{time()}</p> </d> <d> <p><b>�
      };
 });
 
-riot.tag2('page-impure-card-purge', '<d> <p>{time()}</p> </d> <d> <p><b>浄化</b></p> <p>祓魔師: {angelName()}</p> <p>経過時間: {elapsedTime()}</p> <div style="font-size:11px; margin-top:11px;"> <p>開始:{start()}</p> <p>終了:{end()}</p> </div> </d>', 'page-impure-card-purge { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; font-size: 12px; }', '', function(opts) {
+riot.tag2('page-impure-card-purge', '<div style="display:flex; flex-direction:column; height:100%;"> <div style="background:rgba(254, 242, 99, 0.88); padding:6px 8px; margin-bottom: 6px;"> <p><b>浄化:</b> {angelName()}</p> </div> <div style="font-size:11px; margin-top:11px;"> <p>開始:{start()}</p> <p>終了:{end()}</p> </div> <div style="flex-grow:1; display:flex; align-items:center;"> <p style="flex-grow:1; font-size: 33px;text-align: center;">{elapsedTime()}</p> </div> <div style="font-size:8px; text-align:right;"> <p>{time()}</p> </div> </div>', 'page-impure-card-purge { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; font-size: 12px; }', '', function(opts) {
      this.time = () => {
          let time_str = this.opts.source.end || this.opts.source.start;
 
@@ -2157,32 +2163,60 @@ riot.tag2('page-impure-card-request', '<d> <p>{time()}</p> </d> <d> <p><b>浄化
      };
 });
 
-riot.tag2('page-impure-card-status', '<div> <p>状況</p> </div> <div> <p>{purgeNow()}</p> <p>{finished()}</p> </div>', 'page-impure-card-status { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; }', '', function(opts) {
-     this.finished = () => {
+riot.tag2('page-impure-card-status-purge', '<div style="display:flex; flex-direction:column; height:100%;"> <div style="height:24px;"> <p style="text-align: center;">{purgeNow()}</p> </div> <div style="flex-grow:1;display: flex;align-items: center; flex-direction:column;"> <div> <p>Total time:</p> <p style="text-align:center; font-size:55px; word-break:break-all; font-weight: bold;"> {totalTime()} </p> </div> </div> </div>', 'page-impure-card-status-purge { display: block; width: calc(88px * 3 + 11px * 2); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88); border-radius: 8px; } page-impure-card-status-purge.purge { background: rgba(254, 242, 99, 0.88); }', 'class="{isPurgeNow() ? \'purge\' : \'wait\'}"', function(opts) {
+     this.totalTime = () => {
+         let time = this.opts.source.purges.reduce((a, b) => {
+             return a + b.elapsed_time
+         }, 0);
+
+         return new HolyWater().int2hhmmss(time);
+     }
+     this.isPurgeNow = () => {
          let impure = this.opts.source.impure;
 
          if (!impure)
-             return '';
+             return false;
 
-         if (!impure.finished_at)
-             return '未浄化';
+         if (!impure.purge)
+             return false;
 
-         return '浄化済み';
-     }
+         return true;
+     };
      this.purgeNow = () => {
          let impure = this.opts.source.impure;
 
          if (!impure)
-             return '';
+             return 'Purge';
 
          if (!impure.purge)
-             return '';
+             return 'Purge';
 
-         return 'パージ中';
+         return 'Purging';
      };
 });
 
-riot.tag2('page-impure-card', '<page-impure-card-status if="{opts.source.type==⁗IMPURE-STATUS⁗}" source="{opts.source.contents}"></page-impure-card-status> <page-impure-card-angel if="{opts.source.type==⁗IMPURE-ANGEL⁗}" source="{opts.source.contents}"></page-impure-card-angel> <page-impure-card-deamon if="{opts.source.type==⁗IMPURE-DEAMON⁗}" source="{opts.source.contents}"></page-impure-card-deamon> <page-impure-card-description if="{opts.source.type==⁗IMPURE-DESCRIPTION⁗}" source="{opts.source.contents}"></page-impure-card-description> <page-impure-card-incantation if="{opts.source.type==⁗IMPURE-SPELL⁗}" source="{opts.source.contents}"></page-impure-card-incantation> <page-impure-card-purge if="{opts.source.type==⁗IMPURE-PURGE⁗}" source="{opts.source.contents}"></page-impure-card-purge> <page-impure-card-request if="{opts.source.type==⁗IMPURE-REQUEST⁗}" source="{opts.source.contents}"></page-impure-card-request>', 'page-impure-card { display: block; margin-bottom: 11px; }', '', function(opts) {
+riot.tag2('page-impure-card-status', '<div style="height:100%; display:flex; align-items:center;"> <p style="font-size:66px; font-weight:bold; word-break:break-all; text-align:center; flex-grow:1;"> {finished()} </p> </div>', 'page-impure-card-status { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; border-radius: 8px; } page-impure-card-status.pure { background: rgba(137, 195, 235, 0.88); color: #fff; } page-impure-card-status.impure { background: rgba(100, 1, 37, 0.88); color: #fff; }', 'class="{isFinished() ? \'pure\' : \'impure\'}"', function(opts) {
+     this.isFinished = () => {
+         let impure = this.opts.source.impure;
+
+         if (!impure)
+             return false;
+
+         if (!impure.finished_at)
+             return false;
+
+         return true;
+     }
+     this.finished = () => {
+         let state = this.isFinished();
+
+         return state ? '清浄' : '不浄';
+
+         return ;
+     }
+});
+
+riot.tag2('page-impure-card', '<page-impure-card-status if="{opts.source.type==⁗IMPURE-STATUS⁗}" source="{opts.source.contents}"></page-impure-card-status> <page-impure-card-status-purge if="{opts.source.type==⁗IMPURE-STATUS-PURGE⁗}" source="{opts.source.contents}"></page-impure-card-status-purge> <page-impure-card-angel if="{opts.source.type==⁗IMPURE-ANGEL⁗}" source="{opts.source.contents}"></page-impure-card-angel> <page-impure-card-deamon if="{opts.source.type==⁗IMPURE-DEAMON⁗}" source="{opts.source.contents}"></page-impure-card-deamon> <page-impure-card-description if="{opts.source.type==⁗IMPURE-DESCRIPTION⁗}" source="{opts.source.contents}"></page-impure-card-description> <page-impure-card-incantation if="{opts.source.type==⁗IMPURE-SPELL⁗}" source="{opts.source.contents}"></page-impure-card-incantation> <page-impure-card-purge if="{opts.source.type==⁗IMPURE-PURGE⁗}" source="{opts.source.contents}"></page-impure-card-purge> <page-impure-card-request if="{opts.source.type==⁗IMPURE-REQUEST⁗}" source="{opts.source.contents}"></page-impure-card-request>', 'page-impure-card { display: block; margin-bottom: 11px; }', '', function(opts) {
 });
 
 riot.tag2('page-impure-chains', '<h1 class="title is-4">Impure 連携図</h1> <div> <p>準備中</p> </div>', 'page-impure-chains { display: block; width: 100%; height: calc(88px * 3 + 22px * 2); padding: 22px; background: rgba(255,255,255,0.88); border-radius: 8px; margin-bottom: 11px; }', '', function(opts) {
@@ -2258,7 +2292,7 @@ riot.tag2('page-impure-requests', '<h1 class="title is-5">依頼履歴</h1> <div
      this.contents = (v) => { return hw.descriptionViewShort(v); };
 });
 
-riot.tag2('page-impure', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">{this.name()}</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section" style="padding-top:0px;"> <div class="container"> <div style="display: flex;"> <div style="flex-grow: 1;"> <page-impure-contents source="{source}"></page-impure-contents> </div> <div style="margin-left:22px;"> <page-impure-controller source="{term}" impure="{source.impure}" callback="{callback}"></page-impure-controller> </div> </div> </div> </section>', 'page-impure page-tabs li a{ background: #fff; } page-impure { width: 100%; height: 100%; display: block; overflow: auto; } page-impure .tabs ul { border-bottom-color: rgb(254, 242, 99); border-bottom-width: 2px; } page-impure .tabs.is-boxed li.is-active a { background-color: rgba(254, 242, 99, 1); border-color: rgb(254, 242, 99); text-shadow: 0px 0px 11px #fff; color: #333; font-weight: bold; } page-impure .tabs.is-boxed li { margin-left: 8px; } page-impure .tabs.is-boxed a { text-shadow: 0px 0px 8px #fff; font-weight: bold; } page-impure .table th, page-impure .table td { font-size: 14px; }', '', function(opts) {
+riot.tag2('page-impure', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">{this.name()}</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section" style="padding-top:0px;"> <div class="container cards"> <div style="display: flex;"> <div style="flex-grow: 1;"> <page-impure-contents source="{source}"></page-impure-contents> </div> <div style="margin-left:22px;"> <page-impure-controller source="{term}" impure="{source.impure}" callback="{callback}"></page-impure-controller> </div> </div> </div> </section>', 'page-impure page-tabs li a{ background: #fff; } page-impure { width: 100%; height: 100%; display: block; overflow: auto; } page-impure .tabs ul { border-bottom-color: rgb(254, 242, 99); border-bottom-width: 2px; } page-impure .tabs.is-boxed li.is-active a { background-color: rgba(254, 242, 99, 1); border-color: rgb(254, 242, 99); text-shadow: 0px 0px 11px #fff; color: #333; font-weight: bold; } page-impure .tabs.is-boxed li { margin-left: 8px; } page-impure .tabs.is-boxed a { text-shadow: 0px 0px 8px #fff; font-weight: bold; } page-impure .table th, page-impure .table td { font-size: 14px; }', '', function(opts) {
      this.callback = (action, data) => {
          if (action=='refresh') {
              let id = this.id();

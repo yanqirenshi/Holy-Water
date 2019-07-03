@@ -1,19 +1,25 @@
 <page-impure-card-purge>
 
-    <d>
-        <p>{time()}</p>
-    </d>
 
-    <d>
-        <p><b>浄化</b></p>
-        <p>祓魔師: {angelName()}</p>
-        <p>経過時間: {elapsedTime()}</p>
+    <div style="display:flex; flex-direction:column; height:100%;">
+
+        <div style="background:rgba(254, 242, 99, 0.88); padding:6px 8px; margin-bottom: 6px;">
+            <p><b>浄化:</b> {angelName()}</p>
+        </div>
 
         <div style="font-size:11px; margin-top:11px;">
             <p>開始:{start()}</p>
             <p>終了:{end()}</p>
         </div>
-    </d>
+
+        <div style="flex-grow:1; display:flex; align-items:center;">
+            <p style="flex-grow:1; font-size: 33px;text-align: center;">{elapsedTime()}</p>
+        </div>
+
+        <div style="font-size:8px; text-align:right;">
+            <p>{time()}</p>
+        </div>
+    </div>
 
     <script>
      this.time = () => {

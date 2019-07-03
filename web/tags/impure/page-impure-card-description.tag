@@ -4,9 +4,18 @@
         <p>Description</p>
     </div>
 
-    <div class="description" style="flex-grow:1; overflow:auto;">
-        <description-markdown source={''}></description-markdown>
+    <div class="description" style="">
+        <description-markdown source={description()}></description-markdown>
     </div>
+
+    <script>
+     this.description = () => {
+         if (!this.opts.source.impure)
+             return '';
+
+         return this.opts.source.impure.description;
+     };
+    </script>
 
     <style>
      page-impure-card-description {
@@ -21,8 +30,14 @@
      }
 
      page-impure-card-description .description {
+         flex-grow:1;
+         overflow:auto;
+
+         padding: 11px;
+
          background: #eee;
          line-height: 14px;
+
      }
     </style>
 </page-impure-card-description>

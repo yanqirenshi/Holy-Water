@@ -1,37 +1,30 @@
-<page-impure-card-status>
+<page-impure-card-status class={isFinished() ? 'pure' : 'impure'}>
 
-    <div>
-        <p>状況</p>
-    </div>
-
-    <div>
-        <p>{purgeNow()}</p>
-        <p>{finished()}</p>
+    <div style="height:100%; display:flex; align-items:center;">
+        <p style="font-size:66px; font-weight:bold; word-break:break-all; text-align:center; flex-grow:1;">
+            {finished()}
+        </p>
     </div>
 
     <script>
-     this.finished = () => {
+     this.isFinished = () => {
          let impure = this.opts.source.impure;
 
          if (!impure)
-             return '';
+             return false;
 
          if (!impure.finished_at)
-             return '未浄化';
+             return false;
 
-         return '浄化済み';
+         return true;
      }
-     this.purgeNow = () => {
-         let impure = this.opts.source.impure;
+     this.finished = () => {
+         let state = this.isFinished();
 
-         if (!impure)
-             return '';
+         return state ? '清浄' : '不浄';
 
-         if (!impure.purge)
-             return '';
-
-         return 'パージ中';
-     };
+         return ;
+     }
     </script>
 
     <style>
@@ -40,8 +33,17 @@
          width:  calc(88px * 2 + 11px * 1);
          height: calc(88px * 2 + 11px * 1);
          padding: 11px;
-         background: rgba(255,255,255,0.88);;
          border-radius: 8px;
      }
+     page-impure-card-status.pure {
+         background: rgba(137, 195, 235, 0.88);
+         color: #fff;
+     }
+     page-impure-card-status.impure {
+         background: rgba(100, 1, 37, 0.88);
+         color: #fff;
+     }
+
     </style>
+
 </page-impure-card-status>

@@ -1,14 +1,19 @@
 <page-impure-card-incantation>
 
-    <d>
-        <p>{time()}</p>
-    </d>
+    <div style="display:flex; flex-direction:column; height:100%;">
 
-    <d>
-        <p><b>呪文詠唱</b></p>
-        <p>{angelName()}</p>
-        <p>{spell()}</p>
-    </d>
+        <div style="background:#cee4ae; padding:6px 8px; margin-bottom: 6px;">
+            <p><b>呪文詠唱:</b> {angelName()}</p>
+        </div>
+
+        <div class="description">
+            <description-markdown source={spell()}></description-markdown>
+        </div>
+
+        <div style="font-size:8px; text-align:right;">
+            <p>{time()}</p>
+        </div>
+    </div>
 
     <script>
      this.time = () => {
@@ -34,6 +39,11 @@
          border-radius: 8px;
 
          font-size: 12px;
+     }
+     page-impure-card-incantation .description {
+         word-break: break-all;
+         flex-grow: 1;
+         overflow: auto;
      }
     </style>
 </page-impure-card-incantation>

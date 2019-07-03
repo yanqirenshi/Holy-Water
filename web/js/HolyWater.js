@@ -95,6 +95,11 @@ class HolyWater {
         });
 
         out.push({
+            type: 'IMPURE-STATUS-PURGE',
+            contents: source,
+        });
+
+        out.push({
             type: 'IMPURE-DEAMON',
             contents: source,
         });
@@ -133,7 +138,7 @@ class HolyWater {
         return []
             .concat(out)
             .concat(tmp.sort((a, b) => {
-                return a > b ? 1 : -1;
+                return a > b ? -1 : 1;
             }));
     }
 }

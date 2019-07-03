@@ -862,7 +862,6 @@ class Actions extends Vanilla_Redux_Actions {
     }
     fetchPagesImpure (impure) {
         let path = '/pages/impures/' + impure.id ;
-
         API.get(path, function (json, success) {
             if (success)
                 STORE.dispatch(this.fetchedPagesImpure(json));
