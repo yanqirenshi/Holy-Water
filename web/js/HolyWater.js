@@ -138,7 +138,7 @@ class HolyWater {
         return []
             .concat(out)
             .concat(tmp.sort((a, b) => {
-                return a > b ? -1 : 1;
+                return a.time > b.time ? -1 : 1;
             }));
     }
 }

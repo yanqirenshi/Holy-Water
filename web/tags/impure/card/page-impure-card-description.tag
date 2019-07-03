@@ -1,11 +1,11 @@
 <page-impure-card-description>
 
-    <div>
-        <p>Description</p>
-    </div>
-
     <div class="description" style="">
         <description-markdown source={description()}></description-markdown>
+    </div>
+
+    <div style="text-align: right; margin-top: 8px;">
+        <button class="button is-small">編集</button>
     </div>
 
     <script>

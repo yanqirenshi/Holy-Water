@@ -1,12 +1,20 @@
 <page-impure-card-deamon>
 
-    <div>
-        <p>悪魔</p>
-    </div>
+    <div style="display: flex; flex-direction: column; height: 100%;">
 
-    <div>
-        <p>{deamonNameShort()}</p>
-        <p>{deamonName()}</p>
+        <div style="display: flex;flex-grow: 1;align-items: center;">
+
+            <p style="text-align:center;">
+                <b>{deamonNameShort()}</b>
+                <br/>
+                {deamonName()}
+            </p>
+
+        </div>
+
+        <div style="text-align: right;">
+            <button class="button is-small">変更</button>
+        </div>
     </div>
 
     <script>

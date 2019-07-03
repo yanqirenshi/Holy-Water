@@ -2041,47 +2041,24 @@ riot.tag2('impure-card-small', '<div class="content" style="font-size:12px;"> <p
      };
 });
 
-riot.tag2('page-impure-basic', '<h1 class="title is-4" style="margin-bottom: 8px;">Maledict</h1> <div class="contents" style="font-weight:bold; padding-left:22px;"> <p>{maledict()} @{maledict_angel()}</p> </div> <h1 class="title is-4" style="margin-bottom: 8px;">Name</h1> <div class="contents" style="font-weight:bold; padding-left:22px;"> <p>{name()}</p> </div> <h1 class="title is-4" style="margin-bottom: 8px;">Description</h1> <div class="contents description" style="margin-left: 22px;"> <description-markdown source="{description()}"></description-markdown> </div>', 'page-impure-basic { display: block; flex-direction: column; padding: 22px; width: calc(88px * 4 + 22px * 3); height: calc(88px * 5 + 22px * 4); border-radius: 8px; background: rgba(255,255,255,0.88); margin-bottom: 11px; } page-impure-basic .description { background: #eee; border-radius: 3px; line-height: 14px; } page-impure-basic description-markdown > div { padding: 22px; }', '', function(opts) {
-     this.maledict = () => {
-         if (!this.opts.source.maledict)
-             return '???';
-
-         return this.opts.source.maledict.name;
-     };
-     this.maledict_angel = () => {
-         if (!this.opts.source.angel)
-             return '';
-
-         return this.opts.source.angel.name;
-     };
-     this.name = () => {
-         let impure = this.opts.source.impure;
-
-         if (!impure)
-             return '????????';
-
-         return impure.name;
-     };
-     this.description = () => {
-         let impure = this.opts.source.impure;
-
-         if (!impure)
-             return '????????';
-
-         return impure.description;
-     };
-});
-
-riot.tag2('page-impure-card-angel', '<div> <p>祓魔師</p> </div> <div> <p>{angelName()}</p> </div>', 'page-impure-card-angel { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; }', '', function(opts) {
+riot.tag2('page-impure-card-angel', '<div style="display:flex; flex-direction:column; height:100%;"> <div style="flex-grow: 1;display: flex;align-items: center; flex-direction:column; justify-content: center;"> <p style="text-align: center;font-size: 33px;font-weight: bold;"> {angelName()} </p> <p> <span style="font-size:14px;">{maledictName()}</span> </p> </div> <div style="text-align: right;"> <button class="button is-small">依頼</button> </div> </div>', 'page-impure-card-angel { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; }', '', function(opts) {
      this.angelName = () => {
          if (!this.opts.source.angel)
              return '';
 
          return this.opts.source.angel.name;
      };
+     this.maledictName = () => {
+         let maledict = this.opts.source.maledict;
+
+         if (!maledict)
+             return '';
+
+         return '(' + maledict.name + ')';
+     };
 });
 
-riot.tag2('page-impure-card-deamon', '<div> <p>悪魔</p> </div> <div> <p>{deamonNameShort()}</p> <p>{deamonName()}</p> </div>', 'page-impure-card-deamon { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; }', '', function(opts) {
+riot.tag2('page-impure-card-deamon', '<div style="display: flex; flex-direction: column; height: 100%;"> <div style="display: flex;flex-grow: 1;align-items: center;"> <p style="text-align:center;"> <b>{deamonNameShort()}</b> <br> {deamonName()} </p> </div> <div style="text-align: right;"> <button class="button is-small">変更</button> </div> </div>', 'page-impure-card-deamon { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; }', '', function(opts) {
      this.deamonName = () => {
          if (!this.opts.source.deamon)
              return '';
@@ -2096,7 +2073,7 @@ riot.tag2('page-impure-card-deamon', '<div> <p>悪魔</p> </div> <div> <p>{deamo
      };
 });
 
-riot.tag2('page-impure-card-description', '<div> <p>Description</p> </div> <div class="description" style=""> <description-markdown source="{description()}"></description-markdown> </div>', 'page-impure-card-description { display:flex; flex-direction:column; width: calc(88px * 5 + 11px * 4); height: calc(88px * 4 + 11px * 3); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; } page-impure-card-description .description { flex-grow:1; overflow:auto; padding: 11px; background: #eee; line-height: 14px; }', '', function(opts) {
+riot.tag2('page-impure-card-description', '<div class="description" style=""> <description-markdown source="{description()}"></description-markdown> </div> <div style="text-align: right; margin-top: 8px;"> <button class="button is-small">編集</button> </div>', 'page-impure-card-description { display:flex; flex-direction:column; width: calc(88px * 5 + 11px * 4); height: calc(88px * 4 + 11px * 3); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; } page-impure-card-description .description { flex-grow:1; overflow:auto; padding: 11px; background: #eee; line-height: 14px; }', '', function(opts) {
      this.description = () => {
          if (!this.opts.source.impure)
              return '';
@@ -2217,6 +2194,37 @@ riot.tag2('page-impure-card-status', '<div style="height:100%; display:flex; ali
 });
 
 riot.tag2('page-impure-card', '<page-impure-card-status if="{opts.source.type==⁗IMPURE-STATUS⁗}" source="{opts.source.contents}"></page-impure-card-status> <page-impure-card-status-purge if="{opts.source.type==⁗IMPURE-STATUS-PURGE⁗}" source="{opts.source.contents}"></page-impure-card-status-purge> <page-impure-card-angel if="{opts.source.type==⁗IMPURE-ANGEL⁗}" source="{opts.source.contents}"></page-impure-card-angel> <page-impure-card-deamon if="{opts.source.type==⁗IMPURE-DEAMON⁗}" source="{opts.source.contents}"></page-impure-card-deamon> <page-impure-card-description if="{opts.source.type==⁗IMPURE-DESCRIPTION⁗}" source="{opts.source.contents}"></page-impure-card-description> <page-impure-card-incantation if="{opts.source.type==⁗IMPURE-SPELL⁗}" source="{opts.source.contents}"></page-impure-card-incantation> <page-impure-card-purge if="{opts.source.type==⁗IMPURE-PURGE⁗}" source="{opts.source.contents}"></page-impure-card-purge> <page-impure-card-request if="{opts.source.type==⁗IMPURE-REQUEST⁗}" source="{opts.source.contents}"></page-impure-card-request>', 'page-impure-card { display: block; margin-bottom: 11px; }', '', function(opts) {
+});
+
+riot.tag2('page-impure-basic', '<h1 class="title is-4" style="margin-bottom: 8px;">Maledict</h1> <div class="contents" style="font-weight:bold; padding-left:22px;"> <p>{maledict()} @{maledict_angel()}</p> </div> <h1 class="title is-4" style="margin-bottom: 8px;">Name</h1> <div class="contents" style="font-weight:bold; padding-left:22px;"> <p>{name()}</p> </div> <h1 class="title is-4" style="margin-bottom: 8px;">Description</h1> <div class="contents description" style="margin-left: 22px;"> <description-markdown source="{description()}"></description-markdown> </div>', 'page-impure-basic { display: block; flex-direction: column; padding: 22px; width: calc(88px * 4 + 22px * 3); height: calc(88px * 5 + 22px * 4); border-radius: 8px; background: rgba(255,255,255,0.88); margin-bottom: 11px; } page-impure-basic .description { background: #eee; border-radius: 3px; line-height: 14px; } page-impure-basic description-markdown > div { padding: 22px; }', '', function(opts) {
+     this.maledict = () => {
+         if (!this.opts.source.maledict)
+             return '???';
+
+         return this.opts.source.maledict.name;
+     };
+     this.maledict_angel = () => {
+         if (!this.opts.source.angel)
+             return '';
+
+         return this.opts.source.angel.name;
+     };
+     this.name = () => {
+         let impure = this.opts.source.impure;
+
+         if (!impure)
+             return '????????';
+
+         return impure.name;
+     };
+     this.description = () => {
+         let impure = this.opts.source.impure;
+
+         if (!impure)
+             return '????????';
+
+         return impure.description;
+     };
 });
 
 riot.tag2('page-impure-chains', '<h1 class="title is-4">Impure 連携図</h1> <div> <p>準備中</p> </div>', 'page-impure-chains { display: block; width: 100%; height: calc(88px * 3 + 22px * 2); padding: 22px; background: rgba(255,255,255,0.88); border-radius: 8px; margin-bottom: 11px; }', '', function(opts) {
