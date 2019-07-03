@@ -2,6 +2,9 @@ class HolyWater {
     constructor () {
         this.ts = new TimeStripper();
     }
+    /////
+    ///// Utilities
+    /////
     summaryPurges (purges) {
         return purges.reduce((a,b) => {
             return a + b.elapsed_time;
@@ -74,5 +77,63 @@ class HolyWater {
     }
     int2hhmmss (v) {
         return this.ts.format_sec(v);
+    }
+    /////
+    ///// page-impure
+    /////
+    pageImpureContentsList (source) {
+        let out = [];
+
+        out.push({
+            type: 'IMPURE-DESCRIPTION',
+            contents: source,
+        });
+
+        out.push({
+            type: 'IMPURE-STATUS',
+            contents: source,
+        });
+
+        out.push({
+            type: 'IMPURE-DEAMON',
+            contents: source,
+        });
+
+        out.push({
+            type: 'IMPURE-ANGEL',
+            contents: source,
+        });
+
+        let tmp = [];
+        tmp = tmp.concat(source.purges.map((d) => {
+            let date_str = d.end || d.start;
+
+
+            return {
+                type: 'IMPURE-PURGE',
+                contents: d,
+                time: new Date(date_str),
+            };
+        }));
+        tmp = tmp.concat(source.spells.map((d) => {
+            return {
+                type: 'IMPURE-SPELL',
+                contents: d,
+                time: new Date(d.incantation_at),
+            };
+        }));
+        tmp = tmp.concat(source.requests.map((d) => {
+            return {
+                type: 'IMPURE-REQUEST',
+                contents: d,
+                time: new Date(d.messaged_at),
+            };
+        }));
+
+        return []
+            .concat(out)
+            .concat(tmp.sort((a, b) => {
+                return a > b ? 1 : -1;
+            }));
     }
 }

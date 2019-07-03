@@ -17,9 +17,9 @@
                          maledict={modal_maledict}></modal-create-impure>
 
     <modal-create-after-impure></modal-create-after-impure>
-
     <modal-attain-impure></modal-attain-impure>
     <modal-spell-impure></modal-spell-impure>
+    <modal-create-deamon></modal-create-deamon>
 
     <script>
      this.site = () => {

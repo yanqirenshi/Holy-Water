@@ -19,7 +19,8 @@
                 #:left-join
                 #:group-by
                 #:union-all-queries)
-  (:export #:find-deamons)
+  (:export #:find-deamons
+           #:create-deamon)
   (:export #:find-maledicts
            #:get-maledict
            #:get-maledict-type

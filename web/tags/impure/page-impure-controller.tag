@@ -1,10 +1,9 @@
-<impure_page-controller>
+<page-impure-controller>
 
-    <div class="controller-container" style="width: 555px;">
+    <div class="controller-container">
 
         <div class="operators">
             <button class="button is-small" onclick={click} action="refresh">Refresh</button>
-            <span style="flex-grow:1;"></span>
 
             <button class="button is-small {isHide('start')}" onclick={click} action="start">作業開始</button>
 
@@ -46,16 +45,21 @@
     </script>
 
     <style>
-     impure_page-controller > .controller-container {
+     page-impure-controller > .controller-container {
          background: #FEF264;
-         padding: 11px 22px;
+         padding: 22px 11px ;
          border-radius: 3px;
      }
-     impure_page-controller .operators {
+     page-impure-controller .operators {
          display:flex;
+         flex-direction: column;
      }
-     impure_page-controller .operators > * { margin-right:11px; }
-     impure_page-controller .operators > *:last-child { margin-right:0px; }
+     page-impure-controller .operators > * {
+         margin-bottom: 22px;
+     }
+     page-impure-controller .operators > *:last-child {
+         margin-bottom: 0px;
+     }
     </style>
 
-</impure_page-controller>
+</page-impure-controller>

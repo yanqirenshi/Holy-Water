@@ -3,11 +3,13 @@
     <section class="section" style="padding-top: 22px;">
         <div class="container">
 
-            <section class="section">
-                <div class="container">
-                    <h1 class="title is-4 hw-text-white"></h1>
+            <div class="contents">
+                <div>
+                    <div>
+                        <button class="button is-small" onclick={clickCreate}>Create Deamon</button>
+                    </div>
 
-                    <div class="contents">
+                    <div style="margin-top:22px;">
                         <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow">
                             <thead>
                                 <tr>
@@ -26,7 +28,7 @@
                         </table>
                     </div>
                 </div>
-            </section>
+            </div>
 
         </div>
     </section>
@@ -38,12 +40,18 @@
      this.deamons = () => {
          return STORE.get('deamons.list');
      };
-     this.on('mount', () => {
-         ACTIONS.fetchDeamons();
-     });
+     this.clickCreate = () => {
+         ACTIONS.openModalCreateDeamon();
+     };
+     this.clickCreate = () => {
+         ACTIONS.openModalCreateDeamon();
+     };
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-DEAMONS')
              this.update();
+
+         if (action.type=='CREATED-DEAMON')
+             ACTIONS.fetchDeamons();
      });
     </script>
 

@@ -231,6 +231,30 @@ class Actions extends Vanilla_Redux_Actions {
             data: { deamons: this.mergeData(response, STORE.get('deamons')) },
         };
     }
+    openModalCreateDeamon () {
+        STORE.dispatch({
+            type: 'OPEN-MODAL-CREATE-DEAMON',
+        });
+    }
+    createDeamon (name, name_short, description) {
+        let path = '/deamons';
+        let post_data = {
+            name: name,
+            name_short: name_short,
+            description: description,
+        };
+        API.post(path, this.encodePostData(post_data), (json, success) => {
+            STORE.dispatch(this.createdDeamon(json));
+        });
+    }
+    createdDeamon (response) {
+        this.pushSuccessMessage('Deamon の作成が完了しました');
+
+        return {
+            type: 'CREATED-DEAMON',
+            data: {},
+        };
+    }
     /////
     ///// Impure
     /////

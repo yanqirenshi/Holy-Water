@@ -35,7 +35,7 @@ riot.tag2('app-page-area', '', '', '', function(opts) {
      });
 });
 
-riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" site="{site()}" moves="{[]}"></menu-bar> <app-page-area></app-page-area> <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p> <message-area></message-area> <popup-working-action data="{impure()}"></popup-working-action> <menu-add-impure></menu-add-impure> <modal-create-impure open="{modal_open}" maledict="{modal_maledict}"></modal-create-impure> <modal-create-after-impure></modal-create-after-impure> <modal-attain-impure></modal-attain-impure> <modal-spell-impure></modal-spell-impure>', '', '', function(opts) {
+riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" site="{site()}" moves="{[]}"></menu-bar> <app-page-area></app-page-area> <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p> <message-area></message-area> <popup-working-action data="{impure()}"></popup-working-action> <menu-add-impure></menu-add-impure> <modal-create-impure open="{modal_open}" maledict="{modal_maledict}"></modal-create-impure> <modal-create-after-impure></modal-create-after-impure> <modal-attain-impure></modal-attain-impure> <modal-spell-impure></modal-spell-impure> <modal-create-deamon></modal-create-deamon>', '', '', function(opts) {
      this.site = () => {
          return STORE.state().get('site');
      };
@@ -698,6 +698,50 @@ riot.tag2('modal-create-after-impure', '<div class="modal {impure ? \'is-active\
      };
 });
 
+riot.tag2('modal-create-deamon', '<div class="modal {isOpen()}"> <div class="modal-background"></div> <div class="modal-content" style="width:888px;"> <div class="card"> <header class="card-header"> <p class="card-header-title">Create Deamon</p> </header> <div class="card-content"> <div class="content"> <div style="margin-bottom:22px;"> <input class="input" type="text" placeholder="Name" style="margin-bottom:11px;" ref="deamon_name" onkeyup="{keyUP}"> <input class="input" type="text" placeholder="Short Name" style="margin-bottom:11px;" ref="deamon_name_short" onkeyup="{keyUP}"> <textarea class="textarea" placeholder="Description" rows="10" ref="description"></textarea> </div> <div class="control-area"> <button class="button is-small" onclick="{clickClose}">Cancel</button> <button class="button is-small is-danger" onclick="{clickCreate}" disabled="{isDisabled()}">Save</button> </div> </div> </div> </div> </div> <button class="modal-close is-large" aria-label="close" onclick="{clickClose}"></button> </div>', '', '', function(opts) {
+     this.open = false;
+     this.isOpen = () => {
+         return this.open ? 'is-active' : '';
+     };
+     this.isDisabled = () => {
+         if (this.refs.deamon_name.value.trim().length==0 ||
+             this.refs.deamon_name_short.value.trim().length==0)
+             return 'disabled'
+
+         return '';
+     };
+     this.clickCreate = () => {
+         ACTIONS.createDeamon(
+             this.refs.deamon_name.value.trim(),
+             this.refs.deamon_name_short.value.trim(),
+             this.refs.description.value.trim(),
+         );
+     };
+     this.keyUP = () => {
+         this.update();
+     }
+     this.clickClose = () => {
+         this.open = false;
+         this.update();
+     };
+
+     STORE.subscribe((action) => {
+         if (action.type=='OPEN-MODAL-CREATE-DEAMON') {
+             this.open = true;
+             this.update();
+
+             return;
+         }
+
+         if (action.type=='CREATED-DEAMON') {
+             this.open = false;
+             this.update();
+
+             return;
+         }
+     });
+});
+
 riot.tag2('modal-create-impure', '<div class="modal {maledict ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head"> <p class="modal-card-title">やる事を追加</p> <button class="delete" aria-label="close" onclick="{clickCloseButton}"></button> </header> <section class="modal-card-body"> <h4 class="title is-6">場所: {maledictName()}</h4> <div> <span>接頭文字:</span> <button each="{prefixes}" class="button is-small" style="margin-left: 8px;" onclick="{clickTitlePrefix}" riot-value="{label}">{label}</button> </div> <input class="input" type="text" placeholder="Title" ref="name" style="margin-top:11px;"> <textarea class="textarea" placeholder="Description" rows="6" style="margin-top:11px;" ref="description"></textarea> </section> <footer class="modal-card-foot"> <button class="button" onclick="{clickCloseButton}">Cancel</button> <button class="button is-success" onclick="{clickCreateButton}">Create!</button> </footer> </div> </div>', '', '', function(opts) {
      this.maledict = null;
      STORE.subscribe((action) => {
@@ -936,19 +980,25 @@ riot.tag2('sections-list', '<table class="table"> <tbody> <tr each="{opts.data}"
 riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">悪魔</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section>', '', '', function(opts) {
 });
 
-riot.tag2('deamons-page', '<section class="section" style="padding-top: 22px;"> <div class="container"> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white"></h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Name(Short)</th> </tr> </thead> <tbody> <tr each="{deamon in deamons()}"> <td><a href="{idLink(deamon)}">{deamon.id}</a></td> <td>{deamon.name}</td> <td>{deamon.name_short}</td> </tr> </tbody> </table> </div> </div> </section> </div> </section>', '', 'class="page-contents"', function(opts) {
+riot.tag2('deamons-page', '<section class="section" style="padding-top: 22px;"> <div class="container"> <div class="contents"> <div> <div> <button class="button is-small" onclick="{clickCreate}">Create Deamon</button> </div> <div style="margin-top:22px;"> <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Name(Short)</th> </tr> </thead> <tbody> <tr each="{deamon in deamons()}"> <td><a href="{idLink(deamon)}">{deamon.id}</a></td> <td>{deamon.name}</td> <td>{deamon.name_short}</td> </tr> </tbody> </table> </div> </div> </div> </div> </section>', '', 'class="page-contents"', function(opts) {
      this.idLink = (deamon) => {
          return '#deamons/' + deamon.id;
      };
      this.deamons = () => {
          return STORE.get('deamons.list');
      };
-     this.on('mount', () => {
-         ACTIONS.fetchDeamons();
-     });
+     this.clickCreate = () => {
+         ACTIONS.openModalCreateDeamon();
+     };
+     this.clickCreate = () => {
+         ACTIONS.openModalCreateDeamon();
+     };
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-DEAMONS')
              this.update();
+
+         if (action.type=='CREATED-DEAMON')
+             ACTIONS.fetchDeamons();
      });
 });
 
@@ -1991,7 +2041,173 @@ riot.tag2('impure-card-small', '<div class="content" style="font-size:12px;"> <p
      };
 });
 
-riot.tag2('impure_page-controller', '<div class="controller-container" style="width: 555px;"> <div class="operators"> <button class="button is-small" onclick="{click}" action="refresh">Refresh</button> <span style="flex-grow:1;"></span> <button class="button is-small {isHide(\'start\')}" onclick="{click}" action="start">作業開始</button> <button class="button is-small {isHide(\'stop\')}" onclick="{click}" action="stop">作業終了</button> <button class="button is-small" onclick="{click}" action="spell">呪文詠唱</button> <button class="button is-small" onclick="{click}" action="create-after">後続作成</button> <button class="button is-small {isHide(\'attain\')}" onclick="{click}" action="attain">埋葬</button> </div> </div>', 'impure_page-controller > .controller-container { background: #FEF264; padding: 11px 22px; border-radius: 3px; } impure_page-controller .operators { display:flex; } impure_page-controller .operators > * { margin-right:11px; } impure_page-controller .operators > *:last-child { margin-right:0px; }', '', function(opts) {
+riot.tag2('page-impure-basic', '<h1 class="title is-4" style="margin-bottom: 8px;">Maledict</h1> <div class="contents" style="font-weight:bold; padding-left:22px;"> <p>{maledict()} @{maledict_angel()}</p> </div> <h1 class="title is-4" style="margin-bottom: 8px;">Name</h1> <div class="contents" style="font-weight:bold; padding-left:22px;"> <p>{name()}</p> </div> <h1 class="title is-4" style="margin-bottom: 8px;">Description</h1> <div class="contents description" style="margin-left: 22px;"> <description-markdown source="{description()}"></description-markdown> </div>', 'page-impure-basic { display: block; flex-direction: column; padding: 22px; width: calc(88px * 4 + 22px * 3); height: calc(88px * 5 + 22px * 4); border-radius: 8px; background: rgba(255,255,255,0.88); margin-bottom: 11px; } page-impure-basic .description { background: #eee; border-radius: 3px; line-height: 14px; } page-impure-basic description-markdown > div { padding: 22px; }', '', function(opts) {
+     this.maledict = () => {
+         if (!this.opts.source.maledict)
+             return '???';
+
+         return this.opts.source.maledict.name;
+     };
+     this.maledict_angel = () => {
+         if (!this.opts.source.angel)
+             return '';
+
+         return this.opts.source.angel.name;
+     };
+     this.name = () => {
+         let impure = this.opts.source.impure;
+
+         if (!impure)
+             return '????????';
+
+         return impure.name;
+     };
+     this.description = () => {
+         let impure = this.opts.source.impure;
+
+         if (!impure)
+             return '????????';
+
+         return impure.description;
+     };
+});
+
+riot.tag2('page-impure-card-angel', '<div> <p>祓魔師</p> </div> <div> <p>{angelName()}</p> </div>', 'page-impure-card-angel { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; }', '', function(opts) {
+     this.angelName = () => {
+         if (!this.opts.source.angel)
+             return '';
+
+         return this.opts.source.angel.name;
+     };
+});
+
+riot.tag2('page-impure-card-deamon', '<div> <p>悪魔</p> </div> <div> <p>{deamonNameShort()}</p> <p>{deamonName()}</p> </div>', 'page-impure-card-deamon { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; }', '', function(opts) {
+     this.deamonName = () => {
+         if (!this.opts.source.deamon)
+             return '';
+
+         return this.opts.source.deamon.name;
+     };
+     this.deamonNameShort = () => {
+         if (!this.opts.source.deamon)
+             return '';
+
+         return this.opts.source.deamon.name_short;
+     };
+});
+
+riot.tag2('page-impure-card-description', '<div> <p>Description</p> </div> <div class="description" style="flex-grow:1; overflow:auto;"> <description-markdown source="{\'\'}"></description-markdown> </div>', 'page-impure-card-description { display:flex; flex-direction:column; width: calc(88px * 5 + 11px * 4); height: calc(88px * 4 + 11px * 3); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; } page-impure-card-description .description { background: #eee; line-height: 14px; }', '', function(opts) {
+});
+
+riot.tag2('page-impure-card-incantation', '<d> <p>{time()}</p> </d> <d> <p><b>呪文詠唱</b></p> <p>{angelName()}</p> <p>{spell()}</p> </d>', 'page-impure-card-incantation { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; font-size: 12px; }', '', function(opts) {
+     this.time = () => {
+         let time = moment(this.opts.source.incantation_at);
+
+         return time.format('YYYY-MM-DD HH:mm (ddd)');
+     };
+     this.angelName = () => {
+         return this.opts.source.angel_name;
+     };
+     this.spell = () => {
+         return this.opts.source.spell;
+     };
+});
+
+riot.tag2('page-impure-card-purge', '<d> <p>{time()}</p> </d> <d> <p><b>浄化</b></p> <p>祓魔師: {angelName()}</p> <p>経過時間: {elapsedTime()}</p> <div style="font-size:11px; margin-top:11px;"> <p>開始:{start()}</p> <p>終了:{end()}</p> </div> </d>', 'page-impure-card-purge { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; font-size: 12px; }', '', function(opts) {
+     this.time = () => {
+         let time_str = this.opts.source.end || this.opts.source.start;
+
+         return moment(time_str).format('YYYY-MM-DD HH:mm (ddd)');
+     }
+     this.angelName = () => {
+         return this.opts.source.angel_name;
+     };
+     this.start = () => {
+         return moment(this.opts.source.start).format('YYYY-MM-DD HH:mm (ddd)');
+     }
+     this.end = () => {
+         if (!this.opts.source.end)
+             return '';
+
+         return moment(this.opts.source.end).format('YYYY-MM-DD HH:mm (ddd)');
+     }
+     this.elapsedTime = () => {
+         let start = this.opts.source.start;
+         let end   = this.opts.source.end;
+         if (!end)
+             return '計測中';
+
+         let elapsed_time_ms = new Date(end) - new Date(start);
+         return new HolyWater().int2hhmmss(elapsed_time_ms / 1000);
+     }
+});
+
+riot.tag2('page-impure-card-request', '<d> <p>{time()}</p> </d> <d> <p><b>浄化依頼</b></p> <p>元: {angelNamefrom()}</p> <p>先: {angelNameTo()}</p> <p>{message()}</p> </d>', 'page-impure-card-request { display: block; width: calc(88px * 1 + 11px * 0); height: calc(88px * 1 + 11px * 0); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; }', '', function(opts) {
+     this.time = () => {
+         return moment(this.opts.source.messaged_at).format('YYYY-MM-DD HH:mm (ddd)');
+     }
+     this.angelNameFrom = () => {
+         return this.opts.source.angel_from_name;
+     };
+     this.angelNameTo = () => {
+         return this.opts.source.angel_to_name;
+     };
+     this.message = () => {
+         return this.opts.source.contents;
+     };
+});
+
+riot.tag2('page-impure-card-status', '<div> <p>状況</p> </div> <div> <p>{purgeNow()}</p> <p>{finished()}</p> </div>', 'page-impure-card-status { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; }', '', function(opts) {
+     this.finished = () => {
+         let impure = this.opts.source.impure;
+
+         if (!impure)
+             return '';
+
+         if (!impure.finished_at)
+             return '未浄化';
+
+         return '浄化済み';
+     }
+     this.purgeNow = () => {
+         let impure = this.opts.source.impure;
+
+         if (!impure)
+             return '';
+
+         if (!impure.purge)
+             return '';
+
+         return 'パージ中';
+     };
+});
+
+riot.tag2('page-impure-card', '<page-impure-card-status if="{opts.source.type==⁗IMPURE-STATUS⁗}" source="{opts.source.contents}"></page-impure-card-status> <page-impure-card-angel if="{opts.source.type==⁗IMPURE-ANGEL⁗}" source="{opts.source.contents}"></page-impure-card-angel> <page-impure-card-deamon if="{opts.source.type==⁗IMPURE-DEAMON⁗}" source="{opts.source.contents}"></page-impure-card-deamon> <page-impure-card-description if="{opts.source.type==⁗IMPURE-DESCRIPTION⁗}" source="{opts.source.contents}"></page-impure-card-description> <page-impure-card-incantation if="{opts.source.type==⁗IMPURE-SPELL⁗}" source="{opts.source.contents}"></page-impure-card-incantation> <page-impure-card-purge if="{opts.source.type==⁗IMPURE-PURGE⁗}" source="{opts.source.contents}"></page-impure-card-purge> <page-impure-card-request if="{opts.source.type==⁗IMPURE-REQUEST⁗}" source="{opts.source.contents}"></page-impure-card-request>', 'page-impure-card { display: block; margin-bottom: 11px; }', '', function(opts) {
+});
+
+riot.tag2('page-impure-chains', '<h1 class="title is-4">Impure 連携図</h1> <div> <p>準備中</p> </div>', 'page-impure-chains { display: block; width: 100%; height: calc(88px * 3 + 22px * 2); padding: 22px; background: rgba(255,255,255,0.88); border-radius: 8px; margin-bottom: 11px; }', '', function(opts) {
+});
+
+riot.tag2('page-impure-contents', '<div class="grid"> <page-impure-card each="{source in hw.pageImpureContentsList(opts.source)}" class="grid-item" source="{source}"></page-impure-card> <page-impure-chains class="grid-item" source="{[]}"></page-impure-chains> </div>', '', '', function(opts) {
+     this.hw = new HolyWater();
+     this.msnry = null;
+
+     this.on('updated', () => {
+         var elem = document.querySelector('page-impure-contents .grid');
+         this.msnry = new Masonry( elem, {
+             itemSelector: 'page-impure-contents .grid-item',
+             columnWidth: 88,
+             gutter: 11,
+         });
+         this.msnry.layout();
+     })
+     this.on('update', () => {
+         if (this.msnry)
+             this.msnry.layout();
+     });
+});
+
+riot.tag2('page-impure-controller', '<div class="controller-container"> <div class="operators"> <button class="button is-small" onclick="{click}" action="refresh">Refresh</button> <button class="button is-small {isHide(\'start\')}" onclick="{click}" action="start">作業開始</button> <button class="button is-small {isHide(\'stop\')}" onclick="{click}" action="stop">作業終了</button> <button class="button is-small" onclick="{click}" action="spell">呪文詠唱</button> <button class="button is-small" onclick="{click}" action="create-after">後続作成</button> <button class="button is-small {isHide(\'attain\')}" onclick="{click}" action="attain">埋葬</button> </div> </div>', 'page-impure-controller > .controller-container { background: #FEF264; padding: 22px 11px ; border-radius: 3px; } page-impure-controller .operators { display:flex; flex-direction: column; } page-impure-controller .operators > * { margin-bottom: 22px; } page-impure-controller .operators > *:last-child { margin-bottom: 0px; }', '', function(opts) {
      this.click = (e) => {
          let action = e.target.getAttribute('action');
 
@@ -2015,10 +2231,34 @@ riot.tag2('impure_page-controller', '<div class="controller-container" style="wi
      };
 });
 
-riot.tag2('impure_page-tabs', '<div class="tabs is-toggle"> <ul> <li class="is-active"> <a> <span>基本情報</span> </a> </li> <li> <a> <span>浄化履歴</span> </a> </li> <li> <a> <span>Impure の鎖</span> </a> </li> <li> <a> <span>依頼履歴</span> </a> </li> </ul> </div>', 'impure_page-tabs li > a { background: #fff; }', '', function(opts) {
+riot.tag2('page-impure-incantation', '<h1 class="title is-5" style="margin:0px;">呪文詠唱</h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable" style="font-size:14px;"> <thead> <tr> <th rowspan="2">ID</th> <th rowspan="2" colspan="2">Date</th> <th colspan="2">祓魔師</th> <th rowspan="2">Spell</th> </tr> <tr> <th>ID</th> <th>Name</th> </tr> </thead> <tbody> <tr each="{rec in opts.source}"> <td>{rec.id}</td> <td>{dt(rec.incantation_at)}</td> <td>{week(rec.incantation_at)}</td> <td>{rec.angel_id}</td> <td>{rec.angel_name}</td> <td> <description-markdown source="{contents(rec.spell)}"></description-markdown> </td> </tbody> </table> </div>', 'page-impure-incantation { display: block; width: calc(88px * 4 + 22px * 3); height: calc(88px * 3 + 22px * 2); padding: 22px; background: rgba(255,255,255,0.88);; border-radius: 8px; margin-bottom: 11px; } page-impure-incantation description-markdown pre { padding:0px; }', '', function(opts) {
+     let hw = new HolyWater();
+
+     this.dt   = (v) => { return hw.str2yyyymmddhhmmss(v); };
+     this.week = (v) => { return hw.str2week(v); };
+     this.contents = (v) => {
+
+         return v;
+     };
 });
 
-riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">{this.name()}</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section" style="padding-top:0px;"> <div class="container"> <div class="contents"> <impure_page-controller source="{term}" impure="{source.impure}" callback="{callback}"></impure_page-controller> </div> </div> </section> <section class="section" style="padding-top:0px; padding-bottom:22px;"> <div class="container"> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> </section> <div class="tab-contents-area"> <impure_page_tab-basic class="hide" source="{source}"></impure_page_tab-basic> <impure_page_tab-purges class="hide" source="{source.purges}"></impure_page_tab-purges> <impure_page_tab-incantation class="hide" source="{source.spells}"></impure_page_tab-incantation> <impure_page_tab-requests class="hide" source="{source.requests}"></impure_page_tab-requests> <impure_page_tab-chains class="hide" source="{[]}"></impure_page_tab-chains> </div>', 'impure_page page-tabs li a{ background: #fff; } impure_page { width: 100%; height: 100%; display: block; overflow: auto; } impure_page .tabs ul { border-bottom-color: rgb(254, 242, 99); border-bottom-width: 2px; } impure_page .tabs.is-boxed li.is-active a { background-color: rgba(254, 242, 99, 1); border-color: rgb(254, 242, 99); text-shadow: 0px 0px 11px #fff; color: #333; font-weight: bold; } impure_page .tabs.is-boxed li { margin-left: 8px; } impure_page .tabs.is-boxed a { text-shadow: 0px 0px 8px #fff; font-weight: bold; } impure_page .table th, impure_page .table td { font-size: 14px; }', '', function(opts) {
+riot.tag2('page-impure-purges', '<h1 class="title is-5" style="margin:0px;">浄化履歴</h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable"> <thead> <tr> <th colspan="6">Purge</th> <th colspan="2">祓魔師</th> </tr> <tr> <th>ID</th> <th colspan="2">Start</th> <th colspan="2">End</th> <th>Elapsed Time [s]</th> <th>ID</th> <th>Name</th> </tr> </thead> <tbody> <tr each="{rec in opts.source}"> <td>{rec.id}</td> <td>{dt(rec.start)}</td> <td>{week(rec.start)}</td> <td>{dt(rec.end)}</td> <td>{week(rec.end)}</td> <td style="text-align:right;">{time(rec.elapsed_time)}</td> <td>{rec.angel_id}</td> <td>{rec.angel_name}</td> </tr> </tbody> </table> </div>', 'page-impure-purges { display: block; width: calc(88px * 4 + 22px * 3); height: calc(88px * 3 + 22px * 2); padding: 22px; background: rgba(255,255,255,0.88); border-radius: 8px; margin-bottom: 11px; }', '', function(opts) {
+     let hw = new HolyWater();
+
+     this.dt   = (v) => { return hw.str2yyyymmddhhmmss(v); };
+     this.week = (v) => { return hw.str2week(v); };
+     this.time = (v) => { return hw.int2hhmmss(v); };
+});
+
+riot.tag2('page-impure-requests', '<h1 class="title is-5">依頼履歴</h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable"> <thead> <tr> <th rowspan="2" colspan="2">Date</th> <th colspan="2">From</th> <th colspan="2">To</th> <th rowspan="2">Message</th> </tr> <tr> <th>ID</th> <th>Name</th> <th>ID</th> <th>Name</th> </tr> </thead> <tbody> <tr each="{rec in opts.source}" request-message-id="{rec.id}" angel-from-id="{rec.angel_from_id}" angel-to-id="{rec.angel_to_id}" impure-id="{rec.impure_id}"> <td> {dt(rec.messaged_at)} </td> <td> {week(rec.messaged_at)} </td> <td> {rec.angel_from_id} </td> <td>{rec.angel_from_name}</td> <td> {rec.angel_to_id} </td> <td>{rec.angel_to_name}</td> <td> <description-markdown source="{contents(rec.contents)}"></description-markdown> </td> </tr> </tbody> </table> </div>', 'page-impure-requests { display: block; width: calc(88px * 4 + 22px * 3); height: calc(88px * 3 + 22px * 2); padding: 22px; background: rgba(255,255,255,0.88); border-radius: 8px; margin-bottom: 11px; }', '', function(opts) {
+     let hw = new HolyWater();
+
+     this.dt   = (v) => { return hw.str2yyyymmddhhmmss(v); };
+     this.week = (v) => { return hw.str2week(v); };
+     this.contents = (v) => { return hw.descriptionViewShort(v); };
+});
+
+riot.tag2('page-impure', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">{this.name()}</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section" style="padding-top:0px;"> <div class="container"> <div style="display: flex;"> <div style="flex-grow: 1;"> <page-impure-contents source="{source}"></page-impure-contents> </div> <div style="margin-left:22px;"> <page-impure-controller source="{term}" impure="{source.impure}" callback="{callback}"></page-impure-controller> </div> </div> </div> </section>', 'page-impure page-tabs li a{ background: #fff; } page-impure { width: 100%; height: 100%; display: block; overflow: auto; } page-impure .tabs ul { border-bottom-color: rgb(254, 242, 99); border-bottom-width: 2px; } page-impure .tabs.is-boxed li.is-active a { background-color: rgba(254, 242, 99, 1); border-color: rgb(254, 242, 99); text-shadow: 0px 0px 11px #fff; color: #333; font-weight: bold; } page-impure .tabs.is-boxed li { margin-left: 8px; } page-impure .tabs.is-boxed a { text-shadow: 0px 0px 8px #fff; font-weight: bold; } page-impure .table th, page-impure .table td { font-size: 14px; }', '', function(opts) {
      this.callback = (action, data) => {
          if (action=='refresh') {
              let id = this.id();
@@ -2062,23 +2302,6 @@ riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"
          from: moment().add('month', -1),
          to:   moment(),
      }
-     this.page_tabs = new PageTabs([
-         {code: 'basic',       label: '基本情報', tag: 'impure_page_tab-basic' },
-         {code: 'purges',      label: '浄化履歴', tag: 'impure_page_tab-purges' },
-         {code: 'incantation', label: '詠唱履歴', tag: 'impure_page_tab-incantation' },
-         {code: 'requests',    label: '依頼履歴', tag: 'impure_page_tab-requests' },
-         {code: 'chains',      label: '連鎖',     tag: 'impure_page_tab-chains' },
-     ]);
-
-     this.on('mount', () => {
-         this.page_tabs.switchTab(this.tags)
-         this.update();
-     });
-
-     this.clickTab = (e, action, data) => {
-         if (this.page_tabs.switchTab(this.tags, data.code))
-             this.update();
-     };
 
      this.id = () => {
          return location.hash.split('/').reverse()[0];
@@ -2126,67 +2349,6 @@ riot.tag2('impure_page', '<section class="section" style="padding-bottom: 22px;"
          ACTIONS.fetchPagesImpure({ id: id });
          ACTIONS.fetchImpure(id);
      });
-});
-
-riot.tag2('impure_page_tab-basic', '<section class="section" style="padding-top:0px; padding-bottom:22px; style=" padding:0px> <div class="container"> <h1 class="title hw-text-white is-4" style="margin-bottom: 8px;">Maledict</h1> <div class="contents hw-text-white" style="font-weight:bold; padding-left:22px;"> <p>{maledict()} @{maledict_angel()}</p> </div> </div> </section> <section class="section" style="padding-top:0px; padding-bottom:22px; style=" padding:0px> <div class="container"> <h1 class="title hw-text-white is-4" style="margin-bottom: 8px;">Name</h1> <div class="contents hw-text-white" style="font-weight:bold; padding-left:22px;"> <p>{name()}</p> </div> </div> </section> <section class="section" style="padding-top: 22px;"> <div class="container"> <h1 class="title hw-text-white is-4" style="margin-bottom: 8px;">Description</h1> <div class="contents description" style="margin-left: 22px;"> <description-markdown source="{description()}"></description-markdown> </div> </div> </section>', 'impure_page_tab-basic .description { background: #fff; border-radius: 3px; line-height: 14px; } impure_page_tab-basic description-markdown > div { padding: 22px; }', '', function(opts) {
-     this.maledict = () => {
-         if (!this.opts.source.maledict)
-             return '???';
-
-         return this.opts.source.maledict.name;
-     };
-     this.maledict_angel = () => {
-         if (!this.opts.source.angel)
-             return '';
-
-         return this.opts.source.angel.name;
-     };
-     this.name = () => {
-         let impure = this.opts.source.impure;
-
-         if (!impure)
-             return '????????';
-
-         return impure.name;
-     };
-     this.description = () => {
-         let impure = this.opts.source.impure;
-
-         if (!impure)
-             return '????????';
-
-         return impure.description;
-     };
-});
-
-riot.tag2('impure_page_tab-chains', '<section class="section" style="padding:0px;"> <div class="container"> <h1 class="title hw-text-white">準備中</h1> </div> </section>', '', '', function(opts) {
-});
-
-riot.tag2('impure_page_tab-incantation', '<section class="section" style="padding:0px;"> <div class="container"> <h1 class="title hw-text-white"></h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable"> <thead> <tr> <th rowspan="2">ID</th> <th rowspan="2" colspan="2">Date</th> <th colspan="2">祓魔師</th> <th rowspan="2">Spell</th> </tr> <tr> <th>ID</th> <th>Name</th> </tr> </thead> <tbody> <tr each="{rec in opts.source}"> <td>{rec.id}</td> <td>{dt(rec.incantation_at)}</td> <td>{week(rec.incantation_at)}</td> <td>{rec.angel_id}</td> <td>{rec.angel_name}</td> <td> <description-markdown source="{contents(rec.spell)}"></description-markdown> </td> </tbody> </table> </div> </div> </section>', 'impure_page_tab-incantation description-markdown pre { padding:0px; } impure_page_tab-incantation > .section { margin-bottom: 222px;}', '', function(opts) {
-     let hw = new HolyWater();
-
-     this.dt   = (v) => { return hw.str2yyyymmddhhmmss(v); };
-     this.week = (v) => { return hw.str2week(v); };
-     this.contents = (v) => {
-
-         return v;
-     };
-});
-
-riot.tag2('impure_page_tab-purges', '<section class="section" style="padding:0px;"> <div class="container"> <h1 class="title hw-text-white"></h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable"> <thead> <tr> <th colspan="6">Purge</th> <th colspan="2">祓魔師</th> </tr> <tr> <th>ID</th> <th colspan="2">Start</th> <th colspan="2">End</th> <th>Elapsed Time [s]</th> <th>ID</th> <th>Name</th> </tr> </thead> <tbody> <tr each="{rec in opts.source}"> <td>{rec.id}</td> <td>{dt(rec.start)}</td> <td>{week(rec.start)}</td> <td>{dt(rec.end)}</td> <td>{week(rec.end)}</td> <td style="text-align:right;">{time(rec.elapsed_time)}</td> <td>{rec.angel_id}</td> <td>{rec.angel_name}</td> </tr> </tbody> </table> </div> </div> </section>', '', '', function(opts) {
-     let hw = new HolyWater();
-
-     this.dt   = (v) => { return hw.str2yyyymmddhhmmss(v); };
-     this.week = (v) => { return hw.str2week(v); };
-     this.time = (v) => { return hw.int2hhmmss(v); };
-});
-
-riot.tag2('impure_page_tab-requests', '<section class="section" style="padding:0px;"> <div class="container"> <h1 class="title hw-text-white"></h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable"> <thead> <tr> <th rowspan="2" colspan="2">Date</th> <th colspan="2">From</th> <th colspan="2">To</th> <th rowspan="2">Message</th> </tr> <tr> <th>ID</th> <th>Name</th> <th>ID</th> <th>Name</th> </tr> </thead> <tbody> <tr each="{rec in opts.source}" request-message-id="{rec.id}" angel-from-id="{rec.angel_from_id}" angel-to-id="{rec.angel_to_id}" impure-id="{rec.impure_id}"> <td> {dt(rec.messaged_at)} </td> <td> {week(rec.messaged_at)} </td> <td> {rec.angel_from_id} </td> <td>{rec.angel_from_name}</td> <td> {rec.angel_to_id} </td> <td>{rec.angel_to_name}</td> <td> <description-markdown source="{contents(rec.contents)}"></description-markdown> </td> </tr> </tbody> </table> </div> </div> </section>', '', '', function(opts) {
-     let hw = new HolyWater();
-
-     this.dt   = (v) => { return hw.str2yyyymmddhhmmss(v); };
-     this.week = (v) => { return hw.str2week(v); };
-     this.contents = (v) => { return hw.descriptionViewShort(v); };
 });
 
 riot.tag2('page-impure-waiting-actions', '<section class="section"> <div class="container"> <h1 class="title hw-text-white">Actions</h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable" style="font-size:12px;"> <thead> <tr> <th colspan="2">Angel</th> <th colspan="5">Purge</th> </tr> <tr> <th>Id</th> <th>Name</th> <th>ID</th> <th>Start</th> <th>End</th> <th>Elapsed</th> <th>Description</th> </tr> </thead> <tbody> <tr each="{action in opts.source.actions}"> <td>{action.angel_id}</td> <td>{action.angel_name}</td> <td>{action.purge_id}</td> <td>{hw.str2yyyymmddhhmmss(action.purge_start)}</td> <td>{hw.str2yyyymmddhhmmss(action.purge_end)}</td> <td>{hw.int2hhmmss(action.elapsed_time)}</td> <td>{action.purge_description}</td> </tr> </tbody> </table> </div> </div> </section>', '', '', function(opts) {

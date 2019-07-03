@@ -124,6 +124,15 @@
     (declare (ignore angel))
     (render-json (hw.api.ctrl:find-deamons))))
 
+(defroute ("/deamons" :method :POST) (&key |name| |name_short| |description|)
+  (with-angel (angel)
+    (let* ((name        (quri:url-decode |name|))
+           (name_short  (quri:url-decode |name_short|) )
+           (description (quri:url-decode |description|)))
+      (render-json (hw.api.ctrl:create-deamon angel
+                                              name
+                                              name_short
+                                              :description description)))))
 
 ;;;;;
 ;;;;; Orthodoxs

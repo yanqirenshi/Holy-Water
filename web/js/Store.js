@@ -13,7 +13,7 @@ class Store extends Vanilla_Redux_Store {
                         {
                             code: 'impure',
                             regex: new RegExp('^\\d+$'),
-                            tag: 'impure_page',
+                            tag: 'page-impure',
                         }
                     ],
                 },
@@ -27,7 +27,7 @@ class Store extends Vanilla_Redux_Store {
                                 {
                                     code: 'impure',
                                     regex: new RegExp('^\\d+$'),
-                                    tag: 'impure_page',
+                                    tag: 'page-impure',
                                 }
                             ],
                         },
@@ -59,7 +59,7 @@ class Store extends Vanilla_Redux_Store {
                 {
                     code: 'impure',
                     regex: new RegExp('^\\d+$'),
-                    tag: 'impure_page',
+                    tag: 'page-impure',
                 }
             ],
         };
