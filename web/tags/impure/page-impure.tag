@@ -108,6 +108,7 @@
              'STOPED-ACTION',
              'FINISHED-IMPURE',
              'SAVED-IMPURE-INCANTATION-SOLO',
+             'FINISHED-IMPURE',
          ];
 
          if (list.find((d) => { return d == action.type; })) {

@@ -110,6 +110,18 @@ class Store extends Vanilla_Redux_Store {
                     code: "deamon",
                     regex: /^\d+$/,
                     tag: 'deamon-page',
+                    children: [
+                        {
+                            code: 'impures',
+                            children: [
+                                {
+                                    code: 'impure',
+                                    regex: new RegExp('^\\d+$'),
+                                    tag: 'page-impure',
+                                }
+                            ],
+                        },
+                    ],
                 },
             ]
         };

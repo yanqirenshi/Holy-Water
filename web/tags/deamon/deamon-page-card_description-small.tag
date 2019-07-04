@@ -5,8 +5,15 @@
     </div>
 
     <div class="controller">
-        <button class="button is-small">編集</button>
+        <button class="button is-small"
+                onclick={clickEdit}>編集</button>
     </div>
+
+    <script>
+     this.clickEdit = () => {
+         this.opts.callback('open');
+     }
+    </script>
 
     <script>
      this.description = () => {

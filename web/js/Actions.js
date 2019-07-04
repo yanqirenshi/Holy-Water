@@ -925,7 +925,7 @@ class Actions extends Vanilla_Redux_Actions {
         };
     }
     fetchPagesDeamon (deamon) {
-        let path = '/pages/deamon/%d'.format(deamon.id);
+        let path = '/pages/deamons/%d'.format(deamon.id);
 
         API.get(path, function (json, success) {
             if (success)

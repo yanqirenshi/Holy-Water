@@ -54,33 +54,38 @@
 ;;;;;
 ;;;;; impure-purges
 ;;;;;
-(defun impure-purge-list-sxql (impure)
+(defun impure-purge-list-sxql (table &key impure)
   (when impure
-    (select (:ev_purge_end.id
-             :ev_purge_end.angel_id
+    (select (:ev_purge.id
+             :ev_purge.angel_id
              (:as :rs_angel.name :angel_name)
-             :ev_purge_end.impure_id
+             :ev_purge.impure_id
              (:as :rs_impure.name        :impure_name)
              (:as :rs_impure.description :impure_description)
-             :ev_purge_end.description
-             :ev_purge_end.start
-             :ev_purge_end.end
-             (:as (:- :ev_purge_end.end :ev_purge_end.start) :elapsed_time)
-             :ev_purge_end.created_at
-             :ev_purge_end.created_by
-             :ev_purge_end.updated_at
-             :ev_purge_end.updated_by)
-      (from :ev_purge_end)
+             :ev_purge.description
+             :ev_purge.start
+             (if (eq :ev_purge_end table)
+                 :ev_purge.end
+                 '(:as :null :end))
+             (if (eq :ev_purge_end table)
+                 '(:as (:- :ev_purge.end :ev_purge.start) :elapsed_time)
+                 '(:as :null :elapsed_time))
+             :ev_purge.created_at
+             :ev_purge.created_by
+             :ev_purge.updated_at
+             :ev_purge.updated_by)
+      (from (:as table :ev_purge))
       (left-join :rs_angel
-                 :on (:= :ev_purge_end.angel_id :rs_angel.id))
+                 :on (:= :ev_purge.angel_id :rs_angel.id))
       (left-join (:as
                   (sxql:union-all-queries
                    (select (:id :name :description) (from :rs_impure_active)    (where (:= :rs_impure_active.id    (mito:object-id impure))))
                    (select (:id :name :description) (from :rs_impure_finished)  (where (:= :rs_impure_finished.id  (mito:object-id impure))))
                    (select (:id :name :description) (from :rs_impure_discarded) (where (:= :rs_impure_discarded.id (mito:object-id impure)))))
                   :rs_impure)
-                 :on (:= :ev_purge_end.impure_id :rs_impure.id))
-      (where (:= :ev_purge_end.impure_id (mito:object-id impure))))))
+                 :on (:= :ev_purge.impure_id :rs_impure.id))
+      (where (:= :ev_purge.impure_id (mito:object-id impure))))))
+
 
 (defun impure-purge-list-infrate (rec)
   (timestamptz2timestamp! rec :|created_at|)
@@ -91,8 +96,10 @@
 
 
 (defun impure-purge-list (impure)
-  (fetch-all-list (impure-purge-list-sxql impure)
-                  :infrate! #'impure-purge-list-infrate))
+  (nconc (fetch-all-list (impure-purge-list-sxql :ev_purge_start :impure impure)
+                         :infrate! #'impure-purge-list-infrate)
+         (fetch-all-list (impure-purge-list-sxql :ev_purge_end   :impure impure)
+                         :infrate! #'impure-purge-list-infrate)))
 
 
 ;;;;;

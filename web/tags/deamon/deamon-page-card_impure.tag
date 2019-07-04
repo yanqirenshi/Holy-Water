@@ -1,8 +1,15 @@
 <deamon-page-card_impure>
 
     <div class="small">
-        <div class="header {finished()}">
-            <p>Impure</p>
+        <div class="header href={finished()}">
+            <p>
+                Impure
+                <span style="margin-left:11px;">
+                    <a href={linkImpure()}>
+                        <i class="fas fa-link"></i>
+                    </a>
+                </span>
+            </p>
         </div>
 
         <div class="name">
@@ -11,8 +18,10 @@
     </div>
 
     <script>
+     this.linkImpure = () => {
+         return "%s/impures/%d".format(location.hash, this.opts.source.id);
+     };
      this.name = () => {
-         dump(this.opts.source);
          return this.opts.source.name;
      };
      this.finished = () => {

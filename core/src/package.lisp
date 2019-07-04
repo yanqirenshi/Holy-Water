@@ -84,7 +84,8 @@
                      (timestamptz2timestamp val)))))))
 
 (defun interval2second (v)
-  (second (assoc :seconds v)))
+  (cond ((eq :null v) v)
+        (t (second (assoc :seconds v)))))
 
 (defun interval2second! (plist indicator)
   (setf (getf plist indicator)

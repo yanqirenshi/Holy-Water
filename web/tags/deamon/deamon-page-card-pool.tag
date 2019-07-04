@@ -3,7 +3,8 @@
     <div class="grid">
         <deamon-page-card each={obj in list()}
                           class="grid-item"
-                          source={obj}></deamon-page-card>
+                          source={obj}
+                          callback={callback}></deamon-page-card>
     </div>
 
     <script>
@@ -13,7 +14,7 @@
     </script>
 
     <script>
-     this.on('updated', () => {
+     this.layout = () => {
          var elem = document.querySelector('deamon-page-card-pool .grid');
 
          this.msnry = new Masonry(elem, {
@@ -22,16 +23,16 @@
              gutter: 11,
          });
          this.msnry.layout();
+     }
+     this.callback = (action) => {
+         if (action=='refresh')
+             this.layout();
+     };
+     this.on('updated', () => {
+         this.layout();
      })
      this.on('update', () => {
-         var elem = document.querySelector('deamon-page-card-pool .grid');
-
-         this.msnry = new Masonry(elem, {
-             itemSelector: 'deamon-page-card-pool .grid-item',
-             columnWidth: 11,
-             gutter: 11,
-         });
-         this.msnry.layout();
+         this.layout();
      });
     </script>
 
