@@ -134,6 +134,15 @@
                                               name_short
                                               :description description)))))
 
+(defroute ("/deamons/:id/description" :method :POST) (&key id |description|)
+  (with-angel (angel)
+    (let* ((description (quri:url-decode |description|))
+           (deamon (hw::get-deamon :id id)))
+      (unless deamon (throw-code 404))
+      (render-json (hw.api.ctrl:update-deamon-description angel
+                                                          deamon
+                                                          :description description)))))
+
 ;;;;;
 ;;;;; Orthodoxs
 ;;;;;

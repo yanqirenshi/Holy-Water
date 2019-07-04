@@ -5,24 +5,53 @@
             <div>
                 <textarea class="textarea"
                           placeholder="Write Markdown"
-                          onkeyup={keyUp}></textarea>
+                          onkeyup={keyUp}
+                          ref="md">
+                </textarea>
             </div>
 
             <div class="preview">
-                <description-markdown source={markdown}></description-markdown>
+                <description-markdown source={markdownVal()}></description-markdown>
             </div>
         </div>
 
         <div class="controller" style="display:flex; justify-content:space-between;">
             <button class="button is-small"
                     onclick={clickCancel}>Cancel</button>
+
             <button class="button is-small is-danger"
-                    onclick={clickSave}>Save</button>
+                    onclick={clickSave}
+                    disabled={isDisable()}>Save</button>
         </div>
     </div>
 
     <script>
-     this.markdown = '';
+     this.markdown = null;
+     this.markdownVal = () => {
+         if (this.markdown)
+             return this.markdown;
+
+         if (!this.opts.source.deamon)
+             return '';
+
+         this.markdown = this.opts.source.deamon.description;
+         this.refs.md.textContent = this.markdown;
+
+         return this.opts.source.deamon.description;
+     };
+     this.isDisable = () => {
+         if (!this.opts.source.deamon)
+             return 'disabled';
+
+         if (this.markdown==this.opts.source.deamon.description)
+             return 'disabled';
+
+         return '';
+     }
+     this.on('mount', () => {
+         if (this.opts.source.deamon)
+             this.markdown = this.opts.source.deamon.description;
+     });
      this.keyUp = (e) => {
          this.markdown = e.target.value;
          this.tags['description-markdown'].update();
@@ -31,6 +60,8 @@
          this.opts.callback('close');
      };
      this.clickSave = () => {
+         ACTIONS.updateDeamonDescription(this.opts.source.deamon,
+                                         this.markdown);
      };
     </script>
 

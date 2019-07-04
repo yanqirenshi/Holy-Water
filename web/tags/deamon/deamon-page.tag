@@ -28,16 +28,25 @@
          impures: [],
          purges: { summary: [] },
      };
-     this.on('mount', () => {
+     this.loadPageData = () => {
          let id = location.hash.split('/').reverse()[0];
 
          ACTIONS.fetchPagesDeamon({ id:id });
+     }
+     this.on('mount', () => {
+         this.loadPageData();
      });
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-PAGES-DEAMON') {
              this.source = action.response;
 
              this.update();
+             return;
+         }
+
+         if (action.type=='UPDATED-DEAMON-DESCRIPTION') {
+             this.loadPageData();
+
              return;
          }
      });

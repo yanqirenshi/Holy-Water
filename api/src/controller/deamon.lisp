@@ -33,3 +33,11 @@
 (defun create-deamon (angel name name_short &key description)
   (assert (eq 1 (mito:object-id angel)))
   (dao2deamon (hw:create-deamon name name_short :description description :creator angel)))
+
+(defun update-deamon-description (angel deamon &key description)
+  (declare (ignore angel))
+  (assert deamon)
+  (assert description)
+  (setf (hw::description deamon) description)
+  (mito:save-dao deamon)
+  (dao2deamon deamon))

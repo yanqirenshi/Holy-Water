@@ -255,6 +255,23 @@ class Actions extends Vanilla_Redux_Actions {
             data: {},
         };
     }
+    updateDeamonDescription (deamon, description) {
+        let path = '/deamons/%d/description'.format(deamon.id);
+        let post_data = {
+            description: description,
+        };
+        API.post(path, this.encodePostData(post_data), (json, success) => {
+            STORE.dispatch(this.updatedDeamonDescription(json));
+        });
+    }
+    updatedDeamonDescription (response) {
+        this.pushSuccessMessage('Deamon の Description の変更が完了しました');
+
+        return {
+            type: 'UPDATED-DEAMON-DESCRIPTION',
+            data: {},
+        };
+    }
     /////
     ///// Impure
     /////

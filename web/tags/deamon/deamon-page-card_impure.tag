@@ -1,7 +1,7 @@
 <deamon-page-card_impure>
 
     <div class="small">
-        <div class="header href={finished()}">
+        <div class="header {finished()}">
             <p>
                 Impure
                 <span style="margin-left:11px;">
