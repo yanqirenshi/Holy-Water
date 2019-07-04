@@ -6,6 +6,7 @@
         :|duties|   (find-orthodox-duties)
         :|angels|   (hw:list-orthodox-angels :orthodox orthodox)))
 
+
 (defun pages-wor-history (angel start end)
   (when (and angel start end)
     (list :|summary|
@@ -13,12 +14,14 @@
                                                                     :start start
                                                                     :end   end)))))
 
+
 (defun pages-purges (angel from to)
   (when (and angel from to)
     (list :|purges| (hw:list-purge-by-angel angel :from from :to to)
           :|summary| (list :|deamons| (hw:list-summary-purge-by-deamon angel
                                                                        :from from
                                                                        :to   to)))))
+
 
 (defun pages-cemetery (angel from to)
   (when (and angel from to)
@@ -37,8 +40,10 @@
           :|requests| (hw::impure-request-list impure)
           :|chains|   (hw::impure-chain-list   impure))))
 
+
 (defun pages-impures (angel maledict)
   (list :|impures| (hw:list-maledict-impures angel maledict)))
+
 
 (defun pages-impure-waiting (angel impure)
   (when (and angel impure)
@@ -48,3 +53,10 @@
           :|angel|    (dao2angel    (hw::impure-angel impure))
           :|actions|  (hw:list-purge-by-impure impure)
           :|messages| (hw:list-request-messages-unred angel :impure impure))))
+
+
+(defun pages-deamon (angel deamon)
+  (when (and angel deamon)
+    (list :|deamon|  (dao2deamon deamon)
+          :|impures| (hw:list-impures-by-deamon :deamon deamon)
+          :|purges|  (list :|summary| nil))))

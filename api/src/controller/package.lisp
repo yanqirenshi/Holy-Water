@@ -47,5 +47,6 @@
            #:pages-impures
            #:pages-impure
            #:pages-impure-waiting
-           #:pages-requests))
+           #:pages-requests
+           #:pages-deamon))
 (in-package :holy-water.api.controller)

@@ -9,4 +9,20 @@
         </div>
     </section>
 
+    <deamon-page-card-pool></deamon-page-card-pool>
+
+    <script>
+     this.on('mount', () => {
+         let id = location.hash.split('/').reverse()[0];
+
+         ACTIONS.fetchPagesDeamon({ id:id });
+     });
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-PAGES-DEAMON') {
+             dump(action);
+             return;
+         }
+     });
+    </script>
+
 </deamon-page>

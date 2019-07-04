@@ -66,7 +66,8 @@
            #:list-requested-uncomplete-impures
            #:list-request-messages-unred
            #:list-maledict-impures
-           #:list-orthodox-angels))
+           #:list-orthodox-angels
+           #:list-impures-by-deamon))
 (in-package :holy-water)
 
 (mito:connect-toplevel :postgres :database-name "holy_water" :username "holy_water")
@@ -76,9 +77,11 @@
 
 (defun timestamptz2timestamp! (plist indicator)
   (let ((val (getf plist indicator)))
-    (when val
-      (setf (getf plist indicator)
-            (timestamptz2timestamp val)))))
+    (cond ((eq :null val) val)
+          (t (when val
+               (format t "~S~%" val)
+               (setf (getf plist indicator)
+                     (timestamptz2timestamp val)))))))
 
 (defun interval2second (v)
   (second (assoc :seconds v)))
@@ -88,11 +91,15 @@
         (interval2second (getf plist indicator)))
   plist)
 
+(defun apply-infrate! (func results)
+  (dolist (rec results)
+    (funcall func rec))
+  results)
+
 (defun fetch-all-list (sxql &key infrate infrate!)
   (multiple-value-bind (sxql vals)
       (sxql:yield sxql)
     (let ((results (fetch-list sxql vals)))
       (cond (infrate  (mapcar #'(lambda (rec) (funcall infrate rec)) results))
-            (infrate! (dolist (rec results)
-                        (funcall infrate! rec))
-                      results)))))
+            (infrate! (apply-infrate! infrate! results))
+            (t results)))))

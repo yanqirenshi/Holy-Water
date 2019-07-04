@@ -977,7 +977,36 @@ riot.tag2('popup-working-action', '<button class="button is-small hw-button" sty
 riot.tag2('sections-list', '<table class="table"> <tbody> <tr each="{opts.data}"> <td><a href="{hash}">{name}</a></td> </tr> </tbody> </table>', '', '', function(opts) {
 });
 
-riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">悪魔</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section>', '', '', function(opts) {
+riot.tag2('deamon-page-card-pool', '', '', '', function(opts) {
+});
+
+riot.tag2('deamon-page-card-impure', '', '', '', function(opts) {
+});
+
+riot.tag2('deamon-page-card-pool', '', '', '', function(opts) {
+});
+
+riot.tag2('deamon-page-card-pool', '<deamon-page-card each="{obj in []}"></deamon-page-card>', 'deamon-page-card-pool { width:1518px; margin-left: auto; margin-right: auto; }', '', function(opts) {
+});
+
+riot.tag2('deamon-page-card-purges', '', '', '', function(opts) {
+});
+
+riot.tag2('deamon-page-card', '', '', '', function(opts) {
+});
+
+riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">悪魔</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <deamon-page-card-pool></deamon-page-card-pool>', '', '', function(opts) {
+     this.on('mount', () => {
+         let id = location.hash.split('/').reverse()[0];
+
+         ACTIONS.fetchPagesDeamon({ id:id });
+     });
+     STORE.subscribe((action) => {
+         if (action.type=='FETCHED-PAGES-DEAMON') {
+             dump(action);
+             return;
+         }
+     });
 });
 
 riot.tag2('deamons-page', '<section class="section" style="padding-top: 22px;"> <div class="container"> <div class="contents"> <div> <div> <button class="button is-small" onclick="{clickCreate}">Create Deamon</button> </div> <div style="margin-top:22px;"> <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Name(Short)</th> </tr> </thead> <tbody> <tr each="{deamon in deamons()}"> <td><a href="{idLink(deamon)}">{deamon.id}</a></td> <td>{deamon.name}</td> <td>{deamon.name_short}</td> </tr> </tbody> </table> </div> </div> </div> </div> </section>', '', 'class="page-contents"', function(opts) {

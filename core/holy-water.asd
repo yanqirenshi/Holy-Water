@@ -54,7 +54,18 @@
                                (:file "move-impure")
                                (:file "finish-impure")
                                (:file "save-impure")))
-                 (:file "fetch-list"))))
+                 (:module "fetch-list"
+                  :components ((:file "util")
+                               (:file "list-cemeteries")
+                               (:file "list-maledict-impures")
+                               (:file "list-orthodox-angels")
+                               (:file "list-purge-by-angel-sql-template")
+                               (:file "list-purge-by-impure")
+                               (:file "list-request-messages-unred")
+                               (:file "list-requested-uncomplete-impures")
+                               (:file "list-summary-purge-by-deamon")
+                               (:file "list-summay-impure-cemeteries-by-date-damon")
+                               (:file "list-summay-purge-time-by-date-damon"))))))
   :description ""
   :long-description
   #.(read-file-string

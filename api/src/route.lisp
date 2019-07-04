@@ -327,6 +327,12 @@
   (with-angel (angel)
     (render-json (hw.api.ctrl:pages-requests angel))))
 
+(defroute "/pages/deamon/:id" (&key id)
+  (with-angel (angel)
+    (let ((deamon (hw::get-deamon :id id)))
+      (unless deamon (throw-code 404))
+      (render-json (hw.api.ctrl:pages-deamon angel deamon)))))
+
 
 ;;;;;
 ;;;;; Error pages

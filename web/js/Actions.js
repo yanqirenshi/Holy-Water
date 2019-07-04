@@ -924,6 +924,22 @@ class Actions extends Vanilla_Redux_Actions {
             response: response
         };
     }
+    fetchPagesDeamon (deamon) {
+        let path = '/pages/deamon/%d'.format(deamon.id);
+
+        API.get(path, function (json, success) {
+            if (success)
+                STORE.dispatch(this.fetchedPagesDeamon(json));
+        }.bind(this));
+    }
+    fetchedPagesDeamon (response) {
+        let state = STORE.state().toJS();
+
+        return {
+            type: 'FETCHED-PAGES-DEAMON',
+            response: response
+        };
+    }
     /////
     ///// Page
     /////
