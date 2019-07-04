@@ -141,4 +141,36 @@ class HolyWater {
                 return a.time > b.time ? -1 : 1;
             }));
     }
+    /////
+    ///// page-deamon
+    /////
+    pageDeamonContentsList (source) {
+        let out = [];
+
+        let deamon  = source.deamon;
+        let impures = source.impures;
+
+        out.push({
+            type: 'DEAMON-DESCRIPTION',
+            contents: source,
+        });
+
+        out.push({
+            type: 'DEAMON-CODE',
+            contents: source,
+        });
+
+        let tmp = [];
+        tmp = tmp.concat(source.impures.map((impure) => {
+            return {
+                type: 'IMPURES',
+                contents: impure,
+                time: new Date(impure.created_at),
+            };
+        }));
+
+        return []
+            .concat(out)
+            .concat(tmp);
+    }
 }

@@ -977,25 +977,93 @@ riot.tag2('popup-working-action', '<button class="button is-small hw-button" sty
 riot.tag2('sections-list', '<table class="table"> <tbody> <tr each="{opts.data}"> <td><a href="{hash}">{name}</a></td> </tr> </tbody> </table>', '', '', function(opts) {
 });
 
-riot.tag2('deamon-page-card-pool', '', '', '', function(opts) {
+riot.tag2('deamon-page-card-pool', '<div class="grid"> <deamon-page-card each="{obj in list()}" class="grid-item" source="{obj}"></deamon-page-card> </div>', 'deamon-page-card-pool > .grid{ display: block; width:1518px; margin-left: auto; margin-right: auto; }', '', function(opts) {
+     this.list = () => {
+         return new HolyWater().pageDeamonContentsList(this.opts.source);
+     };
+
+     this.on('updated', () => {
+         var elem = document.querySelector('deamon-page-card-pool .grid');
+
+         this.msnry = new Masonry(elem, {
+             itemSelector: 'deamon-page-card-pool .grid-item',
+             columnWidth: 11,
+             gutter: 11,
+         });
+         this.msnry.layout();
+     })
+     this.on('update', () => {
+         var elem = document.querySelector('deamon-page-card-pool .grid');
+
+         this.msnry = new Masonry(elem, {
+             itemSelector: 'deamon-page-card-pool .grid-item',
+             columnWidth: 11,
+             gutter: 11,
+         });
+         this.msnry.layout();
+     });
 });
 
-riot.tag2('deamon-page-card-impure', '', '', '', function(opts) {
+riot.tag2('deamon-page-card', '<deamon-page-card_description if="{typeIs(\'DEAMON-DESCRIPTION\')}" source="{opts.source.contents}"></deamon-page-card_description> <deamon-page-card_name-short if="{typeIs(\'DEAMON-CODE\')}" source="{opts.source.contents}"></deamon-page-card_name-short> <deamon-page-card_impure if="{typeIs(\'IMPURES\')}" source="{opts.source.contents}"></deamon-page-card_impure>', '', '', function(opts) {
+     this.typeIs = (code) => {
+         return this.opts.source.type == code;
+     };
 });
 
-riot.tag2('deamon-page-card-pool', '', '', '', function(opts) {
+riot.tag2('deamon-page-card_description-large', '', '', '', function(opts) {
 });
 
-riot.tag2('deamon-page-card-pool', '<deamon-page-card each="{obj in []}"></deamon-page-card>', 'deamon-page-card-pool { width:1518px; margin-left: auto; margin-right: auto; }', '', function(opts) {
+riot.tag2('deamon-page-card_description-small', '<div class="description" style=""> <description-markdown source="{description()}"></description-markdown> </div> <div class="controller"> <button class="button is-small">編集</button> </div>', 'deamon-page-card_description-small { display: flex; width: calc(11px * 24 + 11px * 23); height: calc(11px * 24 + 11px * 23); margin-bottom: 11px; background: #fff; border-radius: 8px; display:flex; flex-direction:column; } deamon-page-card_description-small .description { flex-grow:1; overflow:auto; padding: 22px 11px 11px 11px; border-radius: 8px 8px 0px 0px; background: #eee; font-size: 14px; line-height: 14px; } deamon-page-card_description-small .controller { text-align: right; margin-top: 8px; margin: 8px; }', '', function(opts) {
+     this.description = () => {
+         let deamon = this.opts.source.deamon;
+         if (!deamon)
+             return '';
+
+         return deamon.description;
+     };
 });
 
-riot.tag2('deamon-page-card-purges', '', '', '', function(opts) {
+riot.tag2('deamon-page-card_description', '<deamon-page-card_description-small source="{opts.source}"></deamon-page-card_description-small> <deamon-page-card_description-large source="{opts.source}"></deamon-page-card_description-large>', '', '', function(opts) {
 });
 
-riot.tag2('deamon-page-card', '', '', '', function(opts) {
+riot.tag2('deamon-page-card_impure', '<div class="small"> <div class="header {finished()}"> <p>Impure</p> </div> <div class="name"> <p>{name()}</p> </div> </div>', 'deamon-page-card_impure > .small{ display: flex; flex-direction: column; width: calc(11px * 8 + 11px * 7); height: calc(11px * 8 + 11px * 7); margin-bottom: 11px; background: #fff; border-radius: 8px; } deamon-page-card_impure > .small > .header { width: 100%; height: 33px; padding: 8px 11px; border-radius: 8px 8px 0px 0px; font-size: 12px; font-weight: bold; background: rgba(100, 1, 37, 0.88); color: #fff; } deamon-page-card_impure > .small > .header.finished { background: rgba(137, 195, 235, 0.88); } deamon-page-card_impure > .small > .name { padding: 6px 8px; font-size: 14px; }', '', function(opts) {
+     this.name = () => {
+         dump(this.opts.source);
+         return this.opts.source.name;
+     };
+     this.finished = () => {
+         return this.opts.source.finished_at ? 'finished' : '';
+     };
 });
 
-riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">悪魔</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <deamon-page-card-pool></deamon-page-card-pool>', '', '', function(opts) {
+riot.tag2('deamon-page-card_name-short', '<div class="small"> <p class="name">{nameShort()}</p> </div>', 'deamon-page-card_name-short > .small{ display: flex; flex-direction: column; justify-content: center; width: calc(11px * 8 + 11px * 7); height: calc(11px * 8 + 11px * 7); padding: 8px; margin-bottom: 11px; background: rgba(22, 22, 14, 0.88); border-radius: 8px; } deamon-page-card_name-short > .small > .name { font-size: 33px; color: #ec6d71; font-weight: bold; text-align: center; }', '', function(opts) {
+     this.nameShort = () => {
+         let deamon = this.opts.source.deamon;
+
+         if (!deamon)
+             return ''
+
+         return deamon.name_short;
+     };
+});
+
+riot.tag2('deamon-page-card_purges', '', '', '', function(opts) {
+});
+
+riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">悪魔: {name()}</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <deamon-page-card-pool source="{source}"></deamon-page-card-pool>', 'deamon-page { overflow: auto; display: block; width: 100%; height: 100%; }', '', function(opts) {
+     this.name = () => {
+         let deamon = this.source.deamon;
+         if (!deamon)
+             return '';
+
+         return deamon.name;
+     };
+
+     this.source = {
+         deamon: null,
+         impures: [],
+         purges: { summary: [] },
+     };
      this.on('mount', () => {
          let id = location.hash.split('/').reverse()[0];
 
@@ -1003,7 +1071,9 @@ riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"
      });
      STORE.subscribe((action) => {
          if (action.type=='FETCHED-PAGES-DEAMON') {
-             dump(action);
+             this.source = action.response;
+
+             this.update();
              return;
          }
      });

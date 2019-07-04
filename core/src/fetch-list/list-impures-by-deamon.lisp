@@ -8,6 +8,7 @@
            (:as :rs_impure.id                  :id)
            (:as :rs_impure.name                :name)
            (:as :rs_impure.description         :description)
+           (:as :rs_impure.created_at          :created_at)
            (if (eq table :rs_impure_finished)  :finished_at  '(:as :null :finished_at))
            (if (eq table :rs_impure_finished)  :finished_by  '(:as :null :finished_by))
            (if (eq table :rs_impure_discarded) :discarded_at '(:as :null :discarded_at))
