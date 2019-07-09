@@ -993,8 +993,11 @@ riot.tag2('deamon-page-card-pool', '<div class="grid"> <deamon-page-card each="{
          this.msnry.layout();
      }
      this.callback = (action) => {
-         if (action=='refresh')
+         if (action=='refresh') {
              this.layout();
+
+             return;
+         }
      };
      this.on('updated', () => {
          this.layout();
@@ -1004,86 +1007,26 @@ riot.tag2('deamon-page-card-pool', '<div class="grid"> <deamon-page-card each="{
      });
 });
 
-riot.tag2('deamon-page-card', '<deamon-page-card_description if="{typeIs(\'DEAMON-DESCRIPTION\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_description> <deamon-page-card_name-short if="{typeIs(\'DEAMON-CODE\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_name-short> <deamon-page-card_impure if="{typeIs(\'IMPURES\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_impure>', '', '', function(opts) {
-     this.typeIs = (code) => {
-         return this.opts.source.type == code;
-     };
-});
-
-riot.tag2('deamon-page-card_description-large', '<div> <div class="editor" style=""> <div> <textarea class="textarea" placeholder="Write Markdown" onkeyup="{keyUp}" ref="md"> </textarea> </div> <div class="preview"> <description-markdown source="{markdownVal()}"></description-markdown> </div> </div> <div class="controller" style="display:flex; justify-content:space-between;"> <button class="button is-small" onclick="{clickCancel}">Cancel</button> <button class="button is-small is-danger" onclick="{clickSave}" disabled="{isDisable()}">Save</button> </div> </div>', 'deamon-page-card_description-large { display: flex; width: calc(11px * 66 + 11px * 65); height: calc(11px * 33 + 11px * 32); margin-bottom: 11px; background: #fff; border-radius: 8px; display:flex; flex-direction:column; } deamon-page-card_description-large > div { display: flex; flex-direction: column; height: 100%; } deamon-page-card_description-large > div > .editor { padding-top: 11px; flex-grow: 1; display: flex; } deamon-page-card_description-large > div > .editor > div { height: 100%; flex-grow: 1; width: 50%; } deamon-page-card_description-large > div > .editor .textarea{ border: none; width:100%; height:100%; resize: none; box-shadow: none; padding-left: 22px; } deamon-page-card_description-large > div > .editor .preview{ overflow: auto; padding: 11px; background:#eeeeee; } deamon-page-card_description-large > div > .controller { padding: 11px; }', '', function(opts) {
-     this.markdown = null;
-     this.markdownVal = () => {
-         if (this.markdown)
-             return this.markdown;
-
-         if (!this.opts.source.deamon)
-             return '';
-
-         this.markdown = this.opts.source.deamon.description;
-         this.refs.md.textContent = this.markdown;
-
-         return this.opts.source.deamon.description;
-     };
-     this.isDisable = () => {
-         if (!this.opts.source.deamon)
-             return 'disabled';
-
-         if (this.markdown==this.opts.source.deamon.description)
-             return 'disabled';
-
-         return '';
-     }
-     this.on('mount', () => {
-         if (this.opts.source.deamon)
-             this.markdown = this.opts.source.deamon.description;
-     });
-     this.keyUp = (e) => {
-         this.markdown = e.target.value;
-         this.tags['description-markdown'].update();
-     };
-     this.clickCancel = () => {
-         this.opts.callback('close');
-     };
-     this.clickSave = () => {
-         ACTIONS.updateDeamonDescription(this.opts.source.deamon,
-                                         this.markdown);
-     };
-});
-
-riot.tag2('deamon-page-card_description-small', '<div class="description" style=""> <description-markdown source="{description()}"></description-markdown> </div> <div class="controller"> <button class="button is-small" onclick="{clickEdit}">編集</button> </div>', 'deamon-page-card_description-small { display: flex; width: calc(11px * 24 + 11px * 23); height: calc(11px * 24 + 11px * 23); margin-bottom: 11px; background: #fff; border-radius: 8px; display:flex; flex-direction:column; } deamon-page-card_description-small .description { flex-grow:1; overflow:auto; padding: 22px 11px 11px 11px; border-radius: 8px 8px 0px 0px; background: #eee; font-size: 14px; line-height: 14px; } deamon-page-card_description-small .controller { text-align: right; margin-top: 8px; margin: 8px; }', '', function(opts) {
-     this.clickEdit = () => {
-         this.opts.callback('open');
-     }
-
+riot.tag2('deamon-page-card', '<page-card_description if="{typeIs(\'DEAMON-DESCRIPTION\')}" source="{description()}" callback="{callback}"></page-card_description> <deamon-page-card_name-short if="{typeIs(\'DEAMON-CODE\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_name-short> <deamon-page-card_impure if="{typeIs(\'IMPURES\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_impure>', '', '', function(opts) {
      this.description = () => {
-         let deamon = this.opts.source.deamon;
+         let deamon = opts.source.contents.deamon;
+
          if (!deamon)
              return '';
 
          return deamon.description;
      };
-});
+     this.callback = (action, data) => {
+         if (action=='save-description') {
+             ACTIONS.updateDeamonDescription(opts.source.contents.deamon,
+                                             data.contents);
 
-riot.tag2('deamon-page-card_description', '<deamon-page-card_description-small if="{!open}" source="{opts.source}" callback="{callback}"></deamon-page-card_description-small> <deamon-page-card_description-large if="{open}" source="{opts.source}" callback="{callback}"></deamon-page-card_description-large>', '', '', function(opts) {
-     this.open = false;
-     this.callback = (action) => {
-         if (action=='open') {
-             this.open = true;
-
-             this.update();
-
-             this.opts.callback('refresh');
              return;
          }
+     };
 
-         if (action=='close') {
-             this.open = false;
-
-             this.update();
-
-             this.opts.callback('refresh');
-             return;
-         }
+     this.typeIs = (code) => {
+         return this.opts.source.type == code;
      };
 });
 
@@ -1149,6 +1092,104 @@ riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"
              return;
          }
      });
+});
+
+riot.tag2('page-card_description-large', '<div> <div class="editor"> <div> <textarea class="textarea" placeholder="Write Markdown" onkeyup="{keyUp}" ref="md"> </textarea> </div> <div class="preview"> <description-markdown source="{markdownVal()}"></description-markdown> </div> </div> <div class="controller" style="display:flex; justify-content:space-between;"> <button class="button is-small" onclick="{clickCancel}">Cancel</button> <button class="button is-small is-danger" onclick="{clickSave}" disabled="{isDisable()}">Save</button> </div> </div>', 'page-card_description-large { display: flex; margin-bottom: 11px; background: #fff; border-radius: 8px; display:flex; flex-direction:column; } page-card_description-large > div { display: flex; flex-direction: column; height: 100%; } page-card_description-large > div > .editor { padding-top: 11px; flex-grow: 1; display: flex; } page-card_description-large > div > .editor > div { height: 100%; flex-grow: 1; width: 50%; } page-card_description-large > div > .editor .textarea{ border: none; width:100%; height:100%; resize: none; box-shadow: none; padding-left: 22px; background: #fdfdfd; font-size: 12px; } page-card_description-large > div > .editor .preview{ overflow: auto; padding: 11px; } page-card_description-large > div > .controller { padding: 11px; }', 'riot-style="width:{w()}px; height:{h()}px;"', function(opts) {
+     this.w = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(hw.htVal('size.w', this.opts), 56, 11);
+     };
+     this.h = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(hw.htVal('size.h', this.opts), 24, 11);
+     };
+
+     this.markdown = null;
+     this.markdownVal = () => {
+         if (this.markdown)
+             return this.markdown;
+
+         this.markdown = this.opts.source;
+         this.refs.md.textContent = this.markdown;
+
+         return this.markdown;
+     };
+     this.isDisable = () => {
+         if (this.markdown==this.opts.source)
+             return 'disabled';
+
+         return '';
+     }
+     this.on('mount', () => {
+         if (this.opts.source.deamon)
+             this.markdown = this.opts.source;
+     });
+     this.keyUp = (e) => {
+         this.markdown = e.target.value;
+         this.tags['description-markdown'].update();
+     };
+     this.clickCancel = () => {
+         this.opts.callback('close');
+     };
+     this.clickSave = () => {
+         this.opts.callback('save', { contents: this.markdown });
+     };
+});
+
+riot.tag2('page-card_description-small', '<div class="description" style=""> <description-markdown source="{opts.source}"></description-markdown> </div> <div class="controller"> <button class="button is-small" onclick="{clickEdit}">編集</button> </div>', 'page-card_description-small { display: flex; margin-bottom: 11px; background: #fff; border-radius: 8px; display:flex; flex-direction:column; } page-card_description-small .description { flex-grow:1; overflow:auto; padding: 22px 11px 11px 11px; border-radius: 8px 8px 0px 0px; font-size: 14px; line-height: 14px; } page-card_description-small .controller { text-align: right; margin-top: 8px; margin: 8px; }', 'riot-style="width:{w()}px; height:{h()}px;"', function(opts) {
+     this.w = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(hw.htVal('size.w', this.opts), 24, 11);
+     };
+     this.h = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(hw.htVal('size.h', this.opts), 24, 11);
+     };
+
+     this.clickEdit = () => {
+         this.opts.callback('open');
+     }
+
+     this.description = () => {
+         let deamon = this.opts.source.deamon;
+         if (!deamon)
+             return '';
+
+         return deamon.description;
+     };
+});
+
+riot.tag2('page-card_description', '<page-card_description-small if="{!open}" source="{opts.source}" callback="{callback}" size="{opts.size.small}"></page-card_description-small> <page-card_description-large if="{open}" source="{opts.source}" callback="{callback}" size="{opts.size.large}"></page-card_description-large>', '', '', function(opts) {
+     this.open = false;
+     this.callback = (action, data) => {
+         if (action=='open') {
+             this.open = true;
+
+             this.update();
+
+             this.opts.callback('refresh');
+             return;
+         }
+
+         if (action=='close') {
+             this.open = false;
+
+             this.update();
+
+             this.opts.callback('refresh');
+             return;
+         }
+
+         if (action=='save') {
+             this.opts.callback('save-description', data);
+
+             return;
+         }
+     };
 });
 
 riot.tag2('deamons-page', '<section class="section" style="padding-top: 22px;"> <div class="container"> <div class="contents"> <div> <div> <button class="button is-small" onclick="{clickCreate}">Create Deamon</button> </div> <div style="margin-top:22px;"> <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Name(Short)</th> </tr> </thead> <tbody> <tr each="{deamon in deamons()}"> <td><a href="{idLink(deamon)}">{deamon.id}</a></td> <td>{deamon.name}</td> <td>{deamon.name_short}</td> </tr> </tbody> </table> </div> </div> </div> </div> </section>', '', 'class="page-contents"', function(opts) {
@@ -2212,7 +2253,123 @@ riot.tag2('impure-card-small', '<div class="content" style="font-size:12px;"> <p
      };
 });
 
-riot.tag2('page-impure-card-angel', '<div style="display:flex; flex-direction:column; height:100%;"> <div style="flex-grow: 1;display: flex;align-items: center; flex-direction:column; justify-content: center;"> <p style="text-align: center;font-size: 33px;font-weight: bold;"> {angelName()} </p> <p> <span style="font-size:14px;">{maledictName()}</span> </p> </div> <div style="text-align: right;"> <button class="button is-small">依頼</button> </div> </div>', 'page-impure-card-angel { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; }', '', function(opts) {
+riot.tag2('page-impure-card-deamon-item', '<p deamon_id="{deamon.id}">{deamon.name} ({deamon.name_short})</p>', 'page-impure-card-deamon-item { display: block; float: left; padding: 8px 11px; margin: 0px 6px 6px 0px; border-radius: 3px; font-weight: bold; font-size:11px; line-height:11px; border: 1px solid #fff; color: #fff; } page-impure-card-deamon-item:hover { border: 1px solid #e83929; background: #e83929; }', 'deamon_id="{deamon.id}"', function(opts) {
+});
+
+riot.tag2('page-impure-card-deamon-large', '<div riot-style="width:{w()}px; height:{h()}px;"> <div class="current"> <p> {deamonName()} ({deamonNameShort()}) </p> </div> <div class="selector"> <input class="input is-small" type="text" placeholder="Text input" onkeyup="{keyUp}"> <div style="margin-top:11px; flex-grow:1;"> <page-impure-card-deamon-item each="{deamon in deamons()}" source="{deamon}" onclick="{selectItem}"></page-impure-card-deamon-item> </div> </div> <div class="controller"> <button class="button is-small" onclick="{clickCancel}">Cancel</button> <button class="button is-small is-danger" onclick="{clickSave}" disabled="{isDisable()}">Save</button> </div> </div>', 'page-impure-card-deamon-large > div { display: flex; flex-direction: column; height: 100%; padding: 11px; background: rgba(22, 22, 14, 0.88);; color: #e83929; font-weight: bold; border-radius: 8px; } page-impure-card-deamon-large .current { padding: 11px 11px 0px 11px; } page-impure-card-deamon-large .selector { flex-grow:1; display:flex; flex-direction:column; padding: 11px 11px 0px 11px; } page-impure-card-deamon-large .controller { display:flex; justify-content:space-between; }', '', function(opts) {
+     this.deamon = this.opts.source.deamon;
+     this.filter = null;
+     this.deamons = () => {
+         let deamons = STORE.get('deamons.list');
+
+         if (!this.filter)
+             return deamons;
+
+         let filter = this.filter.toLowerCase();
+         return deamons.filter((d) => {
+             return d.name.toLowerCase().indexOf(filter) != -1 ||
+                    d.name_short.toLowerCase().indexOf(filter) != -1;
+         });
+     };
+     this.selectItem = (e) => {
+         let id = e.target.getAttribute('deamon_id');
+         let deamon = STORE.get('deamons.ht')[id];
+
+         this.deamon = deamon;
+         this.update();
+     };
+     this.keyUp = (e) => {
+         let = this.filter = e.target.value;
+         this.update();
+     }
+     this.clickCancel = () => {
+         this.opts.callback('close-deamon');
+     };
+     this.isDisable = () => {
+         if (!this.opts.source.deamon && !this.deamon)
+             return 'disabled';
+
+         if (this.opts.source.deamon && this.deamon &&
+             this.opts.source.deamon.id == this.deamon.id)
+             return 'disabled';
+
+         return '';
+     };
+
+     this.clickSave = () => {
+         ACTIONS.setImpureDeamon(this.opts.source.impure, this.deamon);
+     };
+
+     this.w = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(8 * 3, null, 11);
+     };
+     this.h = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(8 * 3, null, 11);
+     };
+
+     this.deamonName = () => {
+         if (!this.deamon)
+             return '';
+
+         return this.deamon.name;
+     };
+     this.deamonNameShort = () => {
+         if (!this.deamon)
+             return '';
+
+         return this.deamon.name_short;
+     };
+});
+
+riot.tag2('page-impure-card-deamon-small', '<div riot-style="width:{w()}px; height:{h()}px;"> <div style="display: flex;flex-grow: 1;align-items: center; justify-content: center;"> <p style="text-align:center;"> <b>{deamonNameShort()}</b> <br> {deamonName()} </p> </div> <div style="text-align: right;"> <button class="button is-small" onclick="{clickEdit}">変更</button> </div> </div>', 'page-impure-card-deamon-small > div { display: flex; flex-direction: column; height: 100%; padding: 11px; background: rgba(22, 22, 14, 0.88);; color: #e83929; font-weight: bold; border-radius: 8px; }', '', function(opts) {
+     this.clickEdit = () => {
+         this.opts.callback('open-deamon');
+     };
+
+     this.w = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(8, null, 11);
+     };
+     this.h = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(8, null, 11);
+     };
+
+     this.deamonName = () => {
+         if (!this.opts.source.deamon)
+             return '';
+
+         return this.opts.source.deamon.name;
+     };
+     this.deamonNameShort = () => {
+         if (!this.opts.source.deamon)
+             return '';
+
+         return this.opts.source.deamon.name_short;
+     };
+});
+
+riot.tag2('page-impure-card-deamon', '<page-impure-card-deamon-large if="{opts.open}" source="{opts.source}" callback="{opts.callback}"></page-impure-card-deamon-large> <page-impure-card-deamon-small if="{!opts.open}" source="{opts.source}" callback="{opts.callback}"></page-impure-card-deamon-small>', '', '', function(opts) {
+});
+
+riot.tag2('page-impure-card-angel', '<div style="display:flex; flex-direction:column; height:100%;"> <div style="flex-grow: 1;display: flex;align-items: center; flex-direction:column; justify-content: center;"> <p style="text-align: center;font-size: 33px;font-weight: bold;"> {angelName()} </p> <p> <span style="font-size:14px;">{maledictName()}</span> </p> </div> <div style="text-align: right;"> <button class="button is-small">依頼</button> </div> </div>', 'page-impure-card-angel { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; }', 'riot-style="width:{w()}px; height:{h()}px;"', function(opts) {
+     this.w = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(8, null, 11);
+     };
+     this.h = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(8, null, 11);
+     };
+
      this.angelName = () => {
          if (!this.opts.source.angel)
              return '';
@@ -2229,31 +2386,18 @@ riot.tag2('page-impure-card-angel', '<div style="display:flex; flex-direction:co
      };
 });
 
-riot.tag2('page-impure-card-deamon', '<div style="display: flex; flex-direction: column; height: 100%;"> <div style="display: flex;flex-grow: 1;align-items: center;"> <p style="text-align:center;"> <b>{deamonNameShort()}</b> <br> {deamonName()} </p> </div> <div style="text-align: right;"> <button class="button is-small">変更</button> </div> </div>', 'page-impure-card-deamon { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; }', '', function(opts) {
-     this.deamonName = () => {
-         if (!this.opts.source.deamon)
-             return '';
+riot.tag2('page-impure-card-incantation', '<div class="header"> <p><b>呪文詠唱:</b> {angelName()}</p> </div> <div class="description"> <description-markdown source="{spell()}"></description-markdown> </div> <div class="hw-card-footer"> <p>{time()}</p> </div>', 'page-impure-card-incantation { display:flex; flex-direction:column; height:100%; background: rgba(255,255,255,0.88);; border-radius: 8px; font-size: 12px; } page-impure-card-incantation .header { background:#cee4ae; padding:8px 11px; margin-bottom: 6px; border-radius: 8px 8px 0px 0px; } page-impure-card-incantation .description { word-break: break-all; flex-grow: 1; overflow: auto; padding-left: 8px; padding-right: 8px; } page-impure-card-incantation .hw-card-footer { font-size:8px; text-align:right; padding: 8px 8px 0px 0px; color: #aaaaaa; }', 'riot-style="width:{w()}px; height:{h()}px;"', function(opts) {
+     this.w = () => {
+         let hw = new HolyWater();
 
-         return this.opts.source.deamon.name;
+         return hw.pageCardDescriptionSize(8, null, 11);
      };
-     this.deamonNameShort = () => {
-         if (!this.opts.source.deamon)
-             return '';
+     this.h = () => {
+         let hw = new HolyWater();
 
-         return this.opts.source.deamon.name_short;
+         return hw.pageCardDescriptionSize(8, null, 11);
      };
-});
 
-riot.tag2('page-impure-card-description', '<div class="description" style=""> <description-markdown source="{description()}"></description-markdown> </div> <div style="text-align: right; margin-top: 8px;"> <button class="button is-small">編集</button> </div>', 'page-impure-card-description { display:flex; flex-direction:column; width: calc(88px * 5 + 11px * 4); height: calc(88px * 4 + 11px * 3); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; } page-impure-card-description .description { flex-grow:1; overflow:auto; padding: 11px; background: #eee; line-height: 14px; }', '', function(opts) {
-     this.description = () => {
-         if (!this.opts.source.impure)
-             return '';
-
-         return this.opts.source.impure.description;
-     };
-});
-
-riot.tag2('page-impure-card-incantation', '<div style="display:flex; flex-direction:column; height:100%;"> <div style="background:#cee4ae; padding:6px 8px; margin-bottom: 6px;"> <p><b>呪文詠唱:</b> {angelName()}</p> </div> <div class="description"> <description-markdown source="{spell()}"></description-markdown> </div> <div style="font-size:8px; text-align:right;"> <p>{time()}</p> </div> </div>', 'page-impure-card-incantation { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; font-size: 12px; } page-impure-card-incantation .description { word-break: break-all; flex-grow: 1; overflow: auto; }', '', function(opts) {
      this.time = () => {
          let time = moment(this.opts.source.incantation_at);
 
@@ -2267,7 +2411,72 @@ riot.tag2('page-impure-card-incantation', '<div style="display:flex; flex-direct
      };
 });
 
-riot.tag2('page-impure-card-purge', '<div style="display:flex; flex-direction:column; height:100%;"> <div style="background:rgba(254, 242, 99, 0.88); padding:6px 8px; margin-bottom: 6px;"> <p><b>浄化:</b> {angelName()}</p> </div> <div style="font-size:11px; margin-top:11px;"> <p>開始:{start()}</p> <p>終了:{end()}</p> </div> <div style="flex-grow:1; display:flex; align-items:center;"> <p style="flex-grow:1; font-size: 33px;text-align: center;">{elapsedTime()}</p> </div> <div style="font-size:8px; text-align:right;"> <p>{time()}</p> </div> </div>', 'page-impure-card-purge { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88);; border-radius: 8px; font-size: 12px; }', '', function(opts) {
+riot.tag2('page-impure-card-network', '<div style="width:100%; height:100%;border-top: 1px solid #aaaaaa;border-bottom: 1px solid #aaaaaa;"> <svg ref="graph"></svg> </div>', 'page-impure-card-network { display: block; padding: 11px 0px; background: rgba(255,255,255,0.88);; border-radius: 8px; font-size: 12px; }', 'riot-style="width:{w()}px; height:{h()}px;"', function(opts) {
+     this.w = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(56, null, 11);
+     };
+     this.h = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(22, null, 11);
+     };
+
+     this.makeCamera = () => {
+         return {
+             look: {
+                 at: {
+                     x: 0,
+                     y: 0.0,
+                 },
+             },
+             scale: 1.0,
+         };
+     }
+     this.getSize = () => {
+         let graph  = this.refs.graph;
+         if (!graph)
+             throw new Error('Graph がないよ。');
+
+         let parent = graph.parentNode;
+         if (!parent)
+             return { w:0, h:0 };
+
+         return {
+             w: this.refs.graph.parentNode.clientWidth,
+             h: this.refs.graph.parentNode.clientHeight,
+         };
+     }
+     this.on('mount', () => {
+         let camera = this.makeCamera();
+         let size   = this.getSize();
+
+         let sketcher = new DefaultSketcher({
+             element: {
+                 selector: 'page-impure-card-network svg',
+             },
+             w: size.w,
+             h: size.h,
+             x: camera.look.at.x,
+             y: camera.look.at.y,
+             scale: camera.scale,
+         });
+     });
+});
+
+riot.tag2('page-impure-card-purge', '<div class="header" style=""> <p><b>浄化:</b> {angelName()}</p> </div> <div class="body"> <div style="font-size:11px; padding-left:8px;"> <p>開:{start()}</p> <p>終:{end()}</p> </div> <div class="elapsed-time"> <p>{elapsedTime()}</p> </div> </div> <div class="hw-card-footer"> <p>{time()}</p> </div>', 'page-impure-card-purge { display:flex; flex-direction:column; background: rgba(255,255,255,0.88);; border-radius: 8px; font-size: 12px; } page-impure-card-purge > .header { background:rgba(254, 242, 99, 0.88); padding:8px 11px; border-radius: 8px 8px 0px 0px; } page-impure-card-purge > .body { display: flex; flex-direction: column; padding: 8px 0px 0px 0px; height: 100%; } page-impure-card-purge > .body > .elapsed-time{ text-align: center; align-items: center; height: 100%; display: flex; justify-content: center; font-size: 33px; font-weight: bold; } page-impure-card-purge .hw-card-footer { font-size:8px; text-align:right; padding: 8px 8px 0px 0px; color: #aaaaaa; }', 'riot-style="width:{w()}px; height:{h()}px;"', function(opts) {
+     this.w = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(8, null, 11);
+     };
+     this.h = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(8, null, 11);
+     };
+
      this.time = () => {
          let time_str = this.opts.source.end || this.opts.source.start;
 
@@ -2311,7 +2520,18 @@ riot.tag2('page-impure-card-request', '<d> <p>{time()}</p> </d> <d> <p><b>浄化
      };
 });
 
-riot.tag2('page-impure-card-status-purge', '<div style="display:flex; flex-direction:column; height:100%;"> <div style="height:24px;"> <p style="text-align: center;">{purgeNow()}</p> </div> <div style="flex-grow:1;display: flex;align-items: center; flex-direction:column;"> <div> <p>Total time:</p> <p style="text-align:center; font-size:55px; word-break:break-all; font-weight: bold;"> {totalTime()} </p> </div> </div> </div>', 'page-impure-card-status-purge { display: block; width: calc(88px * 3 + 11px * 2); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88); border-radius: 8px; } page-impure-card-status-purge.purge { background: rgba(254, 242, 99, 0.88); }', 'class="{isPurgeNow() ? \'purge\' : \'wait\'}"', function(opts) {
+riot.tag2('page-impure-card-status-purge', '<div style="display:flex; flex-direction:column; height:100%;"> <div style="height:24px;"> <p style="text-align: center;">{purgeNow()}</p> </div> <div class="tota-time"> <div> <p>Total time:</p> <p class="tota-time-contents" style=""> {totalTime()} </p> </div> </div> </div>', 'page-impure-card-status-purge { display: block; width: calc(88px * 4 + 11px * 3); height: calc(88px * 2 + 11px * 1); padding: 11px; background: rgba(255,255,255,0.88); border-radius: 8px; } page-impure-card-status-purge.purge { background: rgba(254, 242, 99, 0.88); } page-impure-card-status-purge .tota-time { flex-grow: 1; display: flex; align-items: center; flex-direction:column; } page-impure-card-status-purge .tota-time-contents { text-align:center; font-size:66px; word-break:break-all; font-weight: bold; margin-top: -22px; }', 'class="{isPurgeNow() ? \'purge\' : \'wait\'}" riot-style="width:{w()}px; height:{h()}px;"', function(opts) {
+     this.w = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(16, null, 11);
+     };
+     this.h = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(8, null, 11);
+     };
+
      this.totalTime = () => {
          let time = this.opts.source.purges.reduce((a, b) => {
              return a + b.elapsed_time
@@ -2343,7 +2563,18 @@ riot.tag2('page-impure-card-status-purge', '<div style="display:flex; flex-direc
      };
 });
 
-riot.tag2('page-impure-card-status', '<div style="height:100%; display:flex; align-items:center;"> <p style="font-size:66px; font-weight:bold; word-break:break-all; text-align:center; flex-grow:1;"> {finished()} </p> </div>', 'page-impure-card-status { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; border-radius: 8px; } page-impure-card-status.pure { background: rgba(137, 195, 235, 0.88); color: #fff; } page-impure-card-status.impure { background: rgba(100, 1, 37, 0.88); color: #fff; }', 'class="{isFinished() ? \'pure\' : \'impure\'}"', function(opts) {
+riot.tag2('page-impure-card-status', '<div style="height:100%; display:flex; align-items:center;"> <p style="font-size:66px; font-weight:bold; word-break:break-all; text-align:center; flex-grow:1;"> {finished()} </p> </div>', 'page-impure-card-status { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; border-radius: 8px; } page-impure-card-status.pure { background: rgba(137, 195, 235, 0.88); color: #fff; } page-impure-card-status.impure { background: rgba(100, 1, 37, 0.88); color: #fff; }', 'class="{isFinished() ? \'pure\' : \'impure\'}" riot-style="width:{w()}px; height:{h()}px;"', function(opts) {
+     this.w = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(8, null, 11);
+     };
+     this.h = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(8, null, 11);
+     };
+
      this.isFinished = () => {
          let impure = this.opts.source.impure;
 
@@ -2364,7 +2595,77 @@ riot.tag2('page-impure-card-status', '<div style="height:100%; display:flex; ali
      }
 });
 
-riot.tag2('page-impure-card', '<page-impure-card-status if="{opts.source.type==⁗IMPURE-STATUS⁗}" source="{opts.source.contents}"></page-impure-card-status> <page-impure-card-status-purge if="{opts.source.type==⁗IMPURE-STATUS-PURGE⁗}" source="{opts.source.contents}"></page-impure-card-status-purge> <page-impure-card-angel if="{opts.source.type==⁗IMPURE-ANGEL⁗}" source="{opts.source.contents}"></page-impure-card-angel> <page-impure-card-deamon if="{opts.source.type==⁗IMPURE-DEAMON⁗}" source="{opts.source.contents}"></page-impure-card-deamon> <page-impure-card-description if="{opts.source.type==⁗IMPURE-DESCRIPTION⁗}" source="{opts.source.contents}"></page-impure-card-description> <page-impure-card-incantation if="{opts.source.type==⁗IMPURE-SPELL⁗}" source="{opts.source.contents}"></page-impure-card-incantation> <page-impure-card-purge if="{opts.source.type==⁗IMPURE-PURGE⁗}" source="{opts.source.contents}"></page-impure-card-purge> <page-impure-card-request if="{opts.source.type==⁗IMPURE-REQUEST⁗}" source="{opts.source.contents}"></page-impure-card-request>', 'page-impure-card { display: block; margin-bottom: 11px; }', '', function(opts) {
+riot.tag2('page-impure-card', '<page-card_description if="{typeIs(\'IMPURE-DESCRIPTION\')}" source="{description()}" callback="{callback2}" size="{descriptionSize()}"></page-card_description> <page-impure-card-status if="{typeIs(\'IMPURE-STATUS\')}" source="{opts.source.contents}"></page-impure-card-status> <page-impure-card-status-purge if="{typeIs(\'IMPURE-STATUS-PURGE\')}" source="{opts.source.contents}"></page-impure-card-status-purge> <page-impure-card-angel if="{typeIs(\'IMPURE-ANGEL\')}" source="{opts.source.contents}"></page-impure-card-angel> <page-impure-card-deamon if="{typeIs(\'IMPURE-DEAMON\')}" source="{opts.source.contents}" callback="{callback2}" open="{open.deamon}"></page-impure-card-deamon> <page-impure-card-incantation if="{typeIs(\'IMPURE-SPELL\')}" source="{opts.source.contents}"></page-impure-card-incantation> <page-impure-card-purge if="{typeIs(\'IMPURE-PURGE\')}" source="{opts.source.contents}"></page-impure-card-purge> <page-impure-card-request if="{typeIs(\'IMPURE-REQUEST\')}" source="{opts.source.contents}"></page-impure-card-request> <page-impure-card-network if="{typeIs(\'IMPURE-NETWORK\')}" source="{opts.source.contents}"></page-impure-card-network>', 'page-impure-card { display: block; margin-bottom: 11px; }', '', function(opts) {
+     this.open = {
+         deamon: false,
+         description: false,
+     };
+     this.descriptionSize = () => {
+         return {
+             small: {
+                 w: 55,
+                 h: 22,
+             },
+             large: {
+                 w: 55,
+                 h: 22,
+             },
+         };
+     };
+     this.description = () => {
+         let impure = opts.source.contents.impure;
+
+         if (!impure)
+             return '';
+
+         return impure.description;
+     };
+     this.layout = () => {
+         this.opts.callback('refresh');
+         return;
+     };
+     this.setOpen = (type, state) => {
+         if (type=='deamon') {
+             this.open.deamon = state;
+             this.update();
+             this.layout();
+
+             return;
+         }
+     };
+     this.callback2 = (action, data) => {
+         if (action=='open-deamon') {
+             this.setOpen('deamon', true);
+             return;
+         }
+
+         if (action=='close-deamon') {
+             this.setOpen('deamon', false);
+
+             return;
+         }
+
+         if (action=='save-description') {
+             ACTIONS.updateImpureDescription(opts.source.contents.impure,
+                                             data.contents);
+             return;
+         }
+
+         if (action=='refresh') {
+             this.opts.callback(action);
+             return;
+         }
+     };
+     STORE.subscribe ((action) => {
+         if (action.type=='SETED-IMPURE-DEAMON') {
+             this.setOpen('deamon', false);
+             return;
+         }
+     });
+
+     this.typeIs = (code) => {
+         return this.opts.source.type == code;
+     };
 });
 
 riot.tag2('page-impure-basic', '<h1 class="title is-4" style="margin-bottom: 8px;">Maledict</h1> <div class="contents" style="font-weight:bold; padding-left:22px;"> <p>{maledict()} @{maledict_angel()}</p> </div> <h1 class="title is-4" style="margin-bottom: 8px;">Name</h1> <div class="contents" style="font-weight:bold; padding-left:22px;"> <p>{name()}</p> </div> <h1 class="title is-4" style="margin-bottom: 8px;">Description</h1> <div class="contents description" style="margin-left: 22px;"> <description-markdown source="{description()}"></description-markdown> </div>', 'page-impure-basic { display: block; flex-direction: column; padding: 22px; width: calc(88px * 4 + 22px * 3); height: calc(88px * 5 + 22px * 4); border-radius: 8px; background: rgba(255,255,255,0.88); margin-bottom: 11px; } page-impure-basic .description { background: #eee; border-radius: 3px; line-height: 14px; } page-impure-basic description-markdown > div { padding: 22px; }', '', function(opts) {
@@ -2398,25 +2699,32 @@ riot.tag2('page-impure-basic', '<h1 class="title is-4" style="margin-bottom: 8px
      };
 });
 
-riot.tag2('page-impure-chains', '<h1 class="title is-4">Impure 連携図</h1> <div> <p>準備中</p> </div>', 'page-impure-chains { display: block; width: 100%; height: calc(88px * 3 + 22px * 2); padding: 22px; background: rgba(255,255,255,0.88); border-radius: 8px; margin-bottom: 11px; }', '', function(opts) {
-});
-
-riot.tag2('page-impure-contents', '<div class="grid"> <page-impure-card each="{source in hw.pageImpureContentsList(opts.source)}" class="grid-item" source="{source}"></page-impure-card> <page-impure-chains class="grid-item" source="{[]}"></page-impure-chains> </div>', '', '', function(opts) {
+riot.tag2('page-impure-cards-pool', '<div class="grid"> <page-impure-card each="{source in hw.pageImpureContentsList(opts.source)}" class="grid-item" source="{source}" callback="{callback}"></page-impure-card> </div>', '', '', function(opts) {
      this.hw = new HolyWater();
      this.msnry = null;
 
-     this.on('updated', () => {
-         var elem = document.querySelector('page-impure-contents .grid');
-         this.msnry = new Masonry( elem, {
-             itemSelector: 'page-impure-contents .grid-item',
-             columnWidth: 88,
+     this.layout = () => {
+         var elem = document.querySelector('page-impure-cards-pool .grid');
+
+         this.msnry = new Masonry(elem, {
+             itemSelector: 'page-impure-cards-pool .grid-item',
+             columnWidth: 11,
              gutter: 11,
          });
          this.msnry.layout();
+     }
+     this.callback = (action) => {
+         if (action=='refresh') {
+             this.layout();
+
+             return;
+         }
+     };
+     this.on('updated', () => {
+         this.layout();
      })
      this.on('update', () => {
-         if (this.msnry)
-             this.msnry.layout();
+         this.layout();
      });
 });
 
@@ -2444,34 +2752,7 @@ riot.tag2('page-impure-controller', '<div class="controller-container"> <div cla
      };
 });
 
-riot.tag2('page-impure-incantation', '<h1 class="title is-5" style="margin:0px;">呪文詠唱</h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable" style="font-size:14px;"> <thead> <tr> <th rowspan="2">ID</th> <th rowspan="2" colspan="2">Date</th> <th colspan="2">祓魔師</th> <th rowspan="2">Spell</th> </tr> <tr> <th>ID</th> <th>Name</th> </tr> </thead> <tbody> <tr each="{rec in opts.source}"> <td>{rec.id}</td> <td>{dt(rec.incantation_at)}</td> <td>{week(rec.incantation_at)}</td> <td>{rec.angel_id}</td> <td>{rec.angel_name}</td> <td> <description-markdown source="{contents(rec.spell)}"></description-markdown> </td> </tbody> </table> </div>', 'page-impure-incantation { display: block; width: calc(88px * 4 + 22px * 3); height: calc(88px * 3 + 22px * 2); padding: 22px; background: rgba(255,255,255,0.88);; border-radius: 8px; margin-bottom: 11px; } page-impure-incantation description-markdown pre { padding:0px; }', '', function(opts) {
-     let hw = new HolyWater();
-
-     this.dt   = (v) => { return hw.str2yyyymmddhhmmss(v); };
-     this.week = (v) => { return hw.str2week(v); };
-     this.contents = (v) => {
-
-         return v;
-     };
-});
-
-riot.tag2('page-impure-purges', '<h1 class="title is-5" style="margin:0px;">浄化履歴</h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable"> <thead> <tr> <th colspan="6">Purge</th> <th colspan="2">祓魔師</th> </tr> <tr> <th>ID</th> <th colspan="2">Start</th> <th colspan="2">End</th> <th>Elapsed Time [s]</th> <th>ID</th> <th>Name</th> </tr> </thead> <tbody> <tr each="{rec in opts.source}"> <td>{rec.id}</td> <td>{dt(rec.start)}</td> <td>{week(rec.start)}</td> <td>{dt(rec.end)}</td> <td>{week(rec.end)}</td> <td style="text-align:right;">{time(rec.elapsed_time)}</td> <td>{rec.angel_id}</td> <td>{rec.angel_name}</td> </tr> </tbody> </table> </div>', 'page-impure-purges { display: block; width: calc(88px * 4 + 22px * 3); height: calc(88px * 3 + 22px * 2); padding: 22px; background: rgba(255,255,255,0.88); border-radius: 8px; margin-bottom: 11px; }', '', function(opts) {
-     let hw = new HolyWater();
-
-     this.dt   = (v) => { return hw.str2yyyymmddhhmmss(v); };
-     this.week = (v) => { return hw.str2week(v); };
-     this.time = (v) => { return hw.int2hhmmss(v); };
-});
-
-riot.tag2('page-impure-requests', '<h1 class="title is-5">依頼履歴</h1> <div class="contents"> <table class="table is-bordered is-striped is-narrow is-hoverable"> <thead> <tr> <th rowspan="2" colspan="2">Date</th> <th colspan="2">From</th> <th colspan="2">To</th> <th rowspan="2">Message</th> </tr> <tr> <th>ID</th> <th>Name</th> <th>ID</th> <th>Name</th> </tr> </thead> <tbody> <tr each="{rec in opts.source}" request-message-id="{rec.id}" angel-from-id="{rec.angel_from_id}" angel-to-id="{rec.angel_to_id}" impure-id="{rec.impure_id}"> <td> {dt(rec.messaged_at)} </td> <td> {week(rec.messaged_at)} </td> <td> {rec.angel_from_id} </td> <td>{rec.angel_from_name}</td> <td> {rec.angel_to_id} </td> <td>{rec.angel_to_name}</td> <td> <description-markdown source="{contents(rec.contents)}"></description-markdown> </td> </tr> </tbody> </table> </div>', 'page-impure-requests { display: block; width: calc(88px * 4 + 22px * 3); height: calc(88px * 3 + 22px * 2); padding: 22px; background: rgba(255,255,255,0.88); border-radius: 8px; margin-bottom: 11px; }', '', function(opts) {
-     let hw = new HolyWater();
-
-     this.dt   = (v) => { return hw.str2yyyymmddhhmmss(v); };
-     this.week = (v) => { return hw.str2week(v); };
-     this.contents = (v) => { return hw.descriptionViewShort(v); };
-});
-
-riot.tag2('page-impure', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">{this.name()}</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section" style="padding-top:0px;"> <div class="container cards"> <div style="display: flex;"> <div style="flex-grow: 1;"> <page-impure-contents source="{source}"></page-impure-contents> </div> <div style="margin-left:22px;"> <page-impure-controller source="{term}" impure="{source.impure}" callback="{callback}"></page-impure-controller> </div> </div> </div> </section>', 'page-impure page-tabs li a{ background: #fff; } page-impure { width: 100%; height: 100%; display: block; overflow: auto; } page-impure .tabs ul { border-bottom-color: rgb(254, 242, 99); border-bottom-width: 2px; } page-impure .tabs.is-boxed li.is-active a { background-color: rgba(254, 242, 99, 1); border-color: rgb(254, 242, 99); text-shadow: 0px 0px 11px #fff; color: #333; font-weight: bold; } page-impure .tabs.is-boxed li { margin-left: 8px; } page-impure .tabs.is-boxed a { text-shadow: 0px 0px 8px #fff; font-weight: bold; } page-impure .table th, page-impure .table td { font-size: 14px; }', '', function(opts) {
+riot.tag2('page-impure', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">{this.name()}</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <section class="section" style="padding-top:0px;"> <div class="container cards"> <div style="display: flex;"> <div style="flex-grow: 1;"> <page-impure-cards-pool source="{source}"></page-impure-cards-pool> </div> <div style="margin-left:22px;"> <page-impure-controller source="{term}" impure="{source.impure}" callback="{callback}"></page-impure-controller> </div> </div> </div> </section>', 'page-impure page-tabs li a{ background: #fff; } page-impure { width: 100%; height: 100%; display: block; overflow: auto; } page-impure .tabs ul { border-bottom-color: rgb(254, 242, 99); border-bottom-width: 2px; } page-impure .tabs.is-boxed li.is-active a { background-color: rgba(254, 242, 99, 1); border-color: rgb(254, 242, 99); text-shadow: 0px 0px 11px #fff; color: #333; font-weight: bold; } page-impure .tabs.is-boxed li { margin-left: 8px; } page-impure .tabs.is-boxed a { text-shadow: 0px 0px 8px #fff; font-weight: bold; } page-impure .table th, page-impure .table td { font-size: 14px; }', '', function(opts) {
      this.callback = (action, data) => {
          if (action=='refresh') {
              let id = this.id();
@@ -2548,6 +2829,7 @@ riot.tag2('page-impure', '<section class="section" style="padding-bottom: 22px;"
              'FINISHED-IMPURE',
              'SAVED-IMPURE-INCANTATION-SOLO',
              'FINISHED-IMPURE',
+             'UPDATED-IMPURE-DESCRIPTION',
          ];
 
          if (list.find((d) => { return d == action.type; })) {

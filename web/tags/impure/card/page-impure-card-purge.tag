@@ -1,25 +1,37 @@
-<page-impure-card-purge>
+<page-impure-card-purge style="width:{w()}px; height:{h()}px;">
 
 
-    <div style="display:flex; flex-direction:column; height:100%;">
+    <div class="header" style="">
+        <p><b>浄化:</b> {angelName()}</p>
+    </div>
 
-        <div style="background:rgba(254, 242, 99, 0.88); padding:6px 8px; margin-bottom: 6px;">
-            <p><b>浄化:</b> {angelName()}</p>
+    <div class="body">
+        <div style="font-size:11px; padding-left:8px;">
+            <p>開:{start()}</p>
+            <p>終:{end()}</p>
         </div>
 
-        <div style="font-size:11px; margin-top:11px;">
-            <p>開始:{start()}</p>
-            <p>終了:{end()}</p>
-        </div>
-
-        <div style="flex-grow:1; display:flex; align-items:center;">
-            <p style="flex-grow:1; font-size: 33px;text-align: center;">{elapsedTime()}</p>
-        </div>
-
-        <div style="font-size:8px; text-align:right;">
-            <p>{time()}</p>
+        <div class="elapsed-time">
+            <p>{elapsedTime()}</p>
         </div>
     </div>
+
+    <div class="hw-card-footer">
+        <p>{time()}</p>
+    </div>
+
+    <script>
+     this.w = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(8, null, 11);
+     };
+     this.h = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(8, null, 11);
+     };
+    </script>
 
     <script>
      this.time = () => {
@@ -52,14 +64,43 @@
 
     <style>
      page-impure-card-purge {
-         display: block;
-         width:  calc(88px * 2 + 11px * 1);
-         height: calc(88px * 2 + 11px * 1);
-         padding: 11px;
+         display:flex;
+         flex-direction:column;
+
          background: rgba(255,255,255,0.88);;
          border-radius: 8px;
 
          font-size: 12px;
+     }
+     page-impure-card-purge > .header {
+         background:rgba(254, 242, 99, 0.88);
+         padding:8px 11px;
+         border-radius: 8px 8px 0px 0px;
+     }
+     page-impure-card-purge > .body {
+         display: flex;
+         flex-direction: column;
+
+         padding: 8px 0px 0px 0px;
+
+         height: 100%;
+     }
+
+     page-impure-card-purge > .body > .elapsed-time{
+         text-align: center;
+         align-items: center;
+         height: 100%;
+         display: flex;
+         justify-content: center;
+         font-size: 33px;
+         font-weight: bold;
+     }
+
+     page-impure-card-purge .hw-card-footer {
+         font-size:8px;
+         text-align:right;
+         padding: 8px 8px 0px 0px;
+         color: #aaaaaa;
      }
     </style>
 </page-impure-card-purge>

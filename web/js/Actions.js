@@ -243,6 +243,7 @@ class Actions extends Vanilla_Redux_Actions {
             name_short: name_short,
             description: description,
         };
+
         API.post(path, this.encodePostData(post_data), (json, success) => {
             STORE.dispatch(this.createdDeamon(json));
         });
@@ -261,7 +262,10 @@ class Actions extends Vanilla_Redux_Actions {
             description: description,
         };
         API.post(path, this.encodePostData(post_data), (json, success) => {
-            STORE.dispatch(this.updatedDeamonDescription(json));
+            if (success)
+                STORE.dispatch(this.updatedDeamonDescription(json));
+            else
+                this.pushFetchErrorMessage(json);
         });
     }
     updatedDeamonDescription (response) {
@@ -428,15 +432,16 @@ class Actions extends Vanilla_Redux_Actions {
         };
 
         API.post(path, post_data, (json, success) => {
-            STORE.dispatch(this.setedImpureDeamon(json));
+            STORE.dispatch(this.setedImpureDeamon(json, impure));
         });
     }
-    setedImpureDeamon (response) {
+    setedImpureDeamon (response, impure) {
         this.pushSuccessMessage('Impure と Deamon の関連付けが完了しました。');
 
         return {
             type: 'SETED-IMPURE-DEAMON',
             data: {},
+            impure: impure,
         };
     }
     fetchImpureAtWaitingFor () {
@@ -451,6 +456,28 @@ class Actions extends Vanilla_Redux_Actions {
         return {
             type: 'FETCHED-IMPURE-AT-WAITING-FOR',
             response: response,
+        };
+    }
+    updateImpureDescription (impure, description) {
+        let path = '/impures/%d/description'.format(impure.id);
+        let post_data = {
+            description: description,
+        };
+
+        API.post(path, this.encodePostData(post_data), (json, success) => {
+            if (success)
+                STORE.dispatch(this.updatedImpureDescription(json, impure));
+            else
+                this.pushFetchErrorMessage(json);
+        });
+    }
+    updatedImpureDescription (response, impure) {
+        this.pushSuccessMessage('Impure の Description の変更が完了しました');
+
+        return {
+            type: 'UPDATED-IMPURE-DESCRIPTION',
+            data: {},
+            impure: impure,
         };
     }
     /////

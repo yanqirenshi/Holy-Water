@@ -78,6 +78,22 @@ class HolyWater {
     int2hhmmss (v) {
         return this.ts.format_sec(v);
     }
+    htVal (keys_str, ht) {
+        if (!keys_str)
+            return null;
+
+        let keys = keys_str.split('.');
+        let val = ht;
+
+        for (let key in keys) {
+            val = ht[key];
+
+            if (!val)
+                return null;
+        }
+
+        return val;
+    }
     /////
     ///// page-impure
     /////
@@ -95,17 +111,17 @@ class HolyWater {
         });
 
         out.push({
-            type: 'IMPURE-STATUS-PURGE',
-            contents: source,
-        });
-
-        out.push({
             type: 'IMPURE-DEAMON',
             contents: source,
         });
 
         out.push({
             type: 'IMPURE-ANGEL',
+            contents: source,
+        });
+
+        out.push({
+            type: 'IMPURE-STATUS-PURGE',
             contents: source,
         });
 
@@ -134,6 +150,11 @@ class HolyWater {
                 time: new Date(d.messaged_at),
             };
         }));
+
+        tmp.push({
+            type: 'IMPURE-NETWORK',
+            contents: source,
+        });
 
         return []
             .concat(out)
@@ -172,5 +193,13 @@ class HolyWater {
         return []
             .concat(out)
             .concat(tmp);
+    }
+    /////
+    ///// page-card_description
+    /////
+    pageCardDescriptionSize (request_gain, default_gain, base_size) {
+        let gain = request_gain || default_gain;
+
+        return (base_size * gain + base_size * (gain -1));
     }
 }

@@ -1,7 +1,7 @@
-<deamon-page-card_description-large>
+<page-card_description-large style="width:{w()}px; height:{h()}px;">
 
     <div>
-        <div class="editor" style="">
+        <div class="editor">
             <div>
                 <textarea class="textarea"
                           placeholder="Write Markdown"
@@ -26,31 +26,38 @@
     </div>
 
     <script>
+     this.w = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(hw.htVal('size.w', this.opts), 56, 11);
+     };
+     this.h = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(hw.htVal('size.h', this.opts), 24, 11);
+     };
+    </script>
+
+    <script>
      this.markdown = null;
      this.markdownVal = () => {
          if (this.markdown)
              return this.markdown;
 
-         if (!this.opts.source.deamon)
-             return '';
-
-         this.markdown = this.opts.source.deamon.description;
+         this.markdown = this.opts.source;
          this.refs.md.textContent = this.markdown;
 
-         return this.opts.source.deamon.description;
+         return this.markdown;
      };
      this.isDisable = () => {
-         if (!this.opts.source.deamon)
-             return 'disabled';
-
-         if (this.markdown==this.opts.source.deamon.description)
+         if (this.markdown==this.opts.source)
              return 'disabled';
 
          return '';
      }
      this.on('mount', () => {
          if (this.opts.source.deamon)
-             this.markdown = this.opts.source.deamon.description;
+             this.markdown = this.opts.source;
      });
      this.keyUp = (e) => {
          this.markdown = e.target.value;
@@ -60,16 +67,13 @@
          this.opts.callback('close');
      };
      this.clickSave = () => {
-         ACTIONS.updateDeamonDescription(this.opts.source.deamon,
-                                         this.markdown);
+         this.opts.callback('save', { contents: this.markdown });
      };
     </script>
 
     <style>
-     deamon-page-card_description-large {
+     page-card_description-large {
          display: flex;
-         width:  calc(11px * 66 + 11px * 65);
-         height: calc(11px * 33 + 11px * 32);
 
          margin-bottom: 11px;
 
@@ -79,37 +83,39 @@
          display:flex;
          flex-direction:column;
      }
-     deamon-page-card_description-large > div {
+     page-card_description-large > div {
          display: flex;
          flex-direction: column;
          height: 100%;
      }
-     deamon-page-card_description-large > div > .editor {
+     page-card_description-large > div > .editor {
          padding-top: 11px;
          flex-grow: 1;
          display: flex;
      }
-     deamon-page-card_description-large > div > .editor > div {
+     page-card_description-large > div > .editor > div {
          height: 100%;
          flex-grow: 1;
          width: 50%;
      }
-     deamon-page-card_description-large > div > .editor .textarea{
+     page-card_description-large > div > .editor .textarea{
          border: none;
          width:100%;
          height:100%;
          resize: none;
          box-shadow: none;
          padding-left: 22px;
+
+         background: #fdfdfd;
+         font-size: 12px;
      }
-     deamon-page-card_description-large > div > .editor .preview{
+     page-card_description-large > div > .editor .preview{
          overflow: auto;
          padding: 11px;
-         background:#eeeeee;
      }
-     deamon-page-card_description-large > div > .controller {
+     page-card_description-large > div > .controller {
          padding: 11px;
      }
     </style>
 
-</deamon-page-card_description-large>
+</page-card_description-large>

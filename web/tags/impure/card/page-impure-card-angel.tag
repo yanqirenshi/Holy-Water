@@ -1,4 +1,4 @@
-<page-impure-card-angel>
+<page-impure-card-angel style="width:{w()}px; height:{h()}px;">
 
     <div style="display:flex; flex-direction:column; height:100%;">
         <div style="flex-grow: 1;display: flex;align-items: center; flex-direction:column; justify-content: center;">
@@ -14,6 +14,19 @@
             <button class="button is-small">依頼</button>
         </div>
     </div>
+
+    <script>
+     this.w = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(8, null, 11);
+     };
+     this.h = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(8, null, 11);
+     };
+    </script>
 
     <script>
      this.angelName = () => {

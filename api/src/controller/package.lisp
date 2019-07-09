@@ -22,7 +22,8 @@
            #:get-impure-purging
            #:transfer-impure
            #:create-after-impure
-           #:impure-set-deamon)
+           #:impure-set-deamon
+           #:update-impure-description)
   (:export #:find-orthodoxs
            #:find-orthodox-all-exorcists
            #:find-orthodox-exorcists)

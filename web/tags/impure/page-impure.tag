@@ -13,7 +13,7 @@
         <div class="container cards">
             <div style="display: flex;">
                 <div style="flex-grow: 1;">
-                    <page-impure-contents source={source}></page-impure-contents>
+                    <page-impure-cards-pool source={source}></page-impure-cards-pool>
                 </div>
 
                 <div style="margin-left:22px;">
@@ -109,6 +109,7 @@
              'FINISHED-IMPURE',
              'SAVED-IMPURE-INCANTATION-SOLO',
              'FINISHED-IMPURE',
+             'UPDATED-IMPURE-DESCRIPTION',
          ];
 
          if (list.find((d) => { return d == action.type; })) {

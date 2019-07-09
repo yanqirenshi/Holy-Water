@@ -1,10 +1,25 @@
-<page-impure-card-status class={isFinished() ? 'pure' : 'impure'}>
+<page-impure-card-status
+    class={isFinished() ? 'pure' : 'impure'}
+    style="width:{w()}px; height:{h()}px;">
 
     <div style="height:100%; display:flex; align-items:center;">
         <p style="font-size:66px; font-weight:bold; word-break:break-all; text-align:center; flex-grow:1;">
             {finished()}
         </p>
     </div>
+
+    <script>
+     this.w = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(8, null, 11);
+     };
+     this.h = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(8, null, 11);
+     };
+    </script>
 
     <script>
      this.isFinished = () => {

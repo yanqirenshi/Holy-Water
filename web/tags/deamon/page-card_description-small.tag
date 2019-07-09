@@ -1,13 +1,26 @@
-<deamon-page-card_description-small>
+<page-card_description-small style="width:{w()}px; height:{h()}px;">
 
     <div class="description" style="">
-        <description-markdown source={description()}></description-markdown>
+        <description-markdown source={opts.source}></description-markdown>
     </div>
 
     <div class="controller">
         <button class="button is-small"
                 onclick={clickEdit}>編集</button>
     </div>
+
+    <script>
+     this.w = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(hw.htVal('size.w', this.opts), 24, 11);
+     };
+     this.h = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(hw.htVal('size.h', this.opts), 24, 11);
+     };
+    </script>
 
     <script>
      this.clickEdit = () => {
@@ -26,10 +39,8 @@
     </script>
 
     <style>
-     deamon-page-card_description-small {
+     page-card_description-small {
          display: flex;
-         width:  calc(11px * 24 + 11px * 23);
-         height: calc(11px * 24 + 11px * 23);
 
          margin-bottom: 11px;
 
@@ -39,7 +50,7 @@
          display:flex;
          flex-direction:column;
      }
-     deamon-page-card_description-small .description {
+     page-card_description-small .description {
          flex-grow:1;
          overflow:auto;
 
@@ -47,15 +58,13 @@
 
          border-radius: 8px 8px 0px 0px;
 
-         background: #eee;
-
          font-size:   14px;
          line-height: 14px;
      }
-     deamon-page-card_description-small .controller {
+     page-card_description-small .controller {
          text-align: right;
          margin-top: 8px;
          margin: 8px;
      }
     </style>
-</deamon-page-card_description-small>
+</page-card_description-small>

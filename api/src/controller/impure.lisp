@@ -166,3 +166,12 @@
   (let ((deamon (hw::get-deamon :id deamon-id)))
     (assert deamon)
     (hw:impure-set-deamon angel impure deamon :editor angel)))
+
+
+(defun update-impure-description (angel impure &key description)
+  (declare (ignore angel))
+  (assert impure)
+  (assert description)
+  (setf (hw::description impure) description)
+  (mito:save-dao impure)
+  (dao2impure impure))

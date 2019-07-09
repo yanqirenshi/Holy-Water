@@ -25,8 +25,11 @@
          this.msnry.layout();
      }
      this.callback = (action) => {
-         if (action=='refresh')
+         if (action=='refresh') {
              this.layout();
+
+             return;
+         }
      };
      this.on('updated', () => {
          this.layout();

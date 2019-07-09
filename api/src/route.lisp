@@ -191,6 +191,15 @@
       (unless impure (throw-code 404))
       (render-json (hw.api.ctrl:save-impure angel impure :name name :description description :editor angel)))))
 
+(defroute ("/impures/:id/description" :method :POST) (&key id |description|)
+  (with-angel (angel)
+    (let* ((description (quri:url-decode |description|))
+           (impure (hw::get-impure :id id)))
+      (unless impure (throw-code 404))
+      (render-json (hw.api.ctrl:update-impure-description angel
+                                                          impure
+                                                          :description description)))))
+
 (defroute ("/impures/:id/purges/start" :method :POST) (&key id)
   (with-angel (angel)
     (let ((impure (hw::get-impure :id id)))

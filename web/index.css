@@ -87,3 +87,66 @@ app .hw-button:hover {
     box-shadow: 0px 0px 22px #ffffff;
     text-shadow: 0px 0px 3px #ffffff;
 }
+
+/* **************************************************************** */
+/*   page-card_description                                          */
+/* **************************************************************** */
+app div[ref="markdown-html"] > * {
+    margin-left: 11px;
+}
+
+// h1
+app div[ref="markdown-html"] > h1 {
+    margin-left: 0px;
+    margin-top: 22px;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+app div[ref="markdown-html"] > h1:first-child {
+    margin-left: 11px;
+    margin-bottom: 8px;
+}
+
+app div[ref="markdown-html"] > h2 {
+    margin-left: 11px;
+    margin-top: 22px;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+app div[ref="markdown-html"] > h2:first-child {
+    margin-top: 0px;
+    margin-bottom: 8px;
+}
+
+
+app div[ref="markdown-html"] ul,
+app div[ref="markdown-html"] ol {
+    margin-left: 33px;
+}
+
+app div[ref="markdown-html"] table,
+app div[ref="markdown-html"] th,
+app div[ref="markdown-html"] td {
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+}
+
+app div[ref="markdown-html"] table th {
+    padding: 3px 6px;
+    font-weight: bold;
+    vertical-align: top;
+}
+app div[ref="markdown-html"] table td {
+    padding: 3px 6px;
+    vertical-align: top;
+}
+
+app div[ref="markdown-html"] tr:nth-child(even) {
+    background: #fafafa;
+}
+
+app div[ref="markdown-html"] .description {
+    background: #fff;
+}
