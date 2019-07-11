@@ -93,6 +93,7 @@ app .hw-button:hover {
 /* **************************************************************** */
 app div[ref="markdown-html"] > * {
     margin-left: 11px;
+    word-break: break-all;
 }
 
 // h1

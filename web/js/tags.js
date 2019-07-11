@@ -2436,8 +2436,13 @@ riot.tag2('page-impure-card-network', '<div style="width:100%; height:100%;borde
      }
      this.getSize = () => {
          let graph  = this.refs.graph;
-         if (!graph)
-             throw new Error('Graph がないよ。');
+
+         if (!graph) {
+             console.warn('---- not found this.refs.graph -----------------------');
+             console.warn(this.refs);
+             console.warn('Graph がないよ。');
+             return { w:0, h:0 };
+         }
 
          let parent = graph.parentNode;
          if (!parent)
@@ -2833,8 +2838,8 @@ riot.tag2('page-impure', '<section class="section" style="padding-bottom: 22px;"
          ];
 
          if (list.find((d) => { return d == action.type; })) {
-             if (action.impure.id==this.source.impure.id)
-                 ACTIONS.fetchPagesImpure(this.source.impure);
+
+             ACTIONS.fetchPagesImpure(this.source.impure);
 
              return;
          }

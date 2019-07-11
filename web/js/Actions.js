@@ -304,8 +304,14 @@ class Actions extends Vanilla_Redux_Actions {
         let path = path_str.format(from.toISOString(), to.toISOString());
 
         API.get(path, function (json, success) {
-            if (success)
-                STORE.dispatch(this.fetchedDoneImpures(json));
+            if (!success) {
+                console.warn('See: http://satoshi-iwasaki.local:8080/hw/#home/impures/1197');
+                console.warn([from, to]);
+                this.pushFetchErrorMessage(json);
+                return;
+            }
+
+            STORE.dispatch(this.fetchedDoneImpures(json));
         }.bind(this));
     }
     fetchedDoneImpures (response) {

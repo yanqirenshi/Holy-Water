@@ -67,7 +67,8 @@
            #:list-request-messages-unred
            #:list-maledict-impures
            #:list-orthodox-angels
-           #:list-impures-by-deamon))
+           #:list-impures-by-deamon
+           #:list-relational-impures-by-impure))
 (in-package :holy-water)
 
 (mito:connect-toplevel :postgres :database-name "holy_water" :username "holy_water")

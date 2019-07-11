@@ -1,5 +1,7 @@
 (in-package :holy-water)
 
+(defvar *tables-rs_impure* '(:rs_impure_active :rs_impure_finished :rs_impure_discarded))
+
 (defclass rs_impure ()
   ((name         :accessor name)
    (description  :accessor description)

@@ -31,8 +31,13 @@
      }
      this.getSize = () => {
          let graph  = this.refs.graph;
-         if (!graph)
-             throw new Error('Graph がないよ。');
+
+         if (!graph) {
+             console.warn('---- not found this.refs.graph -----------------------');
+             console.warn(this.refs);
+             console.warn('Graph がないよ。');
+             return { w:0, h:0 };
+         }
 
          let parent = graph.parentNode;
          if (!parent)

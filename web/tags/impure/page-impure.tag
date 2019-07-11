@@ -113,8 +113,8 @@
          ];
 
          if (list.find((d) => { return d == action.type; })) {
-             if (action.impure.id==this.source.impure.id)
-                 ACTIONS.fetchPagesImpure(this.source.impure);
+             // if (action.impure.id==this.source.impure.id)
+             ACTIONS.fetchPagesImpure(this.source.impure);
 
              return;
          }
