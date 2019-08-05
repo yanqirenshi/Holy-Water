@@ -42,8 +42,6 @@
      page-card_description-small {
          display: flex;
 
-         margin-bottom: 11px;
-
          background: #fff;
          border-radius: 8px;
 
@@ -67,4 +65,5 @@
          margin: 8px;
      }
     </style>
+
 </page-card_description-small>

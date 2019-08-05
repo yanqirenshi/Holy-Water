@@ -59,6 +59,9 @@
          width: 100%;
          height: 100%;
      }
+     deamon-page page-card_description-small {
+         margin-bottom: 11px;
+     }
     </style>
 
 </deamon-page>

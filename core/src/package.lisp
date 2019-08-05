@@ -80,7 +80,6 @@
   (let ((val (getf plist indicator)))
     (cond ((eq :null val) val)
           (t (when val
-               (format t "~S~%" val)
                (setf (getf plist indicator)
                      (timestamptz2timestamp val)))))))
 

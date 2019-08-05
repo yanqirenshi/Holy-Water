@@ -17,7 +17,6 @@
 
 
 (defun get-angel-deccot (angel service &key id)
-  (format t "~S~%" (list angel service id))
   (cond ((string= service "GITLAB") (get-angel-deccot-gitlab angel :id id))
         (t nil)))
 

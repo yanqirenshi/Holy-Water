@@ -1,7 +1,6 @@
 (in-package :holy-water)
 
 (defun list-relational-impures-by-impure-sql (from-table to-table direction &key impure)
-  (format t "~S~%" (list from-table to-table direction))
   (let ((id_from (if (eq :before direction) :re_impure.id_to   :re_impure.id_from))
         (id_to   (if (eq :before direction) :re_impure.id_from :re_impure.id_to)))
     (select ((:as (symbol-name direction) :relationship_direction)

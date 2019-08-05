@@ -1056,7 +1056,7 @@ riot.tag2('deamon-page-card_name-short', '<div class="small"> <p class="name">{n
 riot.tag2('deamon-page-card_purges', '', '', '', function(opts) {
 });
 
-riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">悪魔: {name()}</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <deamon-page-card-pool source="{source}"></deamon-page-card-pool>', 'deamon-page { overflow: auto; display: block; width: 100%; height: 100%; }', '', function(opts) {
+riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">悪魔: {name()}</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <deamon-page-card-pool source="{source}"></deamon-page-card-pool>', 'deamon-page { overflow: auto; display: block; width: 100%; height: 100%; } deamon-page page-card_description-small { margin-bottom: 11px; }', '', function(opts) {
      this.name = () => {
          let deamon = this.source.deamon;
          if (!deamon)
@@ -1138,7 +1138,7 @@ riot.tag2('page-card_description-large', '<div> <div class="editor"> <div> <text
      };
 });
 
-riot.tag2('page-card_description-small', '<div class="description" style=""> <description-markdown source="{opts.source}"></description-markdown> </div> <div class="controller"> <button class="button is-small" onclick="{clickEdit}">編集</button> </div>', 'page-card_description-small { display: flex; margin-bottom: 11px; background: #fff; border-radius: 8px; display:flex; flex-direction:column; } page-card_description-small .description { flex-grow:1; overflow:auto; padding: 22px 11px 11px 11px; border-radius: 8px 8px 0px 0px; font-size: 14px; line-height: 14px; } page-card_description-small .controller { text-align: right; margin-top: 8px; margin: 8px; }', 'riot-style="width:{w()}px; height:{h()}px;"', function(opts) {
+riot.tag2('page-card_description-small', '<div class="description" style=""> <description-markdown source="{opts.source}"></description-markdown> </div> <div class="controller"> <button class="button is-small" onclick="{clickEdit}">編集</button> </div>', 'page-card_description-small { display: flex; background: #fff; border-radius: 8px; display:flex; flex-direction:column; } page-card_description-small .description { flex-grow:1; overflow:auto; padding: 22px 11px 11px 11px; border-radius: 8px 8px 0px 0px; font-size: 14px; line-height: 14px; } page-card_description-small .controller { text-align: right; margin-top: 8px; margin: 8px; }', 'riot-style="width:{w()}px; height:{h()}px;"', function(opts) {
      this.w = () => {
          let hw = new HolyWater();
 
@@ -2453,9 +2453,11 @@ riot.tag2('page-impure-card-network', '<div style="width:100%; height:100%;borde
              h: this.refs.graph.parentNode.clientHeight,
          };
      }
-     this.on('mount', () => {
+     this.on('updated', () => {
          let camera = this.makeCamera();
          let size   = this.getSize();
+
+         console.warn(this.refs.graph);
 
          let sketcher = new DefaultSketcher({
              element: {

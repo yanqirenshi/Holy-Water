@@ -48,9 +48,11 @@
              h: this.refs.graph.parentNode.clientHeight,
          };
      }
-     this.on('mount', () => {
+     this.on('updated', () => {
          let camera = this.makeCamera();
          let size   = this.getSize();
+
+         console.warn(this.refs.graph);
 
          let sketcher = new DefaultSketcher({
              element: {
