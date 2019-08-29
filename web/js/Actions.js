@@ -990,6 +990,22 @@ class Actions extends Vanilla_Redux_Actions {
             response: response
         };
     }
+    fetchPagesSelf (from, to) {
+        let path = '/pages/self?from=%s&to=%s'.format(from.toISOString(), to.toISOString());
+
+        API.get(path, function (json, success) {
+            if (success)
+                STORE.dispatch(this.fetchedPagesSelf(json));
+        }.bind(this));
+    }
+    fetchedPagesSelf (response) {
+        let state = STORE.state().toJS();
+
+        return {
+            type: 'FETCHED-PAGES-SELF',
+            response: response
+        };
+    }
     /////
     ///// Page
     /////

@@ -67,7 +67,8 @@
                                (:file "list-summay-impure-cemeteries-by-date-damon")
                                (:file "list-summay-purge-time-by-date-damon")
                                (:file "list-impures-by-deamon")
-                               (:file "list-relational-impures-by-impure"))))))
+                               (:file "list-relational-impures-by-impure")
+                               (:file "list-summary-purge-by-angel-deamon-span"))))))
   :description ""
   :long-description
   #.(read-file-string

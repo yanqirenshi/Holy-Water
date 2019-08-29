@@ -5,7 +5,8 @@
      this.updateContents = (str) => {
          let html = marked(str);
 
-         this.refs['markdown-html'].innerHTML = html;
+         if (this.refs['markdown-html'])
+             this.refs['markdown-html'].innerHTML = html;
      };
      this.on('mount', () => {
          this.updateContents(this.opts.source || '');

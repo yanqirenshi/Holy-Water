@@ -50,5 +50,6 @@
            #:pages-impure
            #:pages-impure-waiting
            #:pages-requests
-           #:pages-deamon))
+           #:pages-deamon
+           #:pages-angel))
 (in-package :holy-water.api.controller)

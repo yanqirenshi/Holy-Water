@@ -123,7 +123,7 @@
          let id = this.id();
 
          ACTIONS.fetchPagesImpure({ id: id });
-         ACTIONS.fetchImpure(id);
+         // ACTIONS.fetchImpure(id);
      });
     </script>
 

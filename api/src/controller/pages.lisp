@@ -61,3 +61,8 @@
     (list :|deamon|  (dao2deamon deamon)
           :|impures| (hw:list-impures-by-deamon :deamon deamon)
           :|purges|  (list :|summary| nil))))
+
+(defun pages-angel (angel from to)
+  (list :|angel|   (dao2angel angel)
+        :|purges|  (list :|deamons| (hw:list-summary-purge-by-angel-deamon-span angel :from from :to to)
+                         :|impures| nil)))

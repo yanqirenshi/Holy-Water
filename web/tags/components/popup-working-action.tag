@@ -3,7 +3,9 @@
     <button class="button is-small hw-button"
             style="margin-right:11px;"
             onclick={clickStop}>Stop</button>
-    <span style="font-size:12px;">{name()}</span>
+    <span style="font-size:12px;">
+        <a href={link()}>{name()}</a>
+    </span>
 
     <div style="margin-top: 8px;">
         <p style="display:inline; font-size:12px; margin-right:22px;">
@@ -35,6 +37,12 @@
      this.hide = () => {
          return opts.data ? '' : 'hide';
      }
+     this.link = () => {
+         if (!opts.data)
+             return location.hash;
+
+         return "#home/impures/" + opts.data.id;
+     };
      this.name = () => {
          return opts.data ? opts.data.name : '';
      };

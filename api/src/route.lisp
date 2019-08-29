@@ -351,6 +351,13 @@
       (unless deamon (throw-code 404))
       (render-json (hw.api.ctrl:pages-deamon angel deamon)))))
 
+(defroute "/pages/self" (&key |from| |to|)
+  (format t "~S~%" (list |from| |to|))
+  (with-angel (angel)
+    (let ((from (local-time:parse-timestring |from|))
+          (to   (local-time:parse-timestring |to|)))
+      (render-json (hw.api.ctrl:pages-angel angel from to)))))
+
 
 ;;;;;
 ;;;;; Error pages

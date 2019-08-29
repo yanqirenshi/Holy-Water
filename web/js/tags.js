@@ -1,3 +1,35 @@
+riot.tag2('angel-page-card-result-deamon', '<div class="controller"> <p style="word-break: keep-all; margin-right:11px;">期間: </p> <input class="input is-small" placeholder="From" style="margin-right:11px;" riot-value="{opts.span.from.format(\'YYYY-MM-DD\')}" ref="from" type="{\'date\'}"> <p style="margin-right:11px;">〜</p> <input class="input is-small" placeholder="To" style="margin-right:11px;" riot-value="{opts.span.to.format(\'YYYY-MM-DD\')}" ref="to" type="{\'date\'}"> <button class="button is-small" onclick="{clickRefresh}">Refresh</button> </div> <div class="summary" style="margin-top:11px;"> <p style="margin-right:11px;">Total:</p> <p style="margin-right:11px;">{totalElapsedDay()}</p> <p style="margin-right:11px;">[人日]</p> </div> <div style="margin-top:11px;"> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size:12px;"> <thead> <tr> <th rowspan="2">ID</th> <th rowspan="2">Name</th> <th colspan="3">作業時間</th> </tr> <tr> <th>人日</th> <th>時間</th> <th>分</th> </tr> </thead> <tbody> <tr each="{obj in list()}"> <td>{obj.deamon_id}</td> <td>{obj.deamon_name}</td> <td class="num">{elapsedDay(obj.puge_elapsed_time)}</td> <td class="num">{elapsedHour(obj.puge_elapsed_time)}</td> <td class="num">{elapsedMinute(obj.puge_elapsed_time)}</td> </tr> </tbody> </table> </div>', 'angel-page-card-result-deamon { display: flex; flex-direction: column; width: calc(11px * 8 * 6); padding: 22px; background: #fff; border-radius: 5px; } angel-page-card-result-deamon .controller { display: flex; align-items: center; } angel-page-card-result-deamon .summary { display: flex; align-items: center; }', '', function(opts) {
+     this.clickRefresh = () => {
+         this.opts.callback('click-refresh', {
+             from: moment(this.refs.from.value),
+             to:   moment(this.refs.to.value),
+         })
+     };
+
+     let sum = this.totalElapsedDay = () => {
+         let sum = opts.source.purges.deamons.reduce((a,b)=>{
+             return a + b.puge_elapsed_time;
+         }, 0);
+
+         return this.elapsedDay(sum);
+     };
+     this.elapsedDay = (val) => {
+         return (Math.ceil(this.elapsedHour(val) / 6 * 100) /100).toFixed(2);
+
+     };
+     this.elapsedHour = (val) => {
+         return (Math.ceil(this.elapsedMinute(val) / 60 * 100) /100).toFixed(2);
+     };
+     this.elapsedMinute = (val) => {
+         return (Math.ceil(val / 60 * 100) / 100).toFixed(2);
+     };
+     this.list = () => {
+         return opts.source.purges.deamons.sort((a,b)=>{
+             return a.puge_elapsed_time < b.puge_elapsed_time ? 1 : -1;
+         });
+     };
+});
+
 riot.tag2('angel-page-change-password', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">パスワード変更</h1> <h2 class="subtitle hw-text-white">準備中</h2> </div> </section>', '', '', function(opts) {
 });
 
@@ -19,7 +51,36 @@ riot.tag2('angel-page-sign-out', '<section class="section"> <div class="containe
      };
 });
 
-riot.tag2('angel_page', '<section class="section"> <div class="container"> </div> </section>', '', 'class="page-contents"', function(opts) {
+riot.tag2('angel_page', '<section class="section"> <div class="container"> <angel-page-card-result-deamon source="{source}" span="{span}" callback="{callback}"></angel-page-card-result-deamon> </div> </section>', '', 'class="page-contents"', function(opts) {
+     this.callback = (action, data) => {
+         if (action=='click-refresh') {
+             this.span.from = data.from;
+             this.span.to   = data.to;
+
+             ACTIONS.fetchPagesSelf(this.span.from, this.span.to);
+         }
+     };
+     this.span = {
+         from: moment().startOf('month'),
+         to:   moment().endOf('month'),
+     };
+     this.source = {
+         angel: null,
+         purges: {
+             deamons: [],
+             impures: [],
+         }
+     };
+     this.on('mount', () => {
+         ACTIONS.fetchPagesSelf(this.span.from, this.span.to);
+     });
+     STORE.subscribe((action)=>{
+         if (action.type=='FETCHED-PAGES-SELF') {
+             this.source = action.response;
+             this.update();
+             return;
+         }
+     });
 });
 
 riot.tag2('app-page-area', '', '', '', function(opts) {
@@ -363,7 +424,8 @@ riot.tag2('description-markdown', '<div ref="markdown-html" style=" background: 
      this.updateContents = (str) => {
          let html = marked(str);
 
-         this.refs['markdown-html'].innerHTML = html;
+         if (this.refs['markdown-html'])
+             this.refs['markdown-html'].innerHTML = html;
      };
      this.on('mount', () => {
          this.updateContents(this.opts.source || '');
@@ -925,7 +987,7 @@ riot.tag2('modal-spell-impure', '<div class="modal {impure ? \'is-active\' : \'\
      });
 });
 
-riot.tag2('popup-working-action', '<button class="button is-small hw-button" style="margin-right:11px;" onclick="{clickStop}">Stop</button> <span style="font-size:12px;">{name()}</span> <div style="margin-top: 8px;"> <p style="display:inline; font-size:12px; margin-right:22px;"> <span style="font-size:12px;width:88px;display:inline-block;">経過: {distance()}</span> <span style="font-size:12px;">開始: </span> <span style="font-size:12px;">{start()}</span> </p> <button class="button is-small hw-button" onclick="{clickStopAndClose}">Stop & Close</button> </div>', 'popup-working-action { display: block; position: fixed; bottom: 33px; right: 33px; background: #fff; padding: 11px 22px; border: 1px solid #ededed; border-radius: 8px; box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666); } popup-working-action .hw-button { background: #fff; box-shadow: none; }', 'class="{hide()}"', function(opts) {
+riot.tag2('popup-working-action', '<button class="button is-small hw-button" style="margin-right:11px;" onclick="{clickStop}">Stop</button> <span style="font-size:12px;"> <a href="{link()}">{name()}</a> </span> <div style="margin-top: 8px;"> <p style="display:inline; font-size:12px; margin-right:22px;"> <span style="font-size:12px;width:88px;display:inline-block;">経過: {distance()}</span> <span style="font-size:12px;">開始: </span> <span style="font-size:12px;">{start()}</span> </p> <button class="button is-small hw-button" onclick="{clickStopAndClose}">Stop & Close</button> </div>', 'popup-working-action { display: block; position: fixed; bottom: 33px; right: 33px; background: #fff; padding: 11px 22px; border: 1px solid #ededed; border-radius: 8px; box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666); } popup-working-action .hw-button { background: #fff; box-shadow: none; }', 'class="{hide()}"', function(opts) {
 
      this.clickStop = () => {
          let impure = this.opts.data;
@@ -941,6 +1003,12 @@ riot.tag2('popup-working-action', '<button class="button is-small hw-button" sty
      this.hide = () => {
          return opts.data ? '' : 'hide';
      }
+     this.link = () => {
+         if (!opts.data)
+             return location.hash;
+
+         return "#home/impures/" + opts.data.id;
+     };
      this.name = () => {
          return opts.data ? opts.data.name : '';
      };
@@ -2850,7 +2918,7 @@ riot.tag2('page-impure', '<section class="section" style="padding-bottom: 22px;"
          let id = this.id();
 
          ACTIONS.fetchPagesImpure({ id: id });
-         ACTIONS.fetchImpure(id);
+
      });
 });
 

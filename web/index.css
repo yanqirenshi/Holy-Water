@@ -134,6 +134,10 @@ app div[ref="markdown-html"] td {
     border: 1px solid #ccc;
 }
 
+app .table td.num {
+    text-align: right;
+}
+
 app div[ref="markdown-html"] table th {
     padding: 3px 6px;
     font-weight: bold;
