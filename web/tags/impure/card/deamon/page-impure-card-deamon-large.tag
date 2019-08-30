@@ -9,11 +9,14 @@
             </p>
         </div>
 
-        <div class="selector">
+        <div style="padding-top:11px; padding-bottom:11px;">
             <input class="input is-small"
                    type="text"
                    placeholder="Text input"
                    onkeyup={keyUp}>
+        </div>
+
+        <div class="selector" style="overflow:auto;">
 
             <div style="margin-top:11px; flex-grow:1;">
                 <page-impure-card-deamon-item each={deamon in deamons()}
@@ -22,7 +25,7 @@
             </div>
         </div>
 
-        <div class="controller">
+        <div class="controller" style="padding-top:11px;">
             <button class="button is-small"
                     onclick={clickCancel}>Cancel</button>
 
@@ -35,13 +38,16 @@
      this.deamon = this.opts.source.deamon;
      this.filter = null;
      this.deamons = () => {
-         let deamons = STORE.get('deamons.list');
+         let deamons = STORE.get('deamons.list').filter((d)=>{
+             return d.purged_at ? false : true;
+         });
 
          if (!this.filter)
              return deamons;
 
          let filter = this.filter.toLowerCase();
          return deamons.filter((d) => {
+
              return d.name.toLowerCase().indexOf(filter) != -1 ||
                     d.name_short.toLowerCase().indexOf(filter) != -1;
          });

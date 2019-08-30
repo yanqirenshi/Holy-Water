@@ -26,6 +26,7 @@
      }
      this.callback = (action) => {
          if (action=='refresh') {
+
              this.layout();
 
              return;

@@ -2373,17 +2373,20 @@ riot.tag2('impure-card-small', '<div class="content" style="font-size:12px;"> <p
 riot.tag2('page-impure-card-deamon-item', '<p deamon_id="{deamon.id}">{deamon.name} ({deamon.name_short})</p>', 'page-impure-card-deamon-item { display: block; float: left; padding: 8px 11px; margin: 0px 6px 6px 0px; border-radius: 3px; font-weight: bold; font-size:11px; line-height:11px; border: 1px solid #fff; color: #fff; } page-impure-card-deamon-item:hover { border: 1px solid #e83929; background: #e83929; }', 'deamon_id="{deamon.id}"', function(opts) {
 });
 
-riot.tag2('page-impure-card-deamon-large', '<div riot-style="width:{w()}px; height:{h()}px;"> <div class="current"> <p> {deamonName()} ({deamonNameShort()}) </p> </div> <div class="selector"> <input class="input is-small" type="text" placeholder="Text input" onkeyup="{keyUp}"> <div style="margin-top:11px; flex-grow:1;"> <page-impure-card-deamon-item each="{deamon in deamons()}" source="{deamon}" onclick="{selectItem}"></page-impure-card-deamon-item> </div> </div> <div class="controller"> <button class="button is-small" onclick="{clickCancel}">Cancel</button> <button class="button is-small is-danger" onclick="{clickSave}" disabled="{isDisable()}">Save</button> </div> </div>', 'page-impure-card-deamon-large > div { display: flex; flex-direction: column; height: 100%; padding: 11px; background: rgba(22, 22, 14, 0.88);; color: #e83929; font-weight: bold; border-radius: 8px; } page-impure-card-deamon-large .current { padding: 11px 11px 0px 11px; } page-impure-card-deamon-large .selector { flex-grow:1; display:flex; flex-direction:column; padding: 11px 11px 0px 11px; } page-impure-card-deamon-large .controller { display:flex; justify-content:space-between; }', '', function(opts) {
+riot.tag2('page-impure-card-deamon-large', '<div riot-style="width:{w()}px; height:{h()}px;"> <div class="current"> <p> {deamonName()} ({deamonNameShort()}) </p> </div> <div style="padding-top:11px; padding-bottom:11px;"> <input class="input is-small" type="text" placeholder="Text input" onkeyup="{keyUp}"> </div> <div class="selector" style="overflow:auto;"> <div style="margin-top:11px; flex-grow:1;"> <page-impure-card-deamon-item each="{deamon in deamons()}" source="{deamon}" onclick="{selectItem}"></page-impure-card-deamon-item> </div> </div> <div class="controller" style="padding-top:11px;"> <button class="button is-small" onclick="{clickCancel}">Cancel</button> <button class="button is-small is-danger" onclick="{clickSave}" disabled="{isDisable()}">Save</button> </div> </div>', 'page-impure-card-deamon-large > div { display: flex; flex-direction: column; height: 100%; padding: 11px; background: rgba(22, 22, 14, 0.88);; color: #e83929; font-weight: bold; border-radius: 8px; } page-impure-card-deamon-large .current { padding: 11px 11px 0px 11px; } page-impure-card-deamon-large .selector { flex-grow:1; display:flex; flex-direction:column; padding: 11px 11px 0px 11px; } page-impure-card-deamon-large .controller { display:flex; justify-content:space-between; }', '', function(opts) {
      this.deamon = this.opts.source.deamon;
      this.filter = null;
      this.deamons = () => {
-         let deamons = STORE.get('deamons.list');
+         let deamons = STORE.get('deamons.list').filter((d)=>{
+             return d.purged_at ? false : true;
+         });
 
          if (!this.filter)
              return deamons;
 
          let filter = this.filter.toLowerCase();
          return deamons.filter((d) => {
+
              return d.name.toLowerCase().indexOf(filter) != -1 ||
                     d.name_short.toLowerCase().indexOf(filter) != -1;
          });
@@ -2783,6 +2786,8 @@ riot.tag2('page-impure-card', '<page-card_description if="{typeIs(\'IMPURE-DESCR
      STORE.subscribe ((action) => {
          if (action.type=='SETED-IMPURE-DEAMON') {
              this.setOpen('deamon', false);
+
+             ACTIONS.fetchPagesImpure({ id: action.impure.id });
              return;
          }
      });
@@ -2839,6 +2844,7 @@ riot.tag2('page-impure-cards-pool', '<div class="grid"> <page-impure-card each="
      }
      this.callback = (action) => {
          if (action=='refresh') {
+
              this.layout();
 
              return;

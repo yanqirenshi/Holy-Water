@@ -83,6 +83,8 @@
      STORE.subscribe ((action) => {
          if (action.type=='SETED-IMPURE-DEAMON') {
              this.setOpen('deamon', false);
+
+             ACTIONS.fetchPagesImpure({ id: action.impure.id });
              return;
          }
      });
