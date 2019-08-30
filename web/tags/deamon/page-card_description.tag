@@ -1,7 +1,16 @@
 <page-card_description>
 
-    <page-card_description-small if={!open} source={opts.source} callback={callback} size={opts.size.small}></page-card_description-small>
-    <page-card_description-large if={open}  source={opts.source} callback={callback} size={opts.size.large}></page-card_description-large>
+    <page-card_description-small if={!open} source={opts.source} callback={callback} size={getSize('small')}></page-card_description-small>
+    <page-card_description-large if={open}  source={opts.source} callback={callback} size={getSize('large')}></page-card_description-large>
+
+    <script>
+     this.getSize = (key) => {
+         if (!opts.size)
+             return { w:0, h:0 };
+
+         return opts.size[key];
+     }
+    </script>
 
     <script>
      this.open = false;

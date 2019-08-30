@@ -20,7 +20,8 @@
                 #:group-by
                 #:union-all-queries)
   (:export #:find-deamons
-           #:create-deamon)
+           #:create-deamon
+           #:purge-deamon)
   (:export #:find-maledicts
            #:get-maledict
            #:get-maledict-type

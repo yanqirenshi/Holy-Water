@@ -103,7 +103,7 @@ class Store extends Vanilla_Redux_Store {
     pageDeamons () {
         return {
             code: "deamons",
-            tag: 'deamons-page',
+            tag: 'page-deamons',
             menu_label: '悪魔',
             children: [
                 {

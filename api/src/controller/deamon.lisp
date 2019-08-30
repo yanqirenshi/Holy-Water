@@ -1,17 +1,19 @@
 (in-package :holy-water.api.controller)
 
 (defclass deamon ()
-  ((id            :accessor id            :initform :null)
-   (name          :accessor name          :initform :null)
-   (name-short    :accessor name-short    :initform :null)
-   (description   :accessor description   :initform :null)))
+  ((id            :accessor id          :initform :null)
+   (name          :accessor name        :initform :null)
+   (name-short    :accessor name-short  :initform :null)
+   (description   :accessor description :initform :null)
+   (purged-at     :accessor purged-at   :initform :null)))
 
 (defmethod %to-json ((obj deamon))
   (with-object
-    (write-key-value "id"            (slot-value obj 'id))
-    (write-key-value "name"          (slot-value obj 'name))
-    (write-key-value "name_short"    (slot-value obj 'name-short))
-    (write-key-value "description"   (slot-value obj 'description))))
+    (write-key-value "id"          (slot-value obj 'id))
+    (write-key-value "name"        (slot-value obj 'name))
+    (write-key-value "name_short"  (slot-value obj 'name-short))
+    (write-key-value "description" (slot-value obj 'description))
+    (write-key-value "purged_at"   (or (slot-value obj 'purged-at) :null))))
 
 (defun dao2deamon (dao)
   (when dao
@@ -20,6 +22,7 @@
       (setf (name deamon)        (hw::name dao))
       (setf (name-short deamon)  (hw::name-short dao))
       (setf (description deamon) (hw::description dao))
+      (setf (purged-at deamon)   (hw::purged-at dao))
       deamon)))
 
 (defun find-deamons ()

@@ -9,7 +9,10 @@
         </div>
     </section>
 
-    <deamon-page-card-pool source={source}></deamon-page-card-pool>
+    <div style="display: flex; padding: 0px 88px;">
+        <deamon-page-card-pool source={source}></deamon-page-card-pool>
+        <deamon-page-controller></deamon-page-controller>
+    </div>
 
     <script>
      this.name = () => {
@@ -61,6 +64,9 @@
      }
      deamon-page page-card_description-small {
          margin-bottom: 11px;
+     }
+     deamon-page deamon-page-card-pool {
+         flex-grow: 1;
      }
     </style>
 

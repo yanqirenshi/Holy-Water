@@ -1075,7 +1075,7 @@ riot.tag2('deamon-page-card-pool', '<div class="grid"> <deamon-page-card each="{
      });
 });
 
-riot.tag2('deamon-page-card', '<page-card_description if="{typeIs(\'DEAMON-DESCRIPTION\')}" source="{description()}" callback="{callback}"></page-card_description> <deamon-page-card_name-short if="{typeIs(\'DEAMON-CODE\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_name-short> <deamon-page-card_impure if="{typeIs(\'IMPURES\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_impure>', '', '', function(opts) {
+riot.tag2('deamon-page-card', '<page-card_description if="{typeIs(\'DEAMON-DESCRIPTION\')}" source="{description()}" callback="{childrenCallback}"></page-card_description> <deamon-page-card_name-short if="{typeIs(\'DEAMON-CODE\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_name-short> <deamon-page-card_impure if="{typeIs(\'IMPURES\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_impure>', '', '', function(opts) {
      this.description = () => {
          let deamon = opts.source.contents.deamon;
 
@@ -1084,10 +1084,15 @@ riot.tag2('deamon-page-card', '<page-card_description if="{typeIs(\'DEAMON-DESCR
 
          return deamon.description;
      };
-     this.callback = (action, data) => {
+     this.childrenCallback = (action, data) => {
          if (action=='save-description') {
              ACTIONS.updateDeamonDescription(opts.source.contents.deamon,
                                              data.contents);
+
+             return;
+         }
+         if (action=='refresh') {
+             this.opts.callback('refresh');
 
              return;
          }
@@ -1124,7 +1129,10 @@ riot.tag2('deamon-page-card_name-short', '<div class="small"> <p class="name">{n
 riot.tag2('deamon-page-card_purges', '', '', '', function(opts) {
 });
 
-riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">悪魔: {name()}</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <deamon-page-card-pool source="{source}"></deamon-page-card-pool>', 'deamon-page { overflow: auto; display: block; width: 100%; height: 100%; } deamon-page page-card_description-small { margin-bottom: 11px; }', '', function(opts) {
+riot.tag2('deamon-page-controller', '<button class="button hw-button" disabled>Add Impure</button> <button class="button hw-button">浄化</button>', 'deamon-page-controller .button { margin-bottom: 11px; width: 100%; }', '', function(opts) {
+});
+
+riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">悪魔: {name()}</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <div style="display: flex; padding: 0px 88px;"> <deamon-page-card-pool source="{source}"></deamon-page-card-pool> <deamon-page-controller></deamon-page-controller> </div>', 'deamon-page { overflow: auto; display: block; width: 100%; height: 100%; } deamon-page page-card_description-small { margin-bottom: 11px; } deamon-page deamon-page-card-pool { flex-grow: 1; }', '', function(opts) {
      this.name = () => {
          let deamon = this.source.deamon;
          if (!deamon)
@@ -1231,7 +1239,14 @@ riot.tag2('page-card_description-small', '<div class="description" style=""> <de
      };
 });
 
-riot.tag2('page-card_description', '<page-card_description-small if="{!open}" source="{opts.source}" callback="{callback}" size="{opts.size.small}"></page-card_description-small> <page-card_description-large if="{open}" source="{opts.source}" callback="{callback}" size="{opts.size.large}"></page-card_description-large>', '', '', function(opts) {
+riot.tag2('page-card_description', '<page-card_description-small if="{!open}" source="{opts.source}" callback="{callback}" size="{getSize(\'small\')}"></page-card_description-small> <page-card_description-large if="{open}" source="{opts.source}" callback="{callback}" size="{getSize(\'large\')}"></page-card_description-large>', '', '', function(opts) {
+     this.getSize = (key) => {
+         if (!opts.size)
+             return { w:0, h:0 };
+
+         return opts.size[key];
+     }
+
      this.open = false;
      this.callback = (action, data) => {
          if (action=='open') {
@@ -1260,13 +1275,7 @@ riot.tag2('page-card_description', '<page-card_description-small if="{!open}" so
      };
 });
 
-riot.tag2('deamons-page', '<section class="section" style="padding-top: 22px;"> <div class="container"> <div class="contents"> <div> <div> <button class="button is-small" onclick="{clickCreate}">Create Deamon</button> </div> <div style="margin-top:22px;"> <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Name(Short)</th> </tr> </thead> <tbody> <tr each="{deamon in deamons()}"> <td><a href="{idLink(deamon)}">{deamon.id}</a></td> <td>{deamon.name}</td> <td>{deamon.name_short}</td> </tr> </tbody> </table> </div> </div> </div> </div> </section>', '', 'class="page-contents"', function(opts) {
-     this.idLink = (deamon) => {
-         return '#deamons/' + deamon.id;
-     };
-     this.deamons = () => {
-         return STORE.get('deamons.list');
-     };
+riot.tag2('page-deamons', '<section class="section" style="padding-top: 22px;"> <div class="container"> <div class="contents"> <div> <button class="button is-small" onclick="{clickCreate}">Create Deamon</button> </div> <page-deamons_card-list></page-deamons_card-list> </div> </div> </section>', '', 'class="page-contents"', function(opts) {
      this.clickCreate = () => {
          ACTIONS.openModalCreateDeamon();
      };
@@ -1280,6 +1289,46 @@ riot.tag2('deamons-page', '<section class="section" style="padding-top: 22px;"> 
          if (action.type=='CREATED-DEAMON')
              ACTIONS.fetchDeamons();
      });
+});
+
+riot.tag2('page-deamons_card-list', '<div> <button class="button is-small {filter.active ? \'is-warning\' : \'\'}" action="active" onclick="{clickFilter}">Active</button> <button class="button is-small {filter.purged ? \'is-warning\' : \'\'}" action="purged" onclick="{clickFilter}">Purged</button> </div> <div> <div style="margin-top:22px;"> <table class="table is-bordered is-striped is-narrow is-hoverable hw-box-shadow" style="font-size:12px;"> <thead> <tr> <th>ID</th> <th>Name</th> <th>Name(Short)</th> <th>Purged at</th> <th>Description</th> </tr> </thead> <tbody> <tr each="{deamon in deamons()}"> <td nowrap><a href="{idLink(deamon)}">{deamon.id}</a></td> <td>{deamon.name}</td> <td nowrap>{deamon.name_short}</td> <td nowrap>{purgedAt(deamon)}</td> <td>{description(deamon)}</td> </tr> </tbody> </table> </div> </div>', 'page-deamons_card-list { display: flex; flex-direction: column; padding: 22px 22px; }', '', function(opts) {
+     this.filter = {
+         active: true,
+         purged: false,
+     };
+     this.clickFilter = (e) => {
+         let key = e.target.getAttribute('action');
+
+         this.filter[key] = !this.filter[key];
+         this.update();
+     };
+
+     this.purgedAt = (deamon) => {
+         let val =  deamon.purged_at;
+         if (!val)
+             return ""
+
+         return moment(val).format('YYYY-MM-DD HH:mm');
+     };
+     this.description = (deamon) => {
+         return deamon.description.split('\n')[0];
+     };
+     this.idLink = (deamon) => {
+         return '#deamons/' + deamon.id;
+     };
+     this.deamons = () => {
+         let list = STORE.get('deamons.list');
+
+         return list.filter((deamon)=>{
+             if (!this.filter.active && !deamon.purged_at)
+                 return false;
+
+             if (!this.filter.purged && deamon.purged_at)
+                 return false;
+
+             return true;
+         });
+     };
 });
 
 riot.tag2('exorcist-page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">祓魔師</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section>', '', 'class="page-contents"', function(opts) {
