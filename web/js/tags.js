@@ -83,6 +83,9 @@ riot.tag2('angel_page', '<section class="section"> <div class="container"> <ange
      });
 });
 
+riot.tag2('app-modal-pool', '<modal-create-after-impure></modal-create-after-impure> <modal-attain-impure></modal-attain-impure> <modal-spell-impure></modal-spell-impure> <modal-create-deamon></modal-create-deamon> <modal-purge-deamon></modal-purge-deamon>', '', '', function(opts) {
+});
+
 riot.tag2('app-page-area', '', '', '', function(opts) {
      this.draw = () => {
          if (this.opts.route)
@@ -96,7 +99,7 @@ riot.tag2('app-page-area', '', '', '', function(opts) {
      });
 });
 
-riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" site="{site()}" moves="{[]}"></menu-bar> <app-page-area></app-page-area> <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p> <message-area></message-area> <popup-working-action data="{impure()}"></popup-working-action> <menu-add-impure></menu-add-impure> <modal-create-impure open="{modal_open}" maledict="{modal_maledict}"></modal-create-impure> <modal-create-after-impure></modal-create-after-impure> <modal-attain-impure></modal-attain-impure> <modal-spell-impure></modal-spell-impure> <modal-create-deamon></modal-create-deamon>', '', '', function(opts) {
+riot.tag2('app', '<div class="kasumi"></div> <menu-bar brand="{{label:\'RT\'}}" site="{site()}" moves="{[]}"></menu-bar> <app-page-area></app-page-area> <p class="image-ref" style="">背景画像: <a href="http://joxaren.com/?p=853">旅人の夢</a></p> <message-area></message-area> <popup-working-action data="{impure()}"></popup-working-action> <menu-add-impure></menu-add-impure> <modal-create-impure open="{modal_open}" maledict="{modal_maledict}"></modal-create-impure> <app-modal-pool></app-modal-pool>', '', '', function(opts) {
      this.site = () => {
          return STORE.state().get('site');
      };
@@ -472,521 +475,6 @@ riot.tag2('menu-add-impure', '<div style="position:fixed; right: 33px; top: 22px
      };
 });
 
-riot.tag2('modal-attain-impure', '<div class="modal {impure ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card" style="width: 555px;"> <header class="modal-card-head" style="padding: 11px 22px;"> <p class="modal-card-title" style="font-size: 14px;">Impure を葬りますか？</p> <button class="delete" aria-label="close" onclick="{clickClose}"></button> </header> <section class="modal-card-body"> <div class="contents"> <p><b>ID</b></p> <p style="padding-left:22px;">{impure ? impure.id : \'\'}</p> <p><b>Name</b></p> <p style="padding-left:22px;">{impure ? impure.name : \'\'}</p> <p style="margin-top:22px;"><b>完了メモ</b></p> <div style="padding-left:22px;"> <textarea class="textarea" placeholder="任意入力項目" ref="spell"></textarea> </div> </div> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display:flex; justify-content: space-between;"> <button class="button is-small" onclick="{clickClose}">Cancel</button> <button class="button is-small is-success" onclick="{clickAttain}">埋葬</button> </footer> </div> </div>', '', '', function(opts) {
-     this.clickAttain = () => {
-         ACTIONS.finishImpure(this.impure,
-                              true,
-                              this.refs.spell.value.trim());
-     };
-     this.clickClose = () => {
-         this.impure = null;
-         this.update();
-         return;
-     };
-
-     this.impure = null;
-     STORE.subscribe((action) => {
-         if (action.type=='CONFIRMATION-ATTAIN-IMPURE') {
-             this.impure = action.impure;
-             this.update();
-             return;
-         }
-
-         if (action.type=='FINISHED-IMPURE') {
-             this.impure = null;
-             this.update();
-             return;
-         }
-     });
-});
-
-riot.tag2('modal-change-deamon-area', '<h1 class="title is-4">Deamons</h1> <p class="control has-icons-left has-icons-right"> <input class="input is-small" type="text" placeholder="Search" onkeyup="{keyUp}"> <span class="icon is-small is-left"> <i class="fas fa-search"></i> </span> </p> <div> <button each="{deamon in deamons()}" class="button is-small deamon-item" deamon-id="{deamon.id}" onclick="{clickDeamon}"> {deamon.name} ({deamon.name_short}) </button> </div>', '', '', function(opts) {
-     this.clickDeamon = (e) => {
-         let deamon_id = e.target.getAttribute('deamon-id');
-
-         this.opts.callback('choose-deamon', { id: deamon_id });
-     };
-
-     this.filter = null;
-
-     this.keyUp = (e) => {
-         let str = e.target.value;
-
-         if (str.length==0)
-             this.filter = null;
-         else
-             this.filter = str
-
-         this.update();
-     };
-
-     this.deamons = () => {
-         let filter = this.filter;
-         let deamons = STORE.get('deamons.list');
-
-         if (!this.filter)
-             return deamons
-
-         filter = filter.toLowerCase();
-
-         let out = deamons.filter((d) => {
-
-             return (d.id + '').toLowerCase().indexOf(filter) >= 0
-                 || d.name.toLowerCase().indexOf(filter) >= 0
-                 || d.name_short.toLowerCase().indexOf(filter) >= 0
-         });
-
-         return out;
-     };
-});
-
-riot.tag2('modal-change-deamon-impure-area', '<div class="root-container"> <h1 class="title is-4">Impure</h1> <div class="basic-info-area" style="font-size:12px;"> <p>{val(\'impure_name\')} (ID: {val(\'impure_id\')})</p> <p style="background:#fff; flex-grow: 1; overflow: auto;"> <description-markdown source="{val(\'impure_description\')}"></description-markdown> </p> </div> <div class="deamon-area"> <h1 class="title is-6" style="margin-bottom: 8px;">Deamon</h1> <div style="padding-left:11px;"> <p>{val(\'impure_deamon\')}</p> <button class="button is-small deamon-item {impureDeamon() ? \'\' : \'hide\'}" onclick="{clickRemove}"> 削除 </button> </div> </div> </div>', 'modal-change-deamon-impure-area .root-container { height: 100%; display: flex; flex-direction: column; } modal-change-deamon-impure-area .basic-info-area { padding-left:11px; flex-grow: 1; display: flex; flex-direction: column; } modal-change-deamon-impure-area .deamon-area { height:99px; margin-top:11px; }', '', function(opts) {
-     this.clickRemove = (e) => {
-         this.opts.callback('remove-deamon');
-     }
-
-     this.val = (name) => {
-         if (!this.opts.source)
-             return '';
-
-         if ('impure_deamon'!=name)
-             return this.opts.source[name];
-
-         let deamon = this.opts.choosed_deamon;
-
-         if (!deamon || deamon.id===null)
-             return 'なし';
-
-         return deamon.name + ' (ID:' + deamon.id + ')';
-     };
-     this.impureDeamon = () => {
-         if (!this.opts.source)
-             return null;
-
-         let deamon = this.opts.choosed_deamon;
-
-         if (!deamon || deamon.id===null)
-             return null;
-
-         return deamon;
-     };
-     this.deamons = () => {
-         return STORE.get('deamons.list');
-     };
-});
-
-riot.tag2('modal-change-deamon', '<div class="modal {isOpen()}"> <div class="modal-background"></div> <div class="modal-content" style="width:888px;"> <div class="card"> <header class="card-header"> <p class="card-header-title"> Change Deamon <span style="margin-left: 22px; color: #f00; font-weight:bold;">注意: 実装中</span> </p> </header> <div class="card-content"> <div class="content"> <div class="flex-contener"> <div class="choose-demaon-area"> <modal-change-deamon-area source="{opts.source}" callback="{callback}"></modal-change-deamon-area> </div> <div class="view-impure-area"> <modal-change-deamon-impure-area source="{opts.source}" choosed_deamon="{choosed_deamon}" callback="{callback}"></modal-change-deamon-impure-area> </div> </div> <div class="control-area"> <button class="button is-small" onclick="{clickCancel}">Cancel</button> <button class="button is-small is-danger" onclick="{clickSave}" disabled="{isDisabled()}">Save</button> </div> </div> </div> </div> </div> <button class="modal-close is-large" aria-label="close" onclick="{clickCancel}"></button> </div>', 'modal-change-deamon .flex-contener { display:flex; height:555px; } modal-change-deamon .choose-demaon-area { flex-grow: 1; padding: 11px; width: 211px; } modal-change-deamon .choose-demaon-area .deamon-item { margin-left: 11px; margin-bottom: 11px; } modal-change-deamon .view-impure-area { flex-grow: 1; padding: 11px; background: rgba(254, 242, 100, 0.08); border-radius: 8px; box-shadow: 0px 0px 22px rgba(254, 242, 100, 0.08); width: 222px; display: flex; flex-direction: column; } modal-change-deamon modal-change-deamon-impure-area { height: 100%; } modal-change-deamon .control-area { display: flex; justify-content: space-between; margin-top: 11px; }', '', function(opts) {
-     this.isOpen = () => {
-         return this.opts.source ? 'is-active' : '';
-     };
-     this.isDisabled = () => {
-         if (!this.opts.source)
-             return 'disabled';
-
-         if (this.choosed_deamon.id == this.opts.source.deamon_id)
-             return 'disabled';
-
-         return '';
-     };
-
-     this.choosed_deamon = null;
-     this.on('update', () => {
-         if (!this.opts.source)
-             return;
-
-         if (!this.choosed_deamon) {
-             let id = this.opts.source.deamon_id;
-
-             if (!id)
-                 this.choosed_deamon = { id: null };
-             else
-                 this.choosed_deamon = STORE.get('deamons.ht')[id];
-         }
-     });
-
-     this.callback = (action, data) => {
-         if (action=='choose-deamon') {
-             let deamons = STORE.get('deamons.ht');
-
-             this.choosed_deamon = deamons[data.id];
-
-             if (!this.choosed_deamon)
-                 this.choosed_deamon = { id: null };
-
-             this.update();
-
-             return;
-         }
-         if (action=='remove-deamon') {
-             this.choosed_deamon = { id: null };
-
-             this.update();
-
-             return;
-         }
-     };
-     this.clickCancel = () => {
-         this.opts.callback('close-modal-change-deamon');
-     };
-     this.clickSave = () => {
-         let impure = { id: this.opts.source.impure_id };
-         let deamon = this.choosed_deamon;
-
-         ACTIONS.setImpureDeamon(impure, deamon);
-     };
-});
-
-riot.tag2('modal-create-after-impure-center', '<h1 class="title is-6">Copy</h1> <button class="button is-small" onclick="{clickCopy}">←</button>', 'modal-create-after-impure-center { display:flex; flex-direction: column; justify-content: center; padding-left: 22px; padding-right: 22px; }', '', function(opts) {
-     this.clickCopy = () => {
-         this.opts.callback('copy');
-     };
-});
-
-riot.tag2('modal-create-after-impure-left-deamon', '<div if="{!opts.source}"> なし </div> <div if="{opts.source}"> {nameShort()} : {name()} <button class="button is-small">削除</button> </div>', '', '', function(opts) {
-     this.name = () => {
-         return opts.source.name;
-     }
-     this.nameShort = () => {
-         return opts.source.name_short;
-     }
-});
-
-riot.tag2('modal-create-after-impure-left-deamons', '<input class="input is-small martin-top" type="text" placeholder="Search Deamon" ref="deamon_name" onkeyup="{keyUp}"> <div class="martin-top"> <button each="{deamon in deamons()}" class="button is-small deamon" deamon_id="{deamon.id}" onclick="{clickDeamon}"> {deamon.name_short} : {deamon.name} </button> </div>', 'modal-create-after-impure-left-deamons .deamon { margin-right: 6px; margin-bottom: 6px; }', '', function(opts) {
-     this.keyword = null;
-     this.keyUp = (e) => {
-         let keyword = e.target.value;
-         if (keyword.length==0)
-             this.keyword = null;
-         else
-             this.keyword = keyword;
-
-         this.update();
-     };
-     this.clickDeamon = (e) => {
-         let id = e.target.getAttribute('deamon_id');
-         this.opts.callback('select-deamon', STORE.get('deamons.ht')[id])
-     };
-     this.deamons = () => {
-         let list = STORE.get('deamons.list');
-
-         if (!this.keyword)
-             return list;
-
-         let keyword = this.keyword.toLowerCase();
-         return list.filter((d) => {
-             let name       = d.name.toLowerCase();
-             let name_short = d.name_short.toLowerCase();
-
-             return !(name.indexOf(keyword) == -1 && name_short.indexOf(keyword) == -1)
-         });
-     };
-});
-
-riot.tag2('modal-create-after-impure-right', '<h1 class="title is-6" style="margin-bottom: 3px;">Title:</h1> <p style="padding-left:11px;">{imprueVal(\'name\')}</p> <h1 class="title is-6" style="margin-bottom: 3px; margin-top: 11px;">description:</h1> <p style="padding-left:11px;"> <description-markdown source="{imprueVal(\'description\')}"></description-markdown> </p> <h1 class="title is-6" style="margin-bottom: 3px; margin-top: 11px;">Deamon:</h1> <p style="padding-left:11px;">{imprueVal(\'deamon\')}</p>', 'modal-create-after-impure-right { flex-grow: 1; display: flex; flex-direction: column; width:45%; padding: 11px; background: #eeeeee; border-radius: 3px; }', '', function(opts) {
-     this.imprueVal = (name) => {
-         let impure = this.opts.source;
-
-         if (!impure)
-             return '';
-
-         if (name=='deamon') {
-             let deamon = impure.deamon;
-
-             if (!deamon)
-                 return ''
-
-             return deamon.name + ' (' + deamon.name_short + ')';
-         }
-
-         return impure[name];
-     };
-});
-
-riot.tag2('modal-create-after-impure', '<div class="modal {impure ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card" style="width:999px;"> <header class="modal-card-head" style="padding: 11px 22px;"> <p class="modal-card-title" style="font-size:16px;">後続の Impure を作成</p> <button class="delete" aria-label="close" onclick="{clickClose}"></button> </header> <section class="modal-card-body" style="display:flex;"> <div class="left"> <input class="input is-small" type="text" placeholder="Title" ref="name"> <textarea class="textarea is-small martin-top" placeholder="Description" rows="6" style="height: 222px;" ref="description"></textarea> <h1 class="title is-6 martin-top" style="margin-bottom: 3px;">Deamon:</h1> <div class="martin-top"> <modal-create-after-impure-left-deamon source="{deamon}" callback="{callback}"></modal-create-after-impure-left-deamon> <modal-create-after-impure-left-deamons callback="{callback}"></modal-create-after-impure-left-deamons> </div> </div> <modal-create-after-impure-center source="{impure}" callback="{callback}"></modal-create-after-impure-center> <modal-create-after-impure-right source="{impure}"></modal-create-after-impure-right> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display: flex; justify-content: space-between;"> <button class="button is-small" onclick="{clickClose}">Cancel</button> <button class="button is-small is-success" onclick="{clickCreate}">Create!</button> </footer> </div> </div>', 'modal-create-after-impure .left { flex-grow: 1; display: flex; flex-direction: column; width:45%; } modal-create-after-impure .left .martin-top { margin-top:11px; }', '', function(opts) {
-     this.callback = (action, data) => {
-         if (action=='copy') {
-             this.refs.name.value = this.impure.name;
-             this.refs.description.value = this.impure.description;
-             this.deamon = this.impure.deamon;
-             this.update();
-
-             return;
-         }
-
-         if (action=='select-deamon') {
-             this.deamon = data;
-             this.update();
-         }
-     };
-
-     this.impure   = null;
-     this.maledict = null;
-     this.deamon   = null;
-     STORE.subscribe((action) => {
-         if (action.type=='OPEN-MODAL-CREATE-AFTER-IMPURE') {
-             this.impure = action.impure;
-             this.update();
-
-             return;
-         }
-
-         let list = [
-             'CREATED-IMPURE-AFTER-IMPURE',
-             'CLOSE-MODAL-CREATE-IMPURE',
-             'CREATED-MALEDICT-IMPURE',
-         ];
-         if (list.find((d) => { return action.type == d;})) {
-             this.impure = null;
-             this.maledict = null;
-             this.update();
-
-             return;
-         }
-     });
-
-     this.clickCreate = (e) => {
-         let params = {
-             name: this.refs.name.value.trim(),
-             description: this.refs.description.value.trim(),
-         }
-
-         if (this.deamon)
-             params.deamon_id = this.deamon.id
-
-         ACTIONS.createImpureAfterImpure(this.impure, params);
-     };
-     this.clickClose = (e) => {
-         ACTIONS.closeModalCreateImpure();
-     };
-});
-
-riot.tag2('modal-create-deamon', '<div class="modal {isOpen()}"> <div class="modal-background"></div> <div class="modal-content" style="width:888px;"> <div class="card"> <header class="card-header"> <p class="card-header-title">Create Deamon</p> </header> <div class="card-content"> <div class="content"> <div style="margin-bottom:22px;"> <input class="input" type="text" placeholder="Name" style="margin-bottom:11px;" ref="deamon_name" onkeyup="{keyUP}"> <input class="input" type="text" placeholder="Short Name" style="margin-bottom:11px;" ref="deamon_name_short" onkeyup="{keyUP}"> <textarea class="textarea" placeholder="Description" rows="10" ref="description"></textarea> </div> <div class="control-area"> <button class="button is-small" onclick="{clickClose}">Cancel</button> <button class="button is-small is-danger" onclick="{clickCreate}" disabled="{isDisabled()}">Save</button> </div> </div> </div> </div> </div> <button class="modal-close is-large" aria-label="close" onclick="{clickClose}"></button> </div>', '', '', function(opts) {
-     this.open = false;
-     this.isOpen = () => {
-         return this.open ? 'is-active' : '';
-     };
-     this.isDisabled = () => {
-         if (this.refs.deamon_name.value.trim().length==0 ||
-             this.refs.deamon_name_short.value.trim().length==0)
-             return 'disabled'
-
-         return '';
-     };
-     this.clickCreate = () => {
-         ACTIONS.createDeamon(
-             this.refs.deamon_name.value.trim(),
-             this.refs.deamon_name_short.value.trim(),
-             this.refs.description.value.trim(),
-         );
-     };
-     this.keyUP = () => {
-         this.update();
-     }
-     this.clickClose = () => {
-         this.open = false;
-         this.update();
-     };
-
-     STORE.subscribe((action) => {
-         if (action.type=='OPEN-MODAL-CREATE-DEAMON') {
-             this.open = true;
-             this.update();
-
-             return;
-         }
-
-         if (action.type=='CREATED-DEAMON') {
-             this.open = false;
-             this.update();
-
-             return;
-         }
-     });
-});
-
-riot.tag2('modal-create-impure', '<div class="modal {maledict ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head"> <p class="modal-card-title">やる事を追加</p> <button class="delete" aria-label="close" onclick="{clickCloseButton}"></button> </header> <section class="modal-card-body"> <h4 class="title is-6">場所: {maledictName()}</h4> <div> <span>接頭文字:</span> <button each="{prefixes}" class="button is-small" style="margin-left: 8px;" onclick="{clickTitlePrefix}" riot-value="{label}">{label}</button> </div> <input class="input" type="text" placeholder="Title" ref="name" style="margin-top:11px;"> <textarea class="textarea" placeholder="Description" rows="6" style="margin-top:11px;" ref="description"></textarea> </section> <footer class="modal-card-foot"> <button class="button" onclick="{clickCloseButton}">Cancel</button> <button class="button is-success" onclick="{clickCreateButton}">Create!</button> </footer> </div> </div>', '', '', function(opts) {
-     this.maledict = null;
-     STORE.subscribe((action) => {
-         if (action.type=='OPEN-MODAL-CREATE-IMPURE') {
-             this.maledict = action.maledict;
-             this.update();
-
-             return;
-         }
-
-         if (action.type=='CLOSE-MODAL-CREATE-IMPURE') {
-             this.maledict = null;
-             this.update();
-
-             return;
-         }
-
-         if (action.type=='CREATED-MALEDICT-IMPURE') {
-             this.maledict = null;
-             this.update();
-
-             return;
-         }
-     });
-
-     this.prefixes = [
-         { label: 'RBP：' },
-         { label: 'RBR：' },
-         { label: 'GLPGSH：' },
-         { label: 'HW：' },
-         { label: 'WBS：' },
-         { label: 'TER：' },
-         { label: '人事：' },
-         { label: 'Ill：' },
-     ];
-     this.clickTitlePrefix = (e) => {
-         let prefix = e.target.getAttribute('value');
-
-         let elem = this.refs.name
-         let name = elem.value;
-
-         let pos = name.indexOf('：');
-         if (pos==-1) {
-             elem.value = prefix + name;
-             return;
-         }
-
-         for (let item of this.prefixes) {
-             let l = item.label;
-             let label_length = l.length;
-
-             if (label_length > name.length)
-                 continue;
-
-             if (name.substring(0, label_length)==l) {
-                 elem.value = prefix + name.substring(label_length);
-                 return;
-             }
-         }
-
-         elem.value = prefix + name;
-     };
-
-     this.maledictName = () => {
-         return this.maledict ? this.maledict.name : '';
-     }
-
-     this.clickCreateButton = (e) => {
-         ACTIONS.createMaledictImpure (this.maledict, {
-             name: this.refs['name'].value,
-             description: this.refs['description'].value,
-             maledict: this.opts.maledict
-         });
-     };
-     this.clickCloseButton = (e) => {
-         ACTIONS.closeModalCreateImpure();
-     };
-});
-
-riot.tag2('modal-purge-result-editor', '<div class="modal {opts.data ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head" style="padding: 11px 22px; font-size: 18px;"> <p class="modal-card-title">作業時間の変更</p> <button class="delete" aria-label="close" action="close-purge-result-editor" onclick="{clickButton}"></button> </header> <section class="modal-card-body"> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">Impure</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'impure_name\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">作業時間</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'elapsed_time\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">開始</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'purge_start\'))}" ref="start" type="{\'datetime\'}"> </p> <div style="padding-top: 5px;"> <button class="button is-small" action="now" onclick="{clickSetDate}">今</button> <button class="button is-small {isHide(\'before-end\')}" action="before-end" onclick="{clickSetDate}">前の作業の終了</button> <button class="button is-small" action="clear-under-hour" onclick="{clickSetDate}">分と秒をクリア</button> <button class="button is-small" action="clear-under-minute" onclick="{clickSetDate}">秒をクリア</button> <button class="button is-small is-warging" action="revert-start" onclick="{clickSetDate}">元に戻す</button> </div> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">終了</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'purge_end\'))}" ref="end" type="{\'datetime\'}"> <div style="padding-top: 5px;"> <button class="button is-small" action="now" onclick="{clickSetDate}">今</button> <button class="button is-small {isHide(\'after-start\')}" action="after-start" onclick="{clickSetDate}">後の作業の開始</button> <button class="button is-small" action="clear-under-hour" onclick="{clickSetDate}">分と秒をクリア</button> <button class="button is-small" action="clear-under-minute" onclick="{clickSetDate}">秒をクリア</button> <button class="button is-small is-warging" action="revert-end" onclick="{clickSetDate}">元に戻す</button> </div> </p> </div> </div> </div> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display:flex; justify-content: space-between;"> <button class="button is-small" action="close-purge-result-editor" onclick="{clickButton}">Cancel</button> <button class="button is-small is-success" action="save-purge-result-editor" onclick="{clickButton}">Save</button> </footer> </div> </div>', '', '', function(opts) {
-     this.clickButton = (e) => {
-         let action = e.target.getAttribute('action');
-
-         if (action != 'save-purge-result-editor') {
-             this.opts.callback(action);
-             return;
-         }
-
-         let stripper = new TimeStripper();
-
-         this.opts.callback(action, {
-             id: this.opts.data.purge_id,
-             start: stripper.str2date(this.refs.start.value),
-             end: stripper.str2date(this.refs.end.value)
-         })
-     };
-     this.clickSetDate = (e) => {
-         let target = e.target;
-
-         let input = target.parentNode.parentNode.firstElementChild.firstElementChild;
-         let action = target.getAttribute('action');
-
-         let value = () => {
-             if (action=='now')
-                 return moment();
-
-             if (action=='after-start')
-                 return this.opts.source.after_start;
-
-             if (action=='before-end')
-                 return this.opts.source.before_end;
-
-             if (action=='revert-start')
-                 return this.opts.data.purge_start;
-
-             if (action=='revert-end') {
-                 return this.opts.data.purge_end;
-             }
-
-             if (action=='clear-under-hour')
-                 return moment(input.value).startOf('hour');
-
-             if (action=='clear-under-minute')
-                 return moment(input.value).startOf('minute');
-
-             throw Error('Not Supported yet. action=' + action) ;
-         };
-
-         input.value = moment(value()).format('YYYY-MM-DD HH:mm:ss');
-     };
-
-     this.isHide = (code) => {
-         if (code=='after-start')
-             return this.opts.source.after_start ? '' : 'hide';
-
-         if (code=='before-end')
-             return this.opts.source.before_end ? '' : 'hide';
-     };
-     this.getVal = (key) => {
-         let data = this.opts.data;
-
-         if (!data)
-             return '';
-
-         if (key=='elapsed_time')
-             return new TimeStripper().format_sec(data[key]);
-
-         return data[key];
-     };
-     this.date2str = (date) => {
-         if (!date) return '';
-
-         return moment(date).format("YYYY-MM-DD HH:mm:ss");
-     };
-});
-
-riot.tag2('modal-spell-impure', '<div class="modal {impure ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card" style="width: 555px;"> <header class="modal-card-head" style="padding: 11px 22px;"> <p class="modal-card-title" style="font-size: 14px;">呪文詠唱</p> <button class="delete" aria-label="close" onclick="{clickClose}"></button> </header> <section class="modal-card-body"> <div class="contents"> <p><b>ID</b></p> <p style="padding-left:22px;">{impure ? impure.id : \'\'}</p> <p><b>Name</b></p> <p style="padding-left:22px;">{impure ? impure.name : \'\'}</p> <p style="margin-top:22px;"><b>呪文</b></p> <div style="padding-left:22px;"> <textarea class="textarea" placeholder="必須入力項目" ref="spell"></textarea> </div> </div> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display:flex; justify-content: space-between;"> <button class="button is-small" onclick="{clickClose}">Cancel</button> <button class="button is-small is-success" onclick="{clickSpell}">詠唱</button> </footer> </div> </div>', '', '', function(opts) {
-     this.clickSpell = () => {
-         ACTIONS.saveImpureIncantationSolo(this.impure,
-                                           this.refs.spell.value.trim());
-     };
-     this.clickClose = () => {
-         this.impure = null;
-         this.update();
-         return;
-     };
-
-     this.impure = null;
-     STORE.subscribe((action) => {
-         if (action.type=='OPEN-MODAL-SPELL-IMPURE') {
-             this.impure = action.impure;
-             this.update();
-             return;
-         }
-
-         if (action.type=='SAVED-IMPURE-INCANTATION-SOLO') {
-             this.impure = null;
-             this.update();
-             return;
-         }
-     });
-});
-
 riot.tag2('popup-working-action', '<button class="button is-small hw-button" style="margin-right:11px;" onclick="{clickStop}">Stop</button> <span style="font-size:12px;"> <a href="{link()}">{name()}</a> </span> <div style="margin-top: 8px;"> <p style="display:inline; font-size:12px; margin-right:22px;"> <span style="font-size:12px;width:88px;display:inline-block;">経過: {distance()}</span> <span style="font-size:12px;">開始: </span> <span style="font-size:12px;">{start()}</span> </p> <button class="button is-small hw-button" onclick="{clickStopAndClose}">Stop & Close</button> </div>', 'popup-working-action { display: block; position: fixed; bottom: 33px; right: 33px; background: #fff; padding: 11px 22px; border: 1px solid #ededed; border-radius: 8px; box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666); } popup-working-action .hw-button { background: #fff; box-shadow: none; }', 'class="{hide()}"', function(opts) {
 
      this.clickStop = () => {
@@ -1115,7 +603,7 @@ riot.tag2('deamon-page-card_impure', '<div class="small"> <div class="header {fi
      };
 });
 
-riot.tag2('deamon-page-card_name-short', '<div class="small"> <p class="name">{nameShort()}</p> </div>', 'deamon-page-card_name-short > .small{ display: flex; flex-direction: column; justify-content: center; width: calc(11px * 8 + 11px * 7); height: calc(11px * 8 + 11px * 7); padding: 8px; margin-bottom: 11px; background: rgba(22, 22, 14, 0.88); border-radius: 8px; } deamon-page-card_name-short > .small > .name { font-size: 33px; color: #ec6d71; font-weight: bold; text-align: center; }', '', function(opts) {
+riot.tag2('deamon-page-card_name-short', '<div class="small"> <p class="name">{nameShort()}</p> </div>', 'deamon-page-card_name-short > .small{ display: flex; flex-direction: column; justify-content: center; width: calc(11px * 24 + 11px * 23); height: calc(11px * 8 + 11px * 7); padding: 8px; margin-bottom: 11px; background: rgba(22, 22, 14, 0.88); border-radius: 8px; } deamon-page-card_name-short > .small > .name { font-size: 33px; color: #ec6d71; font-weight: bold; text-align: center; }', '', function(opts) {
      this.nameShort = () => {
          let deamon = this.opts.source.deamon;
 
@@ -1129,10 +617,33 @@ riot.tag2('deamon-page-card_name-short', '<div class="small"> <p class="name">{n
 riot.tag2('deamon-page-card_purges', '', '', '', function(opts) {
 });
 
-riot.tag2('deamon-page-controller', '<button class="button hw-button" disabled>Add Impure</button> <button class="button hw-button">浄化</button>', 'deamon-page-controller .button { margin-bottom: 11px; width: 100%; }', '', function(opts) {
+riot.tag2('deamon-page-controller', '<button class="button hw-button" disabled="{isAddImpureActive()}">Add Impure</button> <button class="button hw-button" onclick="{clickPurge}" disabled="{isPurgeActive()}">浄化</button>', 'deamon-page-controller .button { margin-bottom: 11px; width: 100%; }', '', function(opts) {
+     this.clickPurge = () => {
+         ACTIONS.openModalPuregeDeamon(this.opts.source.deamon);
+     };
+
+     this.isAddImpureActive = () => {
+         if (!this.opts.source.deamon || this.opts.source.deamon.purged_at)
+             return true;
+
+         return false;
+     }
+     this.isPurgeActive = () => {
+         if (!this.opts.source.deamon || this.opts.source.deamon.purged_at)
+             return true;
+
+         let non_purge = this.opts.source.impures.find((d)=>{
+             return !d.finished_at;
+         });
+
+         if (non_purge)
+             return true;
+
+         return false;
+     };
 });
 
-riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">悪魔: {name()}</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <div style="display: flex; padding: 0px 88px;"> <deamon-page-card-pool source="{source}"></deamon-page-card-pool> <deamon-page-controller></deamon-page-controller> </div>', 'deamon-page { overflow: auto; display: block; width: 100%; height: 100%; } deamon-page page-card_description-small { margin-bottom: 11px; } deamon-page deamon-page-card-pool { flex-grow: 1; }', '', function(opts) {
+riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">悪魔: {name()}</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <div style="display: flex; padding: 0px 88px;"> <deamon-page-card-pool source="{source}"></deamon-page-card-pool> <deamon-page-controller source="{source}"></deamon-page-controller> </div>', 'deamon-page { overflow: auto; display: block; width: 100%; height: 100%; } deamon-page page-card_description-small { margin-bottom: 11px; } deamon-page deamon-page-card-pool { flex-grow: 1; }', '', function(opts) {
      this.name = () => {
          let deamon = this.source.deamon;
          if (!deamon)
@@ -3005,6 +2516,549 @@ riot.tag2('page-impure-waiting', '<section class="section" style="padding-bottom
          if (action.type=='FETCHED-PAGES-IMPURE-WAITING') {
              this.source = action.response;
              this.update();
+         }
+     });
+});
+
+riot.tag2('modal-attain-impure', '<div class="modal {impure ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card" style="width: 555px;"> <header class="modal-card-head" style="padding: 11px 22px;"> <p class="modal-card-title" style="font-size: 14px;">Impure を葬りますか？</p> <button class="delete" aria-label="close" onclick="{clickClose}"></button> </header> <section class="modal-card-body"> <div class="contents"> <p><b>ID</b></p> <p style="padding-left:22px;">{impure ? impure.id : \'\'}</p> <p><b>Name</b></p> <p style="padding-left:22px;">{impure ? impure.name : \'\'}</p> <p style="margin-top:22px;"><b>完了メモ</b></p> <div style="padding-left:22px;"> <textarea class="textarea" placeholder="任意入力項目" ref="spell"></textarea> </div> </div> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display:flex; justify-content: space-between;"> <button class="button is-small" onclick="{clickClose}">Cancel</button> <button class="button is-small is-success" onclick="{clickAttain}">埋葬</button> </footer> </div> </div>', '', '', function(opts) {
+     this.clickAttain = () => {
+         ACTIONS.finishImpure(this.impure,
+                              true,
+                              this.refs.spell.value.trim());
+     };
+     this.clickClose = () => {
+         this.impure = null;
+         this.update();
+         return;
+     };
+
+     this.impure = null;
+     STORE.subscribe((action) => {
+         if (action.type=='CONFIRMATION-ATTAIN-IMPURE') {
+             this.impure = action.impure;
+             this.update();
+             return;
+         }
+
+         if (action.type=='FINISHED-IMPURE') {
+             this.impure = null;
+             this.update();
+             return;
+         }
+     });
+});
+
+riot.tag2('modal-change-deamon-area', '<h1 class="title is-4">Deamons</h1> <p class="control has-icons-left has-icons-right"> <input class="input is-small" type="text" placeholder="Search" onkeyup="{keyUp}"> <span class="icon is-small is-left"> <i class="fas fa-search"></i> </span> </p> <div> <button each="{deamon in deamons()}" class="button is-small deamon-item" deamon-id="{deamon.id}" onclick="{clickDeamon}"> {deamon.name} ({deamon.name_short}) </button> </div>', '', '', function(opts) {
+     this.clickDeamon = (e) => {
+         let deamon_id = e.target.getAttribute('deamon-id');
+
+         this.opts.callback('choose-deamon', { id: deamon_id });
+     };
+
+     this.filter = null;
+
+     this.keyUp = (e) => {
+         let str = e.target.value;
+
+         if (str.length==0)
+             this.filter = null;
+         else
+             this.filter = str
+
+         this.update();
+     };
+
+     this.deamons = () => {
+         let filter = this.filter;
+         let deamons = STORE.get('deamons.list');
+
+         if (!this.filter)
+             return deamons
+
+         filter = filter.toLowerCase();
+
+         let out = deamons.filter((d) => {
+
+             return (d.id + '').toLowerCase().indexOf(filter) >= 0
+                 || d.name.toLowerCase().indexOf(filter) >= 0
+                 || d.name_short.toLowerCase().indexOf(filter) >= 0
+         });
+
+         return out;
+     };
+});
+
+riot.tag2('modal-change-deamon-impure-area', '<div class="root-container"> <h1 class="title is-4">Impure</h1> <div class="basic-info-area" style="font-size:12px;"> <p>{val(\'impure_name\')} (ID: {val(\'impure_id\')})</p> <p style="background:#fff; flex-grow: 1; overflow: auto;"> <description-markdown source="{val(\'impure_description\')}"></description-markdown> </p> </div> <div class="deamon-area"> <h1 class="title is-6" style="margin-bottom: 8px;">Deamon</h1> <div style="padding-left:11px;"> <p>{val(\'impure_deamon\')}</p> <button class="button is-small deamon-item {impureDeamon() ? \'\' : \'hide\'}" onclick="{clickRemove}"> 削除 </button> </div> </div> </div>', 'modal-change-deamon-impure-area .root-container { height: 100%; display: flex; flex-direction: column; } modal-change-deamon-impure-area .basic-info-area { padding-left:11px; flex-grow: 1; display: flex; flex-direction: column; } modal-change-deamon-impure-area .deamon-area { height:99px; margin-top:11px; }', '', function(opts) {
+     this.clickRemove = (e) => {
+         this.opts.callback('remove-deamon');
+     }
+
+     this.val = (name) => {
+         if (!this.opts.source)
+             return '';
+
+         if ('impure_deamon'!=name)
+             return this.opts.source[name];
+
+         let deamon = this.opts.choosed_deamon;
+
+         if (!deamon || deamon.id===null)
+             return 'なし';
+
+         return deamon.name + ' (ID:' + deamon.id + ')';
+     };
+     this.impureDeamon = () => {
+         if (!this.opts.source)
+             return null;
+
+         let deamon = this.opts.choosed_deamon;
+
+         if (!deamon || deamon.id===null)
+             return null;
+
+         return deamon;
+     };
+     this.deamons = () => {
+         return STORE.get('deamons.list');
+     };
+});
+
+riot.tag2('modal-change-deamon', '<div class="modal {isOpen()}"> <div class="modal-background"></div> <div class="modal-content" style="width:888px;"> <div class="card"> <header class="card-header"> <p class="card-header-title"> Change Deamon <span style="margin-left: 22px; color: #f00; font-weight:bold;">注意: 実装中</span> </p> </header> <div class="card-content"> <div class="content"> <div class="flex-contener"> <div class="choose-demaon-area"> <modal-change-deamon-area source="{opts.source}" callback="{callback}"></modal-change-deamon-area> </div> <div class="view-impure-area"> <modal-change-deamon-impure-area source="{opts.source}" choosed_deamon="{choosed_deamon}" callback="{callback}"></modal-change-deamon-impure-area> </div> </div> <div class="control-area"> <button class="button is-small" onclick="{clickCancel}">Cancel</button> <button class="button is-small is-danger" onclick="{clickSave}" disabled="{isDisabled()}">Save</button> </div> </div> </div> </div> </div> <button class="modal-close is-large" aria-label="close" onclick="{clickCancel}"></button> </div>', 'modal-change-deamon .flex-contener { display:flex; height:555px; } modal-change-deamon .choose-demaon-area { flex-grow: 1; padding: 11px; width: 211px; } modal-change-deamon .choose-demaon-area .deamon-item { margin-left: 11px; margin-bottom: 11px; } modal-change-deamon .view-impure-area { flex-grow: 1; padding: 11px; background: rgba(254, 242, 100, 0.08); border-radius: 8px; box-shadow: 0px 0px 22px rgba(254, 242, 100, 0.08); width: 222px; display: flex; flex-direction: column; } modal-change-deamon modal-change-deamon-impure-area { height: 100%; } modal-change-deamon .control-area { display: flex; justify-content: space-between; margin-top: 11px; }', '', function(opts) {
+     this.isOpen = () => {
+         return this.opts.source ? 'is-active' : '';
+     };
+     this.isDisabled = () => {
+         if (!this.opts.source)
+             return 'disabled';
+
+         if (this.choosed_deamon.id == this.opts.source.deamon_id)
+             return 'disabled';
+
+         return '';
+     };
+
+     this.choosed_deamon = null;
+     this.on('update', () => {
+         if (!this.opts.source)
+             return;
+
+         if (!this.choosed_deamon) {
+             let id = this.opts.source.deamon_id;
+
+             if (!id)
+                 this.choosed_deamon = { id: null };
+             else
+                 this.choosed_deamon = STORE.get('deamons.ht')[id];
+         }
+     });
+
+     this.callback = (action, data) => {
+         if (action=='choose-deamon') {
+             let deamons = STORE.get('deamons.ht');
+
+             this.choosed_deamon = deamons[data.id];
+
+             if (!this.choosed_deamon)
+                 this.choosed_deamon = { id: null };
+
+             this.update();
+
+             return;
+         }
+         if (action=='remove-deamon') {
+             this.choosed_deamon = { id: null };
+
+             this.update();
+
+             return;
+         }
+     };
+     this.clickCancel = () => {
+         this.opts.callback('close-modal-change-deamon');
+     };
+     this.clickSave = () => {
+         let impure = { id: this.opts.source.impure_id };
+         let deamon = this.choosed_deamon;
+
+         ACTIONS.setImpureDeamon(impure, deamon);
+     };
+});
+
+riot.tag2('modal-create-after-impure-center', '<h1 class="title is-6">Copy</h1> <button class="button is-small" onclick="{clickCopy}">←</button>', 'modal-create-after-impure-center { display:flex; flex-direction: column; justify-content: center; padding-left: 22px; padding-right: 22px; }', '', function(opts) {
+     this.clickCopy = () => {
+         this.opts.callback('copy');
+     };
+});
+
+riot.tag2('modal-create-after-impure-left-deamon', '<div if="{!opts.source}"> なし </div> <div if="{opts.source}"> {nameShort()} : {name()} <button class="button is-small">削除</button> </div>', '', '', function(opts) {
+     this.name = () => {
+         return opts.source.name;
+     }
+     this.nameShort = () => {
+         return opts.source.name_short;
+     }
+});
+
+riot.tag2('modal-create-after-impure-left-deamons', '<input class="input is-small martin-top" type="text" placeholder="Search Deamon" ref="deamon_name" onkeyup="{keyUp}"> <div class="martin-top"> <button each="{deamon in deamons()}" class="button is-small deamon" deamon_id="{deamon.id}" onclick="{clickDeamon}"> {deamon.name_short} : {deamon.name} </button> </div>', 'modal-create-after-impure-left-deamons .deamon { margin-right: 6px; margin-bottom: 6px; }', '', function(opts) {
+     this.keyword = null;
+     this.keyUp = (e) => {
+         let keyword = e.target.value;
+         if (keyword.length==0)
+             this.keyword = null;
+         else
+             this.keyword = keyword;
+
+         this.update();
+     };
+     this.clickDeamon = (e) => {
+         let id = e.target.getAttribute('deamon_id');
+         this.opts.callback('select-deamon', STORE.get('deamons.ht')[id])
+     };
+     this.deamons = () => {
+         let list = STORE.get('deamons.list');
+
+         if (!this.keyword)
+             return list;
+
+         let keyword = this.keyword.toLowerCase();
+         return list.filter((d) => {
+             let name       = d.name.toLowerCase();
+             let name_short = d.name_short.toLowerCase();
+
+             return !(name.indexOf(keyword) == -1 && name_short.indexOf(keyword) == -1)
+         });
+     };
+});
+
+riot.tag2('modal-create-after-impure-right', '<h1 class="title is-6" style="margin-bottom: 3px;">Title:</h1> <p style="padding-left:11px;">{imprueVal(\'name\')}</p> <h1 class="title is-6" style="margin-bottom: 3px; margin-top: 11px;">description:</h1> <p style="padding-left:11px;"> <description-markdown source="{imprueVal(\'description\')}"></description-markdown> </p> <h1 class="title is-6" style="margin-bottom: 3px; margin-top: 11px;">Deamon:</h1> <p style="padding-left:11px;">{imprueVal(\'deamon\')}</p>', 'modal-create-after-impure-right { flex-grow: 1; display: flex; flex-direction: column; width:45%; padding: 11px; background: #eeeeee; border-radius: 3px; }', '', function(opts) {
+     this.imprueVal = (name) => {
+         let impure = this.opts.source;
+
+         if (!impure)
+             return '';
+
+         if (name=='deamon') {
+             let deamon = impure.deamon;
+
+             if (!deamon)
+                 return ''
+
+             return deamon.name + ' (' + deamon.name_short + ')';
+         }
+
+         return impure[name];
+     };
+});
+
+riot.tag2('modal-create-after-impure', '<div class="modal {impure ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card" style="width:999px;"> <header class="modal-card-head" style="padding: 11px 22px;"> <p class="modal-card-title" style="font-size:16px;">後続の Impure を作成</p> <button class="delete" aria-label="close" onclick="{clickClose}"></button> </header> <section class="modal-card-body" style="display:flex;"> <div class="left"> <input class="input is-small" type="text" placeholder="Title" ref="name"> <textarea class="textarea is-small martin-top" placeholder="Description" rows="6" style="height: 222px;" ref="description"></textarea> <h1 class="title is-6 martin-top" style="margin-bottom: 3px;">Deamon:</h1> <div class="martin-top"> <modal-create-after-impure-left-deamon source="{deamon}" callback="{callback}"></modal-create-after-impure-left-deamon> <modal-create-after-impure-left-deamons callback="{callback}"></modal-create-after-impure-left-deamons> </div> </div> <modal-create-after-impure-center source="{impure}" callback="{callback}"></modal-create-after-impure-center> <modal-create-after-impure-right source="{impure}"></modal-create-after-impure-right> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display: flex; justify-content: space-between;"> <button class="button is-small" onclick="{clickClose}">Cancel</button> <button class="button is-small is-success" onclick="{clickCreate}">Create!</button> </footer> </div> </div>', 'modal-create-after-impure .left { flex-grow: 1; display: flex; flex-direction: column; width:45%; } modal-create-after-impure .left .martin-top { margin-top:11px; }', '', function(opts) {
+     this.callback = (action, data) => {
+         if (action=='copy') {
+             this.refs.name.value = this.impure.name;
+             this.refs.description.value = this.impure.description;
+             this.deamon = this.impure.deamon;
+             this.update();
+
+             return;
+         }
+
+         if (action=='select-deamon') {
+             this.deamon = data;
+             this.update();
+         }
+     };
+
+     this.impure   = null;
+     this.maledict = null;
+     this.deamon   = null;
+     STORE.subscribe((action) => {
+         if (action.type=='OPEN-MODAL-CREATE-AFTER-IMPURE') {
+             this.impure = action.impure;
+             this.update();
+
+             return;
+         }
+
+         let list = [
+             'CREATED-IMPURE-AFTER-IMPURE',
+             'CLOSE-MODAL-CREATE-IMPURE',
+             'CREATED-MALEDICT-IMPURE',
+         ];
+         if (list.find((d) => { return action.type == d;})) {
+             this.impure = null;
+             this.maledict = null;
+             this.update();
+
+             return;
+         }
+     });
+
+     this.clickCreate = (e) => {
+         let params = {
+             name: this.refs.name.value.trim(),
+             description: this.refs.description.value.trim(),
+         }
+
+         if (this.deamon)
+             params.deamon_id = this.deamon.id
+
+         ACTIONS.createImpureAfterImpure(this.impure, params);
+     };
+     this.clickClose = (e) => {
+         ACTIONS.closeModalCreateImpure();
+     };
+});
+
+riot.tag2('modal-create-deamon', '<div class="modal {isOpen()}"> <div class="modal-background"></div> <div class="modal-content" style="width:888px;"> <div class="card"> <header class="card-header"> <p class="card-header-title">Create Deamon</p> </header> <div class="card-content"> <div class="content"> <div style="margin-bottom:22px;"> <input class="input" type="text" placeholder="Name" style="margin-bottom:11px;" ref="deamon_name" onkeyup="{keyUP}"> <input class="input" type="text" placeholder="Short Name" style="margin-bottom:11px;" ref="deamon_name_short" onkeyup="{keyUP}"> <textarea class="textarea" placeholder="Description" rows="10" ref="description"></textarea> </div> <div class="control-area"> <button class="button is-small" onclick="{clickClose}">Cancel</button> <button class="button is-small is-danger" onclick="{clickCreate}" disabled="{isDisabled()}">Save</button> </div> </div> </div> </div> </div> <button class="modal-close is-large" aria-label="close" onclick="{clickClose}"></button> </div>', '', '', function(opts) {
+     this.open = false;
+     this.isOpen = () => {
+         return this.open ? 'is-active' : '';
+     };
+     this.isDisabled = () => {
+         if (this.refs.deamon_name.value.trim().length==0 ||
+             this.refs.deamon_name_short.value.trim().length==0)
+             return 'disabled'
+
+         return '';
+     };
+     this.clickCreate = () => {
+         ACTIONS.createDeamon(
+             this.refs.deamon_name.value.trim(),
+             this.refs.deamon_name_short.value.trim(),
+             this.refs.description.value.trim(),
+         );
+     };
+     this.keyUP = () => {
+         this.update();
+     }
+     this.clickClose = () => {
+         this.open = false;
+         this.update();
+     };
+
+     STORE.subscribe((action) => {
+         if (action.type=='OPEN-MODAL-CREATE-DEAMON') {
+             this.open = true;
+             this.update();
+
+             return;
+         }
+
+         if (action.type=='CREATED-DEAMON') {
+             this.open = false;
+             this.update();
+
+             return;
+         }
+     });
+});
+
+riot.tag2('modal-create-impure', '<div class="modal {maledict ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head"> <p class="modal-card-title">やる事を追加</p> <button class="delete" aria-label="close" onclick="{clickCloseButton}"></button> </header> <section class="modal-card-body"> <h4 class="title is-6">場所: {maledictName()}</h4> <div> <span>接頭文字:</span> <button each="{prefixes}" class="button is-small" style="margin-left: 8px;" onclick="{clickTitlePrefix}" riot-value="{label}">{label}</button> </div> <input class="input" type="text" placeholder="Title" ref="name" style="margin-top:11px;"> <textarea class="textarea" placeholder="Description" rows="6" style="margin-top:11px;" ref="description"></textarea> </section> <footer class="modal-card-foot"> <button class="button" onclick="{clickCloseButton}">Cancel</button> <button class="button is-success" onclick="{clickCreateButton}">Create!</button> </footer> </div> </div>', '', '', function(opts) {
+     this.maledict = null;
+     STORE.subscribe((action) => {
+         if (action.type=='OPEN-MODAL-CREATE-IMPURE') {
+             this.maledict = action.maledict;
+             this.update();
+
+             return;
+         }
+
+         if (action.type=='CLOSE-MODAL-CREATE-IMPURE') {
+             this.maledict = null;
+             this.update();
+
+             return;
+         }
+
+         if (action.type=='CREATED-MALEDICT-IMPURE') {
+             this.maledict = null;
+             this.update();
+
+             return;
+         }
+     });
+
+     this.prefixes = [
+         { label: 'RBP：' },
+         { label: 'RBR：' },
+         { label: 'GLPGSH：' },
+         { label: 'HW：' },
+         { label: 'WBS：' },
+         { label: 'TER：' },
+         { label: '人事：' },
+         { label: 'Ill：' },
+     ];
+     this.clickTitlePrefix = (e) => {
+         let prefix = e.target.getAttribute('value');
+
+         let elem = this.refs.name
+         let name = elem.value;
+
+         let pos = name.indexOf('：');
+         if (pos==-1) {
+             elem.value = prefix + name;
+             return;
+         }
+
+         for (let item of this.prefixes) {
+             let l = item.label;
+             let label_length = l.length;
+
+             if (label_length > name.length)
+                 continue;
+
+             if (name.substring(0, label_length)==l) {
+                 elem.value = prefix + name.substring(label_length);
+                 return;
+             }
+         }
+
+         elem.value = prefix + name;
+     };
+
+     this.maledictName = () => {
+         return this.maledict ? this.maledict.name : '';
+     }
+
+     this.clickCreateButton = (e) => {
+         ACTIONS.createMaledictImpure (this.maledict, {
+             name: this.refs['name'].value,
+             description: this.refs['description'].value,
+             maledict: this.opts.maledict
+         });
+     };
+     this.clickCloseButton = (e) => {
+         ACTIONS.closeModalCreateImpure();
+     };
+});
+
+riot.tag2('modal-purge-deamon', '<div class="modal {deamon ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card" style="width: 555px;"> <header class="modal-card-head" style="padding: 11px 22px;"> <p class="modal-card-title" style="font-size: 14px;">悪魔の浄化</p> <button class="delete" aria-label="close" onclick="{clickClose}"></button> </header> <section class="modal-card-body"> <div class="contents"> <p>この悪魔を浄化しますか？</p> <h1 class="title is-6">ID</h1> <p>{deamon ? deamon.id : \'\'}</p> <h1 class="title is-6">Name</h1> <p>{deamon ? deamon.name : \'\'}</p> <h1 class="title is-6">Name(Short)</h1> <p>{deamon ? deamon.name_short : \'\'}</p> <h1 class="title is-6">Description</h1> <p>{deamon ? deamon.description : \'\'}</p> </div> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display:flex; justify-content: space-between;"> <button class="button is-small" onclick="{clickClose}">Cancel</button> <button class="button is-small is-success" onclick="{clickPurge}">浄化</button> </footer> </div> </div>', 'modal-purge-deamon .modal-card-body .contents .title { margin-top: 22px; margin-bottom: 6px; } modal-purge-deamon .modal-card-body .contents p { padding-left: 11px; }', '', function(opts) {
+     this.deamon = null;
+
+     this.clickPurge = () => {
+         ACTIONS.purgeDeamon(this.deamon);
+     };
+     STORE.subscribe((action)=>{
+         if(action.type=='OPEN-MODAL-PUREGE-DEAMON') {
+             this.deamon = action.deamon;
+             this.update();
+
+             return;
+         }
+         if(action.type=='PURGE-DEAMON') {
+             this.deamon = null;
+             this.update();
+
+             return;
+         }
+     });
+     this.clickClose = () => {
+         this.deamon = null;
+         this.update();
+
+         return;
+     };
+});
+
+riot.tag2('modal-purge-result-editor', '<div class="modal {opts.data ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head" style="padding: 11px 22px; font-size: 18px;"> <p class="modal-card-title">作業時間の変更</p> <button class="delete" aria-label="close" action="close-purge-result-editor" onclick="{clickButton}"></button> </header> <section class="modal-card-body"> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">Impure</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'impure_name\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">作業時間</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'elapsed_time\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">開始</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'purge_start\'))}" ref="start" type="{\'datetime\'}"> </p> <div style="padding-top: 5px;"> <button class="button is-small" action="now" onclick="{clickSetDate}">今</button> <button class="button is-small {isHide(\'before-end\')}" action="before-end" onclick="{clickSetDate}">前の作業の終了</button> <button class="button is-small" action="clear-under-hour" onclick="{clickSetDate}">分と秒をクリア</button> <button class="button is-small" action="clear-under-minute" onclick="{clickSetDate}">秒をクリア</button> <button class="button is-small is-warging" action="revert-start" onclick="{clickSetDate}">元に戻す</button> </div> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">終了</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'purge_end\'))}" ref="end" type="{\'datetime\'}"> <div style="padding-top: 5px;"> <button class="button is-small" action="now" onclick="{clickSetDate}">今</button> <button class="button is-small {isHide(\'after-start\')}" action="after-start" onclick="{clickSetDate}">後の作業の開始</button> <button class="button is-small" action="clear-under-hour" onclick="{clickSetDate}">分と秒をクリア</button> <button class="button is-small" action="clear-under-minute" onclick="{clickSetDate}">秒をクリア</button> <button class="button is-small is-warging" action="revert-end" onclick="{clickSetDate}">元に戻す</button> </div> </p> </div> </div> </div> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display:flex; justify-content: space-between;"> <button class="button is-small" action="close-purge-result-editor" onclick="{clickButton}">Cancel</button> <button class="button is-small is-success" action="save-purge-result-editor" onclick="{clickButton}">Save</button> </footer> </div> </div>', '', '', function(opts) {
+     this.clickButton = (e) => {
+         let action = e.target.getAttribute('action');
+
+         if (action != 'save-purge-result-editor') {
+             this.opts.callback(action);
+             return;
+         }
+
+         let stripper = new TimeStripper();
+
+         this.opts.callback(action, {
+             id: this.opts.data.purge_id,
+             start: stripper.str2date(this.refs.start.value),
+             end: stripper.str2date(this.refs.end.value)
+         })
+     };
+     this.clickSetDate = (e) => {
+         let target = e.target;
+
+         let input = target.parentNode.parentNode.firstElementChild.firstElementChild;
+         let action = target.getAttribute('action');
+
+         let value = () => {
+             if (action=='now')
+                 return moment();
+
+             if (action=='after-start')
+                 return this.opts.source.after_start;
+
+             if (action=='before-end')
+                 return this.opts.source.before_end;
+
+             if (action=='revert-start')
+                 return this.opts.data.purge_start;
+
+             if (action=='revert-end') {
+                 return this.opts.data.purge_end;
+             }
+
+             if (action=='clear-under-hour')
+                 return moment(input.value).startOf('hour');
+
+             if (action=='clear-under-minute')
+                 return moment(input.value).startOf('minute');
+
+             throw Error('Not Supported yet. action=' + action) ;
+         };
+
+         input.value = moment(value()).format('YYYY-MM-DD HH:mm:ss');
+     };
+
+     this.isHide = (code) => {
+         if (code=='after-start')
+             return this.opts.source.after_start ? '' : 'hide';
+
+         if (code=='before-end')
+             return this.opts.source.before_end ? '' : 'hide';
+     };
+     this.getVal = (key) => {
+         let data = this.opts.data;
+
+         if (!data)
+             return '';
+
+         if (key=='elapsed_time')
+             return new TimeStripper().format_sec(data[key]);
+
+         return data[key];
+     };
+     this.date2str = (date) => {
+         if (!date) return '';
+
+         return moment(date).format("YYYY-MM-DD HH:mm:ss");
+     };
+});
+
+riot.tag2('modal-spell-impure', '<div class="modal {impure ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card" style="width: 555px;"> <header class="modal-card-head" style="padding: 11px 22px;"> <p class="modal-card-title" style="font-size: 14px;">呪文詠唱</p> <button class="delete" aria-label="close" onclick="{clickClose}"></button> </header> <section class="modal-card-body"> <div class="contents"> <p><b>ID</b></p> <p style="padding-left:22px;">{impure ? impure.id : \'\'}</p> <p><b>Name</b></p> <p style="padding-left:22px;">{impure ? impure.name : \'\'}</p> <p style="margin-top:22px;"><b>呪文</b></p> <div style="padding-left:22px;"> <textarea class="textarea" placeholder="必須入力項目" ref="spell"></textarea> </div> </div> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display:flex; justify-content: space-between;"> <button class="button is-small" onclick="{clickClose}">Cancel</button> <button class="button is-small is-success" onclick="{clickSpell}">詠唱</button> </footer> </div> </div>', '', '', function(opts) {
+     this.clickSpell = () => {
+         ACTIONS.saveImpureIncantationSolo(this.impure,
+                                           this.refs.spell.value.trim());
+     };
+     this.clickClose = () => {
+         this.impure = null;
+         this.update();
+         return;
+     };
+
+     this.impure = null;
+     STORE.subscribe((action) => {
+         if (action.type=='OPEN-MODAL-SPELL-IMPURE') {
+             this.impure = action.impure;
+             this.update();
+             return;
+         }
+
+         if (action.type=='SAVED-IMPURE-INCANTATION-SOLO') {
+             this.impure = null;
+             this.update();
+             return;
          }
      });
 });

@@ -44,3 +44,8 @@
   (setf (hw::description deamon) description)
   (mito:save-dao deamon)
   (dao2deamon deamon))
+
+(defun puge-deamon (angel deamon)
+  (assert deamon)
+  (hw:purge-deamon deamon :editor angel)
+  (dao2deamon deamon))

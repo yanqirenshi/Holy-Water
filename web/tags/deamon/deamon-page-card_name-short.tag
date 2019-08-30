@@ -21,8 +21,8 @@
          flex-direction: column;
          justify-content: center;
 
-         width: calc(11px * 8 + 11px * 7);
-         height: calc(11px * 8 + 11px * 7);
+         width: calc(11px * 24 + 11px * 23);
+         height: calc(11px * 8 + 11px *  7);
          padding: 8px;
          margin-bottom: 11px;
 

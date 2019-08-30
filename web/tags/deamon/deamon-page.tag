@@ -10,8 +10,8 @@
     </section>
 
     <div style="display: flex; padding: 0px 88px;">
-        <deamon-page-card-pool source={source}></deamon-page-card-pool>
-        <deamon-page-controller></deamon-page-controller>
+        <deamon-page-card-pool  source={source}></deamon-page-card-pool>
+        <deamon-page-controller source={source}></deamon-page-controller>
     </div>
 
     <script>

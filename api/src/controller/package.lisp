@@ -9,7 +9,8 @@
            #:get-maledict)
   (:export #:find-deamons
            #:create-deamon
-           #:update-deamon-description)
+           #:update-deamon-description
+           #:puge-deamon)
   (:export #:find-impures
            #:create-impure-2-maledict
            #:start-action-4-impure

@@ -276,6 +276,24 @@ class Actions extends Vanilla_Redux_Actions {
             data: {},
         };
     }
+    purgeDeamon (deamon) {
+        let path = '/deamons/%d/purge'.format(deamon.id);
+
+        API.post(path, null, (json, success) => {
+            if (success)
+                STORE.dispatch(this.purgedDeamon(json));
+            else
+                this.pushFetchErrorMessage(json);
+        });
+    }
+    purgedDeamon (response) {
+        this.pushSuccessMessage('Deamon の Purgeが完了しました');
+
+        return {
+            type: 'PURGE-DEAMON',
+            data: {},
+        };
+    }
     /////
     ///// Impure
     /////
@@ -1038,5 +1056,11 @@ class Actions extends Vanilla_Redux_Actions {
             data: {},
             maledict: maledict
         };
+    }
+    openModalPuregeDeamon (deamon) {
+        STORE.dispatch({
+            type: 'OPEN-MODAL-PUREGE-DEAMON',
+            deamon: deamon,
+        });
     }
 }

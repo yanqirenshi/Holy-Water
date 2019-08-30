@@ -13,13 +13,11 @@
 
     <menu-add-impure></menu-add-impure>
 
+    <!-- 廃棄予定 -->
     <modal-create-impure open={modal_open}
                          maledict={modal_maledict}></modal-create-impure>
 
-    <modal-create-after-impure></modal-create-after-impure>
-    <modal-attain-impure></modal-attain-impure>
-    <modal-spell-impure></modal-spell-impure>
-    <modal-create-deamon></modal-create-deamon>
+    <app-modal-pool></app-modal-pool>
 
     <script>
      this.site = () => {

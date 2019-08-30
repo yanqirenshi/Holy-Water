@@ -23,6 +23,11 @@
   (:method ((deamon rs_deamon) &key editor)
     (let ((by-id (creator-id editor)))
       (unless (purged-at deamon)
+        (when (select-dao 'rs_impure-active
+                (inner-join :th_deamon_impure
+                            :on (:= :rs_impure_active.id :th_deamon_impure.impure_id))
+                (where (:= :th_deamon_impure.deamon_id (object-id deamon))))
+          (error "未浄化の Impure があります。そのため浄化できません。"))
         (setf (purged-at deamon) (local-time:now))
         (setf (updated-by deamon) by-id)
         (mito:update-dao deamon)))))

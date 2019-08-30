@@ -143,6 +143,13 @@
                                                           deamon
                                                           :description description)))))
 
+(defroute ("/deamons/:id/purge" :method :POST) (&key id)
+  (format t "````~%")
+  (with-angel (angel)
+    (let ((deamon (hw::get-deamon :id id)))
+      (unless deamon (throw-code 404))
+      (render-json (hw.api.ctrl:puge-deamon angel deamon)))))
+
 ;;;;;
 ;;;;; Orthodoxs
 ;;;;;
