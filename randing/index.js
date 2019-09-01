@@ -5,7 +5,10 @@ window.onload = function() {
 };
 
 function getUri () {
-    return 'http://satoshi-iwasaki.local:8080/hw/api/v1/sign/in';
+    let config = HOLY_WATER_CONFIG.api;
+    let url = config.shceme + '://' + config.host + ':' + config.port + config.path.signin;
+
+    return url;
 };
 
 function signIn () {

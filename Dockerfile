@@ -1,10 +1,15 @@
 ##### ################################################################
 #####
 #####  Nginx
+#####  =====
 #####
 #####  Build
-#####  =====
-#####    docker build -t renshi/holy-water -f Dockerfile.HolyWater .
+#####  -----
+#####    docker build -t renshi/holy-water -f Dockerfile .
+#####
+#####  Run
+#####  ---
+#####    docker run renshi/holy-water /bin/bash
 #####
 ##### ################################################################
 FROM renshi/base

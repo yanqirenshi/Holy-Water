@@ -5,7 +5,9 @@
 *.lx64fsl
 *.x86f
 *~
+#*
 .#*
 .DS_Store
 
 hour-memos.org
+randing/config.js
