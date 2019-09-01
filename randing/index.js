@@ -31,7 +31,9 @@ function signIn () {
 
     fetch(uri, contents)
         .then((res) => {
-            location.pathname = /hw/;
+            let config = HOLY_WATER_CONFIG.api;
+
+            location.pathname = config.path.app;
         })
         .then(console.log)
         .catch(console.error);
