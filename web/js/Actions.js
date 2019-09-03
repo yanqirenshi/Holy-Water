@@ -1063,4 +1063,10 @@ class Actions extends Vanilla_Redux_Actions {
             deamon: deamon,
         });
     }
+    openModalCreateDeamonImpure (deamon) {
+        STORE.dispatch({
+            type: 'OPEN-MODAL-CREATE-DEAMON-IMPURE',
+            deamon: deamon,
+        });
+    }
 }

@@ -1,9 +1,12 @@
 <deamon-page-controller>
 
-    <button class="button hw-button" disabled={isAddImpureActive()}>Add Impure</button>
-    <button class="button hw-button" onclick={clickPurge} disabled={isPurgeActive()}>浄化</button>
+    <button class="button hw-button" onclick={createImpure} disabled={isAddImpureActive()}>Add Impure</button>
+    <button class="button hw-button" onclick={clickPurge}   disabled={isPurgeActive()}>浄化</button>
 
     <script>
+     this.createImpure = () => {
+         ACTIONS.openModalCreateDeamonImpure(this.opts.source.deamon);
+     };
      this.clickPurge = () => {
          ACTIONS.openModalPuregeDeamon(this.opts.source.deamon);
      };

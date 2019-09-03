@@ -19,6 +19,9 @@
                 #:left-join
                 #:group-by
                 #:union-all-queries)
+  (:export #:*db-name*
+           #:*db-user*
+           #:*db-user-password*)
   (:export #:find-deamons
            #:create-deamon
            #:purge-deamon)
@@ -73,7 +76,8 @@
            #:list-summary-purge-by-angel-deamon-span))
 (in-package :holy-water)
 
-(mito:connect-toplevel :postgres :database-name "holy_water" :username "hw_user" :password "password")
+;; (mito:connect-toplevel :postgres :database-name "holy_water" :username "hw_user" :password "password")
+(mito:connect-toplevel :postgres :database-name "holy_water" :username "holy_water")
 
 (defun timestamptz2timestamp (v)
   (local-time:format-timestring nil (local-time:universal-to-timestamp v)))

@@ -83,7 +83,7 @@ riot.tag2('angel_page', '<section class="section"> <div class="container"> <ange
      });
 });
 
-riot.tag2('app-modal-pool', '<modal-create-after-impure></modal-create-after-impure> <modal-attain-impure></modal-attain-impure> <modal-spell-impure></modal-spell-impure> <modal-create-deamon></modal-create-deamon> <modal-purge-deamon></modal-purge-deamon>', '', '', function(opts) {
+riot.tag2('app-modal-pool', '<modal-create-after-impure></modal-create-after-impure> <modal-create-deamon-impure></modal-create-deamon-impure> <modal-attain-impure></modal-attain-impure> <modal-spell-impure></modal-spell-impure> <modal-create-deamon></modal-create-deamon> <modal-purge-deamon></modal-purge-deamon>', '', '', function(opts) {
 });
 
 riot.tag2('app-page-area', '', '', '', function(opts) {
@@ -423,7 +423,7 @@ riot.tag2('section-list', '<table class="table is-bordered is-striped is-narrow 
      };
 });
 
-riot.tag2('description-markdown', '<div ref="markdown-html" style=" background: none;"></div>', 'description-markdown * { font-size: 12px; } description-markdown h1 { font-size: 16px; font-weight: bold;} description-markdown ul { list-style-type: disc; margin-left: 22px; }', '', function(opts) {
+riot.tag2('description-markdown', '<div ref="markdown-html" style=" background: none;"></div>', 'description-markdown * { font-size: 12px; } description-markdown h1 { font-size: 16px; font-weight: bold; margin-top: 11px; margin-bottom: 6px; } description-markdown ul { list-style-type: disc; margin-left: 22px; }', '', function(opts) {
      this.updateContents = (str) => {
          let html = marked(str);
 
@@ -617,7 +617,10 @@ riot.tag2('deamon-page-card_name-short', '<div class="small"> <p class="name">{n
 riot.tag2('deamon-page-card_purges', '', '', '', function(opts) {
 });
 
-riot.tag2('deamon-page-controller', '<button class="button hw-button" disabled="{isAddImpureActive()}">Add Impure</button> <button class="button hw-button" onclick="{clickPurge}" disabled="{isPurgeActive()}">浄化</button>', 'deamon-page-controller .button { margin-bottom: 11px; width: 100%; }', '', function(opts) {
+riot.tag2('deamon-page-controller', '<button class="button hw-button" onclick="{createImpure}" disabled="{isAddImpureActive()}">Add Impure</button> <button class="button hw-button" onclick="{clickPurge}" disabled="{isPurgeActive()}">浄化</button>', 'deamon-page-controller .button { margin-bottom: 11px; width: 100%; }', '', function(opts) {
+     this.createImpure = () => {
+         ACTIONS.openModalCreateDeamonImpure(this.opts.source.deamon);
+     };
      this.clickPurge = () => {
          ACTIONS.openModalPuregeDeamon(this.opts.source.deamon);
      };
@@ -681,7 +684,7 @@ riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"
      });
 });
 
-riot.tag2('page-card_description-large', '<div> <div class="editor"> <div> <textarea class="textarea" placeholder="Write Markdown" onkeyup="{keyUp}" ref="md"> </textarea> </div> <div class="preview"> <description-markdown source="{markdownVal()}"></description-markdown> </div> </div> <div class="controller" style="display:flex; justify-content:space-between;"> <button class="button is-small" onclick="{clickCancel}">Cancel</button> <button class="button is-small is-danger" onclick="{clickSave}" disabled="{isDisable()}">Save</button> </div> </div>', 'page-card_description-large { display: flex; margin-bottom: 11px; background: #fff; border-radius: 8px; display:flex; flex-direction:column; } page-card_description-large > div { display: flex; flex-direction: column; height: 100%; } page-card_description-large > div > .editor { padding-top: 11px; flex-grow: 1; display: flex; } page-card_description-large > div > .editor > div { height: 100%; flex-grow: 1; width: 50%; } page-card_description-large > div > .editor .textarea{ border: none; width:100%; height:100%; resize: none; box-shadow: none; padding-left: 22px; background: #fdfdfd; font-size: 12px; } page-card_description-large > div > .editor .preview{ overflow: auto; padding: 11px; } page-card_description-large > div > .controller { padding: 11px; }', 'riot-style="width:{w()}px; height:{h()}px;"', function(opts) {
+riot.tag2('page-card_description-large', '<div> <div class="editor"> <div> <textarea class="textarea" placeholder="Write Markdown" onkeyup="{keyUp}" ref="md"> </textarea> </div> <div class="preview"> <description-markdown source="{markdownVal()}"></description-markdown> </div> </div> <div class="controller" style="display:flex; justify-content:space-between;"> <button class="button is-small" onclick="{clickCancel}">Cancel</button> <button class="button is-small is-danger" onclick="{clickSave}" disabled="{isDisable()}">Save</button> </div> </div>', 'page-card_description-large { display: flex; margin-bottom: 11px; background: #fff; border-radius: 8px; display:flex; flex-direction:column; } page-card_description-large > div { display: flex; flex-direction: column; height: 100%; } page-card_description-large > div > .editor { padding-top: 11px; flex-grow: 1; display: flex; height: 100%; } page-card_description-large > div > .editor > div { height: 100%; flex-grow: 1; width: 50%; } page-card_description-large > div > .editor .textarea{ border: none; width:100%; height:100%; resize: none; box-shadow: none; padding-left: 22px; background: #fdfdfd; font-size: 12px; } page-card_description-large > div > .editor .preview{ overflow: auto; padding: 11px; } page-card_description-large > div > .controller { padding: 11px; }', 'riot-style="width:{w()}px; height:{h()}px;"', function(opts) {
      this.w = () => {
          let hw = new HolyWater();
 
@@ -725,7 +728,7 @@ riot.tag2('page-card_description-large', '<div> <div class="editor"> <div> <text
      };
 });
 
-riot.tag2('page-card_description-small', '<div class="description" style=""> <description-markdown source="{opts.source}"></description-markdown> </div> <div class="controller"> <button class="button is-small" onclick="{clickEdit}">編集</button> </div>', 'page-card_description-small { display: flex; background: #fff; border-radius: 8px; display:flex; flex-direction:column; } page-card_description-small .description { flex-grow:1; overflow:auto; padding: 22px 11px 11px 11px; border-radius: 8px 8px 0px 0px; font-size: 14px; line-height: 14px; } page-card_description-small .controller { text-align: right; margin-top: 8px; margin: 8px; }', 'riot-style="width:{w()}px; height:{h()}px;"', function(opts) {
+riot.tag2('page-card_description-small', '<div class="description"> <description-markdown source="{opts.source}"></description-markdown> </div> <div class="controller"> <button class="button is-small" onclick="{clickEdit}">編集</button> </div>', 'page-card_description-small { display: flex; background: #fff; border-radius: 8px; display:flex; flex-direction:column; } page-card_description-small .description { flex-grow:1; overflow:auto; padding: 22px 11px 11px 11px; border-radius: 8px 8px 0px 0px; font-size: 14px; line-height: 14px; } page-card_description-small .controller { text-align: right; margin-top: 8px; margin: 8px; }', 'riot-style="width:{w()}px; height:{h()}px;"', function(opts) {
      this.w = () => {
          let hw = new HolyWater();
 
@@ -1956,7 +1959,7 @@ riot.tag2('page-impure-card-deamon-large', '<div riot-style="width:{w()}px; heig
      };
 });
 
-riot.tag2('page-impure-card-deamon-small', '<div riot-style="width:{w()}px; height:{h()}px;"> <div style="display: flex;flex-grow: 1;align-items: center; justify-content: center;"> <p style="text-align:center;"> <b>{deamonNameShort()}</b> <br> {deamonName()} </p> </div> <div style="text-align: right;"> <button class="button is-small" onclick="{clickEdit}">変更</button> </div> </div>', 'page-impure-card-deamon-small > div { display: flex; flex-direction: column; height: 100%; padding: 11px; background: rgba(22, 22, 14, 0.88);; color: #e83929; font-weight: bold; border-radius: 8px; }', '', function(opts) {
+riot.tag2('page-impure-card-deamon-small', '<div riot-style="width:{w()}px; height:{h()}px;"> <div style="display: flex;flex-grow: 1;align-items: center; justify-content: center;"> <p style="text-align:center;"> <b>{deamonNameShort()}</b> <br> {deamonName()} </p> </div> <div style="display:flex; justify-content:space-between;"> <p><a href="{deamonLink()}">Link</a></p> <button class="button is-small" onclick="{clickEdit}">変更</button> </div> </div>', 'page-impure-card-deamon-small > div { display: flex; flex-direction: column; height: 100%; padding: 11px; background: rgba(22, 22, 14, 0.88);; color: #e83929; font-weight: bold; border-radius: 8px; }', '', function(opts) {
      this.clickEdit = () => {
          this.opts.callback('open-deamon');
      };
@@ -1983,6 +1986,12 @@ riot.tag2('page-impure-card-deamon-small', '<div riot-style="width:{w()}px; heig
              return '';
 
          return this.opts.source.deamon.name_short;
+     };
+     this.deamonLink = () => {
+         if (!this.opts.source.deamon)
+             return '#';
+
+         return '#deamons/'  + this.opts.source.deamon.id;
      };
 });
 
@@ -2042,7 +2051,22 @@ riot.tag2('page-impure-card-incantation', '<div class="header"> <p><b>呪文詠�
      };
 });
 
-riot.tag2('page-impure-card-network', '<div style="width:100%; height:100%;border-top: 1px solid #aaaaaa;border-bottom: 1px solid #aaaaaa;"> <svg ref="graph"></svg> </div>', 'page-impure-card-network { display: block; padding: 11px 0px; background: rgba(255,255,255,0.88);; border-radius: 8px; font-size: 12px; }', 'riot-style="width:{w()}px; height:{h()}px;"', function(opts) {
+riot.tag2('page-impure-card-network', '<div style="padding: 11px 22px; padding-bottom: 22px;"> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size:12px;"> <thead> <tr> <th rowspan="2">ID</th> <th rowspan="2">Direction</th> <th colspan="2">deamon</th> <th colspan="2">祓魔師</th> <th colspan="2">maledict</th> <th colspan="2">Impure</th> </tr> <tr> <th>ID</th> <th>Namme(short)</th> <th>ID</th> <th>Name</th> <th>ID</th> <th>Name</th> <th>ID</th> <th>Name</th> </tr> </thead> <tbody> <tr each="{obj in list()}"> <td>{obj.relationship_id}</td> <td>{obj.relationship_direction}</td> <td>{obj.deamon_id}</td> <td>{obj.deamon_name_short}</td> <td>{obj.angel_id}</td> <td>{obj.angel_name}</td> <td>{obj.maledict_id}</td> <td>{obj.maledict_name}</td> <td> <a onclick="{link}" impure-id="{obj.id}"> {obj.id} </a> </td> <td>{obj.name}</td> </tr> </tbody> </table> </div> <div style="width:100%; height:100%;border-top: 1px solid #aaaaaa;border-bottom: 1px solid #aaaaaa;"> <svg ref="graph"></svg> </div>', 'page-impure-card-network { display: block; padding: 11px 0px; background: rgba(255,255,255,0.88);; border-radius: 8px; font-size: 12px; }', 'riot-style="width:{w()}px; height:{h()}px;"', function(opts) {
+     this.list = () => {
+         let list = this.opts.source.relationships;
+         if (!list)
+             return [];
+
+         return list;
+     };
+     this.link = (e) => {
+         let id = e.target.getAttribute('impure-id');
+
+         location.hash = '#home/impures/' + id;
+
+         ACTIONS.fetchPagesImpure({ id: id });
+     };
+
      this.w = () => {
          let hw = new HolyWater();
 
@@ -2480,11 +2504,11 @@ riot.tag2('page-impure', '<section class="section" style="padding-bottom: 22px;"
              return;
          }
      });
+
      this.on('mount', () => {
          let id = this.id();
 
          ACTIONS.fetchPagesImpure({ id: id });
-
      });
 });
 
@@ -2806,6 +2830,44 @@ riot.tag2('modal-create-after-impure', '<div class="modal {impure ? \'is-active\
      this.clickClose = (e) => {
          ACTIONS.closeModalCreateImpure();
      };
+});
+
+riot.tag2('modal-create-deamon-impure', '<div class="modal {deamon ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head" style="padding: 11px 22px;"> <p class="modal-card-title" style="font-size:16px;">Create Impure of Deamon</p> <button class="delete" aria-label="close" onclick="{clickClose}"></button> </header> <section class="modal-card-body"> <div> <p>悪魔：{deamon.name + ⁗(⁗ + deamon.name_short + ⁗)⁗}</p> </div> <input class="input is-small" type="text" placeholder="Title" style="margin-top:22px;" ref="name"> <textarea class="textarea is-small martin-top" placeholder="Description" rows="6" style="height: 222px; margin-top:11px;" ref="description"></textarea> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display: flex; justify-content: space-between;"> <button class="button is-small" onclick="{clickClose}">Cancel</button> <button class="button is-success is-small" onclick="{clickCreate}">Create</button> </footer> </div> </div>', '', '', function(opts) {
+     this.clickCreate = (e) => {
+         let params = {
+             name: this.refs.name.value.trim(),
+             description: this.refs.description.value.trim(),
+         }
+
+         if (this.deamon)
+             params.deamon_id = this.deamon.id
+
+     };
+     this.clickClose = (e) => {
+         this.deamon = null;
+         this.update();
+     };
+
+     this.deamon   = null;
+     STORE.subscribe((action) => {
+         if (action.type=='OPEN-MODAL-CREATE-DEAMON-IMPURE') {
+             this.deamon = action.deamon;
+             dump(this.deamon);
+             this.update();
+
+             return;
+         }
+
+         let list = [
+             '',
+         ];
+         if (list.find((d) => { return action.type == d;})) {
+             this.deamon = null;
+             this.update();
+
+             return;
+         }
+     });
 });
 
 riot.tag2('modal-create-deamon', '<div class="modal {isOpen()}"> <div class="modal-background"></div> <div class="modal-content" style="width:888px;"> <div class="card"> <header class="card-header"> <p class="card-header-title">Create Deamon</p> </header> <div class="card-content"> <div class="content"> <div style="margin-bottom:22px;"> <input class="input" type="text" placeholder="Name" style="margin-bottom:11px;" ref="deamon_name" onkeyup="{keyUP}"> <input class="input" type="text" placeholder="Short Name" style="margin-bottom:11px;" ref="deamon_name_short" onkeyup="{keyUP}"> <textarea class="textarea" placeholder="Description" rows="10" ref="description"></textarea> </div> <div class="control-area"> <button class="button is-small" onclick="{clickClose}">Cancel</button> <button class="button is-small is-danger" onclick="{clickCreate}" disabled="{isDisabled()}">Save</button> </div> </div> </div> </div> </div> <button class="modal-close is-large" aria-label="close" onclick="{clickClose}"></button> </div>', '', '', function(opts) {

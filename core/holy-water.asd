@@ -10,6 +10,7 @@
   :components ((:module "src"
                 :components
                 ((:file "package")
+                 (:file "database")
                  (:module "dao"
                   :components ((:file "rs_angel")
                                (:file "rs_grigori")

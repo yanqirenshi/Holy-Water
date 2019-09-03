@@ -12,7 +12,8 @@
 
         </div>
 
-        <div style="text-align: right;">
+        <div style="display:flex; justify-content:space-between;">
+            <p><a href={deamonLink()}>Link</a></p>
             <button class="button is-small" onclick={clickEdit}>変更</button>
         </div>
     </div>
@@ -23,7 +24,7 @@
      };
     </script>
 
-     <script>
+    <script>
      this.w = () => {
          let hw = new HolyWater();
 
@@ -48,6 +49,12 @@
              return '';
 
          return this.opts.source.deamon.name_short;
+     };
+     this.deamonLink = () => {
+         if (!this.opts.source.deamon)
+             return '#';
+
+         return '#deamons/'  + this.opts.source.deamon.id;
      };
     </script>
 

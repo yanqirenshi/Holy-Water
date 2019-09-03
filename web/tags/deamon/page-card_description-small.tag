@@ -1,6 +1,6 @@
 <page-card_description-small style="width:{w()}px; height:{h()}px;">
 
-    <div class="description" style="">
+    <div class="description">
         <description-markdown source={opts.source}></description-markdown>
     </div>
 
