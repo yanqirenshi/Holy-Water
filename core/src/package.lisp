@@ -74,7 +74,9 @@
            #:list-orthodox-angels
            #:list-impures-by-deamon
            #:list-relational-impures-by-impure
-           #:list-summary-purge-by-angel-deamon-span))
+           #:list-summary-purge-by-angel-deamon-span
+           #:list-summary-purge-by-angel-impure-span
+           #:list-summary-purge-by-angel-span))
 (in-package :holy-water)
 
 ;; (mito:connect-toplevel :postgres :database-name "holy_water" :username "hw_user" :password "password")

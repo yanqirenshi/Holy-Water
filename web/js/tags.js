@@ -846,7 +846,7 @@ riot.tag2('page-deamons_card-list', '<div> <button class="button is-small {filte
      this.deamons = () => {
          let list = STORE.get('deamons.list');
 
-         return list.filter((deamon)=>{
+         list = list .filter((deamon)=>{
              if (!this.filter.active && !deamon.purged_at)
                  return false;
 
@@ -854,6 +854,10 @@ riot.tag2('page-deamons_card-list', '<div> <button class="button is-small {filte
                  return false;
 
              return true;
+         });
+
+         return list.sort((a,b)=>{
+             return (a.id < b.id) ? 1 : -1;
          });
      };
 });
