@@ -447,6 +447,22 @@ class Actions extends Vanilla_Redux_Actions {
             to:   response,
         };
     }
+    createImpureDeamonImpure (deamon, data) {
+        let path = '/deamons/' + deamon.id + '/impures';
+
+        API.post(path, this.encodePostData(data), (json, success) => {
+            STORE.dispatch(this.createdImpureDeamonImpure(json, deamon));
+        });
+    }
+    createdImpureDeamonImpure (response, deamon) {
+        this.pushSuccessMessage('Impure の作成が完了しました');
+
+        return {
+            type: 'CREATED-IMPURE-DEAMON-IMPURE',
+            data: {},
+            deamon: deamon,
+        };
+    }
     setImpureDeamon (impure, deamon) {
         let path = '/impures/%d/deamons'.format(impure.id);
         let post_data = {

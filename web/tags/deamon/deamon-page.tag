@@ -31,8 +31,13 @@
          impures: [],
          purges: { summary: [] },
      };
+     this.getID = () => {
+         let id = location.hash.split('/').reverse()[0] * 1;
+
+         return id;
+     }
      this.loadPageData = () => {
-         let id = location.hash.split('/').reverse()[0];
+         let id = this.getID();
 
          ACTIONS.fetchPagesDeamon({ id:id });
      }
@@ -49,6 +54,14 @@
 
          if (action.type=='UPDATED-DEAMON-DESCRIPTION') {
              this.loadPageData();
+
+             return;
+         }
+
+         if (action.type=='CREATED-IMPURE-DEAMON-IMPURE') {
+             let id = this.getID();
+             if (action.deamon.id==id)
+                 ACTIONS.fetchPagesDeamon({ id:id });
 
              return;
          }

@@ -36,6 +36,7 @@
            #:find-impures
            #:find-impures-cemetery
            #:add-after-impure
+           #:add-deamon-impure
            #:impure-set-deamon)
   (:export #:find-orthodoxs
            #:get-orthodox

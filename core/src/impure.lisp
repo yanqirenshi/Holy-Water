@@ -25,15 +25,30 @@
   (:method ((angel rs_angel) (impure rs_impure) &key creator name description)
     (let ((in-box (hw::get-inbox-maledict angel)))
       (assert in-box)
-      (dbi:with-transaction mito:*connection*
-        (let ((after-impure (create-impure :name name
-                                           :description description
-                                           :creator creator)))
-          (add-impure in-box after-impure :creator creator)
-          (mito:create-dao 're_impure
-                           :id-from (mito:object-id impure)
-                           :id-to   (mito:object-id after-impure))
-          after-impure)))))
+      (let ((after-impure (create-impure :name name
+                                         :description description
+                                         :creator creator)))
+        (add-impure in-box after-impure :creator creator)
+        (mito:create-dao 're_impure
+                         :id-from (mito:object-id impure)
+                         :id-to   (mito:object-id after-impure))
+        after-impure))))
+
+
+(defgeneric add-deamon-impure (angel deamon &key creator name description)
+  (:method ((angel rs_angel) (deamon rs_deamon) &key creator name description)
+    (let ((in-box (hw::get-inbox-maledict angel)))
+      (assert in-box)
+      (let ((new-impure (create-impure :name name
+                                       :description description
+                                       :creator creator)))
+        (add-impure in-box new-impure :creator creator)
+        (mito:create-dao 'th_deamon-impure
+                         :deamon-id (object-id deamon)
+                         :impure-id (object-id new-impure)
+                         :created-by (object-id creator)
+                         :updated-by (object-id creator))
+        new-impure))))
 
 
 (defun find-impures (&key maledict)

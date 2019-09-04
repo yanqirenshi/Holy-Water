@@ -12,7 +12,7 @@
             <section class="modal-card-body">
 
                 <div>
-                    <p>悪魔：{deamon.name + "(" + deamon.name_short + ")"}</p>
+                    <p>悪魔：{deamonName()}</p>
                 </div>
 
                 <input class="input is-small"
@@ -39,16 +39,22 @@
     </div>
 
     <script>
+     this.deamonName = () => {
+         if (!this.deamon)
+             return '';
+
+         return this.deamon.name + "(" + this.deamon.name_short + ")"
+     };
+    </script>
+
+    <script>
      this.clickCreate = (e) => {
          let params = {
              name: this.refs.name.value.trim(),
              description: this.refs.description.value.trim(),
          }
 
-         if (this.deamon)
-             params.deamon_id = this.deamon.id
-
-         // ACTIONS.createImpureAfterImpure(this.impure, params);
+         ACTIONS.createImpureDeamonImpure(this.deamon, params);
      };
      this.clickClose = (e) => {
          this.deamon = null;
@@ -61,14 +67,13 @@
      STORE.subscribe((action) => {
          if (action.type=='OPEN-MODAL-CREATE-DEAMON-IMPURE') {
              this.deamon = action.deamon;
-             dump(this.deamon);
              this.update();
 
              return;
          }
 
          let list = [
-             '',
+             'CREATED-IMPURE-DEAMON-IMPURE',
          ];
          if (list.find((d) => { return action.type == d;})) {
              this.deamon = null;

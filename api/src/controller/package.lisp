@@ -23,6 +23,7 @@
            #:get-impure-purging
            #:transfer-impure
            #:create-after-impure
+           #:create-deamon-impure
            #:impure-set-deamon
            #:update-impure-description)
   (:export #:find-orthodoxs

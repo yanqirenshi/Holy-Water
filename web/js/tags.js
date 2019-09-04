@@ -660,8 +660,13 @@ riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"
          impures: [],
          purges: { summary: [] },
      };
+     this.getID = () => {
+         let id = location.hash.split('/').reverse()[0] * 1;
+
+         return id;
+     }
      this.loadPageData = () => {
-         let id = location.hash.split('/').reverse()[0];
+         let id = this.getID();
 
          ACTIONS.fetchPagesDeamon({ id:id });
      }
@@ -678,6 +683,14 @@ riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"
 
          if (action.type=='UPDATED-DEAMON-DESCRIPTION') {
              this.loadPageData();
+
+             return;
+         }
+
+         if (action.type=='CREATED-IMPURE-DEAMON-IMPURE') {
+             let id = this.getID();
+             if (action.deamon.id==id)
+                 ACTIONS.fetchPagesDeamon({ id:id });
 
              return;
          }
@@ -2832,16 +2845,21 @@ riot.tag2('modal-create-after-impure', '<div class="modal {impure ? \'is-active\
      };
 });
 
-riot.tag2('modal-create-deamon-impure', '<div class="modal {deamon ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head" style="padding: 11px 22px;"> <p class="modal-card-title" style="font-size:16px;">Create Impure of Deamon</p> <button class="delete" aria-label="close" onclick="{clickClose}"></button> </header> <section class="modal-card-body"> <div> <p>悪魔：{deamon.name + ⁗(⁗ + deamon.name_short + ⁗)⁗}</p> </div> <input class="input is-small" type="text" placeholder="Title" style="margin-top:22px;" ref="name"> <textarea class="textarea is-small martin-top" placeholder="Description" rows="6" style="height: 222px; margin-top:11px;" ref="description"></textarea> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display: flex; justify-content: space-between;"> <button class="button is-small" onclick="{clickClose}">Cancel</button> <button class="button is-success is-small" onclick="{clickCreate}">Create</button> </footer> </div> </div>', '', '', function(opts) {
+riot.tag2('modal-create-deamon-impure', '<div class="modal {deamon ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head" style="padding: 11px 22px;"> <p class="modal-card-title" style="font-size:16px;">Create Impure of Deamon</p> <button class="delete" aria-label="close" onclick="{clickClose}"></button> </header> <section class="modal-card-body"> <div> <p>悪魔：{deamonName()}</p> </div> <input class="input is-small" type="text" placeholder="Title" style="margin-top:22px;" ref="name"> <textarea class="textarea is-small martin-top" placeholder="Description" rows="6" style="height: 222px; margin-top:11px;" ref="description"></textarea> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display: flex; justify-content: space-between;"> <button class="button is-small" onclick="{clickClose}">Cancel</button> <button class="button is-success is-small" onclick="{clickCreate}">Create</button> </footer> </div> </div>', '', '', function(opts) {
+     this.deamonName = () => {
+         if (!this.deamon)
+             return '';
+
+         return this.deamon.name + "(" + this.deamon.name_short + ")"
+     };
+
      this.clickCreate = (e) => {
          let params = {
              name: this.refs.name.value.trim(),
              description: this.refs.description.value.trim(),
          }
 
-         if (this.deamon)
-             params.deamon_id = this.deamon.id
-
+         ACTIONS.createImpureDeamonImpure(this.deamon, params);
      };
      this.clickClose = (e) => {
          this.deamon = null;
@@ -2852,14 +2870,13 @@ riot.tag2('modal-create-deamon-impure', '<div class="modal {deamon ? \'is-active
      STORE.subscribe((action) => {
          if (action.type=='OPEN-MODAL-CREATE-DEAMON-IMPURE') {
              this.deamon = action.deamon;
-             dump(this.deamon);
              this.update();
 
              return;
          }
 
          let list = [
-             '',
+             'CREATED-IMPURE-DEAMON-IMPURE',
          ];
          if (list.find((d) => { return action.type == d;})) {
              this.deamon = null;
