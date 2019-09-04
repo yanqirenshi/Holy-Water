@@ -19,6 +19,7 @@
                        type="text"
                        placeholder="Title"
                        style="margin-top:22px;"
+                       onkeyup={keyup}
                        ref="name">
 
                 <textarea class="textarea is-small martin-top"
@@ -32,11 +33,27 @@
             <footer class="modal-card-foot"
                     style="padding: 11px 22px; display: flex; justify-content: space-between;">
 
-                <button class="button is-small" onclick={clickClose}>Cancel</button>
-                <button class="button is-success is-small" onclick={clickCreate}>Create</button>
+                <button class="button is-small"            onclick={clickClose}>Cancel</button>
+                <button class="button is-warning is-small" onclick={clickClear}>Clear</button>
+                <button class="button is-danger  is-small" onclick={clickCreate} disabled={dsabled()}>Create</button>
             </footer>
         </div>
     </div>
+
+    <script>
+     this.keyup = () => {
+         this.update();
+     };
+     this.dsabled = () => {
+         if (!this.deamon)
+             return true;
+
+         if (this.refs.name.value.trim()=='')
+             return true;
+
+         return false;
+     };
+    </script>
 
     <script>
      this.deamonName = () => {
@@ -48,6 +65,10 @@
     </script>
 
     <script>
+     this.clickClear = () => {
+         this.refs.name.value = '';
+         this.refs.description.value = '';
+     };
      this.clickCreate = (e) => {
          let params = {
              name: this.refs.name.value.trim(),

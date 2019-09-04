@@ -1,3 +1,49 @@
+riot.tag2('angel-page-card-purge-result-deamon', '<di> <div> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size:12px;"> <thead> <tr> <th>Date</th> <th>Deamon</th> <th>作業時間[人日]</th> <th>Purge Action数</th> </tr> </thead> <tbody> <tr each="{obj in list()}"> <td nowrap>{obj.date}</td> <td>{obj.deamon_name}</td> <td style="text-align:right;">{elapsedDay(obj.elapsed_time)}</td> <td>{obj.impure_count}</td> </tr> </tbody> </table> </div> </di>', 'angel-page-card-purge-result-deamon { display: flex; flex-direction: column; width: calc(11px * 8 * 12); padding: 22px; background: #fff; border-radius: 5px; }', '', function(opts) {
+     this.elapsedDay = (val) => {
+         return (Math.ceil(this.elapsedHour(val) / 6 * 100) /100).toFixed(2);
+     };
+     this.elapsedHour = (val) => {
+         return (Math.ceil(this.elapsedMinute(val) / 60 * 100) /100).toFixed(2);
+     };
+     this.elapsedMinute = (val) => {
+         return (Math.ceil(val / 60 * 100) / 100).toFixed(2);
+     };
+     this.list = () => {
+         if (!this.opts.source.purges ||
+             !this.opts.source.purges.days ||
+             !this.opts.source.purges.days.deamons)
+             return [];
+
+         let list = this.opts.source.purges.days.deamons;
+
+         return list;
+     };
+});
+
+riot.tag2('angel-page-card-purge-result-impure', '<di> <div> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size:12px;"> <thead> <tr> <th>Date</th> <th>Deamon</th> <th>Impure</th> <th>作業時間[h]</th> <th>Purge Action数</th> </tr> </thead> <tbody> <tr each="{obj in list()}"> <td nowrap>{obj.date}</td> <td>{obj.deamon_name}</td> <td>{obj.impure_name}</td> <td style="text-align:right;">{elapsedHour(obj.elapsed_time)}</td> <td>{obj.impure_count}</td> </tr> </tbody> </table> </div> </di>', 'angel-page-card-purge-result-impure { display: flex; flex-direction: column; width: calc(11px * 8 * 12); padding: 22px; background: #fff; border-radius: 5px; }', '', function(opts) {
+     this.elapsedDay = (val) => {
+         return (Math.ceil(this.elapsedHour(val) / 6 * 100) /100).toFixed(2);
+
+     };
+     this.elapsedHour = (val) => {
+         return (Math.ceil(this.elapsedMinute(val) / 60 * 100) /100).toFixed(2);
+     };
+     this.elapsedMinute = (val) => {
+         return (Math.ceil(val / 60 * 100) / 100).toFixed(2);
+     };
+     this.list = () => {
+         dump(this.opts.source.purges.impures);
+
+         if (!this.opts.source.purges ||
+             !this.opts.source.purges.impures)
+             return [];
+
+         let list = this.opts.source.purges.impures;
+
+         return list;
+     };
+});
+
 riot.tag2('angel-page-card-result-deamon', '<div class="controller"> <p style="word-break: keep-all; margin-right:11px;">期間: </p> <input class="input is-small" placeholder="From" style="margin-right:11px;" riot-value="{opts.span.from.format(\'YYYY-MM-DD\')}" ref="from" type="{\'date\'}"> <p style="margin-right:11px;">〜</p> <input class="input is-small" placeholder="To" style="margin-right:11px;" riot-value="{opts.span.to.format(\'YYYY-MM-DD\')}" ref="to" type="{\'date\'}"> <button class="button is-small" onclick="{clickRefresh}">Refresh</button> </div> <div class="summary" style="margin-top:11px;"> <p style="margin-right:11px;">Total:</p> <p style="margin-right:11px;">{totalElapsedDay()}</p> <p style="margin-right:11px;">[人日]</p> </div> <div style="margin-top:11px;"> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size:12px;"> <thead> <tr> <th rowspan="2">ID</th> <th rowspan="2">Name</th> <th colspan="3">作業時間</th> </tr> <tr> <th>人日</th> <th>時間</th> <th>分</th> </tr> </thead> <tbody> <tr each="{obj in list()}"> <td>{obj.deamon_id}</td> <td>{obj.deamon_name}</td> <td class="num">{elapsedDay(obj.puge_elapsed_time)}</td> <td class="num">{elapsedHour(obj.puge_elapsed_time)}</td> <td class="num">{elapsedMinute(obj.puge_elapsed_time)}</td> </tr> </tbody> </table> </div>', 'angel-page-card-result-deamon { display: flex; flex-direction: column; width: calc(11px * 8 * 6); padding: 22px; background: #fff; border-radius: 5px; } angel-page-card-result-deamon .controller { display: flex; align-items: center; } angel-page-card-result-deamon .summary { display: flex; align-items: center; }', '', function(opts) {
      this.clickRefresh = () => {
          this.opts.callback('click-refresh', {
@@ -51,7 +97,7 @@ riot.tag2('angel-page-sign-out', '<section class="section"> <div class="containe
      };
 });
 
-riot.tag2('angel_page', '<section class="section"> <div class="container"> <angel-page-card-result-deamon source="{source}" span="{span}" callback="{callback}"></angel-page-card-result-deamon> </div> </section>', '', 'class="page-contents"', function(opts) {
+riot.tag2('angel_page', '<section class="section"> <div class="container"> <angel-page-card-result-deamon source="{source}" span="{span}" callback="{callback}"></angel-page-card-result-deamon> <angel-page-card-purge-result-deamon source="{source}" span="{span}" callback="{callback}"></angel-page-card-purge-result-deamon> <angel-page-card-purge-result-impure source="{source}" span="{span}" callback="{callback}"></angel-page-card-purge-result-impure> </div> </section>', '', 'class="page-contents"', function(opts) {
      this.callback = (action, data) => {
          if (action=='click-refresh') {
              this.span.from = data.from;
@@ -2849,7 +2895,20 @@ riot.tag2('modal-create-after-impure', '<div class="modal {impure ? \'is-active\
      };
 });
 
-riot.tag2('modal-create-deamon-impure', '<div class="modal {deamon ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head" style="padding: 11px 22px;"> <p class="modal-card-title" style="font-size:16px;">Create Impure of Deamon</p> <button class="delete" aria-label="close" onclick="{clickClose}"></button> </header> <section class="modal-card-body"> <div> <p>悪魔：{deamonName()}</p> </div> <input class="input is-small" type="text" placeholder="Title" style="margin-top:22px;" ref="name"> <textarea class="textarea is-small martin-top" placeholder="Description" rows="6" style="height: 222px; margin-top:11px;" ref="description"></textarea> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display: flex; justify-content: space-between;"> <button class="button is-small" onclick="{clickClose}">Cancel</button> <button class="button is-success is-small" onclick="{clickCreate}">Create</button> </footer> </div> </div>', '', '', function(opts) {
+riot.tag2('modal-create-deamon-impure', '<div class="modal {deamon ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head" style="padding: 11px 22px;"> <p class="modal-card-title" style="font-size:16px;">Create Impure of Deamon</p> <button class="delete" aria-label="close" onclick="{clickClose}"></button> </header> <section class="modal-card-body"> <div> <p>悪魔：{deamonName()}</p> </div> <input class="input is-small" type="text" placeholder="Title" style="margin-top:22px;" onkeyup="{keyup}" ref="name"> <textarea class="textarea is-small martin-top" placeholder="Description" rows="6" style="height: 222px; margin-top:11px;" ref="description"></textarea> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display: flex; justify-content: space-between;"> <button class="button is-small" onclick="{clickClose}">Cancel</button> <button class="button is-warning is-small" onclick="{clickClear}">Clear</button> <button class="button is-danger is-small" onclick="{clickCreate}" disabled="{dsabled()}">Create</button> </footer> </div> </div>', '', '', function(opts) {
+     this.keyup = () => {
+         this.update();
+     };
+     this.dsabled = () => {
+         if (!this.deamon)
+             return true;
+
+         if (this.refs.name.value.trim()=='')
+             return true;
+
+         return false;
+     };
+
      this.deamonName = () => {
          if (!this.deamon)
              return '';
@@ -2857,6 +2916,10 @@ riot.tag2('modal-create-deamon-impure', '<div class="modal {deamon ? \'is-active
          return this.deamon.name + "(" + this.deamon.name_short + ")"
      };
 
+     this.clickClear = () => {
+         this.refs.name.value = '';
+         this.refs.description.value = '';
+     };
      this.clickCreate = (e) => {
          let params = {
              name: this.refs.name.value.trim(),
