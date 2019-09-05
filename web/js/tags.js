@@ -692,15 +692,28 @@ riot.tag2('deamon-page-controller', '<button class="button hw-button" onclick="{
      };
 });
 
-riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h1 class="title hw-text-white">悪魔: {name()}</h1> <h2 class="subtitle hw-text-white"> <section-breadcrumb></section-breadcrumb> </h2> </div> </section> <div style="display: flex; padding: 0px 88px;"> <deamon-page-card-pool source="{source}"></deamon-page-card-pool> <deamon-page-controller source="{source}"></deamon-page-controller> </div>', 'deamon-page { overflow: auto; display: block; width: 100%; height: 100%; } deamon-page page-card_description-small { margin-bottom: 11px; } deamon-page deamon-page-card-pool { flex-grow: 1; }', '', function(opts) {
+riot.tag2('deamon-page-name', '<div class="name"> <h1 class="title hw-text-white" if="{!edit}"> 悪魔: {name()} </h1> <input if="{edit}" class="input" type="text" placeholder="Text input" ref="deamon-name" riot-value="{name()}"> </div> <div class="controller"> <button if="{!edit}" class="button" onclick="{clickEdit}"> Edit </button> <button if="{edit}" class="button is-warning" onclick="{clickCancel}"> Cancel </button> <button if="{edit}" class="button is-danger" onclick="{clickSave}"> Save </button> </div>', 'deamon-page-name { display: flex; width: 100%; } deamon-page-name .name{ flex-grow: 1; margin-right:11px; } deamon-page-name .controller .button{ margin-left:11px; }', '', function(opts) {
+     this.edit = false;
+     this.clickEdit = () => {
+         this.edit = true;
+     };
+     this.clickCancel = () => {
+         this.edit = false;
+     };
+     this.clickSave = () => {
+         this.edit = false;
+     };
+
      this.name = () => {
-         let deamon = this.source.deamon;
+         let deamon = this.opts.source.deamon;
          if (!deamon)
              return '';
 
          return deamon.name;
      };
+});
 
+riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"> <div class="container"> <h2 class="subtitle hw-text-white" style="margin-bottom: 6px;"> <section-breadcrumb></section-breadcrumb> </h2> <deamon-page-name source="{source}"></deamon-page-name> </div> </section> <div style="display: flex; padding: 0px 88px;margin-top:22px;"> <deamon-page-card-pool source="{source}"></deamon-page-card-pool> <deamon-page-controller source="{source}"></deamon-page-controller> </div>', 'deamon-page { overflow: auto; display: block; width: 100%; height: 100%; } deamon-page page-card_description-small { margin-bottom: 11px; } deamon-page deamon-page-card-pool { flex-grow: 1; }', '', function(opts) {
      this.source = {
          deamon: null,
          impures: [],
