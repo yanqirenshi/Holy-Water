@@ -58,9 +58,14 @@
 
 (defun pages-deamon (angel deamon)
   (when (and angel deamon)
-    (list :|deamon|  (dao2deamon deamon)
-          :|impures| (hw:list-impures-by-deamon :deamon deamon)
-          :|purges|  (list :|summary| (list :|daily| (hw:list-summary-purge-by-impure :deamon deamon))))))
+    (let ((daily (hw:list-summary-purge-by-impure :deamon deamon)))
+      (list :|deamon|  (dao2deamon deamon)
+            :|impures| (hw:list-impures-by-deamon :deamon deamon)
+            :|purges|  (list :|summary| (list :|daily| daily)
+                             :|total|   (list :|amount| (reduce #'(lambda (a b)
+                                                                    (+ a (getf b :|elapsed_time|)))
+                                                                daily :initial-value 0.0)
+                                              :|unit| :second))))))
 
 
 (defun pages-angel (angel from to)

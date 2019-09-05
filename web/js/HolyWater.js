@@ -181,6 +181,11 @@ class HolyWater {
             contents: source,
         });
 
+        out.push({
+            type: 'ELAPSED-TIME',
+            contents: source,
+        });
+
         let tmp = [];
         tmp = tmp.concat(source.impures.map((impure) => {
             return {

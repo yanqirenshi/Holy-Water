@@ -609,7 +609,7 @@ riot.tag2('deamon-page-card-pool', '<div class="grid"> <deamon-page-card each="{
      });
 });
 
-riot.tag2('deamon-page-card', '<page-card_description if="{typeIs(\'DEAMON-DESCRIPTION\')}" source="{description()}" callback="{childrenCallback}"></page-card_description> <deamon-page-card_name-short if="{typeIs(\'DEAMON-CODE\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_name-short> <deamon-page-card_impure if="{typeIs(\'IMPURES\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_impure>', '', '', function(opts) {
+riot.tag2('deamon-page-card', '<page-card_description if="{typeIs(\'DEAMON-DESCRIPTION\')}" source="{description()}" callback="{childrenCallback}"></page-card_description> <deamon-page-card_name-short if="{typeIs(\'DEAMON-CODE\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_name-short> <deamon-page-card_elapsed-time if="{typeIs(\'ELAPSED-TIME\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_elapsed-time> <deamon-page-card_impure if="{typeIs(\'IMPURES\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_impure>', '', '', function(opts) {
      this.description = () => {
          let deamon = opts.source.contents.deamon;
 
@@ -634,6 +634,16 @@ riot.tag2('deamon-page-card', '<page-card_description if="{typeIs(\'DEAMON-DESCR
 
      this.typeIs = (code) => {
          return this.opts.source.type == code;
+     };
+});
+
+riot.tag2('deamon-page-card_elapsed-time', '<div class="small"> <div class="header {finished()}"> <p>Elapsed Time</p> </div> <div class="time"> {amount()} </div> <div class="hw-card-footer"> <p>hour</p> </div> </div>', 'deamon-page-card_elapsed-time > .small{ display: flex; flex-direction: column; width: calc(11px * 16 + 11px * 15); height: calc(11px * 8 + 11px * 7); margin-bottom: 11px; background: rgba(255, 255, 255, 0.88); border-radius: 8px; } deamon-page-card_elapsed-time > .small > .header { width: 100%; height: 33px; padding: 8px 11px; border-radius: 8px 8px 0px 0px; font-size: 12px; font-weight: bold; background: #e7e7eb; color: #333333; } deamon-page-card_elapsed-time > .small > .time { display: flex; justify-content: center; align-items: center; height: 100%; font-size: 66px; } deamon-page-card_elapsed-time .hw-card-footer { display: flex; justify-content: flex-end; padding-bottom: 8px; padding-right: 22px; color: #888; }', '', function(opts) {
+     this.amount = () => {
+         let total = this.opts.source.purges.total;
+         if (!total)
+             return '';
+
+         return (total.amount / 60 / 60).toFixed(2);
      };
 });
 
