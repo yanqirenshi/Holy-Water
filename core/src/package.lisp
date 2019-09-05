@@ -68,6 +68,7 @@
            #:list-cemeteries
            #:list-summay-impure-cemeteries-by-date-damon
            #:list-summary-purge-by-deamon
+           #:list-summary-purge-by-impure
            #:list-requested-uncomplete-impures
            #:list-request-messages-unred
            #:list-maledict-impures

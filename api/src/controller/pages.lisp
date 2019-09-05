@@ -60,7 +60,7 @@
   (when (and angel deamon)
     (list :|deamon|  (dao2deamon deamon)
           :|impures| (hw:list-impures-by-deamon :deamon deamon)
-          :|purges|  (list :|summary| nil))))
+          :|purges|  (list :|summary| (list :|daily| (hw:list-summary-purge-by-impure :deamon deamon))))))
 
 
 (defun pages-angel (angel from to)
