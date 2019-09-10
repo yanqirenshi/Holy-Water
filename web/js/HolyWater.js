@@ -182,6 +182,11 @@ class HolyWater {
         });
 
         out.push({
+            type: 'DEAMON-STATUS',
+            contents: source,
+        });
+
+        out.push({
             type: 'ELAPSED-TIME',
             contents: source,
         });

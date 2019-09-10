@@ -609,7 +609,39 @@ riot.tag2('deamon-page-card-pool', '<div class="grid"> <deamon-page-card each="{
      });
 });
 
-riot.tag2('deamon-page-card', '<page-card_description if="{typeIs(\'DEAMON-DESCRIPTION\')}" source="{description()}" callback="{childrenCallback}"></page-card_description> <deamon-page-card_name-short if="{typeIs(\'DEAMON-CODE\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_name-short> <deamon-page-card_elapsed-time if="{typeIs(\'ELAPSED-TIME\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_elapsed-time> <deamon-page-card_impure if="{typeIs(\'IMPURES\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_impure>', '', '', function(opts) {
+riot.tag2('deamon-page-card-status', '<div style="height:100%; display:flex; align-items:center;"> <p style="font-size:66px; font-weight:bold; word-break:break-all; text-align:center; flex-grow:1;"> {finished()} </p> </div>', 'deamon-page-card-status { display: block; width: calc(88px * 2 + 11px * 1); height: calc(88px * 2 + 11px * 1); padding: 11px; border-radius: 8px; } deamon-page-card-status.pure { background: rgba(137, 195, 235, 0.88); color: #fff; } deamon-page-card-status.impure { background: rgba(100, 1, 37, 0.88); color: #fff; }', 'class="{isFinished() ? \'pure\' : \'impure\'}" riot-style="width:{w()}px; height:{h()}px;"', function(opts) {
+     this.w = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(8, null, 11);
+     };
+     this.h = () => {
+         let hw = new HolyWater();
+
+         return hw.pageCardDescriptionSize(8, null, 11);
+     };
+
+     this.isFinished = () => {
+         let impure = this.opts.source.deamon;
+
+         if (!impure)
+             return false;
+
+         if (!impure.purged_at)
+             return false;
+
+         return true;
+     }
+     this.finished = () => {
+         let state = this.isFinished();
+
+         return state ? '清浄' : '不浄';
+
+         return ;
+     }
+});
+
+riot.tag2('deamon-page-card', '<page-card_description if="{typeIs(\'DEAMON-DESCRIPTION\')}" source="{description()}" callback="{childrenCallback}"></page-card_description> <deamon-page-card_name-short if="{typeIs(\'DEAMON-CODE\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_name-short> <deamon-page-card_elapsed-time if="{typeIs(\'ELAPSED-TIME\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_elapsed-time> <deamon-page-card_impure if="{typeIs(\'IMPURES\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_impure> <deamon-page-card-status if="{typeIs(\'DEAMON-STATUS\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card-status>', '', '', function(opts) {
      this.description = () => {
          let deamon = opts.source.contents.deamon;
 
