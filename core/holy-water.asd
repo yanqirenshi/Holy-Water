@@ -65,6 +65,7 @@
                                (:file "list-request-messages-unred")
                                (:file "list-requested-uncomplete-impures")
                                (:file "list-summary-purge-by-deamon")
+                               (:file "list-summary-purge-by-impure")
                                (:file "list-summay-impure-cemeteries-by-date-damon")
                                (:file "list-summay-purge-time-by-date-damon")
                                (:file "list-impures-by-deamon")

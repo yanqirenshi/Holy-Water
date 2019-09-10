@@ -80,9 +80,6 @@
            #:list-summary-purge-by-angel-span))
 (in-package :holy-water)
 
-;; (mito:connect-toplevel :postgres :database-name "holy_water" :username "hw_user" :password "password")
-(mito:connect-toplevel :postgres :database-name "holy_water" :username "holy_water")
-
 (defun timestamptz2timestamp (v)
   (local-time:format-timestring nil (local-time:universal-to-timestamp v)))
 

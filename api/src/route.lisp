@@ -348,7 +348,7 @@
 
 (defroute "/pages/impures/:id" (&key id)
   (with-angel (angel)
-    (let ((impure (hw::get-impure :id (parse-integer id))))
+    (let ((impure (hw::get-impure :id id)))
       (unless impure (throw-code 404))
       (render-json (hw.api.ctrl:pages-impure angel impure)))))
 

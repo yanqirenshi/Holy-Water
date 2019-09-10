@@ -39,7 +39,8 @@
 
          this.update();
 
-         ACTIONS.fetchOrthodoxExorcists(id);
+         if (id)
+             ACTIONS.fetchOrthodoxExorcists(id);
      };
     </script>
 
