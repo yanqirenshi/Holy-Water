@@ -45,6 +45,14 @@
   (mito:save-dao deamon)
   (dao2deamon deamon))
 
+(defun update-deamon-name (angel deamon &key name)
+  (declare (ignore angel))
+  (assert deamon)
+  (assert name)
+  (setf (hw::name deamon) name)
+  (mito:save-dao deamon)
+  (dao2deamon deamon))
+
 (defun puge-deamon (angel deamon)
   (assert deamon)
   (hw:purge-deamon deamon :editor angel)

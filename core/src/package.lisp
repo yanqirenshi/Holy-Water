@@ -19,6 +19,9 @@
                 #:left-join
                 #:group-by
                 #:union-all-queries)
+  (:export #:*db-name*
+           #:*db-user*
+           #:*db-user-password*)
   (:export #:find-deamons
            #:create-deamon
            #:purge-deamon)
@@ -33,6 +36,7 @@
            #:find-impures
            #:find-impures-cemetery
            #:add-after-impure
+           #:add-deamon-impure
            #:impure-set-deamon)
   (:export #:find-orthodoxs
            #:get-orthodox
@@ -64,16 +68,20 @@
            #:list-cemeteries
            #:list-summay-impure-cemeteries-by-date-damon
            #:list-summary-purge-by-deamon
+           #:list-summary-purge-by-impure
            #:list-requested-uncomplete-impures
            #:list-request-messages-unred
            #:list-maledict-impures
            #:list-orthodox-angels
            #:list-impures-by-deamon
            #:list-relational-impures-by-impure
-           #:list-summary-purge-by-angel-deamon-span))
+           #:list-summary-purge-by-angel-deamon-span
+           #:list-summary-purge-by-angel-impure-span
+           #:list-summary-purge-by-angel-span))
 (in-package :holy-water)
 
-(mito:connect-toplevel :postgres :database-name "holy_water" :username "hw_user" :password "password")
+;; (mito:connect-toplevel :postgres :database-name "holy_water" :username "hw_user" :password "password")
+(mito:connect-toplevel :postgres :database-name "holy_water" :username "holy_water")
 
 (defun timestamptz2timestamp (v)
   (local-time:format-timestring nil (local-time:universal-to-timestamp v)))

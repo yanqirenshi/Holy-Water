@@ -2,28 +2,19 @@
 
     <section class="section" style="padding-bottom: 22px;">
         <div class="container">
-            <h1 class="title hw-text-white">悪魔: {name()}</h1>
-            <h2 class="subtitle hw-text-white">
+            <h2 class="subtitle hw-text-white" style="margin-bottom: 6px;">
                 <section-breadcrumb></section-breadcrumb>
             </h2>
+
+            <deamon-page-name source={source}></deamon-page-name>
         </div>
     </section>
 
-    <div style="display: flex; padding: 0px 88px;">
-        <deamon-page-card-pool  source={source}></deamon-page-card-pool>
+    <div style="display: flex; padding: 0px 88px;margin-top:22px;">
         <deamon-page-controller source={source}></deamon-page-controller>
+
+        <deamon-page-card-pool  source={source}></deamon-page-card-pool>
     </div>
-
-    <script>
-     this.name = () => {
-         let deamon = this.source.deamon;
-         if (!deamon)
-             return '';
-
-         return deamon.name;
-     };
-    </script>
-
 
     <script>
      this.source = {
@@ -31,8 +22,13 @@
          impures: [],
          purges: { summary: [] },
      };
+     this.getID = () => {
+         let id = location.hash.split('/').reverse()[0] * 1;
+
+         return id;
+     }
      this.loadPageData = () => {
-         let id = location.hash.split('/').reverse()[0];
+         let id = this.getID();
 
          ACTIONS.fetchPagesDeamon({ id:id });
      }
@@ -52,6 +48,23 @@
 
              return;
          }
+
+         if (action.type=='CREATED-IMPURE-DEAMON-IMPURE') {
+             let id = this.getID();
+             if (action.deamon.id==id)
+                 ACTIONS.fetchPagesDeamon({ id:id });
+
+             return;
+         }
+         if (action.type=='UPDATED-DEAMON-NAME') {
+             let id = this.getID();
+
+             if (action.deamon.id==id)
+                 ACTIONS.fetchPagesDeamon({ id:id });
+
+             return;
+         }
+
      });
     </script>
 
@@ -67,6 +80,8 @@
      }
      deamon-page deamon-page-card-pool {
          flex-grow: 1;
+         display: block;
+         padding-left: 22px;
      }
     </style>
 

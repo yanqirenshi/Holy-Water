@@ -119,11 +119,11 @@
              return;
          }
      });
+
      this.on('mount', () => {
          let id = this.id();
 
          ACTIONS.fetchPagesImpure({ id: id });
-         // ACTIONS.fetchImpure(id);
      });
     </script>
 

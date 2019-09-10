@@ -7,6 +7,14 @@
                                            span={span}
                                            callback={callback}></angel-page-card-result-deamon>
 
+            <angel-page-card-purge-result-deamon source={source}
+                                                 span={span}
+                                                 callback={callback}></angel-page-card-purge-result-deamon>
+
+            <angel-page-card-purge-result-impure source={source}
+                                                 span={span}
+                                                 callback={callback}></angel-page-card-purge-result-impure>
+
             <!-- <angel-page-gitlab></angel-page-gitlab>
 
                  <angel-page-github></angel-page-github> -->

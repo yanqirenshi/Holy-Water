@@ -81,8 +81,8 @@
          height: 188px;
      }
      hw-card-impure.large {
-         width: calc(222px + 222px + 222px + 22px + 22px);
-         height: calc(188px + 188px + 22px + 1px);
+         width: calc(222px * 3 + 22px * 2);
+         height: calc(188px * 4 + 22px * 3 + 1px);
      }
      hw-card-impure[status=start] p {
          font-weight: bold;

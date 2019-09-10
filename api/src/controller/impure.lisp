@@ -152,15 +152,25 @@
     (let ((deamon (hw::get-deamon :id deamon-id)))
       (when deamon-id
         (assert deamon))
-      (let ((impure (hw:add-after-impure angel
-                                         impure_before
-                                         :name name
-                                         :description description
-                                         :creator angel)))
-        (when deamon
-          (hw:impure-set-deamon angel impure deamon :editor angel))
-        (dao2impure impure)))))
+      (dbi:with-transaction mito:*connection*
+        (let ((impure (hw:add-after-impure angel
+                                           impure_before
+                                           :name name
+                                           :description description
+                                           :creator angel)))
+          (when deamon
+            (hw:impure-set-deamon angel impure deamon :editor angel))
+          (dao2impure impure))))))
 
+(defun create-deamon-impure (angel deamon &key name description)
+  (assert (and  angel deamon))
+  (dbi:with-transaction mito:*connection*
+    (dao2impure
+     (hw:add-deamon-impure angel
+                           deamon
+                           :name name
+                           :description description
+                           :creator angel))))
 
 (defun impure-set-deamon (angel impure deamon-id)
   (let ((deamon (hw::get-deamon :id deamon-id)))

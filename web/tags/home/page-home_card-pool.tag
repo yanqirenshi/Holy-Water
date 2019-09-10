@@ -1,7 +1,7 @@
 <page-home_card-pool class={hide()}>
 
     <!-- TODO: このへん混乱しとるね。。 -->
-    <div class="flex-parent" style="height:100%; margin-top: -8px;">
+    <div class="flex-parent">
         <div class="card-container">
             <div>
 

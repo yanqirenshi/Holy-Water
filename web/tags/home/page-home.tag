@@ -10,11 +10,16 @@
     </div>
 
     <div class="contetns-area">
+
         <div style="display:flex;">
             <home_squeeze-area callback={callback}></home_squeeze-area>
             <!-- <home_request-area></home_request-area> -->
         </div>
 
+        <!-- <page-home_card-pool2 maledict={maledict()}
+             callback={callback}
+             filter={squeeze_word}
+             source={impures}></page-home_card-pool2> -->
         <page-home_card-pool maledict={maledict()}
                              callback={callback}
                              filter={squeeze_word}
@@ -183,19 +188,25 @@
 
     <style>
      page-home {
+         display: block;
+
          height: 100%;
          width: 100%;
          padding: 22px 0px 0px 22px;
+         overflow: auto;
+     }
 
-         display: flex;
+     page-home > .bucket-area {
+         position: fixed;
      }
 
      page-home > .contetns-area {
-         height: 100%;
-         margin-left: 11px;
-
          flex-grow: 1;
+         margin-left: 199px;
+
+         flex-direction: column;
      }
+
      page-home home_squeeze-area {
          margin-right: 55px;
      }

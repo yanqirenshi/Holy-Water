@@ -143,12 +143,28 @@
                                                           deamon
                                                           :description description)))))
 
+(defroute ("/deamons/:id/name" :method :POST) (&key id |name|)
+  (with-angel (angel)
+    (let* ((name (quri:url-decode |name|))
+           (deamon (hw::get-deamon :id id)))
+      (unless deamon (throw-code 404))
+      (render-json (hw.api.ctrl:update-deamon-name angel
+                                                   deamon
+                                                   :name name)))))
+
 (defroute ("/deamons/:id/purge" :method :POST) (&key id)
-  (format t "````~%")
   (with-angel (angel)
     (let ((deamon (hw::get-deamon :id id)))
       (unless deamon (throw-code 404))
       (render-json (hw.api.ctrl:puge-deamon angel deamon)))))
+
+(defroute ("/deamons/:id/impures" :method :POST) (&key id |name| |description|)
+  (with-angel (angel)
+    (let ((deamon      (hw::get-deamon :id id))
+          (name        (quri:url-decode |name|))
+          (description (quri:url-decode |description|)))
+      (unless deamon (throw-code 404))
+      (render-json (hw.api.ctrl:create-deamon-impure angel deamon :name name :description description)))))
 
 ;;;;;
 ;;;;; Orthodoxs
@@ -232,7 +248,7 @@
   (with-angel (angel)
     (let ((from (local-time:parse-timestring |from|))
           (to   (local-time:parse-timestring |to|)))
-    (render-json (hw.api.ctrl:find-impures-cemetery angel :from from :to to)))))
+      (render-json (hw.api.ctrl:find-impures-cemetery angel :from from :to to)))))
 
 (defroute ("/impures/:impure-id/transfer/angel/:angel-id" :method :post) (&key impure-id angel-id |message|)
   (with-angel (angel)

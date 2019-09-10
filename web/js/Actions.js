@@ -256,6 +256,27 @@ class Actions extends Vanilla_Redux_Actions {
             data: {},
         };
     }
+    updateDeamonName (deamon, name) {
+        let path = '/deamons/%d/name'.format(deamon.id);
+        let post_data = {
+            name: name,
+        };
+        API.post(path, this.encodePostData(post_data), (json, success) => {
+            if (success)
+                STORE.dispatch(this.updatedDeamonName(json, deamon));
+            else
+                this.pushFetchErrorMessage(json);
+        });
+    }
+    updatedDeamonName (response, deamon) {
+        this.pushSuccessMessage('Deamon の Name の変更が完了しました');
+
+        return {
+            type: 'UPDATED-DEAMON-NAME',
+            data: {},
+            deamon: deamon,
+        };
+    }
     updateDeamonDescription (deamon, description) {
         let path = '/deamons/%d/description'.format(deamon.id);
         let post_data = {
@@ -445,6 +466,22 @@ class Actions extends Vanilla_Redux_Actions {
             data: {},
             from: from_impure,
             to:   response,
+        };
+    }
+    createImpureDeamonImpure (deamon, data) {
+        let path = '/deamons/' + deamon.id + '/impures';
+
+        API.post(path, this.encodePostData(data), (json, success) => {
+            STORE.dispatch(this.createdImpureDeamonImpure(json, deamon));
+        });
+    }
+    createdImpureDeamonImpure (response, deamon) {
+        this.pushSuccessMessage('Impure の作成が完了しました');
+
+        return {
+            type: 'CREATED-IMPURE-DEAMON-IMPURE',
+            data: {},
+            deamon: deamon,
         };
     }
     setImpureDeamon (impure, deamon) {
@@ -1060,6 +1097,12 @@ class Actions extends Vanilla_Redux_Actions {
     openModalPuregeDeamon (deamon) {
         STORE.dispatch({
             type: 'OPEN-MODAL-PUREGE-DEAMON',
+            deamon: deamon,
+        });
+    }
+    openModalCreateDeamonImpure (deamon) {
+        STORE.dispatch({
+            type: 'OPEN-MODAL-CREATE-DEAMON-IMPURE',
             deamon: deamon,
         });
     }

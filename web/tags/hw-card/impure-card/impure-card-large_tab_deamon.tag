@@ -1,7 +1,5 @@
 <impure-card-large_tab_deamon>
 
-    <div>
-
         <div class="view">
             <div class="selected" style="padding: 11px 22px;">
                 <p>{selectedDeamon()}</p>
@@ -13,28 +11,24 @@
         </div>
 
         <div class="selector">
-            <div style="height: 100%;">
-                <input class="input is-small"
-                       type="text"
-                       placeholder="Filter"
-                       onkeyup={keyup}>
+            <input class="input is-small"
+                   type="text"
+                   placeholder="Filter"
+                   onkeyup={keyup}>
 
-                <div class="deamons">
-                    <button each={obj in deamons()}
-                            class="button is-small"
-                            deamon-id={obj.id}
-                            onclick={selectDeamon}>
-                        {obj.name_short} : {obj.name}
-                    </button>
-                </div>
+            <div class="deamons">
+                <button each={obj in deamons()}
+                        class="button is-small"
+                        deamon-id={obj.id}
+                        onclick={selectDeamon}>
+                    {obj.name_short} : {obj.name}
+                </button>
+            </div>
 
-                <div style="display:flex; justify-content:flex-end;">
-                    <button class="button is-small is-danger" onclick={clickSave} disabled={isDisabled()}>Save</button>
-                </div>
+            <div style="display:flex; justify-content:flex-end;">
+                <button class="button is-small is-danger" onclick={clickSave} disabled={isDisabled()}>Save</button>
             </div>
         </div>
-
-    </div>
 
     <script>
      this.filter = null;
@@ -114,27 +108,21 @@
 
 
     <style>
-     impure-card-large_tab_deamon > div {
-         display:flex;
+     impure-card-large_tab_deamon {
+         display: block;
          height: 100%;
      }
-     impure-card-large_tab_deamon .view {
-         width: 232px;
-     }
+     impure-card-large_tab_deamon .view {}
      impure-card-large_tab_deamon .selected {
          background: #efefef;
          padding: 22px;
          border-radius: 3px;
      }
      impure-card-large_tab_deamon .selector {
-         width: 432px;
          margin-left: 11px;
-     }
-     impure-card-large_tab_deamon .selector > div {
-         padding: 0px 22px;
 
-         display: flex;
-         flex-direction: column;
+         padding: 22px 0px;
+         height: 100%;
      }
      impure-card-large_tab_deamon .selector .title {
          margin-bottom: 5px;
@@ -143,11 +131,8 @@
          margin-bottom: 11px;
      }
      impure-card-large_tab_deamon .selector .deamons {
-         flex-grow: 1;
-
-         display: flex;
-         align-content: flex-start;
-         flex-wrap: wrap;
+         height: 100%;
+         overflow-y: auto;
      }
      impure-card-large_tab_deamon .selector .deamons > * {
          margin-right: 11px;

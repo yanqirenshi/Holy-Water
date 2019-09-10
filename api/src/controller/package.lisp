@@ -9,6 +9,7 @@
            #:get-maledict)
   (:export #:find-deamons
            #:create-deamon
+           #:update-deamon-name
            #:update-deamon-description
            #:puge-deamon)
   (:export #:find-impures
@@ -23,6 +24,7 @@
            #:get-impure-purging
            #:transfer-impure
            #:create-after-impure
+           #:create-deamon-impure
            #:impure-set-deamon
            #:update-impure-description)
   (:export #:find-orthodoxs

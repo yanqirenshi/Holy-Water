@@ -61,7 +61,7 @@
      this.deamons = () => {
          let list = STORE.get('deamons.list');
 
-         return list.filter((deamon)=>{
+         list = list .filter((deamon)=>{
              if (!this.filter.active && !deamon.purged_at)
                  return false;
 
@@ -69,6 +69,10 @@
                  return false;
 
              return true;
+         });
+
+         return list.sort((a,b)=>{
+             return (a.id < b.id) ? 1 : -1;
          });
      };
     </script>

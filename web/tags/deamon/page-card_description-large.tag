@@ -92,6 +92,7 @@
          padding-top: 11px;
          flex-grow: 1;
          display: flex;
+         height: 100%;
      }
      page-card_description-large > div > .editor > div {
          height: 100%;

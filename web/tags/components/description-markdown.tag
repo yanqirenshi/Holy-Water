@@ -24,7 +24,12 @@
 
     <style>
      description-markdown *  { font-size: 12px; }
-     description-markdown h1 { font-size: 16px; font-weight: bold;}
+     description-markdown h1 {
+         font-size: 16px;
+         font-weight: bold;
+         margin-top: 11px;
+         margin-bottom: 6px;
+     }
      description-markdown ul { list-style-type: disc; margin-left: 22px; }
     </style>
 
