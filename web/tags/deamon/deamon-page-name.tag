@@ -43,9 +43,16 @@
          this.edit = false;
      };
      this.clickSave = () => {
-         this.edit = false;
+         let new_name = this.refs['deamon-name'].value;
+         ACTIONS.updateDeamonName(this.opts.source.deamon, new_name);
      };
-
+     STORE.subscribe((action)=>{
+         if (action.type=='UPDATED-DEAMON-NAME') {
+             this.edit = false;
+             this.update();
+             return;
+         }
+     });
     </script>
 
     <script>

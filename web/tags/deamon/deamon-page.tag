@@ -55,6 +55,15 @@
 
              return;
          }
+         if (action.type=='UPDATED-DEAMON-NAME') {
+             let id = this.getID();
+
+             if (action.deamon.id==id)
+                 ACTIONS.fetchPagesDeamon({ id:id });
+
+             return;
+         }
+
      });
     </script>
 

@@ -143,6 +143,15 @@
                                                           deamon
                                                           :description description)))))
 
+(defroute ("/deamons/:id/name" :method :POST) (&key id |name|)
+  (with-angel (angel)
+    (let* ((name (quri:url-decode |name|))
+           (deamon (hw::get-deamon :id id)))
+      (unless deamon (throw-code 404))
+      (render-json (hw.api.ctrl:update-deamon-name angel
+                                                   deamon
+                                                   :name name)))))
+
 (defroute ("/deamons/:id/purge" :method :POST) (&key id)
   (with-angel (angel)
     (let ((deamon (hw::get-deamon :id id)))
