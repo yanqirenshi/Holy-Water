@@ -11,8 +11,9 @@
     </section>
 
     <div style="display: flex; padding: 0px 88px;margin-top:22px;">
-        <deamon-page-card-pool  source={source}></deamon-page-card-pool>
         <deamon-page-controller source={source}></deamon-page-controller>
+
+        <deamon-page-card-pool  source={source}></deamon-page-card-pool>
     </div>
 
     <script>
@@ -79,6 +80,8 @@
      }
      deamon-page deamon-page-card-pool {
          flex-grow: 1;
+         display: block;
+         padding-left: 22px;
      }
     </style>
 

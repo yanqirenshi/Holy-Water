@@ -44,7 +44,6 @@
      deamon-page-card-pool > .grid{
          display: block;
 
-         width:1518px;
          margin-left: auto;
          margin-right: auto;
      }

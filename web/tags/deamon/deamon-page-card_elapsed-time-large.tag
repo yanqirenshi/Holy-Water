@@ -17,14 +17,11 @@
             <tehad>
                 <tr>
                     <th rowspan="2">Date</th>
-                    <th colspan="2">Deamon</th>
                     <th colspan="2">Impure</th>
                     <th colspan="2">Elapsed Time</th>
                     <th rowspan="2">Action Count</th>
                 </tr>
                 <tr>
-                    <th>ID</th>
-                    <th>Name</th>
                     <th>ID</th>
                     <th>Name</th>
                     <th>Days</th>
@@ -34,8 +31,6 @@
             <tbody>
                 <tr each={obj in list()}>
                     <td nowrap>{obj.date}</td>
-                    <td nowrap>{obj.deamon_id}</td>
-                    <td>{obj.deamon_name}</td>
                     <td nowrap>{obj.impure_id}</td>
                     <td>{obj.impure_name}</td>
                     <td nowrap>{days(obj.elapsed_time)}</td>

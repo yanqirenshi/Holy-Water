@@ -35,9 +35,13 @@
     </script>
 
     <style>
+     deamon-page-controller {
+         display: flex;
+         flex-direction: column;
+     }
      deamon-page-controller .button {
          margin-bottom: 11px;
-         width: 100%;
+         width:100%;
      }
     </style>
 
