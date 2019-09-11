@@ -1,7 +1,8 @@
 <deamon-page-card_elapsed-time-large>
     <div class="hw-card-header">
         <p>Elapsed Time</p>
-        <button class="button is-small">Close</button>
+        <button class="button is-small"
+                onclick={clickClose}>Close</button>
     </div>
 
 
@@ -62,6 +63,9 @@
 
          return summary.daily;
      };
+     this.clickClose = () => {
+         this.opts.callback('switch-small');
+     }
     </script>
 
     <style>
@@ -79,7 +83,7 @@
      }
      deamon-page-card_elapsed-time-large .hw-card-header {
          width: 100%;
-         eight: 44px;
+         height: 44px;
 
          padding: 8px 11px;
          border-radius: 8px 8px 0px 0px;
@@ -92,6 +96,7 @@
 
          display: flex;
          justify-content: space-between;
+         align-items: center;
      }
      deamon-page-card_elapsed-time-large > .time {
          display: flex;

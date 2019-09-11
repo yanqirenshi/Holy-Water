@@ -5,9 +5,17 @@
                            callback={callback2}
                            size={descriptionSize()}></page-card_description>
 
-    <page-impure-card-status       if={typeIs('IMPURE-STATUS')}       source={opts.source.contents}></page-impure-card-status>
-    <page-impure-card-status-purge if={typeIs('IMPURE-STATUS-PURGE')} source={opts.source.contents}></page-impure-card-status-purge>
-    <page-impure-card-angel        if={typeIs('IMPURE-ANGEL')}        source={opts.source.contents}></page-impure-card-angel>
+    <page-impure-card-status if={typeIs('IMPURE-STATUS')}
+                             source={opts.source.contents}></page-impure-card-status>
+
+    <page-impure-card-status-purge if={typeIs('IMPURE-STATUS-PURGE')}
+                                   source={opts.source.contents}></page-impure-card-status-purge>
+
+    <page-impure-card-angel if={typeIs('IMPURE-ANGEL')}
+                            source={opts.source.contents}></page-impure-card-angel>
+
+    <page-impure-card-maledict if={typeIs('IMPURE-MALEDICT')}
+                               source={opts.source.contents}></page-impure-card-maledict>
 
     <page-impure-card-deamon if={typeIs('IMPURE-DEAMON')}
                              source={opts.source.contents}

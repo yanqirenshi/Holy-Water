@@ -48,6 +48,7 @@
          width:  calc(88px * 2 + 11px * 1);
          height: calc(88px * 2 + 11px * 1);
          padding: 11px;
+         margin-bottom: 11px;
          border-radius: 8px;
      }
      deamon-page-card-status.pure {

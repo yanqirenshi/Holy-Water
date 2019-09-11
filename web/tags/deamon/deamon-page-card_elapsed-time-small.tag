@@ -1,8 +1,10 @@
 <deamon-page-card_elapsed-time-small>
 
     <div class="small">
-        <div class="header {finished()}">
+        <div class="header">
             <p>Elapsed Time</p>
+            <button class="button is-small"
+                    onclick={clickOpen}>Open</button>
         </div>
 
         <div class="time">
@@ -22,6 +24,9 @@
 
          return (total.amount / 60 / 60).toFixed(2);
      };
+     this.clickOpen = () => {
+         this.opts.callback('switch-large');
+     }
     </script>
 
     <style>
@@ -40,7 +45,7 @@
 
      deamon-page-card_elapsed-time-small > .small > .header {
          width: 100%;
-         height: 33px;
+         height: 44px;
 
          padding: 8px 11px;
          border-radius: 8px 8px 0px 0px;
@@ -50,6 +55,10 @@
 
          background: #e7e7eb;
          color: #333333;
+
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
      }
 
      deamon-page-card_elapsed-time-small > .small > .time {

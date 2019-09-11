@@ -121,6 +121,11 @@ class HolyWater {
         });
 
         out.push({
+            type: 'IMPURE-MALEDICT',
+            contents: source,
+        });
+
+        out.push({
             type: 'IMPURE-STATUS-PURGE',
             contents: source,
         });
