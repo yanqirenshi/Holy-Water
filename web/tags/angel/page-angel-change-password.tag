@@ -1,4 +1,4 @@
-<angel-page-change-password>
+<page-angel-change-password>
 
     <section class="section">
         <div class="container">
@@ -7,4 +7,4 @@
         </div>
     </section>
 
-</angel-page-change-password>
+</page-angel-change-password>

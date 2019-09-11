@@ -1,4 +1,4 @@
-<angel-page-gitlab>
+<page-angel-gitlab>
 
     <section class="section">
         <div class="container">
@@ -27,4 +27,4 @@
      };
     </script>
 
-</angel-page-gitlab>
+</page-angel-gitlab>

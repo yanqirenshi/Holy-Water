@@ -1,4 +1,4 @@
-riot.tag2('angel-page-card-purge-result-deamon', '<di> <div> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size:12px;"> <thead> <tr> <th>Date</th> <th>Deamon</th> <th>作業時間[人日]</th> <th>Purge Action数</th> </tr> </thead> <tbody> <tr each="{obj in list()}"> <td nowrap>{obj.date}</td> <td>{obj.deamon_name}</td> <td style="text-align:right;">{elapsedDay(obj.elapsed_time)}</td> <td>{obj.impure_count}</td> </tr> </tbody> </table> </div> </di>', 'angel-page-card-purge-result-deamon { display: flex; flex-direction: column; width: calc(11px * 8 * 12); padding: 22px; background: #fff; border-radius: 5px; }', '', function(opts) {
+riot.tag2('page-angel-card-purge-result-deamon', '<di> <div> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size:12px;"> <thead> <tr> <th>Date</th> <th>Deamon</th> <th>作業時間[人日]</th> <th>Purge Action数</th> </tr> </thead> <tbody> <tr each="{obj in list()}"> <td nowrap>{obj.date}</td> <td>{obj.deamon_name}</td> <td style="text-align:right;">{elapsedDay(obj.elapsed_time)}</td> <td>{obj.impure_count}</td> </tr> </tbody> </table> </div> </di>', 'page-angel-card-purge-result-deamon { display: flex; flex-direction: column; width: calc(11px * 8 * 12); padding: 22px; background: #fff; border-radius: 5px; }', '', function(opts) {
      this.elapsedDay = (val) => {
          return (Math.ceil(this.elapsedHour(val) / 6 * 100) /100).toFixed(2);
      };
@@ -20,7 +20,7 @@ riot.tag2('angel-page-card-purge-result-deamon', '<di> <div> <table class="table
      };
 });
 
-riot.tag2('angel-page-card-purge-result-impure', '<di> <div> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size:12px;"> <thead> <tr> <th>Date</th> <th>Deamon</th> <th>Impure</th> <th>作業時間[h]</th> <th>Purge Action数</th> </tr> </thead> <tbody> <tr each="{obj in list()}"> <td nowrap>{obj.date}</td> <td>{obj.deamon_name}</td> <td>{obj.impure_name}</td> <td style="text-align:right;">{elapsedHour(obj.elapsed_time)}</td> <td>{obj.impure_count}</td> </tr> </tbody> </table> </div> </di>', 'angel-page-card-purge-result-impure { display: flex; flex-direction: column; width: calc(11px * 8 * 12); padding: 22px; background: #fff; border-radius: 5px; }', '', function(opts) {
+riot.tag2('page-angel-card-purge-result-impure', '<di> <div> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size:12px;"> <thead> <tr> <th>Date</th> <th>Deamon</th> <th>Impure</th> <th>作業時間[h]</th> <th>Purge Action数</th> </tr> </thead> <tbody> <tr each="{obj in list()}"> <td nowrap>{obj.date}</td> <td>{obj.deamon_name}</td> <td>{obj.impure_name}</td> <td style="text-align:right;">{elapsedHour(obj.elapsed_time)}</td> <td>{obj.impure_count}</td> </tr> </tbody> </table> </div> </di>', 'page-angel-card-purge-result-impure { display: flex; flex-direction: column; width: calc(11px * 8 * 12); padding: 22px; background: #fff; border-radius: 5px; }', '', function(opts) {
      this.elapsedDay = (val) => {
          return (Math.ceil(this.elapsedHour(val) / 6 * 100) /100).toFixed(2);
 
@@ -44,7 +44,7 @@ riot.tag2('angel-page-card-purge-result-impure', '<di> <div> <table class="table
      };
 });
 
-riot.tag2('angel-page-card-result-deamon', '<div class="controller"> <p style="word-break: keep-all; margin-right:11px;">期間: </p> <input class="input is-small" placeholder="From" style="margin-right:11px;" riot-value="{opts.span.from.format(\'YYYY-MM-DD\')}" ref="from" type="{\'date\'}"> <p style="margin-right:11px;">〜</p> <input class="input is-small" placeholder="To" style="margin-right:11px;" riot-value="{opts.span.to.format(\'YYYY-MM-DD\')}" ref="to" type="{\'date\'}"> <button class="button is-small" onclick="{clickRefresh}">Refresh</button> </div> <div class="summary" style="margin-top:11px;"> <p style="margin-right:11px;">Total:</p> <p style="margin-right:11px;">{totalElapsedDay()}</p> <p style="margin-right:11px;">[人日]</p> </div> <div style="margin-top:11px;"> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size:12px;"> <thead> <tr> <th rowspan="2">ID</th> <th rowspan="2">Name</th> <th colspan="3">作業時間</th> </tr> <tr> <th>人日</th> <th>時間</th> <th>分</th> </tr> </thead> <tbody> <tr each="{obj in list()}"> <td>{obj.deamon_id}</td> <td>{obj.deamon_name}</td> <td class="num">{elapsedDay(obj.puge_elapsed_time)}</td> <td class="num">{elapsedHour(obj.puge_elapsed_time)}</td> <td class="num">{elapsedMinute(obj.puge_elapsed_time)}</td> </tr> </tbody> </table> </div>', 'angel-page-card-result-deamon { display: flex; flex-direction: column; width: calc(11px * 8 * 6); padding: 22px; background: #fff; border-radius: 5px; } angel-page-card-result-deamon .controller { display: flex; align-items: center; } angel-page-card-result-deamon .summary { display: flex; align-items: center; }', '', function(opts) {
+riot.tag2('page-angel-card-result-deamon', '<div class="controller"> <p style="word-break: keep-all; margin-right:11px;">期間: </p> <input class="input is-small" placeholder="From" style="margin-right:11px;" riot-value="{opts.span.from.format(\'YYYY-MM-DD\')}" ref="from" type="{\'date\'}"> <p style="margin-right:11px;">〜</p> <input class="input is-small" placeholder="To" style="margin-right:11px;" riot-value="{opts.span.to.format(\'YYYY-MM-DD\')}" ref="to" type="{\'date\'}"> <button class="button is-small" onclick="{clickRefresh}">Refresh</button> </div> <div class="summary" style="margin-top:11px;"> <p style="margin-right:11px;">Total:</p> <p style="margin-right:11px;">{totalElapsedDay()}</p> <p style="margin-right:11px;">[人日]</p> </div> <div style="margin-top:11px;"> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size:12px;"> <thead> <tr> <th rowspan="2">ID</th> <th rowspan="2">Name</th> <th colspan="3">作業時間</th> </tr> <tr> <th>人日</th> <th>時間</th> <th>分</th> </tr> </thead> <tbody> <tr each="{obj in list()}"> <td>{obj.deamon_id}</td> <td>{obj.deamon_name}</td> <td class="num">{elapsedDay(obj.puge_elapsed_time)}</td> <td class="num">{elapsedHour(obj.puge_elapsed_time)}</td> <td class="num">{elapsedMinute(obj.puge_elapsed_time)}</td> </tr> </tbody> </table> </div>', 'page-angel-card-result-deamon { display: flex; flex-direction: column; width: calc(11px * 8 * 6); padding: 22px; background: #fff; border-radius: 5px; } page-angel-card-result-deamon .controller { display: flex; align-items: center; } page-angel-card-result-deamon .summary { display: flex; align-items: center; }', '', function(opts) {
      this.clickRefresh = () => {
          this.opts.callback('click-refresh', {
              from: moment(this.refs.from.value),
@@ -76,28 +76,37 @@ riot.tag2('angel-page-card-result-deamon', '<div class="controller"> <p style="w
      };
 });
 
-riot.tag2('angel-page-change-password', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">パスワード変更</h1> <h2 class="subtitle hw-text-white">準備中</h2> </div> </section>', '', '', function(opts) {
+riot.tag2('page-angel-change-password', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">パスワード変更</h1> <h2 class="subtitle hw-text-white">準備中</h2> </div> </section>', '', '', function(opts) {
 });
 
-riot.tag2('angel-page-github', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Github Token</h1> <div class="contents" style="padding-left:22px;"> <div></div> <div> <input class="input is-small" type="text" placeholder="Text input" style="width:222px;"> <div style="margin-top:11px;"> <button class="button is-small">Save</button> </div> </div> </div> </div> </section>', '', '', function(opts) {
+riot.tag2('page-angel-external-service-card-pool', '<div style="display:flex;"> <div style="width:222px; height:222px; padding:22px; background:#fff; margin-left:11px;">Github</div> <div style="width:222px; height:222px; padding:22px; background:#fff; margin-left:11px;">Gitlab</div> <div style="width:222px; height:222px; padding:22px; background:#fff; margin-left:11px;">Twitter</div> </div>', '', '', function(opts) {
+});
+
+riot.tag2('page-angel-github', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Github Token</h1> <div class="contents" style="padding-left:22px;"> <div></div> <div> <input class="input is-small" type="text" placeholder="Text input" style="width:222px;"> <div style="margin-top:11px;"> <button class="button is-small">Save</button> </div> </div> </div> </div> </section>', '', '', function(opts) {
      this.clickSignOut = () => {
          ACTIONS.signOut();
      };
 });
 
-riot.tag2('angel-page-gitlab', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Gitlab Token</h1> <div class="contents" style="padding-left:22px;"> <div></div> <div> <input class="input is-small" type="text" placeholder="Text input" style="width:222px;"> <div style="margin-top:11px;"> <button class="button is-small">Save</button> </div> </div> </div> </div> </section>', '', '', function(opts) {
+riot.tag2('page-angel-gitlab', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Gitlab Token</h1> <div class="contents" style="padding-left:22px;"> <div></div> <div> <input class="input is-small" type="text" placeholder="Text input" style="width:222px;"> <div style="margin-top:11px;"> <button class="button is-small">Save</button> </div> </div> </div> </div> </section>', '', '', function(opts) {
      this.clickSignOut = () => {
          ACTIONS.signOut();
      };
 });
 
-riot.tag2('angel-page-sign-out', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">サインアウト</h1> <h2 class="subtitle hw-text-white"></h2> <div class="contents"> <button class="button is-danger hw-box-shadow" style="margin-left:22px; margin-top:11px;" onclick="{clickSignOut}">Sign Out</button> </div> </div> </section>', '', '', function(opts) {
+riot.tag2('page-angel-maledicts-card-pool', '<div style="display:flex;"> <div style="width:222px; height:222px; padding:22px; background:#fff; margin-left:11px;">A</div> <div style="width:222px; height:222px; padding:22px; background:#fff; margin-left:11px;">B</div> <div style="width:222px; height:222px; padding:22px; background:#fff; margin-left:11px;">C</div> <div style="width:222px; height:222px; padding:22px; background:#fff; margin-left:11px;">D</div> <div style="width:222px; height:222px; padding:22px; background:#fff; margin-left:11px;">E</div> </div>', '', '', function(opts) {
+});
+
+riot.tag2('page-angel-result-card-pool', '<page-angel-card-result-deamon source="{opts.source}" span="{opts.span}" callback="{opts.callback}"></page-angel-card-result-deamon> <page-angel-card-purge-result-deamon source="{opts.source}" span="{opts.span}" callback="{opts.callback}"></page-angel-card-purge-result-deamon> <page-angel-card-purge-result-impure source="{opts.source}" span="{opts.span}" callback="{opts.callback}"></page-angel-card-purge-result-impure>', '', '', function(opts) {
+});
+
+riot.tag2('page-angel-sign-out', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">サインアウト</h1> <h2 class="subtitle hw-text-white"></h2> <div class="contents"> <button class="button is-danger hw-box-shadow" style="margin-left:22px; margin-top:11px;" onclick="{clickSignOut}">Sign Out</button> </div> </div> </section>', '', '', function(opts) {
      this.clickSignOut = () => {
          ACTIONS.signOut();
      };
 });
 
-riot.tag2('angel_page', '<section class="section"> <div class="container"> <angel-page-card-result-deamon source="{source}" span="{span}" callback="{callback}"></angel-page-card-result-deamon> <angel-page-card-purge-result-deamon source="{source}" span="{span}" callback="{callback}"></angel-page-card-purge-result-deamon> <angel-page-card-purge-result-impure source="{source}" span="{span}" callback="{callback}"></angel-page-card-purge-result-impure> </div> </section>', '', 'class="page-contents"', function(opts) {
+riot.tag2('page-angel', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">祓魔師</h1> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">パスワード変更</h1> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Maledicts</h1> <page-angel-maledicts-card-pool></page-angel-maledicts-card-pool> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">外部システム連携</h1> <page-angel-external-service-card-pool></page-angel-external-service-card-pool> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">作業実績</h1> <page-angel-result-card-pool source="{source}" span="{span}" callback="{callback}"></page-angel-result-card-pool> </div> </section>', '', 'class="page-contents"', function(opts) {
      this.callback = (action, data) => {
          if (action=='click-refresh') {
              this.span.from = data.from;

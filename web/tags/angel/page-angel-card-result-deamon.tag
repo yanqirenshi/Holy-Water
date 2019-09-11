@@ -1,4 +1,4 @@
-<angel-page-card-result-deamon>
+<page-angel-card-result-deamon>
 
     <div class="controller">
         <p style="word-break: keep-all; margin-right:11px;">期間: </p>
@@ -90,7 +90,7 @@
     </script>
 
     <style>
-     angel-page-card-result-deamon {
+     page-angel-card-result-deamon {
          display: flex;
          flex-direction: column;
 
@@ -100,14 +100,14 @@
          background: #fff;
          border-radius: 5px;
      }
-     angel-page-card-result-deamon .controller {
+     page-angel-card-result-deamon .controller {
          display: flex;
          align-items: center;
      }
-     angel-page-card-result-deamon .summary {
+     page-angel-card-result-deamon .summary {
          display: flex;
          align-items: center;
      }
     </style>
 
-</angel-page-card-result-deamon>
+</page-angel-card-result-deamon>

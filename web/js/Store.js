@@ -181,7 +181,7 @@ class Store extends Vanilla_Redux_Store {
             },
             {
                 code: "angel",
-                tag: 'angel_page',
+                tag: 'page-angel',
                 menu_label: '祓師',
             },
         ];

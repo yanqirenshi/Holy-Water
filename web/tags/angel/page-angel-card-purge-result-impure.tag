@@ -1,4 +1,4 @@
-<angel-page-card-purge-result-deamon>
+<page-angel-card-purge-result-impure>
 
     <di>
         <div>
@@ -7,7 +7,8 @@
                     <tr>
                         <th>Date</th>
                         <th>Deamon</th>
-                        <th>作業時間[人日]</th>
+                        <th>Impure</th>
+                        <th>作業時間[h]</th>
                         <th>Purge Action数</th>
                     </tr>
                 </thead>
@@ -15,7 +16,8 @@
                     <tr each={obj in list()}>
                         <td nowrap>{obj.date}</td>
                         <td>{obj.deamon_name}</td>
-                        <td style="text-align:right;">{elapsedDay(obj.elapsed_time)}</td>
+                        <td>{obj.impure_name}</td>
+                        <td style="text-align:right;">{elapsedHour(obj.elapsed_time)}</td>
                         <td>{obj.impure_count}</td>
                     </tr>
                 </tbody>
@@ -26,6 +28,7 @@
     <script>
      this.elapsedDay = (val) => {
          return (Math.ceil(this.elapsedHour(val) / 6 * 100) /100).toFixed(2);
+
      };
      this.elapsedHour = (val) => {
          return (Math.ceil(this.elapsedMinute(val) / 60 * 100) /100).toFixed(2);
@@ -34,12 +37,13 @@
          return (Math.ceil(val / 60 * 100) / 100).toFixed(2);
      };
      this.list = () => {
+         dump(this.opts.source.purges.impures);
+
          if (!this.opts.source.purges ||
-             !this.opts.source.purges.days ||
-             !this.opts.source.purges.days.deamons)
+             !this.opts.source.purges.impures)
              return [];
 
-         let list = this.opts.source.purges.days.deamons;
+         let list = this.opts.source.purges.impures;
 
          return list;
      };
@@ -47,7 +51,7 @@
 
 
     <style>
-     angel-page-card-purge-result-deamon {
+     page-angel-card-purge-result-impure {
          display: flex;
          flex-direction: column;
 
@@ -59,4 +63,4 @@
      }
     </style>
 
-</angel-page-card-purge-result-deamon>
+</page-angel-card-purge-result-impure>

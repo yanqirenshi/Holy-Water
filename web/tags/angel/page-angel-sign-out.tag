@@ -1,4 +1,4 @@
-<angel-page-sign-out>
+<page-angel-sign-out>
 
     <section class="section">
         <div class="container">
@@ -18,4 +18,4 @@
      };
     </script>
 
-</angel-page-sign-out>
+</page-angel-sign-out>
