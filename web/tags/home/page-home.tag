@@ -17,8 +17,8 @@
         </div>
 
         <!-- <page-home_card-pool2 maledict={maledict()}
-             callback={callback}
              filter={squeeze_word}
+             card_state={cardState()}
              source={impures}></page-home_card-pool2> -->
         <page-home_card-pool maledict={maledict()}
                              callback={callback}
@@ -63,11 +63,15 @@
              let maledict = data;
 
              ACTIONS.openModalCreateImpure(maledict);
+
+             return;
          }
 
          if ('squeeze-impure'==action) {
              this.squeeze_word = (data.trim().length==0 ? null : data);
              this.tags['page-home_card-pool'].update();
+
+             return;
          }
      };
 
@@ -164,7 +168,17 @@
 
              return;
          }
+         if (action.type=='SWITCH-LARGE-HOME-IMPURE-CARD' || action.type=='SWITCH-SMALL-HOME-IMPURE-CARD') {
+             let tag = this.tags['page-home_card-pool2'];
+             if (tag)
+                 tag.update();
+             return;
+         }
      });
+
+     this.cardState = () => {
+         return STORE.get('pages.home.card');
+     }
 
      this.on('mount', () => {
          ACTIONS.fetchMaledicts();

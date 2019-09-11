@@ -1303,7 +1303,86 @@ riot.tag2('page-home_card-impure-deamon-tag', '<a href="#deamons/{deamonVal(\'de
 riot.tag2('page-home_card-impure-header', '<div class="header-label"> <p></p> </div> <div class="header-functions"> <p>開</p> </div>', 'page-home_card-impure-header { display: flex; padding: 8px 11px; } page-home_card-impure-header .header-label { flex-grow:1; overflow: hidden; margin-right: 11px; }', '', function(opts) {
 });
 
-riot.tag2('page-home_card-impure-large', '', 'page-home_card-impure-large { display: block; width: calc((11px * 6) * 4 + 11px * (4 - 1)); height: calc((11px * 6) * 4 + 11px * (4 - 1)); background: #fff; }', '', function(opts) {
+riot.tag2('page-home_card-impure-large-body', '<page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> <div class="tab-contents"> <page-home_card-impure-large_tab-show class="hide"></page-home_card-impure-large_tab-show> <page-home_card-impure-large_tab-edit class="hide"></page-home_card-impure-large_tab-edit> <page-home_card-impure-large_tab-deamon class="hide"></page-home_card-impure-large_tab-deamon> <page-home_card-impure-large_tab-incantation class="hide"></page-home_card-impure-large_tab-incantation> <page-home_card-impure-large_tab-create-after class="hide"></page-home_card-impure-large_tab-create-after> <page-home_card-impure-large_tab-finish class="hide"></page-home_card-impure-large_tab-finish> </div>', 'page-home_card-impure-large-body { flex-grow: 1; display: flex; flex-direction: column; } page-home_card-impure-large-body > .tab-contents{ flex-grow: 1; }', '', function(opts) {
+     this.page_tabs = new PageTabs([
+         {code: 'show',         label: '照会',   tag: 'page-home_card-impure-large_tab-show' },
+         {code: 'edit',         label: '編集',   tag: 'page-home_card-impure-large_tab-edit' },
+         {code: 'deamon',       label: '悪魔',   tag: 'page-home_card-impure-large_tab-deamon' },
+         {code: 'incantation',  label: '呪文',   tag: 'page-home_card-impure-large_tab-incantation' },
+         {code: 'create-after', label: '後続成', tag: 'page-home_card-impure-large_tab-create-after' },
+         {code: 'finish',       label: '完了',   tag: 'page-home_card-impure-large_tab-finish' },
+     ]);
+
+     this.on('mount', () => {
+
+         let len = Object.keys(this.tags).length;
+         if (len==0)
+             return;
+
+         this.page_tabs.switchTab(this.tags)
+         this.update();
+     });
+
+     this.clickTab = (e, action, data) => {
+         if (this.page_tabs.switchTab(this.tags, data.code))
+             this.update();
+     };
+});
+
+riot.tag2('page-home_card-impure-large-footer', '<div class="{opts.status}"> <button class="button is-small is-grow" onclick="{clickShow}">照会</button> <button class="button is-small is-grow" onclick="{clickStartStopaction}">{actionButtonLabel()}</button> <button class="button is-small" onclick="{clickOpen}"> <i class="far fa-envelope-open"></i> </button> </div>', 'page-home_card-impure-large-footer > div { display: flex; justify-content: space-between; padding: 8px 11px; } page-home_card-impure-large-footer > div.started .button { font-weight: bold; text-shadow: 0px 0px 22px rgba(254, 242, 99, 0.888); } page-home_card-impure-large-footer .button.is-grow { flex-grow:1; }', '', function(opts) {
+     this.clickOpen = () => {
+         ACTIONS.switchLargeHomeImpureCard(this.opts.source);
+     };
+     this.clickShow = () => {
+         location.hash = '#home/impures/' + this.opts.source.id;
+     }
+     this.clickStartStopaction = (e) => {
+         if (e.target.innerHTML=='停止') {
+             ACTIONS.stopImpure(this.opts.source);
+             return;
+         }
+         if (e.target.innerHTML=='開始') {
+             ACTIONS.startImpure(this.opts.source);
+             return;
+         }
+
+         throw new Error('XXXX');
+     };
+
+     this.actionButtonLabel = () => {
+         return this.opts.source.purge_started_at ? '停止' : '開始';
+     };
+});
+
+riot.tag2('page-home_card-impure-large-header', '<div> <p>Impure</p> </div>', 'page-home_card-impure-large-header > div { padding: 11px 22px; } page-home_card-impure-large-header > div > p { font-weight: bold; }', '', function(opts) {
+});
+
+riot.tag2('page-home_card-impure-large', '<div class="{status()}"> <page-home_card-impure-large-header source="{opts.source}" status="{status()}"></page-home_card-impure-large-header> <page-home_card-impure-large-body source="{opts.source}" status="{status()}"></page-home_card-impure-large-body> <page-home_card-impure-large-footer source="{opts.source}" status="{status()}"></page-home_card-impure-large-footer> </div>', 'page-home_card-impure-large > div { display: flex; flex-direction: column; width: calc((22px * 12) * 2 + 22px * (12 - 1)); height: calc((22px * 8) * 2 + 22px * (8 - 1)); background: #fff; border-radius: 8px; } page-home_card-impure-large > div.started { box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.888); }', '', function(opts) {
+     this.status = () => {
+         return this.opts.is_start_action ? 'started' : '';
+     };
+});
+
+riot.tag2('page-home_card-impure-large_tab-create-after', '', '', '', function(opts) {
+});
+
+
+riot.tag2('page-home_card-impure-large_tab-deamon', '', '', '', function(opts) {
+});
+
+
+riot.tag2('page-home_card-impure-large_tab-edit', '', '', '', function(opts) {
+});
+
+riot.tag2('page-home_card-impure-large_tab-finish', '', '', '', function(opts) {
+});
+
+
+riot.tag2('page-home_card-impure-large_tab-incantation', '', '', '', function(opts) {
+});
+
+
+riot.tag2('page-home_card-impure-large_tab-show', '', '', '', function(opts) {
 });
 
 riot.tag2('page-home_card-impure-small-body', '<div class="{opts.status}"> <page-home_card-impure-deamon-tag source="{opts.source}"></page-home_card-impure-deamon-tag> <p> {name()} </p> </div>', 'page-home_card-impure-small-body { display: block; height: 100%; overflow:auto; } page-home_card-impure-small-body > div { padding: 0px 11px 11px 11px; } page-home_card-impure-small-body > div.started { font-weight: bold; text-shadow: 0px 0px 22px rgba(254, 242, 99, 0.666); } page-home_card-impure-small-body > div > p { word-break: break-all; display: inline; }', '', function(opts) {
@@ -1317,10 +1396,38 @@ riot.tag2('page-home_card-impure-small-body', '<div class="{opts.status}"> <page
 
 });
 
-riot.tag2('page-home_card-impure-small-footer', '<div class="{opts.status}"> <button class="button is-small is-grow">照会</button> <button class="button is-small is-grow">停止</button> <button class="button is-small is-grow">開始</button> <button class="button is-small"> <i class="far fa-envelope-open"></i> </button> </div>', 'page-home_card-impure-small-footer > div { display: flex; justify-content: space-between; padding: 8px 11px; } page-home_card-impure-small-footer > div.started .button { font-weight: bold; text-shadow: 0px 0px 22px rgba(254, 242, 99, 0.888); } page-home_card-impure-small-footer .button.is-grow { flex-grow:1; }', '', function(opts) {
+riot.tag2('page-home_card-impure-small-footer', '<div class="{opts.status}"> <button class="button is-small is-grow" onclick="{clickShow}">照会</button> <button class="button is-small is-grow" onclick="{clickStartStopaction}">{actionButtonLabel()}</button> <button class="button is-small" onclick="{clickOpen}"> <i class="far fa-envelope-open"></i> </button> </div>', 'page-home_card-impure-small-footer > div { display: flex; justify-content: space-between; padding: 8px 11px; } page-home_card-impure-small-footer > div.started .button { font-weight: bold; text-shadow: 0px 0px 22px rgba(254, 242, 99, 0.888); } page-home_card-impure-small-footer .button.is-grow { flex-grow:1; }', '', function(opts) {
+     this.clickOpen = () => {
+         ACTIONS.switchLargeHomeImpureCard(this.opts.source);
+     };
+     this.clickShow = () => {
+         location.hash = '#home/impures/' + this.opts.source.id;
+     }
+     this.clickStartStopaction = (e) => {
+         if (e.target.innerHTML=='停止') {
+             ACTIONS.stopImpure(this.opts.source);
+             return;
+         }
+         if (e.target.innerHTML=='開始') {
+             ACTIONS.startImpure(this.opts.source);
+             return;
+         }
+
+         throw new Error('XXXX');
+     };
+
+     this.actionButtonLabel = () => {
+         return this.opts.source.purge_started_at ? '停止' : '開始';
+     };
 });
 
 riot.tag2('page-home_card-impure-small', '<div class="{status()}"> <page-home_card-impure-small-body source="{opts.source}" status="{status()}"></page-home_card-impure-small-body> <page-home_card-impure-small-footer source="{opts.source}" status="{status()}"></page-home_card-impure-small-footer> </div>', 'page-home_card-impure-small > div { display: flex; flex-direction: column; width: calc((22px * 4) * 2 + 22px * (4 - 1)); height: calc((22px * 4) * 2 + 22px * (4 - 1)); background: #fff; border-radius: 5px; padding-top:11px; } page-home_card-impure-small > div.started { box-shadow: 0px 0px 22px rgba(254, 242, 99, 0.888); } page-home_card-impure-small > div > page-home_card-impure-small-body { flex-grow: 1; flex-direction: column; }', '', function(opts) {
+     this.status = () => {
+         return this.opts.is_start_action ? 'started' : '';
+     };
+});
+
+riot.tag2('page-home_card-impure', '<page-home_card-impure-large if="{isOpen()}" source="{opts.source}" card_state="{opts.card_state}" is_start_action="{isStart()}"></page-home_card-impure-large> <page-home_card-impure-small if="{!isOpen()}" source="{opts.source}" card_state="{opts.card_state}" is_start_action="{isStart()}"></page-home_card-impure-small>', '', '', function(opts) {
      this.isStart = () => {
          if (!this.opts.source)
              return false;
@@ -1330,15 +1437,25 @@ riot.tag2('page-home_card-impure-small', '<div class="{status()}"> <page-home_ca
 
          return true;
      }
-     this.status = () => {
-         return this.isStart() ? 'started' : '';
+     this.isStartAction = () => {
+         if (!this.opts.source)
+             return false;
+
+         if (!this.opts.source.purge_started_at)
+             return false;
+
+         return true;
+     };
+     this.isOpen = () => {
+         let id = this.opts.source.id;
+
+         let opened = this.opts.card_state.impure.opened;
+
+         return opened[id] ? true : false;
      };
 });
 
-riot.tag2('page-home_card-impure', '<page-home_card-impure-large if="{false}" source="{opts.source}"></page-home_card-impure-large> <page-home_card-impure-small if="{true}" source="{opts.source}"></page-home_card-impure-small>', '', '', function(opts) {
-});
-
-riot.tag2('page-home_card-pool2', '<div class="grid"> <page-home_card class="grid-item" each="{obj in list()}" source="{obj}"></page-home_card> </div>', 'page-home_card-pool2 { display: block; width: 100%; padding-left: 22px; } page-home_card-pool2 .grid-item { margin-bottom: 22px; }', '', function(opts) {
+riot.tag2('page-home_card-pool2', '<div class="grid"> <page-home_card class="grid-item" each="{obj in list()}" card_state="{cardState()}" source="{obj}"></page-home_card> </div>', 'page-home_card-pool2 { display: block; width: 100%; padding-left: 22px; } page-home_card-pool2 .grid-item { margin-bottom: 22px; }', '', function(opts) {
      this.layout = () => {
          var elem = document.querySelector('page-home_card-pool2 > .grid');
 
@@ -1353,6 +1470,9 @@ riot.tag2('page-home_card-pool2', '<div class="grid"> <page-home_card class="gri
          this.layout();
      });
 
+     this.cardState = () => {
+         return this.opts.card_state;
+     }
      this.list = () => {
          let list = this.opts.source;
 
@@ -1378,7 +1498,10 @@ riot.tag2('page-home_card-pool2', '<div class="grid"> <page-home_card class="gri
      };
 });
 
-riot.tag2('page-home_card', '<page-home_card-impure if="{draw(\'IMPURE\')}" source="{source()}"></page-home_card-impure>', '', '', function(opts) {
+riot.tag2('page-home_card', '<page-home_card-impure if="{draw(\'IMPURE\')}" source="{source()}" card_state="{cardState()}"></page-home_card-impure>', '', '', function(opts) {
+     this.cardState = () => {
+         return this.opts.card_state;
+     };
      this.source = () => {
          return this.opts.source;
      };
@@ -1388,7 +1511,7 @@ riot.tag2('page-home_card', '<page-home_card-impure if="{draw(\'IMPURE\')}" sour
          if (key=='IMPURE') {
              if (!source)
                  return false;
-             dump(source._class == "IMPURE")
+
              return source._class == "IMPURE";
          }
      };
@@ -1427,7 +1550,8 @@ riot.tag2('orthodox-doropdown', '<div class="dropdown {open ? \'is-active\' : \'
 
          this.update();
 
-         ACTIONS.fetchOrthodoxExorcists(id);
+         if (id)
+             ACTIONS.fetchOrthodoxExorcists(id);
      };
 
      this.open = null;
@@ -1505,11 +1629,15 @@ riot.tag2('page-home', '<div class="bucket-area"> <home_maledicts data="{STORE.g
              let maledict = data;
 
              ACTIONS.openModalCreateImpure(maledict);
+
+             return;
          }
 
          if ('squeeze-impure'==action) {
              this.squeeze_word = (data.trim().length==0 ? null : data);
              this.tags['page-home_card-pool'].update();
+
+             return;
          }
      };
 
@@ -1605,7 +1733,17 @@ riot.tag2('page-home', '<div class="bucket-area"> <home_maledicts data="{STORE.g
 
              return;
          }
+         if (action.type=='SWITCH-LARGE-HOME-IMPURE-CARD' || action.type=='SWITCH-SMALL-HOME-IMPURE-CARD') {
+             let tag = this.tags['page-home_card-pool2'];
+             if (tag)
+                 tag.update();
+             return;
+         }
      });
+
+     this.cardState = () => {
+         return STORE.get('pages.home.card');
+     }
 
      this.on('mount', () => {
          ACTIONS.fetchMaledicts();

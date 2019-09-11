@@ -249,6 +249,17 @@ class Store extends Vanilla_Redux_Store {
                 site: this.initRouteData(),
                 selected: this.initSelectedData(),
             },
+            {
+                pages: {
+                    home: {
+                        card: {
+                            impure: {
+                                opened: {}
+                            }
+                        }
+                    }
+                }
+            },
             core_data);
 
         for (var i in data.site.pages) {

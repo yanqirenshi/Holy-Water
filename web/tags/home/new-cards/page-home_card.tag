@@ -1,8 +1,13 @@
 <page-home_card>
 
-    <page-home_card-impure if={draw('IMPURE')} source={source()}></page-home_card-impure>
+    <page-home_card-impure if={draw('IMPURE')}
+                           source={source()}
+                           card_state={cardState()}></page-home_card-impure>
 
     <script>
+     this.cardState = () => {
+         return this.opts.card_state;
+     };
      this.source = () => {
          return this.opts.source;
      };
@@ -12,7 +17,7 @@
          if (key=='IMPURE') {
              if (!source)
                  return false;
-             dump(source._class == "IMPURE")
+
              return source._class == "IMPURE";
          }
      };

@@ -1,4 +1,4 @@
-<page-home_card-impure-small-footer>
+<page-home_card-impure-large-footer>
 
     <div class="{opts.status}">
         <button class="button is-small is-grow"
@@ -39,18 +39,18 @@
     </script>
 
     <style>
-     page-home_card-impure-small-footer > div {
+     page-home_card-impure-large-footer > div {
          display: flex;
          justify-content: space-between;
          padding: 8px 11px;
      }
-     page-home_card-impure-small-footer > div.started .button {
+     page-home_card-impure-large-footer > div.started .button {
          font-weight: bold;
          text-shadow: 0px 0px 22px rgba(254, 242, 99, 0.888);
      }
-     page-home_card-impure-small-footer .button.is-grow {
+     page-home_card-impure-large-footer .button.is-grow {
          flex-grow:1;
      }
     </style>
 
-</page-home_card-impure-small-footer>
+</page-home_card-impure-large-footer>

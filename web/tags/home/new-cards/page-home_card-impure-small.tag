@@ -1,23 +1,16 @@
 <page-home_card-impure-small>
 
     <div class="{status()}">
-        <page-home_card-impure-small-body   source={opts.source} status={status()}></page-home_card-impure-small-body>
+        <page-home_card-impure-small-body source={opts.source}
+                                          status={status()}></page-home_card-impure-small-body>
 
-        <page-home_card-impure-small-footer source={opts.source} status={status()}></page-home_card-impure-small-footer>
+        <page-home_card-impure-small-footer source={opts.source}
+                                            status={status()}></page-home_card-impure-small-footer>
     </div>
 
     <script>
-     this.isStart = () => {
-         if (!this.opts.source)
-             return false;
-
-         if (!this.opts.source.purge_started_at)
-             return false;
-
-         return true;
-     }
      this.status = () => {
-         return this.isStart() ? 'started' : '';
+         return this.opts.is_start_action ? 'started' : '';
      };
     </script>
 

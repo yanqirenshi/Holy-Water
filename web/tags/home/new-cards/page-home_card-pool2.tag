@@ -1,7 +1,10 @@
 <page-home_card-pool2>
 
     <div class="grid">
-        <page-home_card class="grid-item" each={obj in list()} source={obj}></page-home_card>
+        <page-home_card class="grid-item"
+                        each={obj in list()}
+                        card_state={cardState()}
+                        source={obj}></page-home_card>
     </div>
 
     <script>
@@ -21,6 +24,9 @@
     </script>
 
     <script>
+     this.cardState = () => {
+         return this.opts.card_state;
+     }
      this.list = () => {
          let list = this.opts.source;
 

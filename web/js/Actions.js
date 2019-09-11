@@ -1106,4 +1106,27 @@ class Actions extends Vanilla_Redux_Actions {
             deamon: deamon,
         });
     }
+    /////
+    ///// Page: Home
+    /////
+    switchLargeHomeImpureCard (impure) {
+        let state = STORE.get('pages');
+
+        state.home.card.impure.opened[impure.id] = impure;
+
+        STORE.dispatch({
+            type: 'SWITCH-LARGE-HOME-IMPURE-CARD',
+            data: { pages: state },
+        });
+    }
+    switchSmallHomeImpureCard (impure) {
+        let state = STORE.get('pages');
+
+        delete state.home.card.impure.opened[impure.id];
+
+        STORE.dispatch({
+            type: 'SWITCH-SMALL-HOME-IMPURE-CARD',
+            data: { pages: state },
+        });
+    }
 }
