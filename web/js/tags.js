@@ -737,7 +737,10 @@ riot.tag2('deamon-page-card_elapsed-time', '<deamon-page-card_elapsed-time-small
      };
 });
 
-riot.tag2('deamon-page-card_impure', '<div class="small"> <div class="header {finished()}"> <p> Impure <span style="margin-left:11px;"> <a href="{linkImpure()}"> <i class="fas fa-link"></i> </a> </span> </p> </div> <div class="name"> <p>{name()}</p> </div> </div>', 'deamon-page-card_impure > .small{ display: flex; flex-direction: column; width: calc(11px * 8 + 11px * 7); height: calc(11px * 8 + 11px * 7); margin-bottom: 11px; background: #fff; border-radius: 8px; } deamon-page-card_impure > .small > .header { width: 100%; height: 33px; padding: 8px 11px; border-radius: 8px 8px 0px 0px; font-size: 12px; font-weight: bold; background: rgba(100, 1, 37, 0.88); color: #fff; } deamon-page-card_impure > .small > .header.finished { background: rgba(137, 195, 235, 0.88); } deamon-page-card_impure > .small > .name { padding: 6px 8px; font-size: 14px; }', '', function(opts) {
+riot.tag2('deamon-page-card_impure', '<div class="small"> <div class="header {finished()}"> <p> Impure <span style="margin-left:11px;"> <a href="{linkImpure()}"> <i class="fas fa-link"></i> </a> </span> </p> </div> <div class="name"> <p>{name()}</p> </div> <div class="elapsed-time"> <p>{elapsedTime()}</p> </div> </div>', 'deamon-page-card_impure > .small { display: flex; flex-direction: column; width: calc(11px * 8 + 11px * 7); height: calc(11px * 8 + 11px * 7); margin-bottom: 11px; background: #fff; border-radius: 8px; } deamon-page-card_impure > .small > .header { width: 100%; height: 33px; padding: 8px 11px; border-radius: 8px 8px 0px 0px; font-size: 12px; font-weight: bold; background: rgba(100, 1, 37, 0.88); color: #fff; } deamon-page-card_impure > .small > .header.finished { background: rgba(137, 195, 235, 0.88); } deamon-page-card_impure > .small > .name { padding: 6px 8px; font-size: 14px; font-weight: bold; flex-grow: 1; display: flex; justify-content: center; align-items: center; } deamon-page-card_impure .small > .elapsed-time { text-align: center; font-size: 22px; padding-top: 8px; }', '', function(opts) {
+     this.elapsedTime = () => {
+         return "00:00:00";
+     };
      this.linkImpure = () => {
          return "%s/impures/%d".format(location.hash, this.opts.source.id);
      };
@@ -877,7 +880,7 @@ riot.tag2('page-card_description-large', '<div> <div class="editor"> <div> <text
      this.w = () => {
          let hw = new HolyWater();
 
-         return hw.pageCardDescriptionSize(hw.htVal('size.w', this.opts), 56, 11);
+         return hw.pageCardDescriptionSize(hw.htVal('size.w', this.opts), 48, 11);
      };
      this.h = () => {
          let hw = new HolyWater();
@@ -3503,7 +3506,21 @@ riot.tag2('modal-purge-deamon', '<div class="modal {deamon ? \'is-active\' : \'\
      };
 });
 
-riot.tag2('modal-purge-result-editor', '<div class="modal {opts.data ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head" style="padding: 11px 22px; font-size: 18px;"> <p class="modal-card-title">作業時間の変更</p> <button class="delete" aria-label="close" action="close-purge-result-editor" onclick="{clickButton}"></button> </header> <section class="modal-card-body"> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">Impure</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'impure_name\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">作業時間</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'elapsed_time\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">開始</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'purge_start\'))}" ref="start" type="{\'datetime\'}"> </p> <div style="padding-top: 5px;"> <button class="button is-small" action="now" onclick="{clickSetDate}">今</button> <button class="button is-small {isHide(\'before-end\')}" action="before-end" onclick="{clickSetDate}">前の作業の終了</button> <button class="button is-small" action="clear-under-hour" onclick="{clickSetDate}">分と秒をクリア</button> <button class="button is-small" action="clear-under-minute" onclick="{clickSetDate}">秒をクリア</button> <button class="button is-small is-warging" action="revert-start" onclick="{clickSetDate}">元に戻す</button> </div> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">終了</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'purge_end\'))}" ref="end" type="{\'datetime\'}"> <div style="padding-top: 5px;"> <button class="button is-small" action="now" onclick="{clickSetDate}">今</button> <button class="button is-small {isHide(\'after-start\')}" action="after-start" onclick="{clickSetDate}">後の作業の開始</button> <button class="button is-small" action="clear-under-hour" onclick="{clickSetDate}">分と秒をクリア</button> <button class="button is-small" action="clear-under-minute" onclick="{clickSetDate}">秒をクリア</button> <button class="button is-small is-warging" action="revert-end" onclick="{clickSetDate}">元に戻す</button> </div> </p> </div> </div> </div> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display:flex; justify-content: space-between;"> <button class="button is-small" action="close-purge-result-editor" onclick="{clickButton}">Cancel</button> <button class="button is-small is-success" action="save-purge-result-editor" onclick="{clickButton}">Save</button> </footer> </div> </div>', '', '', function(opts) {
+riot.tag2('modal-purge-result-editor-dtcon', '<table class="table"> <tbody> <tr> <td>基本</td> <td> <button class="button is-small" target="{opts.target}" action="now" onclick="{opts.clickSetDate}">今</button> <button class="button is-small is-warging" target="{opts.target}" action="revert-start" onclick="{opts.clickSetDate}">元に戻す</button> </td> </tr> <tr> <td>関連</td> <td> <button class="button is-small {isHide(\'before_end\')}" target="{opts.target}" action="before-end" onclick="{opts.clickSetDate}">前の作業の終了</button> <button class="button is-small {isHide(\'after_start\')}" target="{opts.target}" action="after-start" onclick="{opts.clickSetDate}">後の作業の開始</button> </td> </tr> <tr> <td>クリア</td> <td> <button class="button is-small" target="{opts.target}" action="clear-under-hour" onclick="{opts.clickSetDate}">分と秒</button> <button class="button is-small" target="{opts.target}" action="clear-under-minute" onclick="{opts.clickSetDate}">秒</button> </td> </tr> </tbody> </table>', '', '', function(opts) {
+     this.isHide = (code) => {
+         let target = this.opts.target;
+
+         if (target=='start' && code=='before_end')
+             return '';
+
+         if (target=='end' && code=='after_start')
+             return '';
+
+         return 'hide';
+     };
+});
+
+riot.tag2('modal-purge-result-editor', '<div class="modal {opts.data ? \'is-active\' : \'\'}"> <div class="modal-background"></div> <div class="modal-card"> <header class="modal-card-head" style="padding: 11px 22px; font-size: 18px;"> <p class="modal-card-title">作業時間の変更</p> <button class="delete" aria-label="close" action="close-purge-result-editor" onclick="{clickButton}"></button> </header> <section class="modal-card-body"> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">Impure</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'impure_name\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">作業時間</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input is-static" type="text" riot-value="{getVal(\'elapsed_time\')}" readonly> </p> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">開始</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'purge_start\'))}" ref="start" type="{\'datetime\'}"> </p> <div style="padding-top: 5px;"> <modal-purge-result-editor-dtcon source="{this.opts.source}" code="before-end" target="start" click-set-date="{clickSetDate}"></modal-purge-result-editor-dtcon> </div> </div> </div> </div> <div class="field is-horizontal"> <div class="field-label is-normal"> <label class="label">終了</label> </div> <div class="field-body"> <div class="field"> <p class="control"> <input class="input" riot-value="{date2str(getVal(\'purge_end\'))}" ref="end" type="{\'datetime\'}"> </p> <div style="padding-top: 5px;"> <modal-purge-result-editor-dtcon source="{this.opts.source}" code="before-start" target="end" click-set-date="{clickSetDate}"></modal-purge-result-editor-dtcon> </div> </div> </div> </div> </section> <footer class="modal-card-foot" style="padding: 11px 22px; display:flex; justify-content: space-between;"> <button class="button is-small" action="close-purge-result-editor" onclick="{clickButton}">Cancel</button> <button class="button is-small is-success" action="save-purge-result-editor" onclick="{clickButton}">Save</button> </footer> </div> </div>', '', '', function(opts) {
      this.clickButton = (e) => {
          let action = e.target.getAttribute('action');
 
@@ -3522,8 +3539,7 @@ riot.tag2('modal-purge-result-editor', '<div class="modal {opts.data ? \'is-acti
      };
      this.clickSetDate = (e) => {
          let target = e.target;
-
-         let input = target.parentNode.parentNode.firstElementChild.firstElementChild;
+         let input = this.refs[target.getAttribute('target')];
          let action = target.getAttribute('action');
 
          let value = () => {
@@ -3533,8 +3549,9 @@ riot.tag2('modal-purge-result-editor', '<div class="modal {opts.data ? \'is-acti
              if (action=='after-start')
                  return this.opts.source.after_start;
 
-             if (action=='before-end')
+             if (action=='before-end') {
                  return this.opts.source.before_end;
+             }
 
              if (action=='revert-start')
                  return this.opts.data.purge_start;

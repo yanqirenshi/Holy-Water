@@ -15,9 +15,16 @@
         <div class="name">
             <p>{name()}</p>
         </div>
+
+        <div class="elapsed-time">
+            <p>{elapsedTime()}</p>
+        </div>
     </div>
 
     <script>
+     this.elapsedTime = () => {
+         return "00:00:00";
+     };
      this.linkImpure = () => {
          return "%s/impures/%d".format(location.hash, this.opts.source.id);
      };
@@ -30,7 +37,7 @@
     </script>
 
     <style>
-     deamon-page-card_impure > .small{
+     deamon-page-card_impure > .small {
          display: flex;
          flex-direction: column;
 
@@ -60,7 +67,18 @@
      }
      deamon-page-card_impure > .small > .name {
          padding: 6px 8px;
-         font-size: 14px;         
+         font-size: 14px;
+         font-weight: bold;
+         flex-grow: 1;
+
+         display: flex;
+         justify-content: center;
+         align-items: center;
+     }
+     deamon-page-card_impure .small > .elapsed-time {
+         text-align: center;
+         font-size: 22px;
+         padding-top: 8px;
      }
     </style>
 

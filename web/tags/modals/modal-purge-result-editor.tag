@@ -47,14 +47,16 @@
                     <div class="field-body">
                         <div class="field">
                             <p class="control">
-                                <input class="input" type="datetime" value={date2str(getVal('purge_start'))} ref="start">
+                                <input class="input"
+                                       type="datetime"
+                                       value={date2str(getVal('purge_start'))}
+                                       ref="start">
                             </p>
                             <div style="padding-top: 5px;">
-                                <button class="button is-small"                        action="now"                onclick={clickSetDate}>今</button>
-                                <button class="button is-small {isHide('before-end')}" action="before-end"         onclick={clickSetDate}>前の作業の終了</button>
-                                <button class="button is-small"                        action="clear-under-hour"   onclick={clickSetDate}>分と秒をクリア</button>
-                                <button class="button is-small"                        action="clear-under-minute" onclick={clickSetDate}>秒をクリア</button>
-                                <button class="button is-small is-warging"             action="revert-start"       onclick={clickSetDate}>元に戻す</button>
+                                <modal-purge-result-editor-dtcon source={this.opts.source}
+                                                                 code="before-end"
+                                                                 target="start"
+                                                                 click-set-date={clickSetDate}></modal-purge-result-editor-dtcon>
                             </div>
                         </div>
                     </div>
@@ -68,14 +70,13 @@
                         <div class="field">
                             <p class="control">
                                 <input class="input" type="datetime" value={date2str(getVal('purge_end'))} ref="end">
-                                <div style="padding-top: 5px;">
-                                    <button class="button is-small"                         action="now"                onclick={clickSetDate}>今</button>
-                                    <button class="button is-small {isHide('after-start')}" action="after-start"        onclick={clickSetDate}>後の作業の開始</button>
-                                    <button class="button is-small"                         action="clear-under-hour"   onclick={clickSetDate}>分と秒をクリア</button>
-                                    <button class="button is-small"                         action="clear-under-minute" onclick={clickSetDate}>秒をクリア</button>
-                                    <button class="button is-small is-warging"              action="revert-end"         onclick={clickSetDate}>元に戻す</button>
-                                </div>
                             </p>
+                            <div style="padding-top: 5px;">
+                                <modal-purge-result-editor-dtcon source={this.opts.source}
+                                                                 code="before-start"
+                                                                 target="end"
+                                                                 click-set-date={clickSetDate}></modal-purge-result-editor-dtcon>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -108,8 +109,7 @@
      };
      this.clickSetDate = (e) => {
          let target = e.target;
-         // TODO: 手抜きです。汎用性はないっす。あ
-         let input = target.parentNode.parentNode.firstElementChild.firstElementChild;
+         let input = this.refs[target.getAttribute('target')];
          let action = target.getAttribute('action');
 
          let value = () => {
@@ -119,8 +119,9 @@
              if (action=='after-start')
                  return this.opts.source.after_start;
 
-             if (action=='before-end')
+             if (action=='before-end') {
                  return this.opts.source.before_end;
+             }
 
              if (action=='revert-start')
                  return this.opts.data.purge_start;

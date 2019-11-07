@@ -29,7 +29,7 @@
      this.w = () => {
          let hw = new HolyWater();
 
-         return hw.pageCardDescriptionSize(hw.htVal('size.w', this.opts), 56, 11);
+         return hw.pageCardDescriptionSize(hw.htVal('size.w', this.opts), 48, 11);
      };
      this.h = () => {
          let hw = new HolyWater();
