@@ -1,4 +1,74 @@
-riot.tag2('page-angel-card-purge-result-deamon', '<di> <div> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size:12px;"> <thead> <tr> <th>Date</th> <th>Deamon</th> <th>作業時間[人日]</th> <th>Purge Action数</th> </tr> </thead> <tbody> <tr each="{obj in list()}"> <td nowrap>{obj.date}</td> <td>{obj.deamon_name}</td> <td style="text-align:right;">{elapsedDay(obj.elapsed_time)}</td> <td>{obj.impure_count}</td> </tr> </tbody> </table> </div> </di>', 'page-angel-card-purge-result-deamon { display: flex; flex-direction: column; width: calc(11px * 8 * 12); padding: 22px; background: #fff; border-radius: 5px; }', '', function(opts) {
+riot.tag2('page-angel-action-results-controller', '<div class="controller"> <p style="word-break: keep-all; margin-right:11px;">期間: </p> <input class="input is-small" placeholder="From" style="margin-right:11px;" riot-value="{opts.span.from.format(\'YYYY-MM-DD\')}" ref="from" type="{\'date\'}"> <p style="margin-right:11px;">〜</p> <input class="input is-small" placeholder="To" style="margin-right:11px;" riot-value="{opts.span.to.format(\'YYYY-MM-DD\')}" ref="to" type="{\'date\'}"> <button class="button is-small" onclick="{clickRefresh}">Refresh</button> </div> <div class="summary hw-text-white" style="margin-top:11px;"> <p style="margin-right:11px;">Total:</p> <p style="margin-right:11px;">{totalElapsedDay()}</p> <p style="margin-right:11px;">[人日]</p> </div>', 'page-angel-action-results-controller { display: block; margin-bottom: 22px; width: 555px; } page-angel-action-results-controller .controller { display: flex; align-items: center; background: #fff; padding: 11px 22px; border-radius: 5px; } page-angel-action-results-controller .summary { display: flex; align-items: center; font-weight: bold; }', '', function(opts) {
+     this.clickRefresh = () => {
+         this.opts.callback('click-refresh', {
+             from: moment(this.refs.from.value),
+             to:   moment(this.refs.to.value),
+         })
+     };
+     this.elapsedDay = (val) => {
+         return (Math.ceil(this.elapsedHour(val) / 6 * 100) /100).toFixed(2);
+
+     };
+     this.elapsedHour = (val) => {
+         return (Math.ceil(this.elapsedMinute(val) / 60 * 100) /100).toFixed(2);
+     };
+     this.elapsedMinute = (val) => {
+         return (Math.ceil(val / 60 * 100) / 100).toFixed(2);
+     };
+
+     this.totalElapsedDay = () => {
+         let sum = opts.source.purges.deamons.reduce((a,b)=>{
+             return a + b.puge_elapsed_time;
+         }, 0);
+
+         return this.elapsedDay(sum);
+     };
+});
+
+riot.tag2('page-angel-action-results', '<section class="section" style="padding-top: 55px; padding-bottom: 11px;"> <div class="container"> <h1 class="title is-4 hw-text-white">作業実績</h1> <page-angel-action-results-controller source="{opts.source}" span="{opts.span}" callback="{opts.callback}"></page-angel-action-results-controller> <page-tabs core="{page_tabs}" callback="{clickTab}"></page-tabs> </div> </section> <div> <page-angel-action-results_tab-total source="{opts.source}" span="{opts.span}" callback="{opts.callback}"></page-angel-action-results_tab-total> <page-angel-action-results_tab-date source="{opts.source}" span="{opts.span}" callback="{opts.callback}"></page-angel-action-results_tab-date> <page-angel-action-results_tab-deamon source="{opts.source}" span="{opts.span}" callback="{opts.callback}"></page-angel-action-results_tab-deamon> </div>', 'page-angel-action-results { display:block; margin-bottom: 222px; } page-angel-action-results .tabs li { margin-right: 6px; } page-angel-action-results .tabs.is-boxed a { background: rgba(255, 255, 255, 0.6) }', '', function(opts) {
+     this.default_tag = 'home';
+     this.active_tag = null;
+     this.page_tabs = new PageTabs([
+         {code: 'total', label: '悪魔 別',          tag: 'page-angel-action-results_tab-total' },
+         {code: 'date',  label: '日別 + Impure 別', tag: 'page-angel-action-results_tab-date' },
+         {code: 'deamo', label: '日別 + 悪魔 別',   tag: 'page-angel-action-results_tab-deamon' },
+     ]);
+     this.on('mount', () => {
+         this.page_tabs.switchTab(this.tags)
+         this.update();
+     });
+
+     this.clickTab = (e, action, data) => {
+         if (this.page_tabs.switchTab(this.tags, data.code))
+             this.update();
+     };
+});
+
+riot.tag2('page-angel-action-results_tab-date', '<section class="section" style="padding-top:11px;"> <div class="container"> <div class="controller"> <di> <div> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size:12px;"> <thead> <tr> <th>Date</th> <th>Deamon</th> <th>Impure</th> <th>作業時間[h]</th> <th>Purge Action数</th> </tr> </thead> <tbody> <tr each="{obj in list()}"> <td nowrap>{obj.date}</td> <td>{obj.deamon_name}</td> <td>{obj.impure_name}</td> <td style="text-align:right;">{elapsedHour(obj.elapsed_time)}</td> <td>{obj.impure_count}</td> </tr> </tbody> </table> </div> </di> </div> </div> </section>', 'page-angel-action-results_tab-date { display: flex; flex-direction: column; }', '', function(opts) {
+     this.elapsedDay = (val) => {
+         return (Math.ceil(this.elapsedHour(val) / 6 * 100) /100).toFixed(2);
+
+     };
+     this.elapsedHour = (val) => {
+         return (Math.ceil(this.elapsedMinute(val) / 60 * 100) /100).toFixed(2);
+     };
+     this.elapsedMinute = (val) => {
+         return (Math.ceil(val / 60 * 100) / 100).toFixed(2);
+     };
+     this.list = () => {
+         if (!this.opts.source.purges ||
+             !this.opts.source.purges.impures)
+             return [];
+
+         let list = this.opts.source.purges.impures.sort((a, b) => {
+             return a.date < b.date ? 1 : -1;
+         });
+
+         return list;
+     };
+});
+
+riot.tag2('page-angel-action-results_tab-deamon', '<section class="section" style="padding-top:11px;"> <div class="container"> <div class="controller"> <di> <div> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size:12px;"> <thead> <tr> <th rowspan="2">Date</th> <th colspan="2">Deamon</th> <th colspan="2">作業結果</th> </tr> <tr> <th>Name</th> <th>Short Name</th> <th>作業時間[人日]</th> <th>Purge Action数</th> </tr> </thead> <tbody> <tr each="{obj in list()}"> <td nowrap>{obj.date}</td> <td>{obj.deamon_name}</td> <td>{obj.deamon_name_short}</td> <td style="text-align:right;">{elapsedDay(obj.elapsed_time)}</td> <td>{obj.impure_count}</td> </tr> </tbody> </table> </div> </di> </div> </div> </section>', 'page-angel-action-results_tab-deamon { display: flex; flex-direction: column; }', '', function(opts) {
      this.elapsedDay = (val) => {
          return (Math.ceil(this.elapsedHour(val) / 6 * 100) /100).toFixed(2);
      };
@@ -14,51 +84,15 @@ riot.tag2('page-angel-card-purge-result-deamon', '<di> <div> <table class="table
              !this.opts.source.purges.days.deamons)
              return [];
 
-         let list = this.opts.source.purges.days.deamons;
+         let list = this.opts.source.purges.days.deamons.sort((a, b) => {
+             return a.date < b.date ? 1 : -1;
+         });
 
          return list;
      };
 });
 
-riot.tag2('page-angel-card-purge-result-impure', '<di> <div> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size:12px;"> <thead> <tr> <th>Date</th> <th>Deamon</th> <th>Impure</th> <th>作業時間[h]</th> <th>Purge Action数</th> </tr> </thead> <tbody> <tr each="{obj in list()}"> <td nowrap>{obj.date}</td> <td>{obj.deamon_name}</td> <td>{obj.impure_name}</td> <td style="text-align:right;">{elapsedHour(obj.elapsed_time)}</td> <td>{obj.impure_count}</td> </tr> </tbody> </table> </div> </di>', 'page-angel-card-purge-result-impure { display: flex; flex-direction: column; width: calc(11px * 8 * 12); padding: 22px; background: #fff; border-radius: 5px; }', '', function(opts) {
-     this.elapsedDay = (val) => {
-         return (Math.ceil(this.elapsedHour(val) / 6 * 100) /100).toFixed(2);
-
-     };
-     this.elapsedHour = (val) => {
-         return (Math.ceil(this.elapsedMinute(val) / 60 * 100) /100).toFixed(2);
-     };
-     this.elapsedMinute = (val) => {
-         return (Math.ceil(val / 60 * 100) / 100).toFixed(2);
-     };
-     this.list = () => {
-         dump(this.opts.source.purges.impures);
-
-         if (!this.opts.source.purges ||
-             !this.opts.source.purges.impures)
-             return [];
-
-         let list = this.opts.source.purges.impures;
-
-         return list;
-     };
-});
-
-riot.tag2('page-angel-card-result-deamon', '<div class="controller"> <p style="word-break: keep-all; margin-right:11px;">期間: </p> <input class="input is-small" placeholder="From" style="margin-right:11px;" riot-value="{opts.span.from.format(\'YYYY-MM-DD\')}" ref="from" type="{\'date\'}"> <p style="margin-right:11px;">〜</p> <input class="input is-small" placeholder="To" style="margin-right:11px;" riot-value="{opts.span.to.format(\'YYYY-MM-DD\')}" ref="to" type="{\'date\'}"> <button class="button is-small" onclick="{clickRefresh}">Refresh</button> </div> <div class="summary" style="margin-top:11px;"> <p style="margin-right:11px;">Total:</p> <p style="margin-right:11px;">{totalElapsedDay()}</p> <p style="margin-right:11px;">[人日]</p> </div> <div style="margin-top:11px;"> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size:12px;"> <thead> <tr> <th rowspan="2">ID</th> <th rowspan="2">Name</th> <th colspan="3">作業時間</th> </tr> <tr> <th>人日</th> <th>時間</th> <th>分</th> </tr> </thead> <tbody> <tr each="{obj in list()}"> <td>{obj.deamon_id}</td> <td>{obj.deamon_name}</td> <td class="num">{elapsedDay(obj.puge_elapsed_time)}</td> <td class="num">{elapsedHour(obj.puge_elapsed_time)}</td> <td class="num">{elapsedMinute(obj.puge_elapsed_time)}</td> </tr> </tbody> </table> </div>', 'page-angel-card-result-deamon { display: flex; flex-direction: column; width: calc(11px * 8 * 6); padding: 22px; background: #fff; border-radius: 5px; } page-angel-card-result-deamon .controller { display: flex; align-items: center; } page-angel-card-result-deamon .summary { display: flex; align-items: center; }', '', function(opts) {
-     this.clickRefresh = () => {
-         this.opts.callback('click-refresh', {
-             from: moment(this.refs.from.value),
-             to:   moment(this.refs.to.value),
-         })
-     };
-
-     let sum = this.totalElapsedDay = () => {
-         let sum = opts.source.purges.deamons.reduce((a,b)=>{
-             return a + b.puge_elapsed_time;
-         }, 0);
-
-         return this.elapsedDay(sum);
-     };
+riot.tag2('page-angel-action-results_tab-total', '<section class="section" style="padding-top:11px;"> <div class="container"> <div style="margin-top:11px;"> <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="font-size:12px;"> <thead> <tr> <th colspan="3">Deamon</th> <th colspan="3">作業時間</th> </tr> <tr> <th>ID</th> <th>Name</th> <th>Short Name</th> <th>人日</th> <th>時間</th> <th>分</th> </tr> </thead> <tbody> <tr each="{obj in list()}"> <td>{obj.deamon_id}</td> <td>{obj.deamon_name}</td> <td>{obj.deamon_name_short}</td> <td class="num">{elapsedDay(obj.puge_elapsed_time)}</td> <td class="num">{elapsedHour(obj.puge_elapsed_time)}</td> <td class="num">{elapsedMinute(obj.puge_elapsed_time)}</td> </tr> </tbody> </table> </div> </div> </section>', 'page-angel-action-results_tab-total { display: flex; flex-direction: column; } page-angel-action-results_tab-total .summary { display: flex; align-items: center; font-weight: bold; }', '', function(opts) {
      this.elapsedDay = (val) => {
          return (Math.ceil(this.elapsedHour(val) / 6 * 100) /100).toFixed(2);
 
@@ -97,21 +131,18 @@ riot.tag2('page-angel-gitlab', '<section class="section"> <div class="container"
 riot.tag2('page-angel-maledicts-card-pool', '<div style="display:flex;"> <div style="width:222px; height:222px; padding:22px; background:#fff; margin-left:11px;">A</div> <div style="width:222px; height:222px; padding:22px; background:#fff; margin-left:11px;">B</div> <div style="width:222px; height:222px; padding:22px; background:#fff; margin-left:11px;">C</div> <div style="width:222px; height:222px; padding:22px; background:#fff; margin-left:11px;">D</div> <div style="width:222px; height:222px; padding:22px; background:#fff; margin-left:11px;">E</div> </div>', '', '', function(opts) {
 });
 
-riot.tag2('page-angel-result-card-pool', '<page-angel-card-result-deamon source="{opts.source}" span="{opts.span}" callback="{opts.callback}"></page-angel-card-result-deamon> <page-angel-card-purge-result-deamon source="{opts.source}" span="{opts.span}" callback="{opts.callback}"></page-angel-card-purge-result-deamon> <page-angel-card-purge-result-impure source="{opts.source}" span="{opts.span}" callback="{opts.callback}"></page-angel-card-purge-result-impure>', '', '', function(opts) {
-});
-
 riot.tag2('page-angel-sign-out', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">サインアウト</h1> <h2 class="subtitle hw-text-white"></h2> <div class="contents"> <button class="button is-danger hw-box-shadow" style="margin-left:22px; margin-top:11px;" onclick="{clickSignOut}">Sign Out</button> </div> </div> </section>', '', '', function(opts) {
      this.clickSignOut = () => {
          ACTIONS.signOut();
      };
 });
 
-riot.tag2('page-angel', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">祓魔師</h1> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">パスワード変更</h1> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Maledicts</h1> <page-angel-maledicts-card-pool></page-angel-maledicts-card-pool> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">外部システム連携</h1> <page-angel-external-service-card-pool></page-angel-external-service-card-pool> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">作業実績</h1> <page-angel-result-card-pool source="{source}" span="{span}" callback="{callback}"></page-angel-result-card-pool> </div> </section>', '', 'class="page-contents"', function(opts) {
+riot.tag2('page-angel', '<section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">祓魔師</h1> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">パスワード変更</h1> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">Maledicts</h1> <page-angel-maledicts-card-pool></page-angel-maledicts-card-pool> </div> </section> <section class="section"> <div class="container"> <h1 class="title is-4 hw-text-white">外部システム連携</h1> <page-angel-external-service-card-pool></page-angel-external-service-card-pool> </div> </section> <page-angel-action-results source="{source}" span="{span}" callback="{callback}"></page-angel-action-results>', '', 'class="page-contents"', function(opts) {
      this.callback = (action, data) => {
          if (action=='click-refresh') {
              this.span.from = data.from;
              this.span.to   = data.to;
-
+             dump(this.span.from, this.span.to);
              ACTIONS.fetchPagesSelf(this.span.from, this.span.to);
          }
      };
@@ -590,7 +621,9 @@ riot.tag2('sections-list', '<table class="table"> <tbody> <tr each="{opts.data}"
 
 riot.tag2('deamon-page-card-pool', '<div class="grid"> <deamon-page-card each="{obj in list()}" class="grid-item" source="{obj}" callback="{callback}"></deamon-page-card> </div>', 'deamon-page-card-pool > .grid{ display: block; margin-left: auto; margin-right: auto; }', '', function(opts) {
      this.list = () => {
-         return new HolyWater().pageDeamonContentsList(this.opts.source);
+         let x = new HolyWater().pageDeamonContentsList(this.opts.source);
+         dump(x);
+         return x;
      };
 
      this.layout = () => {
@@ -650,7 +683,7 @@ riot.tag2('deamon-page-card-status', '<div style="height:100%; display:flex; ali
      }
 });
 
-riot.tag2('deamon-page-card', '<page-card_description if="{typeIs(\'DEAMON-DESCRIPTION\')}" source="{description()}" callback="{childrenCallback}"></page-card_description> <deamon-page-card_name-short if="{typeIs(\'DEAMON-CODE\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_name-short> <deamon-page-card_elapsed-time if="{typeIs(\'ELAPSED-TIME\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_elapsed-time> <deamon-page-card_impure if="{typeIs(\'IMPURES\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_impure> <deamon-page-card-status if="{typeIs(\'DEAMON-STATUS\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card-status>', '', '', function(opts) {
+riot.tag2('deamon-page-card', '<page-card_description if="{typeIs(\'DEAMON-DESCRIPTION\')}" source="{description()}" callback="{childrenCallback}"></page-card_description> <deamon-page-card_name-short if="{typeIs(\'DEAMON-CODE\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_name-short> <deamon-page-card_elapsed-time if="{typeIs(\'ELAPSED-TIME\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card_elapsed-time> <deamon-page-card_impure if="{typeIs(\'IMPURES\')}" source="{opts.source}" callback="{opts.callback}"></deamon-page-card_impure> <deamon-page-card-status if="{typeIs(\'DEAMON-STATUS\')}" source="{opts.source.contents}" callback="{opts.callback}"></deamon-page-card-status>', '', '', function(opts) {
      this.description = () => {
          let deamon = opts.source.contents.deamon;
 
@@ -739,16 +772,19 @@ riot.tag2('deamon-page-card_elapsed-time', '<deamon-page-card_elapsed-time-small
 
 riot.tag2('deamon-page-card_impure', '<div class="small"> <div class="header {finished()}"> <p> Impure <span style="margin-left:11px;"> <a href="{linkImpure()}"> <i class="fas fa-link"></i> </a> </span> </p> </div> <div class="name"> <p>{name()}</p> </div> <div class="elapsed-time"> <p>{elapsedTime()}</p> </div> </div>', 'deamon-page-card_impure > .small { display: flex; flex-direction: column; width: calc(11px * 8 + 11px * 7); height: calc(11px * 8 + 11px * 7); margin-bottom: 11px; background: #fff; border-radius: 8px; } deamon-page-card_impure > .small > .header { width: 100%; height: 33px; padding: 8px 11px; border-radius: 8px 8px 0px 0px; font-size: 12px; font-weight: bold; background: rgba(100, 1, 37, 0.88); color: #fff; } deamon-page-card_impure > .small > .header.finished { background: rgba(137, 195, 235, 0.88); } deamon-page-card_impure > .small > .name { padding: 6px 8px; font-size: 14px; font-weight: bold; flex-grow: 1; display: flex; justify-content: center; align-items: center; } deamon-page-card_impure .small > .elapsed-time { text-align: center; font-size: 22px; padding-top: 8px; }', '', function(opts) {
      this.elapsedTime = () => {
-         return "00:00:00";
+         if (!this.opts.source.purge)
+             return 0;
+
+         return new HolyWater().int2hhmmss(this.opts.source.purge.elapsed_time_total);
      };
      this.linkImpure = () => {
-         return "%s/impures/%d".format(location.hash, this.opts.source.id);
+         return "%s/impures/%d".format(location.hash, this.opts.source.contents.id);
      };
      this.name = () => {
-         return this.opts.source.name;
+         return this.opts.source.contents.name;
      };
      this.finished = () => {
-         return this.opts.source.finished_at ? 'finished' : '';
+         return this.opts.source.contents.finished_at ? 'finished' : '';
      };
 });
 
@@ -828,6 +864,7 @@ riot.tag2('deamon-page', '<section class="section" style="padding-bottom: 22px;"
      this.source = {
          deamon: null,
          impures: [],
+         impure_purge_times: [],
          purges: { summary: [] },
      };
      this.getID = () => {
@@ -2401,7 +2438,7 @@ riot.tag2('page-impure-card-deamon-large', '<div riot-style="width:{w()}px; heig
      };
 });
 
-riot.tag2('page-impure-card-deamon-small', '<div riot-style="width:{w()}px; height:{h()}px;"> <div style="display: flex;flex-grow: 1;align-items: center; justify-content: center;"> <p style="text-align:center;"> <b>{deamonNameShort()}</b> <br> {deamonName()} </p> </div> <div style="display:flex; justify-content:space-between;"> <p><a href="{deamonLink()}">Link</a></p> <button class="button is-small" onclick="{clickEdit}">変更</button> </div> </div>', 'page-impure-card-deamon-small > div { display: flex; flex-direction: column; height: 100%; padding: 11px; background: rgba(22, 22, 14, 0.88);; color: #e83929; font-weight: bold; border-radius: 8px; }', '', function(opts) {
+riot.tag2('page-impure-card-deamon-small', '<div riot-style="width:{w()}px; height:{h()}px;"> <div style="display: flex;flex-grow: 1;align-items: center; justify-content: center;"> <p style="text-align:center;"> <b>{deamonNameShort()}</b> <br> {deamonName()} </p> </div> <div style="display:flex; justify-content:space-between;"> <p><a href="{deamonLink()}">Link</a></p> <button class="button is-small" onclick="{clickEdit}">変更</button> </div> </div>', 'page-impure-card-deamon-small > div { display: flex; flex-direction: column; height: 100%; padding: 11px; background: rgba(22, 22, 14, 0.88); color: #e83929; font-weight: bold; border-radius: 8px; }', '', function(opts) {
      this.clickEdit = () => {
          this.opts.callback('open-deamon');
      };
@@ -2409,7 +2446,7 @@ riot.tag2('page-impure-card-deamon-small', '<div riot-style="width:{w()}px; heig
      this.w = () => {
          let hw = new HolyWater();
 
-         return hw.pageCardDescriptionSize(8, null, 11);
+         return hw.pageCardDescriptionSize(16, null, 11);
      };
      this.h = () => {
          let hw = new HolyWater();

@@ -9,7 +9,9 @@
 
     <script>
      this.list = () => {
-         return new HolyWater().pageDeamonContentsList(this.opts.source);
+         let x = new HolyWater().pageDeamonContentsList(this.opts.source);
+         dump(x);
+         return x;
      };
     </script>
 

@@ -54,5 +54,6 @@
            #:pages-impure-waiting
            #:pages-requests
            #:pages-deamon
-           #:pages-angel))
+           #:pages-angel)
+  (:export #:get-session-data))
 (in-package :holy-water.api.controller)

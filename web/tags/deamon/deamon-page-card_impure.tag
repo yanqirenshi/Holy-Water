@@ -23,16 +23,19 @@
 
     <script>
      this.elapsedTime = () => {
-         return "00:00:00";
+         if (!this.opts.source.purge)
+             return 0;
+
+         return new HolyWater().int2hhmmss(this.opts.source.purge.elapsed_time_total);
      };
      this.linkImpure = () => {
-         return "%s/impures/%d".format(location.hash, this.opts.source.id);
+         return "%s/impures/%d".format(location.hash, this.opts.source.contents.id);
      };
      this.name = () => {
-         return this.opts.source.name;
+         return this.opts.source.contents.name;
      };
      this.finished = () => {
-         return this.opts.source.finished_at ? 'finished' : '';
+         return this.opts.source.contents.finished_at ? 'finished' : '';
      };
     </script>
 

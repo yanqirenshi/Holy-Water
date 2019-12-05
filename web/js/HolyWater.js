@@ -106,12 +106,12 @@ class HolyWater {
         });
 
         out.push({
-            type: 'IMPURE-STATUS',
+            type: 'IMPURE-DEAMON',
             contents: source,
         });
 
         out.push({
-            type: 'IMPURE-DEAMON',
+            type: 'IMPURE-STATUS',
             contents: source,
         });
 
@@ -175,6 +175,10 @@ class HolyWater {
 
         let deamon  = source.deamon;
         let impures = source.impures;
+        let impure_purge_times = source.impure_purge_times.reduce((ht, d) => {
+            ht[d.impure_id] = d;
+            return ht;
+        }, {});
 
         out.push({
             type: 'DEAMON-DESCRIPTION',
@@ -198,11 +202,25 @@ class HolyWater {
 
         let tmp = [];
         tmp = tmp.concat(source.impures.map((impure) => {
-            return {
+            let out = {
                 type: 'IMPURES',
                 contents: impure,
                 time: new Date(impure.created_at),
+                purge: {
+                    start: null,
+                    end: null,
+                    elapsed_time_total: null,
+                }
             };
+
+            let data = impure_purge_times[impure.id];
+            if (data) {
+                out.purge.end                = data.purge_end;
+                out.purge.start              = data.purge_start;
+                out.purge.elapsed_time_total = data.purge_elapsed_time_total;
+            }
+
+            return out;
         }));
 
         return []

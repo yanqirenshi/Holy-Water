@@ -20,6 +20,7 @@
      this.source = {
          deamon: null,
          impures: [],
+         impure_purge_times: [],
          purges: { summary: [] },
      };
      this.getID = () => {

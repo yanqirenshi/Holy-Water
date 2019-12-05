@@ -61,6 +61,7 @@
     (let ((daily (hw:list-summary-purge-by-impure :deamon deamon)))
       (list :|deamon|  (dao2deamon deamon)
             :|impures| (hw:list-impures-by-deamon :deamon deamon)
+            :|impure_purge_times| (hw:list-impures-purged-time-by-deamon :deamon deamon)
             :|purges|  (list :|summary| (list :|daily| daily)
                              :|total|   (list :|amount| (reduce #'(lambda (a b)
                                                                     (+ a (getf b :|elapsed_time|)))

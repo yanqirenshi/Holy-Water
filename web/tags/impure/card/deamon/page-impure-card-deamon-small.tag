@@ -28,7 +28,7 @@
      this.w = () => {
          let hw = new HolyWater();
 
-         return hw.pageCardDescriptionSize(8, null, 11);
+         return hw.pageCardDescriptionSize(16, null, 11);
      };
      this.h = () => {
          let hw = new HolyWater();
@@ -65,7 +65,7 @@
          height: 100%;
 
          padding: 11px;
-         background: rgba(22, 22, 14, 0.88);;
+         background: rgba(22, 22, 14, 0.88);
          color: #e83929;
          font-weight: bold;
 

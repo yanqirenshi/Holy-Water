@@ -27,22 +27,16 @@
         </div>
     </section>
 
-
-    <section class="section">
-        <div class="container">
-            <h1 class="title is-4 hw-text-white">作業実績</h1>
-            <page-angel-result-card-pool source={source}
-                                         span={span}
-                                         callback={callback}></page-angel-result-card-pool>
-        </div>
-    </section>
+    <page-angel-action-results source={source}
+                               span={span}
+                               callback={callback}></page-angel-action-results>
 
     <script>
      this.callback = (action, data) => {
          if (action=='click-refresh') {
              this.span.from = data.from;
              this.span.to   = data.to;
-
+             dump(this.span.from, this.span.to);
              ACTIONS.fetchPagesSelf(this.span.from, this.span.to);
          }
      };

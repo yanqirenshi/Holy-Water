@@ -58,14 +58,15 @@
     (write-key-value "ghost_id"      (slot-value obj 'ghost-id))))
 
 (defun dao2angel (dao)
-  (when dao
-    (let ((angel (make-instance 'angel))
-          (ghost (hw::get-ghost-shadow :angel dao)))
-      (setf (id angel)   (mito:object-id dao))
-      (setf (name angel) (hw::name dao))
-      (when ghost
-        (setf (ghost-id angel) (hw::ghost-id ghost)))
-      angel)))
+  (if (null dao)
+      :null
+      (let ((angel (make-instance 'angel))
+            (ghost (hw::get-ghost-shadow :angel dao)))
+        (setf (id angel)   (mito:object-id dao))
+        (setf (name angel) (hw::name dao))
+        (when ghost
+          (setf (ghost-id angel) (hw::ghost-id ghost)))
+        angel)))
 
 (defun find-angels (angel)
   (mapcar #'dao2angel

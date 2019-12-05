@@ -15,6 +15,7 @@
                 :components
                 ((:module "controller"
                   :components ((:file "package")
+                               (:file "session")
                                (:file "orthodox")
                                (:file "angel")
                                (:file "utilities")

@@ -74,6 +74,7 @@
            #:list-maledict-impures
            #:list-orthodox-angels
            #:list-impures-by-deamon
+           #:list-impures-purged-time-by-deamon
            #:list-relational-impures-by-impure
            #:list-summary-purge-by-angel-deamon-span
            #:list-summary-purge-by-angel-impure-span
