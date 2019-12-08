@@ -74,3 +74,11 @@
         :|purges|  (list :|deamons| (hw:list-summary-purge-by-angel-deamon-span angel :from from :to to)
                          :|impures| (hw:list-summary-purge-by-angel-impure-span angel :from from :to to)
                          :|days|    (list :|deamons| (hw:list-summary-purge-by-angel-span angel :from from :to to)))))
+
+;;;;;
+;;;;;
+;;;;;
+(defun pages-world (angel maledict-id)
+  (let ((maledict (hw:get-maledict :angel angel :id maledict-id)))
+    (assert maledict)
+    (list :|impures| (hw:list-maledict-impures angel maledict))))
