@@ -1,8 +1,11 @@
 (in-package :holy-water)
 
-(defun get-maledict (&key id)
-  (when id
-    (find-dao 'rs_maledict :id id)))
+(defun get-maledict (&key id angel)
+  (cond ((and id angel)
+         (first (remove-if #'(lambda (maledict)
+                               (/= (mito:object-id maledict) id))
+                           (find-maledicts :angel angel))))
+        (id (find-dao 'rs_maledict :id id))))
 
 (defun find-maledicts (&key angel)
   (select-dao 'rs_maledict
