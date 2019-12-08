@@ -78,7 +78,11 @@
 ;;;;;
 ;;;;;
 ;;;;;
-(defun pages-world (angel maledict-id)
-  (let ((maledict (hw:get-maledict :angel angel :id maledict-id)))
-    (assert maledict)
-    (list :|impures| (hw:list-maledict-impures angel maledict))))
+(defun pages-world (angel maledict-id orthodox-id)
+  (let ((maledict (hw:get-maledict :angel angel :id maledict-id))
+        (orthodox (hw:get-orthodox :id orthodox-id)))
+    (when maledict-id (assert maledict))
+    (when orthodox-id (assert orthodox))
+    (list :|impures|  (and maledict (hw:list-maledict-impures angel maledict))
+          :|orthodox| (dao2orthodox orthodox)
+          :|orthodox_angels| (hw:list-orthodox-angels :orthodox orthodox))))

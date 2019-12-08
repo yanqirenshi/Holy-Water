@@ -27,5 +27,6 @@
   (timestamptz2timestamp! rec :|appointed_at|))
 
 (defun list-orthodox-angels (&key orthodox)
-  (fetch-all-list (list-orthodox-angels-sql :orthodox orthodox)
-                  :infrate! #'list-orthodox-angels-infrate!))
+  (when orthodox
+    (fetch-all-list (list-orthodox-angels-sql :orthodox orthodox)
+                    :infrate! #'list-orthodox-angels-infrate!)))
