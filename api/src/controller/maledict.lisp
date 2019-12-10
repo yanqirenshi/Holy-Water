@@ -15,6 +15,12 @@
     (write-key-value "description"   (slot-value obj 'description))
     (write-key-value "order"         (slot-value obj 'order))
     (write-key-value "deletable"     (slot-value obj 'deletable))
+    (write-key-value "maledict_type" (let ((plist (slot-value obj 'maledict-type)))
+                                       (list :|deletable|   (getf plist :deletable)
+                                             :|description| (getf plist :description)
+                                             :|name|        (getf plist :name)
+                                             :|order|       (getf plist :order))))
+    ;; haiki yotei
     (write-key-value "maledict-type" (slot-value obj 'maledict-type))))
 
 (defun dao2maledict (dao)
