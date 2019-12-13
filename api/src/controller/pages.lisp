@@ -83,5 +83,6 @@
         (orthodox (hw:get-orthodox :id orthodox-id)))
     (when maledict-id (assert maledict))
     (when orthodox-id (assert orthodox))
-    (list :|impures| (and maledict (hw:list-maledict-impures angel maledict))
+    (list :|impures| (and maledict
+                          (hw:list-maledict-impures angel maledict))
           :|angels|  (hw:list-orthodox-angels :orthodox orthodox))))
