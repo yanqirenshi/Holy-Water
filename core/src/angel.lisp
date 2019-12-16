@@ -9,7 +9,7 @@
 
 
 (defun create-angel (&key (name "????????") creator)
-  (let ((by-id (creator-id creator)))
+  (let ((by-id (if creator (creator-id creator) -1)))
     (let ((angel (create-dao 'rs_angel
                              :name name
                              :created-by by-id

@@ -69,20 +69,40 @@ CREATE TABLE IF NOT EXISTS re_impure (
     updated_at TIMESTAMPTZ
 );
 
-/* ***** */
-/* grant */
-/* ***** */
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON th_angel_maledict TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON th_deamon_impure TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON th_ghost_shadow_angel TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON th_ghost_shadow_deccot TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON th_orthodox_angel TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON re_impure TO hw_user;
+
+/* ************* */
+/* Grant: hw_app */
+/* ************* */
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON th_angel_maledict TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON th_deamon_impure TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON th_ghost_shadow_angel TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON th_ghost_shadow_deccot TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON th_orthodox_angel TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON re_impure TO hw_app;
 
 
-GRANT USAGE, SELECT, UPDATE ON th_angel_maledict_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON th_deamon_impure_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON th_ghost_shadow_angel_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON th_ghost_shadow_deccot_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON th_orthodox_angel_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON re_impure_id_seq TO hw_user;
+GRANT USAGE, SELECT, UPDATE ON th_angel_maledict_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON th_deamon_impure_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON th_ghost_shadow_angel_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON th_ghost_shadow_deccot_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON th_orthodox_angel_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON re_impure_id_seq TO hw_app;
+
+
+/* ************** */
+/* Grant: hw_user */
+/* ************** */
+GRANT SELECT ON th_angel_maledict TO hw_user;
+GRANT SELECT ON th_deamon_impure TO hw_user;
+GRANT SELECT ON th_ghost_shadow_angel TO hw_user;
+GRANT SELECT ON th_ghost_shadow_deccot TO hw_user;
+GRANT SELECT ON th_orthodox_angel TO hw_user;
+GRANT SELECT ON re_impure TO hw_user;
+
+
+GRANT USAGE, SELECT ON th_angel_maledict_id_seq TO hw_user;
+GRANT USAGE, SELECT ON th_deamon_impure_id_seq TO hw_user;
+GRANT USAGE, SELECT ON th_ghost_shadow_angel_id_seq TO hw_user;
+GRANT USAGE, SELECT ON th_ghost_shadow_deccot_id_seq TO hw_user;
+GRANT USAGE, SELECT ON th_orthodox_angel_id_seq TO hw_user;
+GRANT USAGE, SELECT ON re_impure_id_seq TO hw_user;

@@ -16,7 +16,7 @@
   (:documentation "email と password で認証し、rs_angel を返す"))
 
 (defun create-setting-auth (angel &key email password editor)
-  (let ((by-id (creator-id editor)))
+  (let ((by-id (if editor (creator-id editor) -1)))
     (create-dao 'ev_setting-auth
                 :angel-id (object-id angel)
                 :email email

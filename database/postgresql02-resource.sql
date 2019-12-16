@@ -1,7 +1,7 @@
 /* psql -U hw_sys -d holy_water */
 
 /* **************************************************************** */
-/* Resources                                                        */ 
+/* Resources                                                        */
 /* **************************************************************** */
 CREATE TABLE IF NOT EXISTS rs_angel (
     id BIGSERIAL NOT NULL PRIMARY KEY,
@@ -125,29 +125,60 @@ CREATE TABLE IF NOT EXISTS rs_orthodox (
 );
 
 
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_angel TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_deamon TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_deccot_gitlab TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_deccot_github TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_ghost_shadow TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_grigori TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_impure_active TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_impure_finished TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_impure_discarded TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_maledict TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_orthodox_duty TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_orthodox TO hw_user;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_angel TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_deamon TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_deccot_gitlab TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_deccot_github TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_ghost_shadow TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_grigori TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_impure_active TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_impure_finished TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_impure_discarded TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_maledict TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_orthodox_duty TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON rs_orthodox TO hw_app;
 
 
-GRANT USAGE, SELECT, UPDATE ON rs_angel_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON rs_deamon_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON rs_deccot_gitlab_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON rs_deccot_github_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON rs_ghost_shadow_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON rs_grigori_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON rs_impure_active_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON rs_impure_finished_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON rs_impure_discarded_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON rs_maledict_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON rs_orthodox_duty_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON rs_orthodox_id_seq TO hw_user;
+GRANT USAGE, SELECT, UPDATE ON rs_angel_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON rs_deamon_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON rs_deccot_gitlab_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON rs_deccot_github_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON rs_ghost_shadow_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON rs_grigori_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON rs_impure_active_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON rs_impure_finished_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON rs_impure_discarded_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON rs_maledict_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON rs_orthodox_duty_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON rs_orthodox_id_seq TO hw_app;
+
+
+/* **************************************************************** */
+/* hw_user                                                          */
+/* **************************************************************** */
+GRANT SELECT ON rs_angel TO hw_user;
+GRANT SELECT ON rs_deamon TO hw_user;
+GRANT SELECT ON rs_deccot_gitlab TO hw_user;
+GRANT SELECT ON rs_deccot_github TO hw_user;
+GRANT SELECT ON rs_ghost_shadow TO hw_user;
+GRANT SELECT ON rs_grigori TO hw_user;
+GRANT SELECT ON rs_impure_active TO hw_user;
+GRANT SELECT ON rs_impure_finished TO hw_user;
+GRANT SELECT ON rs_impure_discarded TO hw_user;
+GRANT SELECT ON rs_maledict TO hw_user;
+GRANT SELECT ON rs_orthodox_duty TO hw_user;
+GRANT SELECT ON rs_orthodox TO hw_user;
+
+
+GRANT USAGE, SELECT ON rs_angel_id_seq TO hw_user;
+GRANT USAGE, SELECT ON rs_deamon_id_seq TO hw_user;
+GRANT USAGE, SELECT ON rs_deccot_gitlab_id_seq TO hw_user;
+GRANT USAGE, SELECT ON rs_deccot_github_id_seq TO hw_user;
+GRANT USAGE, SELECT ON rs_ghost_shadow_id_seq TO hw_user;
+GRANT USAGE, SELECT ON rs_grigori_id_seq TO hw_user;
+GRANT USAGE, SELECT ON rs_impure_active_id_seq TO hw_user;
+GRANT USAGE, SELECT ON rs_impure_finished_id_seq TO hw_user;
+GRANT USAGE, SELECT ON rs_impure_discarded_id_seq TO hw_user;
+GRANT USAGE, SELECT ON rs_maledict_id_seq TO hw_user;
+GRANT USAGE, SELECT ON rs_orthodox_duty_id_seq TO hw_user;
+GRANT USAGE, SELECT ON rs_orthodox_id_seq TO hw_user;

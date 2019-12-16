@@ -328,25 +328,52 @@ CREATE TABLE IF NOT EXISTS ev_setting_auth (
 /* ***** */
 /* grant */
 /* ***** */
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON ev_collect_impure TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON ev_collect_impure_history TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON ev_incantation_solo TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON ev_incantation_duet TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON ev_purge_start TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON ev_purge_end TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON ev_request TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON ev_request_message_unread TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON ev_request_message_read TO hw_user;
-GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON ev_setting_auth TO hw_user;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON ev_collect_impure TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON ev_collect_impure_history TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON ev_incantation_solo TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON ev_incantation_duet TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON ev_purge_start TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON ev_purge_end TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON ev_request TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON ev_request_message_unread TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON ev_request_message_read TO hw_app;
+GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON ev_setting_auth TO hw_app;
 
 
-GRANT USAGE, SELECT, UPDATE ON ev_collect_impure_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON ev_collect_impure_history_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON ev_incantation_solo_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON ev_incantation_duet_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON ev_purge_start_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON ev_purge_end_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON ev_request_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON ev_request_message_unread_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON ev_request_message_read_id_seq TO hw_user;
-GRANT USAGE, SELECT, UPDATE ON ev_setting_auth_id_seq TO hw_user;
+GRANT USAGE, SELECT, UPDATE ON ev_collect_impure_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON ev_collect_impure_history_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON ev_incantation_solo_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON ev_incantation_duet_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON ev_purge_start_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON ev_purge_end_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON ev_request_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON ev_request_message_unread_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON ev_request_message_read_id_seq TO hw_app;
+GRANT USAGE, SELECT, UPDATE ON ev_setting_auth_id_seq TO hw_app;
+
+
+/* ***** */
+/* grant */
+/* ***** */
+GRANT SELECT ON ev_collect_impure TO hw_user;
+GRANT SELECT ON ev_collect_impure_history TO hw_user;
+GRANT SELECT ON ev_incantation_solo TO hw_user;
+GRANT SELECT ON ev_incantation_duet TO hw_user;
+GRANT SELECT ON ev_purge_start TO hw_user;
+GRANT SELECT ON ev_purge_end TO hw_user;
+GRANT SELECT ON ev_request TO hw_user;
+GRANT SELECT ON ev_request_message_unread TO hw_user;
+GRANT SELECT ON ev_request_message_read TO hw_user;
+GRANT SELECT ON ev_setting_auth TO hw_user;
+
+
+GRANT USAGE, SELECT ON ev_collect_impure_id_seq TO hw_user;
+GRANT USAGE, SELECT ON ev_collect_impure_history_id_seq TO hw_user;
+GRANT USAGE, SELECT ON ev_incantation_solo_id_seq TO hw_user;
+GRANT USAGE, SELECT ON ev_incantation_duet_id_seq TO hw_user;
+GRANT USAGE, SELECT ON ev_purge_start_id_seq TO hw_user;
+GRANT USAGE, SELECT ON ev_purge_end_id_seq TO hw_user;
+GRANT USAGE, SELECT ON ev_request_id_seq TO hw_user;
+GRANT USAGE, SELECT ON ev_request_message_unread_id_seq TO hw_user;
+GRANT USAGE, SELECT ON ev_request_message_read_id_seq TO hw_user;
+GRANT USAGE, SELECT ON ev_setting_auth_id_seq TO hw_user;

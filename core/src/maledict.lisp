@@ -21,7 +21,7 @@
                           (order 1)
                           (deletable nil)
                           (description ""))
-  (let ((by-id (creator-id creator)))
+  (let ((by-id (if creator (creator-id creator) -1)))
     (create-dao 'rs_maledict
                      :maledict-type-id maledict-type-id
                      :name name
