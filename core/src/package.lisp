@@ -23,6 +23,7 @@
            #:*db-user*
            #:*db-user-password*)
   (:export #:find-deamons
+           #:find-deamons-alive
            #:create-deamon
            #:purge-deamon)
   (:export #:find-maledicts
