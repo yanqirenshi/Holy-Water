@@ -225,3 +225,22 @@
   (when impure
     (list :|node| nil
           :|edge| nil)))
+
+
+
+;;;;;
+;;;;; deamon-impure
+;;;;;
+(defgeneric create-deamon-impure (deamon impure &key editor)
+  (:method ((deamon-id integer) (impure-id integer) &key editor)
+    (create-deamon-impure :deamon (get-deamon :id deamon-id)
+                          :impure (get-impure :id impure-id)
+                          :editor editor))
+  (:method ((deamon rs_deamon) (impure rs_impure) &key editor)
+    (assert (and deamon impure))
+    (let ((editor-id (object-id editor)))
+      (mito:create-dao 'th_deamon-impure
+                       :deamon-id (object-id deamon)
+                       :impure-id (object-id impure)
+                       :created-by editor-id
+                       :updated-by editor-id))))
