@@ -10,7 +10,7 @@
 
 
 (defun find-deamons-alive ()
-  (select-dao 'rs_deamon (where (:not-null :purged-at))))
+  (select-dao 'rs_deamon (where (:is-null :purged-at))))
 
 
 (defun create-deamon (name name_short &key creator (description ""))
