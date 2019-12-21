@@ -21,7 +21,8 @@
                 #:union-all-queries)
   (:export #:*db-name*
            #:*db-user*
-           #:*db-user-password*)
+           #:*db-user-password*
+           #:connect-db)
   (:export #:find-deamons
            #:create-deamon
            #:purge-deamon)
