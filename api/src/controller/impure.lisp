@@ -185,3 +185,27 @@
   (setf (hw::description impure) description)
   (mito:save-dao impure)
   (dao2impure impure))
+
+
+;;;;;
+;;;;; create-impure
+;;;;;
+(defun create-impure-core (angel name description maledict-id deamon-id)
+  (let ((maledict (and maledict-id (hw:get-maledict :id maledict-id)))
+        (deamon   (and deamon-id   (hw::get-deamon  :id deamon-id))))
+    (when maledict-id (assert maledict))
+    (when deamon-id   (assert deamon))
+    (let ((new-impure (hw:create-impure :name name
+                                        :description description
+                                        :creator angel)))
+      (if maledict
+          (hw:add-impure maledict new-impure :creator angel)
+          (hw:add-impure angel    new-impure :creator angel))
+      (when deamon
+        (hw:create-deamon-impure deamon new-impure :editor angel))
+      (dao2impure new-impure :angel angel))))
+
+
+(defun create-impure (angel &key name description maledict-id deamon-id)
+  (dbi:with-transaction mito:*connection*
+    (create-impure-core angel name description maledict-id deamon-id)))

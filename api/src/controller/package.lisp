@@ -8,6 +8,7 @@
   (:export #:find-maledicts
            #:get-maledict)
   (:export #:find-deamons
+           #:find-deamons-alive
            #:create-deamon
            #:update-deamon-name
            #:update-deamon-description

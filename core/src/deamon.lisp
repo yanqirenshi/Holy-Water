@@ -9,6 +9,10 @@
   (select-dao 'rs_deamon))
 
 
+(defun find-deamons-alive ()
+  (select-dao 'rs_deamon (where (:is-null :purged-at))))
+
+
 (defun create-deamon (name name_short &key creator (description ""))
   (let ((by-id (creator-id creator)))
     (create-dao 'rs_deamon

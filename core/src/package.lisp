@@ -24,6 +24,8 @@
            #:*db-user-password*
            #:connect-db)
   (:export #:find-deamons
+           #:get-deamon
+           #:find-deamons-alive
            #:create-deamon
            #:purge-deamon)
   (:export #:find-maledicts
@@ -38,6 +40,7 @@
            #:find-impures-cemetery
            #:add-after-impure
            #:add-deamon-impure
+           #:create-deamon-impure
            #:impure-set-deamon)
   (:export #:find-orthodoxs
            #:get-orthodox

@@ -29,6 +29,17 @@
   (mapcar #'dao2deamon
           (hw:find-deamons)))
 
+
+(defun find-deamons ()
+  (mapcar #'dao2deamon
+          (hw:find-deamons)))
+
+(defun find-deamons-alive ()
+  (mapcar #'dao2deamon
+          (hw:find-deamons-alive)))
+
+
+
 (defun get-deamon (&key id)
   (when id
     (dao2deamon (mito:find-dao 'hw::rs_deamon :id id))))
