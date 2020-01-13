@@ -17,10 +17,11 @@
   (let ((by-id (creator-id creator)))
     (create-dao 'rs_deamon
                 :name name
-                :name-short name_short
+                :name-short  name_short
                 :description description
-                :created-by by-id
-                :updated-by by-id)))
+                :purged-at   nil
+                :created-by  by-id
+                :updated-by  by-id)))
 
 
 (defgeneric purge-deamon (deamon &key editor)

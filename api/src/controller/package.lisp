@@ -27,6 +27,7 @@
            #:create-after-impure
            #:create-deamon-impure
            #:impure-set-deamon
+           #:impure-set-deamon-new
            #:update-impure-description)
   (:export #:find-orthodoxs
            #:find-orthodox-all-exorcists
@@ -55,6 +56,7 @@
            #:pages-impure-waiting
            #:pages-requests
            #:pages-deamon
+           #:pages-deamon-new
            #:pages-angel
            #:pages-world)
   (:export #:get-session-data))

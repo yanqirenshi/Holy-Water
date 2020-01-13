@@ -177,6 +177,14 @@
     (assert deamon)
     (hw:impure-set-deamon angel impure deamon :editor angel)))
 
+(defun impure-set-deamon-new (angel deamon impure)
+  "TODO: impure-set-deamon の新しいヤツ"
+  (assert deamon)
+  (assert impure)
+  (hw:impure-set-deamon angel impure deamon :editor angel)
+  (list :|deamon| (dao2deamon deamon)
+        :|impure| (dao2impure (hw:get-impure :id (mito:object-id impure)))))
+
 
 (defun update-impure-description (angel impure &key description)
   (declare (ignore angel))
@@ -203,7 +211,10 @@
           (hw:add-impure angel    new-impure :creator angel))
       (when deamon
         (hw:create-deamon-impure deamon new-impure :editor angel))
-      (dao2impure new-impure :angel angel))))
+
+      (list :|deamon|   (or (dao2deamon deamon) :null)
+            :|maledict| (dao2maledict (hw::impure-maledict new-impure))
+            :|impure|   (dao2impure new-impure :angel angel)))))
 
 
 (defun create-impure (angel &key name description maledict-id deamon-id)

@@ -56,6 +56,22 @@
           :|messages| (hw:list-request-messages-unred angel :impure impure))))
 
 
+(defun pages-angel (angel from to)
+  (list :|angel|   (dao2angel angel)
+        :|purges|  (list :|deamons| (hw:list-summary-purge-by-angel-deamon-span angel :from from :to to)
+                         :|impures| (hw:list-summary-purge-by-angel-impure-span angel :from from :to to)
+                         :|days|    (list :|deamons| (hw:list-summary-purge-by-angel-span angel :from from :to to)))))
+
+;;;;;
+;;;;;
+;;;;;
+(defun pages-deamon-purges (daily)
+  (list :|summary| (list :|daily| daily)
+        :|total|   (list :|amount| (reduce #'(lambda (a b)
+                                               (+ a (getf b :|elapsed_time|)))
+                                           daily :initial-value 0.0)
+                         :|unit| :second)))
+
 (defun pages-deamon (angel deamon)
   (when (and angel deamon)
     (let ((daily (hw:list-summary-purge-by-impure :deamon deamon)))
@@ -68,12 +84,13 @@
                                                                 daily :initial-value 0.0)
                                               :|unit| :second))))))
 
+(defun pages-deamon-new (angel deamon)
+  (declare (ignore angel))
+  (let ((daily (hw:list-summary-purge-by-impure :deamon deamon)))
+    (list :|deamon|  (dao2deamon deamon)
+          :|impures| (hw:list-impures-by-deamon :deamon deamon)
+          :|purges|  (pages-deamon-purges daily))))
 
-(defun pages-angel (angel from to)
-  (list :|angel|   (dao2angel angel)
-        :|purges|  (list :|deamons| (hw:list-summary-purge-by-angel-deamon-span angel :from from :to to)
-                         :|impures| (hw:list-summary-purge-by-angel-impure-span angel :from from :to to)
-                         :|days|    (list :|deamons| (hw:list-summary-purge-by-angel-span angel :from from :to to)))))
 
 ;;;;;
 ;;;;;
