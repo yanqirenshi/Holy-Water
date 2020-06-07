@@ -95,6 +95,20 @@
 ;;;;;
 ;;;;;
 ;;;;;
+(defun pages-impure-new (angel impure)
+  (let ((deamon (hw::impure-deamon impure))
+        (maledict (hw::impure-maledict impure)))
+    (list :|deamon|   (or (dao2deamon deamon) :null)
+          :|impure|   (dao2impure impure :angel angel)
+          :|maledict| (or (dao2maledict maledict) :null)
+          :|angel|    (or (dao2angel (hw::maledict-angel maledict)) :null)
+          :|purges|   (impure-purges impure)
+          :|requests| (impure-request-message impure))))
+
+
+;;;;;
+;;;;;
+;;;;;
 (defun pages-world (angel maledict-id orthodox-id)
   (let ((maledict (hw:get-maledict :angel angel :id maledict-id))
         (orthodox (hw:get-orthodox :id orthodox-id)))

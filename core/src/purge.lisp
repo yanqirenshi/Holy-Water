@@ -75,9 +75,13 @@
          (id-col   (alexandria:make-keyword (concatenate 'string table-name ".ID")))
          (name-col (alexandria:make-keyword (concatenate 'string table-name ".NAME"))))
     (select (:ev_purge_end.*
-             (:as name-col :impure_name))
+             (:as name-col :impure_name)
+             (:as :rs_angel.name :angel_name))
       (from :ev_purge_end)
-      (inner-join table :on (:= :ev_purge_end.impure_id id-col))
+      (inner-join table
+                  :on (:= :ev_purge_end.impure_id id-col))
+      (left-join :rs_angel
+                 :on (:= :ev_purge_end.angel_id :rs_angel.id))
       (where (:and (:= :ev_purge_end.angel_id (object-id angel))
                    (:or (:and (:<= :ev_purge_end.start from)
                               (:>= :ev_purge_end.end   from))
@@ -90,9 +94,13 @@
          (id-col   (alexandria:make-keyword (concatenate 'string table-name ".ID")))
          (name-col (alexandria:make-keyword (concatenate 'string table-name ".NAME"))))
     (select (:ev_purge_end.*
-             (:as name-col :impure_name))
+             (:as name-col       :impure_name)
+             (:as :rs_angel.name :angel_name))
       (from :ev_purge_end)
-      (inner-join table :on (:= :ev_purge_end.impure_id id-col))
+      (inner-join table
+                  :on (:= :ev_purge_end.impure_id id-col))
+      (left-join :rs_angel
+                 :on (:= :ev_purge_end.angel_id :rs_angel.id))
       (where (:= :ev_purge_end.impure_id (object-id impure))))))
 
 

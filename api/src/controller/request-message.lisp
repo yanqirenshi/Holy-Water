@@ -11,13 +11,16 @@
 
 (defmethod %to-json ((obj request-message))
   (with-object
-    (write-key-value "id"            (slot-value obj 'id))
-    (write-key-value "impure_id"     (slot-value obj 'impure-id))
-    (write-key-value "angel_id_from" (slot-value obj 'angel-id-from))
-    (write-key-value "angel_id_to"   (slot-value obj 'angel-id-to))
-    (write-key-value "contents"      (slot-value obj 'contents))
-    (write-key-value "messaged_at"   (timestamp2str (slot-value obj 'messaged-at)))
-    (write-key-value "readed_at"     (timestamp2str (slot-value obj 'readed-at)))))
+    (write-key-value "id"              (slot-value obj 'id))
+    (write-key-value "impure_id"       (slot-value obj 'impure-id))
+    (write-key-value "impure_name"     "")
+    (write-key-value "angel_id_from"   (slot-value obj 'angel-id-from))
+    (write-key-value "angel_name_from" "")
+    (write-key-value "angel_id_to"     (slot-value obj 'angel-id-to))
+    (write-key-value "angel_name_to"   "")
+    (write-key-value "contents"        (slot-value obj 'contents))
+    (write-key-value "messaged_at"     (timestamp2str (slot-value obj 'messaged-at)))
+    (write-key-value "readed_at"       (timestamp2str (slot-value obj 'readed-at)))))
 
 (defgeneric dao2request-message-readed-at (dao)
   (:method ((dao hw::ev_request-message-unread))

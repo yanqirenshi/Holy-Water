@@ -35,6 +35,17 @@
   (:method (dao)
     nil))
 
+(defun impure-purges (impure)
+  (mapcar #'plist2purge-history
+          (hw:find-purge-history :impure impure)))
+
+(defun impure-request-message (impure)
+  (mapcar #'dao2request-message
+          (nconc
+           (mito:select-dao 'hw::ev_request-message-unread
+             (sxql:where (:= :ev_request_message_unread.impure_id (mito:object-id impure))))
+           (mito:select-dao 'hw::ev_request-message-read
+             (sxql:where (:= :ev_request_message_read.impure_id (mito:object-id impure)))))))
 
 (defun dao2impure (dao &key angel with-details)
   (when dao
@@ -51,18 +62,8 @@
                 (if purge (dao2purge purge) :null))))
       (when with-details
         ;; TODO: 以下は core に実装すべきやね
-        ;; purges
-        (setf (purges impure)
-              (mapcar #'plist2purge-history
-                      (hw:find-purge-history :impure dao)))
-        ;; requests
-        (setf (requests impure)
-              (mapcar #'dao2request-message
-                      (nconc
-                       (mito:select-dao 'hw::ev_request-message-unread
-                         (sxql:where (:= :ev_request_message_unread.impure_id (mito:object-id dao))))
-                       (mito:select-dao 'hw::ev_request-message-read
-                         (sxql:where (:= :ev_request_message_read.impure_id (mito:object-id dao))))))))
+        (setf (purges impure)   (impure-purges impure))
+        (setf (requests impure) (impure-request-message impure)))
       impure)))
 
 (defun find-impures (angel &key maledict)

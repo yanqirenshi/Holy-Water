@@ -35,12 +35,14 @@
 ;;;;;
 (defclass purge-history (purge)
   ((end         :accessor end         :initform :null)
-   (impure-name :accessor impure-name :initform :null)))
+   (impure-name :accessor impure-name :initform :null)
+   (angel-name  :accessor angel-name  :initform :null)))
 
 (defun plist2purge-history (plist)
   (let ((purge (make-instance 'purge-history)))
     (setf (id purge)          (getf plist :|id|))
     (setf (angel-id  purge)   (getf plist :|angel_id|))
+    (setf (angel-name purge)  (getf plist :|angel_name|))
     (setf (impure-id purge)   (getf plist :|impure_id|))
     (setf (impure-name purge) (getf plist :|impure_name|))
     (setf (start purge)       (ut2timestamp (getf plist :|start|)))
@@ -52,6 +54,7 @@
   (with-object
     (write-key-value "id"          (slot-value obj 'id))
     (write-key-value "angel_id"    (slot-value obj 'angel-id))
+    (write-key-value "angel_name"  (slot-value obj 'angel-name))
     (write-key-value "impure_id"   (slot-value obj 'impure-id))
     (write-key-value "impure_name" (slot-value obj 'impure-name))
     (write-key-value "start"       (timestamp2str (slot-value obj 'start)))

@@ -57,6 +57,7 @@
            #:pages-requests
            #:pages-deamon
            #:pages-deamon-new
+           #:pages-impure-new
            #:pages-angel
            #:pages-world)
   (:export #:get-session-data))

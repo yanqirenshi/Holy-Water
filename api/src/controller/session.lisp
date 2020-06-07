@@ -7,4 +7,5 @@
         :|orthodoxs| (hw.api.ctrl:find-orthodoxs)
         :|deamons|   (hw.api.ctrl:find-deamons-alive)
         :|external_service| nil
-        :|wall_paper| :null))
+        :|wall_paper| :null
+        :|impures|    (list :|purging| (hw.api.ctrl:get-impure-purging angel))))

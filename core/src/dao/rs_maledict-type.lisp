@@ -9,13 +9,13 @@
 
 (defvar *maledict-types*
   (alexandria:alist-hash-table
-   `((,*maledict-type-inbox*         . (:id ,*maledict-type-inbox*         :name "In Box"         :order 0   :deletable 0 :description ""))
-     (,*maledict-type-nex-action*    . (:id ,*maledict-type-nex-action*    :name "Next Action"    :order 10  :deletable 1 :description ""))
-     (,*maledict-type-plan-project*  . (:id ,*maledict-type-plan-project*  :name "Plan Project"   :order 40  :deletable 1 :description ""))
-     (,*maledict-type-someday-maybe* . (:id ,*maledict-type-someday-maybe* :name "Someday/Maybe"  :order 50  :deletable 1 :description ""))
-     (,*maledict-type-done*          . (:id ,*maledict-type-done*          :name "Done"           :order 999 :deletable 0 :description ""))
-     (,*maledict-type-user-create*   . (:id ,*maledict-type-user-create*   :name "????????"       :order 100 :deletable 1 :description ""))
-     (,*maledict-type-user-create*   . (:id ,*maledict-type-user-create*   :name "Regular work"   :order 100 :deletable 1 :description "日々の繰返し実施している作業")))))
+   `((,*maledict-type-inbox*         . (:maledict-type-id ,*maledict-type-inbox*         :name "In Box"         :order 0   :deletable 0 :description ""))
+     (,*maledict-type-nex-action*    . (:maledict-type-id ,*maledict-type-nex-action*    :name "Next Action"    :order 10  :deletable 1 :description ""))
+     (,*maledict-type-plan-project*  . (:maledict-type-id ,*maledict-type-plan-project*  :name "Plan Project"   :order 40  :deletable 1 :description ""))
+     (,*maledict-type-someday-maybe* . (:maledict-type-id ,*maledict-type-someday-maybe* :name "Someday/Maybe"  :order 50  :deletable 1 :description ""))
+     (,*maledict-type-done*          . (:maledict-type-id ,*maledict-type-done*          :name "Done"           :order 999 :deletable 0 :description ""))
+     (,*maledict-type-user-create*   . (:maledict-type-id ,*maledict-type-user-create*   :name "????????"       :order 100 :deletable 1 :description ""))
+     (,*maledict-type-user-create*   . (:maledict-type-id ,*maledict-type-user-create*   :name "Regular work"   :order 100 :deletable 1 :description "日々の繰返し実施している作業")))))
 
 (defun %find-initial-maledict-types (&key (maledict-types *maledict-types*))
   (mapcar #'(lambda (d)
